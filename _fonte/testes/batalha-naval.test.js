@@ -1,5 +1,5 @@
 "use strict";
-/* Os mesmos casos de RegrasBatalhaNavalTest e DadosBatalhaNavalTest do Multi-Game Strategy. */
+/* Regras da Batalha Naval portadas do app em React Native (src/utils/gameLogic.ts). */
 const assert = require("node:assert/strict");
 const B = require("../../assets/jogos/batalha-naval-logica.js");
 
@@ -18,247 +18,186 @@ function semente(n) {
   };
 }
 const p = (l, c) => B.casa(l, c);
-const tab = (navios, tiros = []) => ({ navios, tiros });
+const sempre = (v) => () => v;
+function colocar(tab, tipo, l, c, orientacao) {
+  const posicoes = B.posicoesDoNavio(p(l, c), tipo, orientacao);
+  assert.ok(B.podePosicionar(tab, posicoes), `${tipo} deveria caber`);
+  return B.posicionar(tab, tipo, posicoes);
+}
+function atirar(tab, pontos) {
+  let r;
+  for (const [l, c] of pontos) {
+    r = B.atacar(tab, p(l, c));
+    tab = r.tabuleiro;
+  }
+  return { tab, r };
+}
 
-teste("navio não sai do tabuleiro nem cruza outro e cada tipo entra uma vez", () => {
-  const t = B.tabuleiroVazio();
-  assert.equal(B.posicionar(t, "carrier", 0, 6, "horizontal"), null);
-  assert.equal(B.posicionar(t, "carrier", 6, 0, "vertical"), null);
-  const um = B.posicionar(t, "carrier", 0, 5, "horizontal");
-  assert.deepEqual(um.navios[0].posicoes, [5, 6, 7, 8, 9].map((c) => p(0, c)));
-  // Cruza o porta-aviões em (0,7)
-  assert.equal(B.posicionar(um, "battleship", 0, 7, "vertical"), null);
-  assert.equal(B.posicionar(um, "carrier", 5, 0, "horizontal"), null);
-  const dois = B.posicionar(um, "battleship", 1, 7, "vertical");
-  assert.equal(dois.navios.length, 2);
-  assert.equal(B.remover(dois, "carrier").navios.length, 1);
+teste("navio ocupa as casas para a direita ou para baixo e não sai do tabuleiro", () => {
+  assert.deepEqual(B.posicoesDoNavio(p(2, 3), "submarine", "horizontal"), [p(2, 3), p(2, 4), p(2, 5)]);
+  assert.deepEqual(B.posicoesDoNavio(p(2, 3), "patrol", "vertical"), [p(2, 3), p(3, 3)]);
+  const vazio = B.tabuleiroVazio();
+  assert.equal(B.podePosicionar(vazio, B.posicoesDoNavio(p(0, 6), "carrier", "horizontal")), false);
+  assert.equal(B.podePosicionar(vazio, B.posicoesDoNavio(p(0, 5), "carrier", "horizontal")), true);
+  assert.equal(B.podePosicionar(vazio, B.posicoesDoNavio(p(6, 0), "carrier", "vertical")), false);
 });
 
-teste("frota aleatória sempre completa e válida", () => {
+teste("navios podem encostar, mas não se cruzar", () => {
+  const tab = colocar(B.tabuleiroVazio(), "carrier", 0, 0, "horizontal");
+  assert.equal(B.podePosicionar(tab, B.posicoesDoNavio(p(0, 4), "battleship", "vertical")), false);
+  assert.equal(B.podePosicionar(tab, B.posicoesDoNavio(p(1, 0), "battleship", "horizontal")), true);
+  assert.equal(tab.grade[0][4].estado, "navio");
+  assert.equal(tab.grade[0][4].navio, "carrier");
+  assert.equal(tab.grade[0][5].estado, "agua");
+});
+
+teste("tiro na água, acerto e navio afundado", () => {
+  const tab = colocar(B.tabuleiroVazio(), "patrol", 4, 4, "vertical");
+  const agua = B.atacar(tab, p(0, 0));
+  assert.equal(agua.acerto, false);
+  assert.equal(agua.tabuleiro.grade[0][0].estado, "erro");
+  assert.equal(agua.tabuleiro.grade[0][0].revelada, true);
+  // O tabuleiro original não muda
+  assert.equal(tab.grade[0][0].revelada, false);
+
+  const acerto = B.atacar(agua.tabuleiro, p(4, 4));
+  assert.deepEqual([acerto.acerto, acerto.afundou, acerto.tipo], [true, false, "patrol"]);
+  assert.equal(acerto.tabuleiro.grade[4][4].estado, "acerto");
+  assert.equal(B.todosAfundados(acerto.tabuleiro), false);
+
+  const afundou = B.atacar(acerto.tabuleiro, p(5, 4));
+  assert.deepEqual([afundou.acerto, afundou.afundou, afundou.tipo], [true, true, "patrol"]);
+  assert.equal(afundou.tabuleiro.grade[4][4].estado, "afundado");
+  assert.equal(afundou.tabuleiro.grade[5][4].estado, "afundado");
+  assert.equal(B.todosAfundados(afundou.tabuleiro), true);
+
+  const repetido = B.atacar(afundou.tabuleiro, p(5, 4));
+  assert.equal(repetido.repetido, true);
+  assert.equal(repetido.tabuleiro, afundou.tabuleiro);
+});
+
+teste("frota do computador sai sempre completa, com 17 casas e sem cruzar", () => {
   const aleatorio = semente(7);
-  for (let i = 0; i < 300; i++) {
-    const t = B.completarAleatorio(B.tabuleiroVazio(), aleatorio);
-    assert.equal(B.tiposPosicionados(t).size, 5);
-    assert.ok(B.frotaValida(t, true));
-    assert.equal(t.navios.reduce((s, n) => s + n.posicoes.length, 0), 17);
+  for (let i = 0; i < 500; i++) {
+    const tab = B.tabuleiroAleatorio(aleatorio);
+    assert.deepEqual(tab.navios.map((n) => n.tipo), B.ORDEM);
+    const ocupadas = tab.grade.flat().filter((c) => c.estado === "navio");
+    assert.equal(ocupadas.length, 17);
+    for (const navio of tab.navios) {
+      assert.equal(navio.posicoes.length, B.NAVIOS[navio.tipo].tamanho);
+      for (const q of navio.posicoes) assert.equal(tab.grade[q.linha][q.coluna].navio, navio.tipo);
+    }
   }
 });
 
-teste("completar respeita os navios já posicionados", () => {
-  const parcial = B.posicionar(B.tabuleiroVazio(), "patrol", 9, 8, "horizontal");
-  const completo = B.completarAleatorio(parcial, semente(3));
-  assert.deepEqual(completo.navios.find((n) => n.tipo === "patrol"), parcial.navios[0]);
-  assert.ok(B.frotaValida(completo, true));
+teste("fácil atira sempre ao acaso, mesmo caçando", () => {
+  const tab = colocar(B.tabuleiroVazio(), "carrier", 5, 2, "horizontal");
+  const { tab: atingido } = atirar(tab, [[5, 4]]);
+  const caca = { ultimoAlvo: p(5, 4), cacando: true, direcao: "horizontal", acertos: [p(5, 4)] };
+  // Com o sorteio em 0, a primeira casa livre é (0, 0), longe do acerto
+  assert.deepEqual(B.jogadaComputador(atingido, caca, "facil", sempre(0)), p(0, 0));
 });
 
-teste("tiro repetido é ignorado e afundar marca todas as casas", () => {
-  const t = tab([{ tipo: "patrol", posicoes: [p(2, 2), p(2, 3)] }]);
-  const agua = B.atirar(t, p(0, 0));
-  assert.equal(agua.atingido, null);
-  assert.equal(B.atirar(agua.tabuleiro, p(0, 0)), null);
-  assert.equal(B.atirar(t, 100), null);
-  const acerto = B.atirar(agua.tabuleiro, p(2, 2));
-  assert.equal(acerto.atingido, "patrol");
-  assert.equal(acerto.afundou, false);
-  assert.equal(B.estado(acerto.tabuleiro, p(2, 2)), "acerto");
-  const afundou = B.atirar(acerto.tabuleiro, p(2, 3));
-  assert.equal(afundou.afundou, true);
-  assert.equal(B.estado(afundou.tabuleiro, p(2, 2)), "afundado");
-  assert.equal(B.estado(afundou.tabuleiro, p(0, 0)), "erro");
-  assert.ok(B.todosAfundados(afundou.tabuleiro));
+teste("médio tenta ao lado do último acerto em 60% das vezes", () => {
+  const tab = colocar(B.tabuleiroVazio(), "carrier", 5, 2, "horizontal");
+  const { tab: atingido } = atirar(tab, [[5, 4]]);
+  const caca = { ultimoAlvo: p(5, 4), cacando: true, direcao: "vertical", acertos: [p(5, 4)] };
+  // Sorteio abaixo de 0,6: vizinho na direção atual (vertical, primeiro para cima)
+  assert.deepEqual(B.jogadaComputador(atingido, caca, "medio", sempre(0.1)), p(4, 4));
+  // Sorteio acima: tiro ao acaso (a 70ª das 99 casas livres, pulando a (5, 4))
+  assert.deepEqual(B.jogadaComputador(atingido, caca, "medio", sempre(0.7)), p(7, 0));
+  // Sem vizinho livre na direção, tenta a outra só quando não há direção definida
+  assert.deepEqual(B.alvoCaca(atingido, p(5, 4), null), p(5, 3));
 });
 
-teste("tabuleiro sem navios não conta como derrotado", () => {
-  assert.equal(B.todosAfundados(B.tabuleiroVazio()), false);
+teste("difícil segue a linha dos acertos pelas pontas", () => {
+  const tab = colocar(B.tabuleiroVazio(), "carrier", 3, 2, "horizontal");
+  const { tab: atingido } = atirar(tab, [[3, 4], [3, 5]]);
+  const caca = { ultimoAlvo: p(3, 5), cacando: true, direcao: "horizontal", acertos: [p(3, 4), p(3, 5)] };
+  assert.equal(B.orientacaoDosAcertos(caca.acertos), "horizontal");
+  assert.deepEqual(B.jogadaComputador(atingido, caca, "dificil", sempre(0.99)), p(3, 3));
+  // Com a ponta esquerda já atacada, vai para a direita
+  const { tab: semEsquerda } = atirar(atingido, [[3, 3]]);
+  const caca2 = { ...caca, acertos: [p(3, 4), p(3, 5), p(3, 3)] };
+  assert.deepEqual(B.jogadaComputador(semEsquerda, caca2, "dificil", sempre(0.99)), p(3, 2));
+  // Um acerto só: vizinhos na ordem esquerda, direita, cima, baixo
+  assert.deepEqual(B.alvoInteligente(tab, [p(0, 0)]), p(0, 1));
+  assert.deepEqual(B.alvoInteligente(tab, [p(4, 4)]), p(4, 3));
 });
 
-teste("acertou joga de novo, errou passa a vez e a vitória encerra a partida", () => {
-  const inimigo = tab([{ tipo: "patrol", posicoes: [p(0, 0), p(0, 1)] }]);
-  const jogador = B.completarAleatorio(B.tabuleiroVazio(), semente(2));
-  const partida = { jogador, inimigo, fase: "jogando", vez: "jogador", vencedor: null, dificuldade: "easy", orientacao: "horizontal" };
-
-  const acerto = B.atirarJogador(partida, p(0, 0));
-  assert.equal(acerto.partida.vez, "jogador");
-  assert.equal(B.atirarJogador(acerto.partida, p(0, 0)), null, "mesma casa duas vezes");
-
-  const erro = B.atirarJogador(acerto.partida, p(5, 5));
-  assert.equal(erro.partida.vez, "ia");
-  assert.equal(B.atirarJogador(erro.partida, p(0, 1)), null, "não é a vez do jogador");
-
-  const vitoria = B.atirarJogador(acerto.partida, p(0, 1));
-  assert.equal(vitoria.partida.fase, "fim");
-  assert.equal(vitoria.partida.vencedor, "jogador");
-  assert.equal(B.tiros(vitoria.partida), 2);
+teste("memória do computador: liga a caça no acerto, troca a direção no erro e zera ao afundar", () => {
+  const inicio = B.cacaInicial();
+  const acerto = B.depoisDaJogada(inicio, p(2, 2), { acerto: true, afundou: false }, sempre(0.1));
+  assert.deepEqual(acerto, { ultimoAlvo: p(2, 2), cacando: true, direcao: "horizontal", acertos: [p(2, 2)] });
+  const erro = B.depoisDaJogada(acerto, p(2, 3), { acerto: false, afundou: false });
+  assert.equal(erro.direcao, "vertical");
+  assert.deepEqual(erro.acertos, [p(2, 2)]);
+  const outro = B.depoisDaJogada(erro, p(3, 2), { acerto: true, afundou: false }, sempre(0.9));
+  assert.equal(outro.direcao, "vertical");
+  assert.equal(outro.acertos.length, 2);
+  assert.deepEqual(B.depoisDaJogada(outro, p(4, 2), { acerto: true, afundou: true }), B.cacaInicial());
+  // Errar fora da caça não muda nada
+  assert.equal(B.depoisDaJogada(inicio, p(0, 0), { acerto: false, afundou: false }), inicio);
 });
 
-teste("só começa com a frota completa e a dificuldade escolhida", () => {
-  const aleatorio = semente(5);
-  const nova = B.novaPartida(null, aleatorio);
-  assert.equal(B.iniciar(nova), null);
-  const pronta = B.posicionarRestantes(nova, aleatorio);
-  assert.ok(B.prontaParaComecar(pronta));
-  assert.equal(B.iniciar(pronta), null);
-  const jogando = B.iniciar(B.escolherDificuldade(pronta, "medium"));
-  assert.equal(jogando.fase, "jogando");
-  assert.equal(B.posicionarNavio(jogando, "patrol", 0, 0), null, "não posiciona depois de começar");
-});
-
-teste("girar troca a orientação usada no posicionamento", () => {
-  let partida = B.escolherDificuldade(B.novaPartida(null, semente(1)), "easy");
-  assert.equal(partida.orientacao, "horizontal");
-  partida = B.girar(partida);
-  const posta = B.posicionarNavio(partida, "battleship", 2, 3);
-  assert.deepEqual(posta.jogador.navios[0].posicoes, [p(2, 3), p(3, 3), p(4, 3), p(5, 3)]);
-  assert.ok(B.emAndamento(posta));
-  assert.equal(B.emAndamento(partida), false);
-  assert.deepEqual(B.naviosFaltando(B.removerNavio(posta, "battleship")), B.NAVIOS.map((n) => n.tipo));
-});
-
-teste("partida completa entre jogador e computador termina sem casas repetidas", () => {
-  B.DIFICULDADES.forEach(({ chave }, i) => {
-    const aleatorio = semente(i + 10);
-    let partida = B.iniciar(B.posicionarRestantes(B.novaPartida(chave, aleatorio), aleatorio));
-    const livres = Array.from({ length: 100 }, (_, k) => k).sort(() => aleatorio() - 0.5);
-    let jogadas = 0;
-    while (partida.fase !== "fim") {
-      if (partida.vez === "jogador") {
-        partida = B.atirarJogador(partida, livres.shift()).partida;
-      } else {
-        const antes = partida.jogador.tiros.length;
-        const j = B.jogadaIa(partida, aleatorio);
-        assert.equal(j.partida.jogador.tiros.length, antes + 1);
-        partida = j.partida;
+teste("computador nunca repete casa e sempre termina em até 100 tiros", () => {
+  const aleatorio = semente(42);
+  for (const nivel of B.DIFICULDADES) {
+    for (let i = 0; i < 150; i++) {
+      let tab = B.tabuleiroAleatorio(aleatorio);
+      let caca = B.cacaInicial();
+      let tiros = 0;
+      while (!B.todosAfundados(tab)) {
+        const alvo = B.jogadaComputador(tab, caca, nivel, aleatorio);
+        assert.equal(B.atacada(tab, alvo), false, `${nivel} repetiu ${B.nomeCasa(alvo)}`);
+        const r = B.atacar(tab, alvo);
+        tab = r.tabuleiro;
+        caca = B.depoisDaJogada(caca, alvo, r, aleatorio);
+        tiros++;
       }
-      jogadas++;
-      assert.ok(jogadas <= 200);
+      assert.ok(tiros >= 17 && tiros <= 100);
     }
-    assert.ok(partida.vencedor);
-  });
+  }
 });
 
-teste("computador nunca atira duas vezes na mesma casa", () => {
-  B.DIFICULDADES.forEach(({ chave }, i) => {
-    const aleatorio = semente(42 + i);
-    let t = B.completarAleatorio(B.tabuleiroVazio(), aleatorio);
-    let n = 0;
-    while (!B.todosAfundados(t)) {
-      const alvo = B.escolherAlvo(t, chave, aleatorio);
-      assert.ok(!t.tiros.includes(alvo), `${chave} repetiu ${alvo}`);
-      t = B.atirar(t, alvo).tabuleiro;
-      n++;
-    }
-    assert.ok(n <= 100);
-  });
-});
-
-teste("difícil caça ao redor do acerto e segue a linha", () => {
-  const navio = { tipo: "battleship", posicoes: [p(5, 3), p(5, 4), p(5, 5), p(5, 6)] };
-  const aleatorio = semente(9);
-  const umAcerto = tab([navio], [p(5, 5)]);
-  for (let i = 0; i < 20; i++) assert.ok(B.vizinhas(p(5, 5)).includes(B.escolherAlvo(umAcerto, "hard", aleatorio)));
-  const doisAcertos = tab([navio], [p(5, 5), p(5, 4)]);
-  for (let i = 0; i < 20; i++) assert.ok([p(5, 3), p(5, 6)].includes(B.escolherAlvo(doisAcertos, "hard", aleatorio)));
-  // Ponta esquerda já tentada (água): só sobra a direita
-  const comAgua = tab([navio], [p(5, 5), p(5, 4), p(5, 2), p(5, 3)]);
-  assert.equal(B.escolherAlvo(comAgua, "hard", aleatorio), p(5, 6));
-});
-
-teste("depois de afundar um navio continua caçando o outro já atingido", () => {
-  const patrulha = { tipo: "patrol", posicoes: [p(0, 0), p(0, 1)] };
-  const submarino = { tipo: "submarine", posicoes: [p(1, 0), p(2, 0), p(3, 0)] };
-  const t = tab([patrulha, submarino], [p(0, 0), p(0, 1), p(1, 0)]);
-  assert.deepEqual(B.acertosAbertos(t), [p(1, 0)]);
-  const aleatorio = semente(4);
-  for (let i = 0; i < 20; i++) assert.ok([p(2, 0), p(1, 1)].includes(B.escolherAlvo(t, "hard", aleatorio)));
-});
-
-teste("difícil afunda a frota com menos tiros que o médio, e o médio que o fácil", () => {
-  const media = (dificuldade) => {
-    const aleatorio = semente(100);
-    let soma = 0;
-    for (let k = 0; k < 60; k++) {
-      let t = B.completarAleatorio(B.tabuleiroVazio(), aleatorio);
-      while (!B.todosAfundados(t)) {
-        t = B.atirar(t, B.escolherAlvo(t, dificuldade, aleatorio)).tabuleiro;
-        soma++;
-      }
-    }
-    return soma / 60;
-  };
-  const facil = media("easy");
-  const medio = media("medium");
-  const dificil = media("hard");
-  assert.ok(medio < facil, `fácil ${facil}, médio ${medio}`);
-  assert.ok(dificil < medio, `médio ${medio}, difícil ${dificil}`);
-});
-
-teste("estatísticas guardam vitórias, média e o melhor jogo", () => {
+teste("estatísticas: média de todas as partidas e melhor vitória com menos tiros", () => {
   let e = B.estatisticasVazias();
-  e = B.registrarEstatistica(e, true, 60);
-  e = B.registrarEstatistica(e, false, 40);
-  e = B.registrarEstatistica(e, true, 50);
-  assert.deepEqual(e, { partidas: 3, vitorias: 2, derrotas: 1, mediaTiros: 50, melhorJogo: 50 });
-  assert.equal(B.taxaVitoria(e), 67);
-  assert.deepEqual(B.lerEstatisticas(JSON.stringify(e)), e);
-  assert.deepEqual(B.lerEstatisticas('{"partidas":2,"vitorias":5}'), B.estatisticasVazias());
+  e = B.registrarPartida(e, true, 60);
+  assert.deepEqual(e, { partidas: 1, vitorias: 1, derrotas: 0, mediaTiros: 60, melhor: 60 });
+  e = B.registrarPartida(e, false, 75);
+  assert.deepEqual(e, { partidas: 2, vitorias: 1, derrotas: 1, mediaTiros: 68, melhor: 60 });
+  e = B.registrarPartida(e, true, 48);
+  assert.equal(e.melhor, 48);
+  e = B.registrarPartida(e, true, 55);
+  assert.equal(e.melhor, 48);
+  assert.equal(B.aproveitamento(e), 0.75);
+  assert.equal(B.aproveitamento(B.estatisticasVazias()), 0);
 });
 
-teste("recorde: menos tiros é melhor e empate não supera", () => {
-  const lista = B.ordenarRecordes([
-    { tiros: 60, momento: 1 },
-    { tiros: 35, momento: 2 },
-    { tiros: 48, momento: 3 },
-  ]);
-  assert.deepEqual(lista.map((r) => r.tiros), [35, 48, 60]);
-  const r = B.inserirRecorde(lista, { tiros: 35, momento: 9 });
-  assert.equal(r.novoRecorde, false, "empate não supera o recorde");
-  assert.equal(r.posicao, 2);
-  assert.equal(B.inserirRecorde([], { tiros: 80, momento: 1 }).novoRecorde, true);
-  // Lista cheia: um resultado pior que o 10º não entra
-  const cheia = Array.from({ length: 10 }, (_, i) => ({ tiros: 20 + i, momento: i }));
-  const fora = B.inserirRecorde(cheia, { tiros: 99, momento: 50 });
-  assert.equal(fora.posicao, null);
-  assert.equal(fora.lista, cheia);
-  assert.deepEqual(B.lerRecordes('{"easy":[{"tiros":0,"momento":1},{"tiros":40,"momento":2}],"hard":"x"}'), {
-    easy: [{ tiros: 40, momento: 2 }],
-    medium: [],
-    hard: [],
-  });
+teste("estatísticas lidas do navegador são validadas", () => {
+  const boa = { partidas: 3, vitorias: 2, derrotas: 1, mediaTiros: 61, melhor: 50 };
+  assert.deepEqual(B.lerEstatisticas(boa), boa);
+  assert.deepEqual(B.lerEstatisticas(null), B.estatisticasVazias());
+  assert.deepEqual(B.lerEstatisticas({ ...boa, vitorias: 5 }), B.estatisticasVazias());
+  assert.deepEqual(B.lerEstatisticas({ ...boa, melhor: -1 }), B.estatisticasVazias());
+  assert.deepEqual(B.lerEstatisticas({ partidas: "3" }), B.estatisticasVazias());
 });
 
-teste("partida salva volta igual e JSON corrompido ou incoerente é ignorado", () => {
-  const aleatorio = semente(11);
-  const pronta = B.posicionarRestantes(B.novaPartida("hard", aleatorio), aleatorio);
-  const jogando = B.iniciar(pronta);
-  const depois = B.atirarJogador(jogando, p(3, 4)).partida;
-  assert.deepEqual(B.lerPartida(JSON.stringify(depois)), depois);
-  assert.equal(B.lerPartida("{quebrado"), null);
-  assert.equal(B.lerPartida(null), null);
-  // Dois navios na mesma casa
-  const navios = depois.jogador.navios;
-  const sobreposto = {
-    ...depois,
-    jogador: { ...depois.jogador, navios: [...navios.filter((n) => n.tipo !== "patrol"), { tipo: "patrol", posicoes: navios[0].posicoes.slice(0, 2) }] },
-  };
-  assert.equal(B.lerPartida(JSON.stringify(sobreposto)), null);
-  // Navio torto
-  const torto = { ...depois, inimigo: { ...depois.inimigo, navios: depois.inimigo.navios.map((n) => (n.tipo === "patrol" ? { ...n, posicoes: [0, 11] } : n)) } };
-  assert.equal(B.lerPartida(JSON.stringify(torto)), null);
-  // Tiros durante o posicionamento
-  assert.equal(B.lerPartida(JSON.stringify({ ...pronta, inimigo: { ...pronta.inimigo, tiros: [5] } })), null);
-  // Em jogo sem dificuldade
-  assert.equal(B.lerPartida(JSON.stringify({ ...depois, dificuldade: null })), null);
+teste("nome da casa: letra da coluna e número da linha", () => {
+  assert.equal(B.nomeCasa(p(0, 0)), "A1");
+  assert.equal(B.nomeCasa(p(9, 9)), "J10");
+  assert.equal(B.nomeCasa(p(4, 1)), "B5");
 });
 
 let falhas = 0;
 for (const [nome, fn] of testes) {
   try {
     fn();
-    console.log(`ok   ${nome}`);
+    console.log(`ok - ${nome}`);
   } catch (erro) {
     falhas++;
-    console.error(`FALHA ${nome}\n${erro.stack}`);
+    console.log(`FALHOU - ${nome}\n${erro.stack}`);
   }
 }
-console.log(`\n${testes.length - falhas}/${testes.length} testes passaram`);
 if (falhas) process.exit(1);
+console.log(`${testes.length} testes passaram`);

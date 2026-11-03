@@ -1,482 +1,225 @@
 "use strict";
-/*
- * Regras da Batalha Naval do app Multi-Game Strategy (com.emerson1981.multigames), sem DOM:
- * jogos/batalhanaval/logica/Modelos.kt, TabuleiroNaval.kt, IaBatalhaNaval.kt e Partida.kt,
- * dados/RepositorioBatalhaNaval.kt (validação da partida salva) e dados/recordes/RegrasRecordes.kt.
- * As casas são números de 0 a 99 (linha × 10 + coluna); o sorteio recebe uma função
- * aleatorio() que devolve [0, 1), para os testes repetirem as partidas.
- */
+/* Regras e jogadas do computador da Batalha Naval, portadas do app em React Native
+   (batalhanaval/src/utils/gameLogic.ts, constants/gameConstants.ts, hooks/useBattleshipGame.ts
+   e services/gameStorage.ts). Tudo aqui é puro: recebe o estado e devolve um novo. */
 const LogicaBatalhaNaval = (() => {
   const TAMANHO = 10;
-  const CASAS = TAMANHO * TAMANHO;
-  const LIMITE_RECORDES = 10;
 
-  /** Frota na ordem de posicionamento do app, com as cores de cada navio. */
-  const NAVIOS = [
-    { tipo: "carrier", nome: "Porta-aviões", tamanho: 5, cor: "#ff6b6b" },
-    { tipo: "battleship", nome: "Encouraçado", tamanho: 4, cor: "#4ecdc4" },
-    { tipo: "submarine", nome: "Submarino", tamanho: 3, cor: "#45b7d1" },
-    { tipo: "destroyer", nome: "Contratorpedeiro", tamanho: 3, cor: "#96ceb4" },
-    { tipo: "patrol", nome: "Patrulha", tamanho: 2, cor: "#ffeaa7" },
-  ];
-  const TIPO = new Map(NAVIOS.map((n) => [n.tipo, n]));
+  const NAVIOS = {
+    carrier: { tipo: "carrier", nome: "Porta-aviões", tamanho: 5, cor: "#FF6B6B" },
+    battleship: { tipo: "battleship", nome: "Encouraçado", tamanho: 4, cor: "#4ECDC4" },
+    submarine: { tipo: "submarine", nome: "Submarino", tamanho: 3, cor: "#45B7D1" },
+    destroyer: { tipo: "destroyer", nome: "Contratorpedeiro", tamanho: 3, cor: "#96CEB4" },
+    patrol: { tipo: "patrol", nome: "Patrulha", tamanho: 2, cor: "#FFEAA7" },
+  };
+  const ORDEM = ["carrier", "battleship", "submarine", "destroyer", "patrol"];
+  const DIFICULDADES = ["facil", "medio", "dificil"];
 
-  /** Dificuldades da IA; a chave também é a categoria dos recordes. */
-  const DIFICULDADES = [
-    { chave: "easy", nome: "Fácil", descricao: "O computador atira quase sempre ao acaso" },
-    { chave: "medium", nome: "Médio", descricao: "Às vezes ele caça perto dos acertos" },
-    { chave: "hard", nome: "Difícil", descricao: "Ele persegue cada navio atingido" },
-  ];
-  const CHANCE_CACA = { easy: 0.2, medium: 0.6, hard: 1 };
+  const casa = (linha, coluna) => ({ linha, coluna });
+  const dentro = (p) => p.linha >= 0 && p.linha < TAMANHO && p.coluna >= 0 && p.coluna < TAMANHO;
 
-  const casa = (linha, coluna) => linha * TAMANHO + coluna;
-  const linhaDe = (i) => Math.floor(i / TAMANHO);
-  const colunaDe = (i) => i % TAMANHO;
-  const dentro = (linha, coluna) => linha >= 0 && linha < TAMANHO && coluna >= 0 && coluna < TAMANHO;
-  const sortear = (lista, aleatorio) => lista[Math.floor(aleatorio() * lista.length)];
-
-  function embaralhar(lista, aleatorio) {
-    const copia = lista.slice();
-    for (let i = copia.length - 1; i > 0; i--) {
-      const j = Math.floor(aleatorio() * (i + 1));
-      [copia[i], copia[j]] = [copia[j], copia[i]];
+  // Cada casa: estado "agua", "navio", "acerto", "erro" ou "afundado", o tipo do navio que
+  // está nela e se já levou tiro
+  function tabuleiroVazio() {
+    const grade = [];
+    for (let l = 0; l < TAMANHO; l++) {
+      const linha = [];
+      for (let c = 0; c < TAMANHO; c++) linha.push({ estado: "agua", navio: null, revelada: false });
+      grade.push(linha);
     }
-    return copia;
+    return { grade, navios: [] };
   }
 
-  /** Casas vizinhas (cima, baixo, esquerda, direita) dentro do tabuleiro. */
-  function vizinhas(i) {
-    const l = linhaDe(i);
-    const c = colunaDe(i);
-    return [
-      [l - 1, c],
-      [l + 1, c],
-      [l, c - 1],
-      [l, c + 1],
-    ]
-      .filter(([a, b]) => dentro(a, b))
-      .map(([a, b]) => casa(a, b));
-  }
+  const atacada = (tab, p) => tab.grade[p.linha][p.coluna].revelada;
 
-  /** Casas de um navio que começa em (linha, coluna) e segue para a direita ou para baixo; null se sair. */
-  function posicoesNavio(tipo, linha, coluna, orientacao) {
-    const navio = TIPO.get(tipo);
+  function posicoesDoNavio(inicio, tipo, orientacao) {
     const posicoes = [];
-    for (let k = 0; k < navio.tamanho; k++) {
-      const l = orientacao === "horizontal" ? linha : linha + k;
-      const c = orientacao === "horizontal" ? coluna + k : coluna;
-      if (!dentro(l, c)) return null;
-      posicoes.push(casa(l, c));
+    for (let i = 0; i < NAVIOS[tipo].tamanho; i++) {
+      posicoes.push(orientacao === "vertical" ? casa(inicio.linha + i, inicio.coluna) : casa(inicio.linha, inicio.coluna + i));
     }
     return posicoes;
   }
 
-  // ---------- Tabuleiro: { navios: [{ tipo, posicoes }], tiros: [casas] } ----------
-
-  const tabuleiroVazio = () => ({ navios: [], tiros: [] });
-
-  function navioEm(t, i) {
-    return t.navios.find((n) => n.posicoes.includes(i)) || null;
+  // Os navios podem encostar um no outro, mas não sair do tabuleiro nem se cruzar
+  function podePosicionar(tab, posicoes) {
+    return posicoes.every((p) => dentro(p) && tab.grade[p.linha][p.coluna].estado !== "navio");
   }
 
-  function afundado(t, navio) {
-    return navio.posicoes.every((p) => t.tiros.includes(p));
+  function posicionar(tab, tipo, posicoes) {
+    const grade = tab.grade.map((linha) => linha.slice());
+    for (const p of posicoes) grade[p.linha][p.coluna] = { estado: "navio", navio: tipo, revelada: false };
+    const navio = { tipo, tamanho: NAVIOS[tipo].tamanho, posicoes, acertos: 0, afundado: false };
+    return { grade, navios: tab.navios.concat([navio]) };
   }
 
-  /** "agua", "navio" (intacto), "acerto", "erro" ou "afundado". */
-  function estado(t, i) {
-    const navio = navioEm(t, i);
-    const atingida = t.tiros.includes(i);
-    if (!navio) return atingida ? "erro" : "agua";
-    if (!atingida) return "navio";
-    return afundado(t, navio) ? "afundado" : "acerto";
+  /** Tiro numa casa. Quando o navio afunda, todas as casas dele viram "afundado". */
+  function atacar(tab, p) {
+    const atual = tab.grade[p.linha][p.coluna];
+    if (atual.revelada) return { tabuleiro: tab, acerto: false, afundou: false, repetido: true };
+    const grade = tab.grade.map((linha) => linha.slice());
+    if (atual.estado !== "navio") {
+      grade[p.linha][p.coluna] = { ...atual, estado: "erro", revelada: true };
+      return { tabuleiro: { grade, navios: tab.navios }, acerto: false, afundou: false };
+    }
+    grade[p.linha][p.coluna] = { ...atual, estado: "acerto", revelada: true };
+    const navios = tab.navios.map((n) => (n.tipo === atual.navio ? { ...n, acertos: n.acertos + 1 } : n));
+    const navio = navios.find((n) => n.tipo === atual.navio);
+    if (navio.acertos >= navio.tamanho) {
+      navio.afundado = true;
+      for (const q of navio.posicoes) grade[q.linha][q.coluna] = { ...grade[q.linha][q.coluna], estado: "afundado" };
+      return { tabuleiro: { grade, navios }, acerto: true, afundou: true, tipo: navio.tipo };
+    }
+    return { tabuleiro: { grade, navios }, acerto: true, afundou: false, tipo: navio.tipo };
   }
 
-  /** Vitória só com a frota no mar: um tabuleiro sem navios não conta como derrotado. */
-  function todosAfundados(t) {
-    return t.navios.length > 0 && t.navios.every((n) => afundado(t, n));
-  }
+  const todosAfundados = (tab) => tab.navios.length > 0 && tab.navios.every((n) => n.afundado);
 
-  const tiposPosicionados = (t) => new Set(t.navios.map((n) => n.tipo));
-  const afundados = (t) => t.navios.filter((n) => afundado(t, n)).map((n) => n.tipo);
-
-  /** Casas atingidas de navios que ainda não afundaram (onde a IA deve caçar). */
-  function acertosAbertos(t) {
-    return t.tiros.filter((i) => estado(t, i) === "acerto");
-  }
-
-  function podePosicionar(t, posicoes) {
-    return !!posicoes && posicoes.every((p) => p >= 0 && p < CASAS && !navioEm(t, p));
-  }
-
-  /** Coloca o navio (uma vez por tipo); null se sair do tabuleiro ou cruzar outro navio. */
-  function posicionar(t, tipo, linha, coluna, orientacao) {
-    if (!TIPO.has(tipo) || tiposPosicionados(t).has(tipo)) return null;
-    const posicoes = posicoesNavio(tipo, linha, coluna, orientacao);
-    if (!podePosicionar(t, posicoes)) return null;
-    return { ...t, navios: [...t.navios, { tipo, posicoes }] };
-  }
-
-  function remover(t, tipo) {
-    return { ...t, navios: t.navios.filter((n) => n.tipo !== tipo) };
-  }
-
-  /** Resultado de um tiro; null se a casa estiver fora do tabuleiro ou já tiver levado tiro. */
-  function atirar(t, i) {
-    if (!Number.isInteger(i) || i < 0 || i >= CASAS || t.tiros.includes(i)) return null;
-    const novo = { ...t, tiros: [...t.tiros, i] };
-    const navio = navioEm(t, i);
-    return { tabuleiro: novo, posicao: i, atingido: navio ? navio.tipo : null, afundou: !!navio && afundado(novo, navio) };
-  }
-
-  /** Completa a frota sorteando entre todas as posições válidas; null se faltar espaço. */
-  function completarAleatorio(t, aleatorio = Math.random) {
-    let tabuleiro = t;
-    const ja = tiposPosicionados(t);
-    for (const { tipo } of NAVIOS) {
-      if (ja.has(tipo)) continue;
-      const opcoes = [];
-      for (let i = 0; i < CASAS; i++) {
-        for (const orientacao of ["horizontal", "vertical"]) {
-          const posicoes = posicoesNavio(tipo, linhaDe(i), colunaDe(i), orientacao);
-          if (podePosicionar(tabuleiro, posicoes)) opcoes.push(posicoes);
+  /** Frota do computador: cada navio numa casa e direção sorteadas até caber. */
+  function tabuleiroAleatorio(aleatorio = Math.random) {
+    // No app, um navio que não coubesse em 100 tentativas ficava de fora; aqui o sorteio
+    // recomeça, para a frota sair sempre completa
+    for (;;) {
+      let tab = tabuleiroVazio();
+      for (const tipo of ORDEM) {
+        for (let tentativa = 0; tentativa < 100; tentativa++) {
+          const inicio = casa(Math.floor(aleatorio() * TAMANHO), Math.floor(aleatorio() * TAMANHO));
+          const posicoes = posicoesDoNavio(inicio, tipo, aleatorio() < 0.5 ? "horizontal" : "vertical");
+          if (podePosicionar(tab, posicoes)) {
+            tab = posicionar(tab, tipo, posicoes);
+            break;
+          }
         }
       }
-      if (!opcoes.length) return null;
-      tabuleiro = { ...tabuleiro, navios: [...tabuleiro.navios, { tipo, posicoes: sortear(opcoes, aleatorio) }] };
+      if (tab.navios.length === ORDEM.length) return tab;
     }
-    return tabuleiro;
   }
 
-  /** Frota bem formada: um navio de cada tipo, do tamanho certo, em linha, sem sobreposição. */
-  function frotaValida(t, completa) {
-    if (!t || !Array.isArray(t.navios) || !Array.isArray(t.tiros)) return false;
-    const tipos = t.navios.map((n) => n && n.tipo);
-    if (tipos.some((tipo) => !TIPO.has(tipo)) || new Set(tipos).size !== tipos.length) return false;
-    if (completa && tipos.length !== NAVIOS.length) return false;
-    const casas = t.navios.flatMap((n) => (Array.isArray(n.posicoes) ? n.posicoes : [null]));
-    const casaValida = (i) => Number.isInteger(i) && i >= 0 && i < CASAS;
-    if (!casas.every(casaValida) || new Set(casas).size !== casas.length) return false;
-    const emLinha = t.navios.every((n) => {
-      const ordenadas = n.posicoes.slice().sort((a, b) => a - b);
-      if (ordenadas.length !== TIPO.get(n.tipo).tamanho) return false;
-      const inicio = ordenadas[0];
-      return ["horizontal", "vertical"].some((o) => {
-        const esperadas = posicoesNavio(n.tipo, linhaDe(inicio), colunaDe(inicio), o);
-        return !!esperadas && esperadas.every((p, k) => p === ordenadas[k]);
-      });
-    });
-    return emLinha && t.tiros.every(casaValida) && new Set(t.tiros).size === t.tiros.length;
-  }
+  // ---- Computador ----
 
-  // ---------- Computador ----------
+  /** O que o computador lembra entre um tiro e outro (lastAITarget, aiHuntMode etc. no app). */
+  const cacaInicial = () => ({ ultimoAlvo: null, cacando: false, direcao: null, acertos: [] });
 
-  /**
-   * Onde o computador atira. Só sorteia entre casas que ainda não levaram tiro e caça a partir
-   * de todos os acertos em navios ainda não afundados:
-   * - Fácil: ao acaso; em 20% das vezes tenta ao lado de um acerto.
-   * - Médio: em 60% das vezes tenta ao lado de um acerto.
-   * - Difícil: sempre caça; com dois acertos em linha segue a linha, e sem acertos atira em
-   *   casas alternadas (xadrez), já que o menor navio ocupa duas casas.
-   */
-  function escolherAlvo(t, dificuldade, aleatorio = Math.random) {
+  function casaAleatoria(tab, aleatorio) {
     const livres = [];
-    for (let i = 0; i < CASAS; i++) if (!t.tiros.includes(i)) livres.push(i);
-    if (!livres.length) return null;
-    const acertos = acertosAbertos(t);
-    if (acertos.length && aleatorio() < (CHANCE_CACA[dificuldade] ?? CHANCE_CACA.medium)) {
-      const alvo = dificuldade === "hard" ? alvoInteligente(t, acertos, aleatorio) : alvoVizinho(t, acertos, aleatorio);
-      if (alvo !== null) return alvo;
+    for (let l = 0; l < TAMANHO; l++) {
+      for (let c = 0; c < TAMANHO; c++) if (!tab.grade[l][c].revelada) livres.push(casa(l, c));
     }
-    if (dificuldade === "hard") {
-      const xadrez = livres.filter((i) => (linhaDe(i) + colunaDe(i)) % 2 === 0);
-      if (xadrez.length) return sortear(xadrez, aleatorio);
-    }
-    return sortear(livres, aleatorio);
+    return livres.length ? livres[Math.floor(aleatorio() * livres.length)] : casa(0, 0);
   }
 
-  /** Casa livre ao lado de um acerto sorteado (Fácil e Médio). */
-  function alvoVizinho(t, acertos, aleatorio) {
-    for (const acerto of embaralhar(acertos, aleatorio)) {
-      const opcoes = vizinhas(acerto).filter((i) => !t.tiros.includes(i));
-      if (opcoes.length) return sortear(opcoes, aleatorio);
+  /** Direção do navio pelos acertos: todos na mesma linha (horizontal) ou na mesma coluna. */
+  function orientacaoDosAcertos(acertos) {
+    if (acertos.length < 2) return null;
+    if (acertos.every((a) => a.linha === acertos[0].linha)) return "horizontal";
+    if (acertos.every((a) => a.coluna === acertos[0].coluna)) return "vertical";
+    return null;
+  }
+
+  function pontas(acertos, orientacao) {
+    const valores = acertos.map((a) => (orientacao === "horizontal" ? a.coluna : a.linha)).sort((a, b) => a - b);
+    return { min: valores[0], max: valores[valores.length - 1] };
+  }
+
+  /** Difícil: com dois acertos em linha, continua pelas pontas; com um, tenta os vizinhos. */
+  function alvoInteligente(tab, acertos) {
+    if (!acertos.length) return null;
+    const orientacao = orientacaoDosAcertos(acertos);
+    let candidatas;
+    if (!orientacao) {
+      const u = acertos[acertos.length - 1];
+      candidatas = [casa(u.linha, u.coluna - 1), casa(u.linha, u.coluna + 1), casa(u.linha - 1, u.coluna), casa(u.linha + 1, u.coluna)];
+    } else {
+      const { min, max } = pontas(acertos, orientacao);
+      const { linha, coluna } = acertos[0];
+      candidatas = orientacao === "horizontal"
+        ? [casa(linha, min - 1), casa(linha, max + 1)]
+        : [casa(min - 1, coluna), casa(max + 1, coluna)];
+    }
+    return candidatas.find((p) => dentro(p) && !atacada(tab, p)) || null;
+  }
+
+  /** Médio: vizinhos do último acerto, primeiro na direção que ele está tentando. */
+  function alvoCaca(tab, ultimo, direcao) {
+    for (const d of direcao ? [direcao] : ["horizontal", "vertical"]) {
+      const candidatas = d === "horizontal"
+        ? [casa(ultimo.linha, ultimo.coluna - 1), casa(ultimo.linha, ultimo.coluna + 1)]
+        : [casa(ultimo.linha - 1, ultimo.coluna), casa(ultimo.linha + 1, ultimo.coluna)];
+      const alvo = candidatas.find((p) => dentro(p) && !atacada(tab, p));
+      if (alvo) return alvo;
     }
     return null;
   }
 
-  /** Continua as linhas de acertos pelas pontas; sem linha, tenta os vizinhos dos acertos. */
-  function alvoInteligente(t, acertos, aleatorio = Math.random) {
-    const abertos = new Set(acertos.map((i) => `${linhaDe(i)},${colunaDe(i)}`));
-    const aberto = (l, c) => abertos.has(`${l},${c}`);
-    const pontas = [];
-    for (const acerto of acertos) {
-      const l = linhaDe(acerto);
-      const c = colunaDe(acerto);
-      for (const [dl, dc] of [
-        [0, 1],
-        [1, 0],
-      ]) {
-        if (!aberto(l - dl, c - dc) && !aberto(l + dl, c + dc)) continue;
-        let [il, ic] = [l, c];
-        while (aberto(il - dl, ic - dc)) [il, ic] = [il - dl, ic - dc];
-        let [fl, fc] = [l, c];
-        while (aberto(fl + dl, fc + dc)) [fl, fc] = [fl + dl, fc + dc];
-        for (const [pl, pc] of [
-          [il - dl, ic - dc],
-          [fl + dl, fc + dc],
-        ]) {
-          if (dentro(pl, pc) && !pontas.includes(casa(pl, pc))) pontas.push(casa(pl, pc));
-        }
-      }
+  /** Onde o computador atira no tabuleiro do jogador. */
+  function jogadaComputador(tab, caca, dificuldade, aleatorio = Math.random) {
+    if (dificuldade === "dificil" && caca.cacando && caca.acertos.length) {
+      const alvo = alvoInteligente(tab, caca.acertos);
+      if (alvo) return alvo;
     }
-    const naLinha = pontas.filter((i) => !t.tiros.includes(i));
-    if (naLinha.length) return sortear(naLinha, aleatorio);
-    return alvoVizinho(t, acertos, aleatorio);
+    // Médio: em 60% das vezes procura ao lado do último acerto
+    if (dificuldade === "medio" && caca.cacando && caca.ultimoAlvo && aleatorio() < 0.6) {
+      const alvo = alvoCaca(tab, caca.ultimoAlvo, caca.direcao);
+      if (alvo) return alvo;
+    }
+    // Fácil: sempre ao acaso
+    return casaAleatoria(tab, aleatorio);
   }
 
-  // ---------- Partida ----------
-  /*
-   * { jogador, inimigo, fase: "posicionando" | "jogando" | "fim", vez: "jogador" | "ia",
-   *   vencedor: null | "jogador" | "ia", dificuldade: null | "easy" | "medium" | "hard",
-   *   orientacao: "horizontal" | "vertical" }
-   */
-
-  function novaPartida(dificuldade = null, aleatorio = Math.random) {
-    return {
-      jogador: tabuleiroVazio(),
-      inimigo: completarAleatorio(tabuleiroVazio(), aleatorio),
-      fase: "posicionando",
-      vez: "jogador",
-      vencedor: null,
-      dificuldade,
-      orientacao: "horizontal",
-    };
-  }
-
-  /** Tiros do jogador: as casas atingidas no tabuleiro inimigo. */
-  const tiros = (p) => p.inimigo.tiros.length;
-  const naviosFaltando = (p) => {
-    const ja = tiposPosicionados(p.jogador);
-    return NAVIOS.filter((n) => !ja.has(n.tipo)).map((n) => n.tipo);
-  };
-  const prontaParaComecar = (p) => p.fase === "posicionando" && naviosFaltando(p).length === 0;
-  /** Há algo a perder ao começar outra: navio posicionado ou batalha em curso. */
-  const emAndamento = (p) => p.fase === "jogando" || (p.fase === "posicionando" && p.jogador.navios.length > 0);
-  const vezDaIa = (p) => p.fase === "jogando" && p.vez === "ia";
-
-  function escolherDificuldade(p, dificuldade) {
-    if (p.fase === "fim" || !DIFICULDADES.some((d) => d.chave === dificuldade)) return p;
-    return { ...p, dificuldade };
-  }
-
-  function girar(p) {
-    return { ...p, orientacao: p.orientacao === "horizontal" ? "vertical" : "horizontal" };
-  }
-
-  function posicionarNavio(p, tipo, linha, coluna) {
-    if (p.fase !== "posicionando") return null;
-    const jogador = posicionar(p.jogador, tipo, linha, coluna, p.orientacao);
-    return jogador ? { ...p, jogador } : null;
-  }
-
-  /** Tira o navio do tabuleiro durante o posicionamento (para colocá-lo em outro lugar). */
-  function removerNavio(p, tipo) {
-    return p.fase === "posicionando" ? { ...p, jogador: remover(p.jogador, tipo) } : p;
-  }
-
-  function posicionarRestantes(p, aleatorio = Math.random) {
-    if (p.fase !== "posicionando") return null;
-    const jogador = completarAleatorio(p.jogador, aleatorio);
-    return jogador ? { ...p, jogador } : null;
-  }
-
-  function iniciar(p) {
-    if (!prontaParaComecar(p) || !p.dificuldade) return null;
-    return { ...p, fase: "jogando", vez: "jogador" };
-  }
-
-  /** Tiro do jogador no tabuleiro inimigo; quem acerta joga de novo. */
-  function atirarJogador(p, i) {
-    if (p.fase !== "jogando" || p.vez !== "jogador") return null;
-    const tiro = atirar(p.inimigo, i);
-    if (!tiro) return null;
-    const venceu = todosAfundados(tiro.tabuleiro);
-    const partida = {
-      ...p,
-      inimigo: tiro.tabuleiro,
-      vez: tiro.atingido || venceu ? "jogador" : "ia",
-      fase: venceu ? "fim" : "jogando",
-      vencedor: venceu ? "jogador" : null,
-    };
-    return { partida, tiro };
-  }
-
-  /** Um tiro do computador (ele também joga de novo quando acerta). */
-  function jogadaIa(p, aleatorio = Math.random) {
-    if (!vezDaIa(p)) return null;
-    const alvo = escolherAlvo(p.jogador, p.dificuldade || "medium", aleatorio);
-    if (alvo === null) return null;
-    const tiro = atirar(p.jogador, alvo);
-    if (!tiro) return null;
-    const venceu = todosAfundados(tiro.tabuleiro);
-    const partida = {
-      ...p,
-      jogador: tiro.tabuleiro,
-      vez: tiro.atingido || venceu ? "ia" : "jogador",
-      fase: venceu ? "fim" : "jogando",
-      vencedor: venceu ? "ia" : null,
-    };
-    return { partida, tiro };
-  }
-
-  /** Partida salva coerente (como CodecBatalhaNaval.partidaValida); qualquer coisa estranha é descartada. */
-  function partidaValida(p) {
-    if (!p || typeof p !== "object") return false;
-    if (!["posicionando", "jogando", "fim"].includes(p.fase)) return false;
-    if (!["jogador", "ia"].includes(p.vez) || !["horizontal", "vertical"].includes(p.orientacao)) return false;
-    if (p.dificuldade !== null && !DIFICULDADES.some((d) => d.chave === p.dificuldade)) return false;
-    if (p.vencedor !== null && !["jogador", "ia"].includes(p.vencedor)) return false;
-    if (!frotaValida(p.inimigo, true) || !frotaValida(p.jogador, p.fase !== "posicionando")) return false;
-    if (p.fase === "posicionando" && (p.jogador.tiros.length || p.inimigo.tiros.length)) return false;
-    if (p.fase === "jogando" && (todosAfundados(p.jogador) || todosAfundados(p.inimigo) || !p.dificuldade)) return false;
-    return true;
-  }
-
-  /** Lê a partida do JSON salvo; null se faltar, estiver corrompida ou incoerente. */
-  function lerPartida(texto) {
-    if (typeof texto !== "string" || !texto) return null;
-    try {
-      const obj = JSON.parse(texto);
-      const limpar = (t) => ({
-        navios: Array.isArray(t?.navios) ? t.navios.map((n) => ({ tipo: n?.tipo, posicoes: n?.posicoes })) : null,
-        tiros: t?.tiros,
-      });
-      const p = {
-        jogador: limpar(obj.jogador),
-        inimigo: limpar(obj.inimigo),
-        fase: obj.fase,
-        vez: obj.vez,
-        vencedor: obj.vencedor ?? null,
-        dificuldade: obj.dificuldade ?? null,
-        orientacao: obj.orientacao,
+  /** Atualiza a memória do computador depois do tiro dele. */
+  function depoisDaJogada(caca, alvo, resultado, aleatorio = Math.random) {
+    if (resultado.afundou) return cacaInicial();
+    if (resultado.acerto) {
+      return {
+        ultimoAlvo: alvo,
+        cacando: true,
+        direcao: caca.direcao || (aleatorio() < 0.5 ? "horizontal" : "vertical"),
+        acertos: caca.acertos.concat([alvo]),
       };
-      return partidaValida(p) ? p : null;
-    } catch (erro) {
-      return null;
     }
+    // Errou durante a caça: o médio passa a tentar a outra direção
+    if (caca.cacando) return { ...caca, direcao: caca.direcao === "horizontal" ? "vertical" : "horizontal" };
+    return caca;
   }
 
-  // ---------- Estatísticas e recordes ----------
+  // ---- Estatísticas ----
 
-  const estatisticasVazias = () => ({ partidas: 0, vitorias: 0, derrotas: 0, mediaTiros: 0, melhorJogo: 0 });
+  const estatisticasVazias = () => ({ partidas: 0, vitorias: 0, derrotas: 0, mediaTiros: 0, melhor: 0 });
 
-  function registrarEstatistica(e, venceu, nTiros) {
-    const total = e.partidas + 1;
+  /** Soma uma partida. A média de tiros conta todas as partidas, como no app. */
+  function registrarPartida(est, venceu, tiros) {
+    const partidas = est.partidas + 1;
     return {
-      partidas: total,
-      vitorias: e.vitorias + (venceu ? 1 : 0),
-      derrotas: e.derrotas + (venceu ? 0 : 1),
-      mediaTiros: Math.round((e.mediaTiros * e.partidas + nTiros) / total),
-      melhorJogo: venceu && (e.melhorJogo === 0 || nTiros < e.melhorJogo) ? nTiros : e.melhorJogo,
+      partidas,
+      vitorias: est.vitorias + (venceu ? 1 : 0),
+      derrotas: est.derrotas + (venceu ? 0 : 1),
+      mediaTiros: Math.round((est.mediaTiros * est.partidas + tiros) / partidas),
+      // Melhor partida: menos tiros numa vitória
+      melhor: venceu && (est.melhor === 0 || tiros < est.melhor) ? tiros : est.melhor,
     };
   }
 
-  const taxaVitoria = (e) => (e.partidas === 0 ? 0 : Math.round((e.vitorias * 100) / e.partidas));
+  const aproveitamento = (est) => (est.partidas ? est.vitorias / est.partidas : 0);
 
-  function lerEstatisticas(texto) {
-    try {
-      const e = JSON.parse(texto);
-      const campos = ["partidas", "vitorias", "derrotas", "mediaTiros", "melhorJogo"];
-      if (e && campos.every((c) => Number.isInteger(e[c]) && e[c] >= 0) && e.vitorias + e.derrotas === e.partidas) {
-        return Object.fromEntries(campos.map((c) => [c, e[c]]));
-      }
-    } catch (erro) {
-      /* Corrompidas: começa do zero. */
+  /** Estatísticas lidas do navegador, ou zeradas se o conteúdo não for válido. */
+  function lerEstatisticas(dados) {
+    const inteiro = (v) => Number.isInteger(v) && v >= 0;
+    if (!dados || typeof dados !== "object") return estatisticasVazias();
+    const { partidas, vitorias, derrotas, mediaTiros, melhor } = dados;
+    if (![partidas, vitorias, derrotas, mediaTiros, melhor].every(inteiro) || vitorias + derrotas !== partidas) {
+      return estatisticasVazias();
     }
-    return estatisticasVazias();
+    return { partidas, vitorias, derrotas, mediaTiros, melhor };
   }
 
-  /** Menos tiros primeiro; no empate fica na frente quem fez antes. */
-  const ordenarRecordes = (lista) => lista.slice().sort((a, b) => a.tiros - b.tiros || a.momento - b.momento);
-
-  /**
-   * Coloca a vitória na lista se ela couber entre as 10 melhores. Devolve a lista nova, a
-   * posição (1 = melhor; null se não entrou) e se é um novo recorde (a primeira ou melhor que a
-   * melhor anterior; empate não é recorde).
-   */
-  function inserirRecorde(lista, novo) {
-    const melhor = lista[0];
-    const novoRecorde = !melhor || novo.tiros < melhor.tiros;
-    const mantidos = ordenarRecordes([...lista, novo]).slice(0, LIMITE_RECORDES);
-    const indice = mantidos.indexOf(novo);
-    return { lista: indice >= 0 ? mantidos : lista, posicao: indice >= 0 ? indice + 1 : null, novoRecorde };
-  }
-
-  /** { easy: [...], medium: [...], hard: [...] } com { tiros, momento }, já ordenadas. */
-  function lerRecordes(texto) {
-    const recordes = { easy: [], medium: [], hard: [] };
-    try {
-      const obj = JSON.parse(texto);
-      for (const chave of Object.keys(recordes)) {
-        const lista = Array.isArray(obj?.[chave]) ? obj[chave] : [];
-        recordes[chave] = ordenarRecordes(
-          lista.filter((r) => r && Number.isInteger(r.tiros) && r.tiros > 0 && Number.isFinite(r.momento)),
-        ).slice(0, LIMITE_RECORDES);
-      }
-    } catch (erro) {
-      /* Sem recordes válidos. */
-    }
-    return recordes;
-  }
+  /** "B7": letra da coluna e número da linha, para leitores de tela. */
+  const nomeCasa = (p) => `${"ABCDEFGHIJ"[p.coluna]}${p.linha + 1}`;
 
   return {
-    TAMANHO,
-    NAVIOS,
-    DIFICULDADES,
-    navio: (tipo) => TIPO.get(tipo) || null,
-    casa,
-    linhaDe,
-    colunaDe,
-    vizinhas,
-    posicoesNavio,
-    tabuleiroVazio,
-    navioEm,
-    afundado,
-    estado,
-    todosAfundados,
-    tiposPosicionados,
-    afundados,
-    acertosAbertos,
-    posicionar,
-    remover,
-    atirar,
-    completarAleatorio,
-    frotaValida,
-    escolherAlvo,
-    alvoInteligente,
-    novaPartida,
-    tiros,
-    naviosFaltando,
-    prontaParaComecar,
-    emAndamento,
-    vezDaIa,
-    escolherDificuldade,
-    girar,
-    posicionarNavio,
-    removerNavio,
-    posicionarRestantes,
-    iniciar,
-    atirarJogador,
-    jogadaIa,
-    partidaValida,
-    lerPartida,
-    estatisticasVazias,
-    registrarEstatistica,
-    taxaVitoria,
-    lerEstatisticas,
-    ordenarRecordes,
-    inserirRecorde,
-    lerRecordes,
+    TAMANHO, NAVIOS, ORDEM, DIFICULDADES, casa, dentro, tabuleiroVazio, atacada, posicoesDoNavio,
+    podePosicionar, posicionar, atacar, todosAfundados, tabuleiroAleatorio, cacaInicial, casaAleatoria,
+    orientacaoDosAcertos, alvoInteligente, alvoCaca, jogadaComputador, depoisDaJogada,
+    estatisticasVazias, registrarPartida, aproveitamento, lerEstatisticas, nomeCasa,
   };
 })();
+
 if (typeof module === "object") module.exports = LogicaBatalhaNaval;

@@ -44,6 +44,7 @@
   const botaoIniciar = raiz.querySelector("#cr-iniciar");
   const botaoContinuar = raiz.querySelector("#cr-continuar");
   const botaoPausar = raiz.querySelector("#cr-pausar");
+  const botaoReiniciar = raiz.querySelector("#cr-reiniciar");
   const botoesNivel = [...raiz.querySelectorAll("[data-nivel]")];
   const status = raiz.querySelector("#cr-status");
   const recordesNivel = raiz.querySelector("#cr-recordes-nivel");
@@ -306,6 +307,7 @@
     botaoIniciar.textContent = jogo.fase === F.FIM ? "Jogar novamente" : "Iniciar jogo";
     botaoContinuar.hidden = jogo.fase !== F.PAUSADO;
     botaoPausar.hidden = !andamento || jogo.fase === F.PAUSADO;
+    botaoReiniciar.hidden = !andamento;
 
     for (const botao of botoesNivel) {
       const ativo = botao.dataset.nivel === nivelId;
@@ -596,6 +598,35 @@
     if (document.activeElement === botaoContinuar) botaoPausar.focus();
   }
 
+  /** Descarta a partida em andamento (sem entrar nos recordes) e começa outra no mesmo nível. */
+  function reiniciar() {
+    if (!C.emAndamento(jogo.fase)) return;
+    const estavaPausado = jogo.fase === F.PAUSADO;
+    const recomecar = () => {
+      cancelarTudo();
+      pararTom();
+      padAceso = null;
+      jogo = C.estadoInicial(nivel());
+      gravar(CHAVE_PARTIDA, null);
+      iniciar();
+      focar(foco);
+    };
+    pausar(false);
+    // Pausar logo depois de um erro na última vida já encerrou a partida
+    if (!C.emAndamento(jogo.fase)) return;
+    // Quem já tinha pausado continua pausado ao desistir de reiniciar
+    const voltar = estavaPausado ? () => botaoContinuar.focus() : continuar;
+    abrirDialogo({
+      titulo: "Reiniciar a partida?",
+      texto: `A partida em andamento será perdida e uma nova começa do zero, no nível ${nivel().nome}.`,
+      botoes: [
+        { rotulo: "Reiniciar", acao: recomecar },
+        { rotulo: estavaPausado ? "Voltar" : "Continuar jogando", acao: voltar, secundario: true },
+      ],
+      aoCancelar: voltar,
+    });
+  }
+
   function trocarNivel(id) {
     if (id === nivelId || !C.NIVEIS[id]) return;
     const aplicar = () => {
@@ -695,6 +726,7 @@
   });
   botaoContinuar.addEventListener("click", continuar);
   botaoPausar.addEventListener("click", () => pausar());
+  botaoReiniciar.addEventListener("click", reiniciar);
   botaoSom.addEventListener("click", alternarSom);
   for (const botao of botoesNivel) botao.addEventListener("click", () => trocarNivel(botao.dataset.nivel));
 

@@ -1,601 +1,645 @@
 "use strict";
-/*
- * Interface da Batalha Naval do Multi-Game Strategy (jogos/batalhanaval/ui/BatalhaNavalViewModel.kt,
- * TelaPartidaBatalhaNaval.kt, SeletorNavios.kt, PainelDificuldade.kt, GradeNaval.kt,
- * DialogoFimBatalha.kt e TelaMenuBatalhaNaval.kt): dificuldade, posicionamento manual ou
- * aleatório, batalha com o computador pensando 1 s antes de cada tiro, fim de partida,
- * estatísticas e recordes. As regras ficam em batalha-naval-logica.js; tudo é salvo no localStorage.
- */
+/* Batalha Naval: telas e turnos como no app em React Native (src/app/difficultyScreen.tsx,
+   src/app/gameScreen.tsx, src/components/ e src/hooks/useBattleshipGame.ts). As regras e o
+   computador estão em batalha-naval-logica.js. */
 (() => {
   const raiz = document.querySelector("#bnaval");
-  if (!raiz || typeof LogicaBatalhaNaval === "undefined") return;
-  const B = LogicaBatalhaNaval;
+  if (!raiz) return;
+  const L = LogicaBatalhaNaval;
+  const $ = (id) => document.getElementById(id);
 
-  const ESPERA_IA_MS = 1000;
-  const DURACAO_AVISO_MS = 2500;
-  const CHAVE_PARTIDA = "efs-batalha-naval-partida";
-  const CHAVE_ESTATISTICAS = "efs-batalha-naval-estatisticas";
-  const CHAVE_RECORDES = "efs-batalha-naval-recordes";
-  const CHAVE_ABA = "efs-batalha-naval-aba-recordes";
+  const CHAVE_ESTATISTICAS = "efs-batalha-naval-placar";
+  const CHAVE_SOM = "efs-batalha-naval-som";
+  // Dados da versão anterior desta página, que não servem mais
+  const CHAVES_ANTIGAS = [
+    "efs-batalha-naval-partida",
+    "efs-batalha-naval-estatisticas",
+    "efs-batalha-naval-recordes",
+    "efs-batalha-naval-aba-recordes",
+  ];
+  const NOMES_DIFICULDADE = { facil: "Fácil", medio: "Médio", dificil: "Difícil" };
+  const SONS = {
+    agua: "/assets/jogos/batalha-naval/agua.wav",
+    bomba: "/assets/jogos/batalha-naval/bomba.wav",
+    vitoria: "/assets/jogos/batalha-naval/vitoria.mp3",
+  };
+  // Tempos do app: o resultado do tiro fica 1,5 s na tela antes de a vez passar, e o
+  // computador espera 1 s antes de cada tiro
+  const MOSTRAR_TIRO = 1500;
+  const ESPERA_COMPUTADOR = 1000;
 
-  const $ = (seletor) => raiz.querySelector(seletor);
-  const telaDificuldade = $("#bn-tela-dificuldade");
-  const telaPosicao = $("#bn-tela-posicionamento");
-  const telaBatalha = $("#bn-tela-batalha");
-  const resumo = $("#bn-resumo");
-  const botaoNovo = $("#bn-novo");
-  const posicaoTitulo = $("#bn-posicao-titulo");
-  const posicaoTexto = $("#bn-posicao-texto");
-  const cartaoPosicao = $("#bn-cartao-posicao");
-  const seloDificuldade = $("#bn-posicao-dificuldade");
-  const frota = $("#bn-frota");
-  const botoesOrientacao = [...raiz.querySelectorAll("[data-orientacao]")];
-  const botaoAleatorio = $("#bn-aleatorio");
-  const botaoIniciar = $("#bn-iniciar");
-  const vezTitulo = $("#bn-vez-titulo");
-  const vezTexto = $("#bn-vez-texto");
-  const pensando = $("#bn-pensando");
-  const textoTiros = $("#bn-tiros");
-  const textoAfundados = $("#bn-afundados");
-  const ultimo = $("#bn-ultimo");
-  const botaoNovoFim = $("#bn-novo-fim");
-  const meuResumo = $("#bn-meu-resumo");
-  const listaRecordes = $("#bn-lista-recordes");
-  const semRecordes = $("#bn-sem-recordes");
-  const abasRecordes = [...raiz.querySelectorAll("[data-recordes]")];
-  const dialogo = $("#bn-dialogo");
-  const dialogoIcone = $("#bn-dialogo-icone");
-  const dialogoTitulo = $("#bn-dialogo-titulo");
-  const dialogoCorpo = $("#bn-dialogo-corpo");
-  const dialogoBotoes = $("#bn-dialogo-botoes");
+  const el = {
+    telaDificuldade: $("bn-tela-dificuldade"),
+    telaJogo: $("bn-tela-jogo"),
+    dificuldade: $("bn-dificuldade"),
+    trocar: $("bn-trocar"),
+    som: $("bn-som"),
+    vez: $("bn-vez"),
+    tiros: $("bn-tiros"),
+    corpo: $("bn-corpo"),
+    seletor: $("bn-seletor"),
+    frota: $("bn-frota"),
+    orientacao: $("bn-orientacao"),
+    girar: $("bn-girar"),
+    iniciar: $("bn-iniciar"),
+    rotulo: $("bn-rotulo"),
+    grade: $("bn-grade"),
+    novo: $("bn-novo"),
+    instrucoes: $("bn-instrucoes"),
+    aviso: $("bn-aviso"),
+    apagar: $("bn-apagar"),
+    dialogo: $("bn-dialogo"),
+    dialogoTitulo: $("bn-dialogo-titulo"),
+    dialogoTexto: $("bn-dialogo-texto"),
+    dialogoNumero: $("bn-dialogo-numero"),
+    dialogoTiros: $("bn-dialogo-tiros"),
+    dialogoBotoes: $("bn-dialogo-botoes"),
+  };
 
-  const NOME_DIFICULDADE = Object.fromEntries(B.DIFICULDADES.map((d) => [d.chave, d.nome]));
-  const ROTULO_CASA = { agua: "água", navio: "navio", acerto: "acerto", erro: "tiro na água", afundado: "navio afundado" };
-
-  let partida;
-  let estatisticas = B.estatisticasVazias();
-  let recordes = { easy: [], medium: [], hard: [] };
-  let selecionado = null;
-  let ultimoTiroIa = null;
-  let previa = null; // casa sob o cursor ou o foco no posicionamento
-  let aviso = null;
-  let temporizadorAviso = null;
-  let turnoIa = null;
-  let abaRecordes = "easy";
-
-  // ---------- Armazenamento ----------
-
+  // ---- Navegador ----
   function ler(chave) {
     try {
       return localStorage.getItem(chave);
-    } catch (erro) {
+    } catch (e) {
       return null;
     }
   }
-
   function gravar(chave, valor) {
     try {
       localStorage.setItem(chave, valor);
-    } catch (erro) {
-      /* Armazenamento indisponível: vale só enquanto a página estiver aberta. */
+    } catch (e) {
+      /* sem armazenamento: o jogo segue sem guardar */
     }
   }
+  function apagarChave(chave) {
+    try {
+      localStorage.removeItem(chave);
+    } catch (e) {
+      /* idem */
+    }
+  }
+  CHAVES_ANTIGAS.forEach(apagarChave);
 
-  const salvarPartida = () => gravar(CHAVE_PARTIDA, JSON.stringify(partida));
+  let estatisticas = (() => {
+    try {
+      return L.lerEstatisticas(JSON.parse(ler(CHAVE_ESTATISTICAS)));
+    } catch (e) {
+      return L.estatisticasVazias();
+    }
+  })();
+  let somLigado = ler(CHAVE_SOM) !== "0";
 
-  // ---------- Tabuleiros ----------
-
-  /** Cria as 100 casas; nos tabuleiros em que se toca, cada casa é um botão (só uma recebe Tab). */
-  function criarGrade(el, interativa) {
-    const casas = [];
-    for (let i = 0; i < B.TAMANHO * B.TAMANHO; i++) {
-      const casa = document.createElement(interativa ? "button" : "span");
-      casa.className = "bn-casa";
-      casa.dataset.casa = String(i);
-      if (interativa) {
-        casa.type = "button";
-        casa.tabIndex = i === 0 ? 0 : -1;
+  // ---- Sons (audioService) ----
+  const audios = {};
+  function prepararSons() {
+    if (!somLigado) return;
+    for (const nome of Object.keys(SONS)) {
+      if (audios[nome]) continue;
+      try {
+        const audio = new Audio(SONS[nome]);
+        audio.preload = "auto";
+        audio.volume = 0.8;
+        audios[nome] = audio;
+      } catch (e) {
+        /* navegador sem áudio */
       }
-      el.append(casa);
-      casas.push(casa);
     }
-    if (interativa) {
-      el.addEventListener("keydown", (evento) => moverFoco(evento, casas));
-      el.addEventListener("focusin", (evento) => {
-        const alvo = evento.target.closest(".bn-casa");
-        if (!alvo) return;
-        casas.forEach((c) => (c.tabIndex = c === alvo ? 0 : -1));
-      });
-    }
-    return casas;
   }
-
-  /** Setas andam pelo tabuleiro; Home/End vão ao começo/fim da linha. */
-  function moverFoco(evento, casas) {
-    const atual = casas.indexOf(document.activeElement);
-    if (atual < 0) return;
-    const l = B.linhaDe(atual);
-    const c = B.colunaDe(atual);
-    const destino = {
-      ArrowUp: l > 0 ? atual - B.TAMANHO : null,
-      ArrowDown: l < B.TAMANHO - 1 ? atual + B.TAMANHO : null,
-      ArrowLeft: c > 0 ? atual - 1 : null,
-      ArrowRight: c < B.TAMANHO - 1 ? atual + 1 : null,
-      Home: atual - c,
-      End: atual - c + B.TAMANHO - 1,
-    }[evento.key];
-    if (destino === undefined) return;
-    evento.preventDefault();
-    if (destino !== null) casas[destino].focus();
-  }
-
-  const casasPosicao = criarGrade($("#bn-grade-posicao"), true);
-  const casasInimigo = criarGrade($("#bn-grade-inimigo"), true);
-  const casasMeu = criarGrade($("#bn-grade-meu"), false);
-
-  const descreverCasa = (i, estado) => `Linha ${B.linhaDe(i) + 1}, coluna ${B.colunaDe(i) + 1}: ${ROTULO_CASA[estado]}`;
-  const ondeFoi = (i) => `linha ${B.linhaDe(i) + 1}, coluna ${B.colunaDe(i) + 1}`;
-
-  /** Desenha um tabuleiro. No inimigo, os navios intactos aparecem como água até o fim. */
-  function pintar(casas, tabuleiro, { mostrarNavios, destaque = null, tocavel = () => false, rotular = true }) {
-    casas.forEach((el, i) => {
-      let estado = B.estado(tabuleiro, i);
-      if (estado === "navio" && !mostrarNavios) estado = "agua";
-      el.className = `bn-casa bn-${estado}`;
-      // A cor do navio só aparece quando ele está à vista (intacto e mostrado, ou já afundado)
-      const navio = estado === "navio" || estado === "afundado" ? B.navioEm(tabuleiro, i) : null;
-      if (navio) el.style.setProperty("--cor", B.navio(navio.tipo).cor);
-      else el.style.removeProperty("--cor");
-      if (i === destaque) el.classList.add("bn-destaque");
-      if (rotular) {
-        el.setAttribute("aria-label", descreverCasa(i, estado));
-        el.setAttribute("aria-disabled", String(!tocavel(i)));
-      }
-    });
-  }
-
-  // ---------- Desenho ----------
-
-  function desenhar() {
-    const fase = partida.fase;
-    botaoNovo.hidden = !partida.dificuldade;
-    telaDificuldade.hidden = !(fase === "posicionando" && !partida.dificuldade);
-    telaPosicao.hidden = !(fase === "posicionando" && partida.dificuldade);
-    telaBatalha.hidden = fase === "posicionando";
-    desenharResumo();
-    if (!telaPosicao.hidden) desenharPosicionamento();
-    if (!telaBatalha.hidden) desenharBatalha();
-    desenharRecordes();
-  }
-
-  function desenharResumo() {
-    const e = estatisticas;
-    if (e.partidas === 0) {
-      resumo.textContent = "Posicione sua frota e afunde os navios do computador com o menor número de tiros.";
-      return;
-    }
-    const partes = [`Partidas: ${e.partidas}`, `Vitórias: ${e.vitorias} (${B.taxaVitoria(e)}%)`];
-    if (e.melhorJogo > 0) partes.push(`Melhor: ${e.melhorJogo} tiros`);
-    resumo.textContent = partes.join(" · ");
-  }
-
-  function dicaPosicionamento() {
-    if (B.prontaParaComecar(partida)) return "Clique em “Iniciar jogo” para começar. Clique num navio do tabuleiro para mudá-lo de lugar.";
-    if (selecionado) {
-      const n = B.navio(selecionado);
-      return `Clique na casa onde o ${n.nome} (${n.tamanho} casas) deve começar.`;
-    }
-    return "Escolha um navio da lista e depois clique no tabuleiro.";
-  }
-
-  function desenharPosicionamento() {
-    const pronta = B.prontaParaComecar(partida);
-    posicaoTitulo.textContent = pronta ? "Frota pronta!" : "Posicione seus navios";
-    posicaoTexto.textContent = aviso || dicaPosicionamento();
-    cartaoPosicao.classList.toggle("bn-alerta", !!aviso);
-    seloDificuldade.textContent = NOME_DIFICULDADE[partida.dificuldade];
-    seloDificuldade.dataset.dificuldade = partida.dificuldade;
-
-    const postos = B.tiposPosicionados(partida.jogador);
-    for (const botao of frota.children) {
-      const tipo = botao.dataset.tipo;
-      const posto = postos.has(tipo);
-      botao.disabled = posto;
-      botao.classList.toggle("bn-posto", posto);
-      botao.setAttribute("aria-pressed", String(tipo === selecionado));
-    }
-    for (const b of botoesOrientacao) {
-      const ativo = b.dataset.orientacao === partida.orientacao;
-      b.classList.toggle("active", ativo);
-      b.setAttribute("aria-pressed", String(ativo));
-    }
-    botaoAleatorio.disabled = pronta;
-    botaoIniciar.hidden = !pronta;
-
-    pintar(casasPosicao, partida.jogador, { mostrarNavios: true, tocavel: () => true });
-    desenharPrevia();
-  }
-
-  /** Mostra onde o navio escolhido ficaria a partir da casa sob o cursor (verde se cabe, vermelho se não). */
-  function desenharPrevia() {
-    for (const el of casasPosicao) el.classList.remove("bn-previa", "bn-previa-ruim");
-    if (previa === null || !selecionado || B.navioEm(partida.jogador, previa)) return;
-    const l = B.linhaDe(previa);
-    const c = B.colunaDe(previa);
-    const tamanho = B.navio(selecionado).tamanho;
-    const cabe = !!B.posicionar(partida.jogador, selecionado, l, c, partida.orientacao);
-    for (let k = 0; k < tamanho; k++) {
-      const pl = partida.orientacao === "horizontal" ? l : l + k;
-      const pc = partida.orientacao === "horizontal" ? c + k : c;
-      if (pl >= B.TAMANHO || pc >= B.TAMANHO) break;
-      const el = casasPosicao[B.casa(pl, pc)];
-      el.classList.add(cabe ? "bn-previa" : "bn-previa-ruim");
-      el.style.setProperty("--cor-previa", B.navio(selecionado).cor);
+  function tocar(nome) {
+    if (!somLigado) return;
+    prepararSons();
+    const audio = audios[nome];
+    if (!audio) return;
+    try {
+      audio.currentTime = 0;
+      const tocando = audio.play();
+      if (tocando && tocando.catch) tocando.catch(() => {});
+    } catch (e) {
+      /* som silencioso em caso de erro, como no app */
     }
   }
 
-  function desenharBatalha() {
-    const fim = partida.fase === "fim";
-    const podeAtirar = partida.fase === "jogando" && partida.vez === "jogador";
-    let titulo;
-    let texto;
-    if (partida.vencedor === "jogador") [titulo, texto] = ["🎉 Vitória!", "Você afundou todos os navios inimigos."];
-    else if (partida.vencedor === "ia") [titulo, texto] = ["😔 Derrota", "Todos os seus navios foram afundados."];
-    else if (partida.vez === "jogador") [titulo, texto] = ["Seu turno", "Clique no tabuleiro inimigo para atirar. Acertou? Atire de novo!"];
-    else [titulo, texto] = ["Vez do computador…", "Ele está mirando no seu tabuleiro."];
-    vezTitulo.textContent = titulo;
-    vezTexto.textContent = texto;
-    pensando.hidden = !B.vezDaIa(partida);
-    textoTiros.textContent = String(B.tiros(partida));
-    const afundadosInimigo = B.afundados(partida.inimigo).length;
-    textoAfundados.textContent = `${afundadosInimigo}/${B.NAVIOS.length}`;
-    botaoNovoFim.hidden = !fim;
-    telaBatalha.classList.toggle("bn-vez-ia", B.vezDaIa(partida));
+  // ---- Estado da partida (useBattleshipGame) ----
+  let dificuldade = null;
+  let fase = "posicionamento"; // "posicionamento", "batalha" ou "fim"
+  let vez = "jogador";
+  let jogador;
+  let computador;
+  let caca;
+  let tiros = 0;
+  let vencedor = null;
+  let orientacao = "horizontal";
+  let selecionado = null;
+  // Enquanto o resultado do tiro do jogador fica na tela, novos tiros são ignorados
+  let bloqueado = false;
+  let ultimoTiro = null; // { lado: "jogador" | "computador", casa }
+  let mensagem = null; // aviso que troca a instrução até o próximo clique
+  let foco = L.casa(0, 0);
+  let timers = [];
 
-    pintar(casasInimigo, partida.inimigo, {
-      // No fim, mostra onde estavam os navios que sobraram
-      mostrarNavios: fim,
-      tocavel: (i) => podeAtirar && !partida.inimigo.tiros.includes(i),
-    });
-    pintar(casasMeu, partida.jogador, { mostrarNavios: true, destaque: ultimoTiroIa, rotular: false });
-    const perdidos = B.afundados(partida.jogador).length;
-    meuResumo.textContent = `: ${perdidos} de ${B.NAVIOS.length} navios afundados, ${partida.jogador.tiros.length} tiros do computador.`;
+  function agendar(fn, ms) {
+    const id = setTimeout(() => {
+      timers = timers.filter((t) => t !== id);
+      fn();
+    }, ms);
+    timers.push(id);
+  }
+  function cancelarTimers() {
+    timers.forEach(clearTimeout);
+    timers = [];
   }
 
-  function desenharRecordes() {
-    for (const aba of abasRecordes) {
-      const ativa = aba.dataset.recordes === abaRecordes;
-      aba.classList.toggle("active", ativa);
-      aba.setAttribute("aria-pressed", String(ativa));
-    }
-    const lista = recordes[abaRecordes];
-    semRecordes.hidden = lista.length > 0;
-    listaRecordes.replaceChildren(
-      ...lista.map((r) => {
-        const item = document.createElement("li");
-        const tiros = document.createElement("strong");
-        tiros.textContent = `${r.tiros} tiros`;
-        const data = document.createElement("span");
-        data.textContent = new Date(r.momento).toLocaleDateString("pt-BR");
-        item.append(tiros, data);
-        return item;
-      }),
-    );
-  }
+  const frotaCompleta = () => L.ORDEM.every((tipo) => jogador.navios.some((n) => n.tipo === tipo));
+  const emAndamento = () => fase !== "fim" && (jogador.navios.length > 0 || tiros > 0);
 
-  function avisar(texto) {
-    aviso = texto;
-    clearTimeout(temporizadorAviso);
-    temporizadorAviso = setTimeout(() => {
-      aviso = null;
-      if (!telaPosicao.hidden) desenharPosicionamento();
-    }, DURACAO_AVISO_MS);
+  function novaPartida() {
+    cancelarTimers();
+    fecharDialogo();
+    jogador = L.tabuleiroVazio();
+    computador = L.tabuleiroAleatorio();
+    caca = L.cacaInicial();
+    fase = "posicionamento";
+    vez = "jogador";
+    tiros = 0;
+    vencedor = null;
+    orientacao = "horizontal";
+    selecionado = null;
+    bloqueado = false;
+    ultimoTiro = null;
+    mensagem = null;
+    foco = L.casa(0, 0);
     desenhar();
   }
 
-  // ---------- Ações ----------
-
-  function atualizar(nova) {
-    partida = nova;
-    salvarPartida();
-    desenhar();
+  function escolherDificuldade(nivel) {
+    dificuldade = nivel;
+    novaPartida();
+    trazerParaVista();
+    const primeiro = el.frota.querySelector(".bn-item:not(:disabled)");
+    if (primeiro) primeiro.focus({ preventScroll: true });
   }
 
-  function escolherDificuldade(chave) {
-    atualizar(B.escolherDificuldade(partida, chave));
-    selecionado = B.naviosFaltando(partida)[0] || null;
+  function voltarParaDificuldade() {
+    cancelarTimers();
+    dificuldade = null;
     desenhar();
-    frota.querySelector("button:not(:disabled)")?.focus({ preventScroll: true });
+    trazerParaVista();
+    raiz.querySelector(".bn-nivel").focus({ preventScroll: true });
   }
 
+  // ---- Posicionamento ----
   function selecionar(tipo) {
-    selecionado = selecionado === tipo ? null : tipo;
+    if (fase !== "posicionamento" || jogador.navios.some((n) => n.tipo === tipo)) return;
+    selecionado = tipo;
+    mensagem = null;
     desenhar();
   }
 
   function girar() {
-    if (partida.fase !== "posicionando") return;
-    atualizar(B.girar(partida));
+    orientacao = orientacao === "horizontal" ? "vertical" : "horizontal";
+    desenhar();
   }
 
-  /** Clique no próprio tabuleiro: posiciona o navio escolhido ou recolhe um já posicionado. */
-  function tocarMeuTabuleiro(i) {
-    if (partida.fase !== "posicionando") return;
-    const existente = B.navioEm(partida.jogador, i);
-    if (existente) {
-      selecionado = existente.tipo;
-      atualizar(B.removerNavio(partida, existente.tipo));
-      return;
-    }
+  function colocar(p) {
     if (!selecionado) {
-      avisar("Escolha um navio na lista acima.");
+      mensagem = "Escolha primeiro um navio na lista.";
+      desenhar();
       return;
     }
-    const nova = B.posicionarNavio(partida, selecionado, B.linhaDe(i), B.colunaDe(i));
-    if (!nova) {
-      avisar(`O ${B.navio(selecionado).nome} não cabe nessa posição.`);
+    const posicoes = L.posicoesDoNavio(p, selecionado, orientacao);
+    if (!L.podePosicionar(jogador, posicoes)) {
+      mensagem = "O navio não cabe aí. Escolha outra casa ou mude a orientação.";
+      desenhar();
       return;
     }
-    selecionado = B.naviosFaltando(nova)[0] || null;
-    aviso = null;
-    atualizar(nova);
-    if (B.prontaParaComecar(partida)) botaoIniciar.focus({ preventScroll: true });
-  }
-
-  function posicionarRestantes() {
-    const nova = B.posicionarRestantes(partida);
-    if (!nova) {
-      avisar("Não há espaço para os navios que faltam.");
-      return;
-    }
+    jogador = L.posicionar(jogador, selecionado, posicoes);
+    avisar(`${L.NAVIOS[selecionado].nome} posicionado em ${L.nomeCasa(p)}.`);
     selecionado = null;
-    atualizar(nova);
-    botaoIniciar.focus({ preventScroll: true });
+    mensagem = null;
+    desenhar();
+    // Sem navio escolhido, o foco volta para a lista (ou para o botão de iniciar)
+    const proximo = frotaCompleta() ? el.iniciar : el.frota.querySelector(".bn-item:not(:disabled)");
+    if (proximo && raiz.contains(document.activeElement)) proximo.focus({ preventScroll: true });
   }
 
   function iniciar() {
-    const nova = B.iniciar(partida);
-    if (!nova) return;
-    ultimoTiroIa = null;
-    ultimo.textContent = "";
-    atualizar(nova);
-    casasInimigo.find((c) => c.tabIndex === 0)?.focus({ preventScroll: true });
-  }
-
-  function atirar(i) {
-    const jogada = B.atirarJogador(partida, i);
-    if (!jogada) return;
-    const { tiro } = jogada;
-    let resultado = "água.";
-    if (tiro.afundou) resultado = `afundou o ${B.navio(tiro.atingido).nome}!`;
-    else if (tiro.atingido) resultado = "acertou um navio! Atire de novo.";
-    ultimo.textContent = `Seu tiro na ${ondeFoi(i)}: ${resultado}`;
-    aplicar(jogada);
-    if (B.vezDaIa(partida)) agendarIa();
-  }
-
-  /** O computador pensa um pouco antes de cada tiro e continua enquanto acertar. */
-  function agendarIa() {
-    if (turnoIa) return;
-    turnoIa = setTimeout(() => {
-      turnoIa = null;
-      const jogada = B.jogadaIa(partida);
-      if (!jogada) return;
-      const { tiro } = jogada;
-      ultimoTiroIa = tiro.posicao;
-      let resultado = "água.";
-      if (tiro.afundou) resultado = `afundou seu ${B.navio(tiro.atingido).nome}.`;
-      else if (tiro.atingido) resultado = `acertou seu ${B.navio(tiro.atingido).nome}.`;
-      ultimo.textContent = `O computador atirou na ${ondeFoi(tiro.posicao)}: ${resultado}`;
-      aplicar(jogada);
-      if (B.vezDaIa(partida)) agendarIa();
-    }, ESPERA_IA_MS);
-  }
-
-  function aplicar(jogada) {
-    atualizar(jogada.partida);
-    if (jogada.partida.fase === "fim") terminar();
-  }
-
-  function terminar() {
-    const venceu = partida.vencedor === "jogador";
-    const n = B.tiros(partida);
-    estatisticas = B.registrarEstatistica(estatisticas, venceu, n);
-    gravar(CHAVE_ESTATISTICAS, JSON.stringify(estatisticas));
-    let registro = null;
-    if (venceu && partida.dificuldade) {
-      registro = B.inserirRecorde(recordes[partida.dificuldade], { tiros: n, momento: Date.now() });
-      if (registro.posicao !== null) {
-        recordes = { ...recordes, [partida.dificuldade]: registro.lista };
-        gravar(CHAVE_RECORDES, JSON.stringify(recordes));
-      }
-      abaRecordes = partida.dificuldade;
-    }
+    if (fase !== "posicionamento" || !frotaCompleta()) return;
+    fase = "batalha";
+    vez = "jogador";
+    prepararSons();
     desenhar();
-    mostrarFim(venceu, n, registro);
+    trazerParaVista();
+    casaEm(foco).focus({ preventScroll: true });
   }
 
-  function novoJogo() {
-    clearTimeout(turnoIa);
-    turnoIa = null;
-    clearTimeout(temporizadorAviso);
-    aviso = null;
-    selecionado = null;
-    ultimoTiroIa = null;
-    previa = null;
-    ultimo.textContent = "";
-    fecharDialogo();
-    atualizar(B.novaPartida());
-    telaDificuldade.querySelector("button")?.focus({ preventScroll: true });
-  }
-
-  // ---------- Diálogos ----------
-
-  function botao(rotulo, acao, secundario) {
-    const el = document.createElement("button");
-    el.type = "button";
-    el.className = secundario ? "button secondary" : "button";
-    el.textContent = rotulo;
-    el.addEventListener("click", acao);
-    return el;
-  }
-
-  function abrirDialogo({ icone, titulo, corpo, botoes }) {
-    dialogoIcone.textContent = icone;
-    dialogoTitulo.textContent = titulo;
-    dialogoCorpo.replaceChildren(...corpo);
-    dialogoBotoes.replaceChildren(...botoes.map((b) => botao(b.rotulo, b.acao, b.secundario)));
-    // Abre no mesmo clique do último tiro: os botões ignoram cliques logo em seguida
-    dialogo.classList.add("bn-travado");
-    setTimeout(() => dialogo.classList.remove("bn-travado"), 600);
-    if (typeof dialogo.showModal === "function") {
-      if (!dialogo.open) dialogo.showModal();
-    } else {
-      dialogo.setAttribute("open", "");
+  // ---- Tiros ----
+  function textoDoTiro(quem, r, p) {
+    const nome = r.tipo ? L.NAVIOS[r.tipo].nome : "";
+    if (quem === "jogador") {
+      if (r.afundou) return `Você afundou o ${nome}!`;
+      return r.acerto ? `Acertou em ${L.nomeCasa(p)}! Atire de novo.` : `Água em ${L.nomeCasa(p)}.`;
     }
-    dialogoBotoes.firstElementChild?.focus();
+    if (r.afundou) return `O adversário afundou seu ${nome}.`;
+    return r.acerto
+      ? `O adversário acertou seu ${nome} em ${L.nomeCasa(p)}.`
+      : `O adversário atirou em ${L.nomeCasa(p)} e errou.`;
   }
 
-  function fecharDialogo() {
-    if (!dialogo.open) return;
-    if (typeof dialogo.close === "function") dialogo.close();
-    else dialogo.removeAttribute("open");
-  }
-
-  function paragrafo(texto, classe) {
-    const p = document.createElement("p");
-    p.textContent = texto;
-    if (classe) p.className = classe;
-    return p;
-  }
-
-  function mostrarFim(venceu, n, registro) {
-    const caixa = document.createElement("div");
-    caixa.className = "bn-dialogo-tiros";
-    caixa.append(paragrafo("Tiros disparados"), paragrafo(String(n), "bn-dialogo-numero"));
-    const corpo = [
-      paragrafo(venceu ? "Você afundou todos os navios inimigos!" : "Todos os seus navios foram afundados. Tente novamente!"),
-      caixa,
-    ];
-    const nivel = partida.dificuldade ? ` (${NOME_DIFICULDADE[partida.dificuldade]})` : "";
-    if (registro?.novoRecorde) corpo.push(paragrafo(`🏆 Novo recorde${nivel}!`, "bn-selo-recorde"));
-    else if (registro?.posicao) corpo.push(paragrafo(`${registro.posicao}º lugar nos seus recordes${nivel}`, "bn-posicao-recorde"));
-    abrirDialogo({
-      icone: venceu ? "🎉" : "😔",
-      titulo: venceu ? "Vitória!" : "Derrota",
-      corpo,
-      botoes: [
-        { rotulo: "Novo jogo", acao: novoJogo },
-        { rotulo: "Ver tabuleiros", acao: () => { fecharDialogo(); botaoNovoFim.focus({ preventScroll: true }); }, secundario: true },
-      ],
-    });
-    dialogoTitulo.classList.toggle("bn-venceu", venceu);
-  }
-
-  function pedirNovoJogo() {
-    if (!B.emAndamento(partida)) {
-      novoJogo();
+  function atirar(p) {
+    if (fase !== "batalha" || vez !== "jogador" || bloqueado || L.atacada(computador, p)) return;
+    const r = L.atacar(computador, p);
+    computador = r.tabuleiro;
+    tiros++;
+    ultimoTiro = { lado: "computador", casa: p };
+    tocar(r.acerto ? "bomba" : "agua");
+    avisar(textoDoTiro("jogador", r, p));
+    if (L.todosAfundados(computador)) {
+      terminar("jogador");
       return;
     }
+    if (!r.acerto) {
+      // Mostra onde o tiro caiu e só depois passa a vez
+      bloqueado = true;
+      agendar(() => {
+        bloqueado = false;
+        vez = "computador";
+        desenhar();
+        agendar(vezDoComputador, ESPERA_COMPUTADOR);
+      }, MOSTRAR_TIRO);
+    }
+    desenhar();
+  }
+
+  function vezDoComputador() {
+    if (fase !== "batalha" || vez !== "computador") return;
+    const alvo = L.jogadaComputador(jogador, caca, dificuldade);
+    const r = L.atacar(jogador, alvo);
+    jogador = r.tabuleiro;
+    caca = L.depoisDaJogada(caca, alvo, r);
+    ultimoTiro = { lado: "jogador", casa: alvo };
+    tocar(r.acerto ? "bomba" : "agua");
+    avisar(textoDoTiro("computador", r, alvo));
+    if (L.todosAfundados(jogador)) {
+      terminar("computador");
+      return;
+    }
+    desenhar();
+    // Acertou: ele atira de novo. Errou: a vez volta depois de mostrar o tiro
+    if (r.acerto) agendar(vezDoComputador, ESPERA_COMPUTADOR);
+    else {
+      agendar(() => {
+        vez = "jogador";
+        desenhar();
+        if (raiz.contains(document.activeElement)) casaEm(foco).focus({ preventScroll: true });
+      }, MOSTRAR_TIRO);
+    }
+  }
+
+  function terminar(quemVenceu) {
+    cancelarTimers();
+    fase = "fim";
+    vencedor = quemVenceu;
+    bloqueado = false;
+    const venceu = quemVenceu === "jogador";
+    if (venceu) tocar("vitoria");
+    estatisticas = L.registrarPartida(estatisticas, venceu, tiros);
+    gravar(CHAVE_ESTATISTICAS, JSON.stringify(estatisticas));
+    desenhar();
+    desenharEstatisticas();
+    // Um instante para ver o último tiro antes do aviso de fim
+    agendar(() => {
+      abrirDialogo({
+        titulo: venceu ? "🎉 Vitória!" : "😔 Derrota",
+        classe: venceu ? "bn-venceu" : "bn-perdeu",
+        texto: venceu ? "Você afundou todos os navios inimigos!" : "Todos os seus navios foram afundados!",
+        tiros,
+        botoes: [
+          { texto: "Novo jogo", classe: venceu ? "bn-botao-vitoria" : "bn-botao-derrota", acao: novaPartida },
+          { texto: "Fechar", classe: "secondary" },
+        ],
+      });
+    }, 700);
+  }
+
+  // ---- Diálogo ----
+  function abrirDialogo({ titulo, classe = "", texto, tiros: numero = null, botoes }) {
+    el.dialogoTitulo.textContent = titulo;
+    el.dialogoTitulo.className = `bn-dialogo-titulo ${classe}`.trim();
+    el.dialogoTexto.textContent = texto;
+    el.dialogoNumero.hidden = numero === null;
+    if (numero !== null) el.dialogoTiros.textContent = String(numero);
+    el.dialogoBotoes.replaceChildren(
+      ...botoes.map(({ texto: rotulo, classe: estilo = "", acao }) => {
+        const botao = document.createElement("button");
+        botao.type = "button";
+        botao.className = `button ${estilo}`.trim();
+        botao.textContent = rotulo;
+        botao.addEventListener("click", () => {
+          fecharDialogo();
+          if (acao) acao();
+        });
+        return botao;
+      }),
+    );
+    if (typeof el.dialogo.showModal === "function") {
+      if (!el.dialogo.open) el.dialogo.showModal();
+    } else {
+      el.dialogo.setAttribute("open", "");
+    }
+    el.dialogoBotoes.querySelector("button").focus();
+  }
+  function fecharDialogo() {
+    if (!el.dialogo.open) return;
+    if (typeof el.dialogo.close === "function") el.dialogo.close();
+    else el.dialogo.removeAttribute("open");
+  }
+  function confirmar(titulo, texto, rotulo, acao) {
     abrirDialogo({
-      icone: "⚓",
-      titulo: "Novo jogo",
-      corpo: [paragrafo("Tem certeza que deseja iniciar um novo jogo? O progresso atual será perdido.")],
-      botoes: [
-        { rotulo: "Novo jogo", acao: novoJogo },
-        { rotulo: "Cancelar", acao: () => { fecharDialogo(); botaoNovo.focus({ preventScroll: true }); }, secundario: true },
-      ],
+      titulo,
+      texto,
+      botoes: [{ texto: "Cancelar", classe: "secondary" }, { texto: rotulo, acao }],
     });
   }
 
-  // ---------- Controles ----------
+  // ---- Desenho ----
+  function avisar(texto) {
+    el.aviso.textContent = texto;
+  }
 
-  for (const navio of B.NAVIOS) {
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className = "bn-escolha";
-    b.dataset.tipo = navio.tipo;
-    b.style.setProperty("--cor", navio.cor);
-    const nome = document.createElement("span");
-    nome.className = "bn-escolha-nome";
-    nome.textContent = navio.nome;
+  // Leva o placar para a tela quando o conteúdo acima muda de altura
+  function trazerParaVista() {
+    const alvo = dificuldade ? el.telaJogo : el.telaDificuldade;
+    const topo = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 72;
+    const caixa = alvo.getBoundingClientRect();
+    if (caixa.top < topo || caixa.top > window.innerHeight * 0.6) {
+      window.scrollTo({ top: window.scrollY + caixa.top - topo - 12, behavior: "smooth" });
+    }
+  }
+
+  // Lista de navios: criada uma vez, só o estado muda
+  const itens = {};
+  for (const tipo of L.ORDEM) {
+    const navio = L.NAVIOS[tipo];
+    const botao = document.createElement("button");
+    botao.type = "button";
+    botao.className = "bn-item";
+    botao.dataset.navio = tipo;
+    const previa = document.createElement("span");
+    previa.className = "bn-previa";
+    previa.style.setProperty("--cor", navio.cor);
     const desenho = document.createElement("span");
-    desenho.className = "bn-escolha-desenho";
-    desenho.setAttribute("aria-hidden", "true");
-    for (let k = 0; k < navio.tamanho; k++) desenho.append(document.createElement("i"));
-    const casas = document.createElement("span");
-    casas.className = "sr-only";
-    casas.textContent = `, ${navio.tamanho} casas`;
-    const posto = document.createElement("span");
-    posto.className = "bn-escolha-posto";
-    posto.textContent = "✓";
-    posto.title = "Posicionado";
-    b.append(nome, casas, desenho, posto);
-    b.addEventListener("click", () => selecionar(navio.tipo));
-    frota.append(b);
+    desenho.className = `bn-previa-navio bn-img-${tipo}`;
+    previa.append(desenho);
+    const textos = document.createElement("span");
+    textos.className = "bn-item-textos";
+    const nome = document.createElement("span");
+    nome.className = "bn-item-nome";
+    nome.textContent = navio.nome;
+    const info = document.createElement("span");
+    info.className = "bn-item-info";
+    info.textContent = `Tamanho: ${navio.tamanho}`;
+    const ok = document.createElement("span");
+    ok.className = "bn-item-ok";
+    ok.textContent = "✓ Posicionado";
+    textos.append(nome, info, ok);
+    botao.append(previa, textos);
+    botao.addEventListener("click", () => selecionar(tipo));
+    el.frota.append(botao);
+    itens[tipo] = { botao, ok };
   }
 
-  telaDificuldade.querySelectorAll("[data-dificuldade]").forEach((b) => {
-    b.addEventListener("click", () => escolherDificuldade(b.dataset.dificuldade));
+  // Tabuleiro: 100 botões criados uma vez; o foco anda com as setas (um só fica na ordem do Tab)
+  const casas = [];
+  for (let l = 0; l < L.TAMANHO; l++) {
+    for (let c = 0; c < L.TAMANHO; c++) {
+      const botao = document.createElement("button");
+      botao.type = "button";
+      botao.className = "bn-casa";
+      botao.dataset.linha = String(l);
+      botao.dataset.coluna = String(c);
+      botao.tabIndex = -1;
+      el.grade.append(botao);
+      casas.push(botao);
+    }
+  }
+  const casaEm = (p) => casas[p.linha * L.TAMANHO + p.coluna];
+  const posicaoDe = (botao) => L.casa(Number(botao.dataset.linha), Number(botao.dataset.coluna));
+
+  // Pedaço i do desenho do navio, girado quando ele está na vertical
+  function fatia(tab, tipo, p) {
+    const navio = tab.navios.find((n) => n.tipo === tipo);
+    const indice = navio.posicoes.findIndex((q) => q.linha === p.linha && q.coluna === p.coluna);
+    const vertical = navio.posicoes.every((q) => q.coluna === navio.posicoes[0].coluna);
+    const span = document.createElement("span");
+    span.className = `bn-fatia bn-img-${tipo}${vertical ? " bn-vertical" : ""}`;
+    span.style.setProperty("--i", String(indice));
+    return span;
+  }
+
+  function desenharGrade(tab, doJogador, clicavel) {
+    el.grade.classList.toggle("bn-clicavel", clicavel);
+    const lado = doJogador ? "jogador" : "computador";
+    for (let l = 0; l < L.TAMANHO; l++) {
+      for (let c = 0; c < L.TAMANHO; c++) {
+        const p = L.casa(l, c);
+        const cel = tab.grade[l][c];
+        const botao = casaEm(p);
+        // No tabuleiro inimigo, casa que não levou tiro é sempre água
+        const estado = doJogador || cel.revelada ? cel.estado : "agua";
+        const nomeNavio = cel.navio ? L.NAVIOS[cel.navio].nome : "";
+        let descricao = doJogador ? "água" : "não atacada";
+        botao.replaceChildren();
+        if (estado === "navio") {
+          botao.append(fatia(tab, cel.navio, p));
+          descricao = `seu ${nomeNavio}`;
+        } else if (estado === "afundado") {
+          botao.append(fatia(tab, cel.navio, p));
+          descricao = `${nomeNavio} afundado`;
+        } else if (estado === "acerto") {
+          botao.textContent = "💥";
+          descricao = doJogador ? `seu ${nomeNavio} atingido` : "acerto";
+        } else if (estado === "erro") {
+          botao.textContent = "💧";
+          descricao = "água, já atacada";
+        }
+        botao.className = `bn-casa${estado === "agua" ? "" : ` bn-${estado}`}`;
+        if (ultimoTiro && ultimoTiro.lado === lado && ultimoTiro.casa.linha === l && ultimoTiro.casa.coluna === c) {
+          botao.classList.add("bn-ultimo");
+        }
+        const desativada = !clicavel || (!doJogador && cel.revelada);
+        botao.setAttribute("aria-disabled", desativada ? "true" : "false");
+        botao.setAttribute("aria-label", `${L.nomeCasa(p)}: ${descricao}`);
+        botao.tabIndex = l === foco.linha && c === foco.coluna ? 0 : -1;
+      }
+    }
+  }
+
+  function limparPrevia() {
+    for (const botao of casas) botao.classList.remove("bn-previa-ok", "bn-previa-erro");
+  }
+  function mostrarPrevia(p) {
+    limparPrevia();
+    if (fase !== "posicionamento" || !selecionado) return;
+    const posicoes = L.posicoesDoNavio(p, selecionado, orientacao);
+    const cabe = L.podePosicionar(jogador, posicoes);
+    for (const q of posicoes) {
+      if (L.dentro(q)) casaEm(q).classList.add(cabe ? "bn-previa-ok" : "bn-previa-erro");
+    }
+  }
+
+  function textoDasInstrucoes() {
+    if (mensagem) return mensagem;
+    if (fase === "posicionamento") {
+      return frotaCompleta()
+        ? "Toque em Iniciar jogo para começar."
+        : "Toque em um navio, escolha entre horizontal e vertical e depois toque no tabuleiro para posicioná-lo.";
+    }
+    if (fase === "batalha") {
+      return vez === "jogador"
+        ? "Este é o tabuleiro do adversário: toque em uma casa para atacar."
+        : "Este é o seu tabuleiro: veja onde o adversário atacou seus navios.";
+    }
+    return vencedor === "jogador"
+      ? "Você afundou todos os navios inimigos! Toque em Novo jogo para jogar de novo."
+      : "Todos os seus navios foram afundados. Toque em Novo jogo para tentar de novo.";
+  }
+
+  function desenhar() {
+    el.telaDificuldade.hidden = dificuldade !== null;
+    el.telaJogo.hidden = dificuldade === null;
+    if (!dificuldade) return;
+
+    el.dificuldade.textContent = NOMES_DIFICULDADE[dificuldade];
+    el.tiros.textContent = String(tiros);
+    if (fase === "posicionamento") el.vez.textContent = "Posicione seus navios";
+    else if (fase === "batalha") el.vez.textContent = vez === "jogador" ? "Sua vez" : "Vez do adversário";
+    else el.vez.textContent = vencedor === "jogador" ? "Vitória!" : "Derrota";
+    el.vez.classList.toggle("bn-vez-adversario", fase === "batalha" && vez === "computador");
+
+    const posicionando = fase === "posicionamento";
+    el.seletor.hidden = !posicionando;
+    el.corpo.classList.toggle("bn-com-seletor", posicionando);
+    for (const tipo of L.ORDEM) {
+      const colocado = jogador.navios.some((n) => n.tipo === tipo);
+      const { botao, ok } = itens[tipo];
+      botao.disabled = colocado;
+      botao.classList.toggle("bn-colocado", colocado);
+      botao.setAttribute("aria-pressed", String(selecionado === tipo));
+      ok.hidden = !colocado;
+    }
+    el.orientacao.hidden = !selecionado;
+    el.girar.textContent = orientacao === "horizontal" ? "↔️ Horizontal" : "↕️ Vertical";
+    el.iniciar.hidden = !(posicionando && frotaCompleta());
+
+    // Na vez do jogador aparece o tabuleiro inimigo; na do computador, o do jogador
+    const inimigo = (fase === "batalha" && vez === "jogador") || (fase === "fim" && vencedor === "jogador");
+    el.rotulo.textContent = inimigo ? "Tabuleiro inimigo" : "Seu tabuleiro";
+    const clicavel = posicionando || (fase === "batalha" && vez === "jogador" && !bloqueado);
+    desenharGrade(inimigo ? computador : jogador, !inimigo, clicavel);
+    limparPrevia();
+
+    el.instrucoes.textContent = textoDasInstrucoes();
+    el.instrucoes.classList.toggle("bn-alerta", Boolean(mensagem));
+  }
+
+  function desenharEstatisticas() {
+    const e = estatisticas;
+    $("bn-est-partidas").textContent = String(e.partidas);
+    $("bn-est-vitorias").textContent = String(e.vitorias);
+    $("bn-est-derrotas").textContent = String(e.derrotas);
+    $("bn-est-aproveitamento").textContent = `${Math.round(L.aproveitamento(e) * 100)}%`;
+    $("bn-est-media").textContent = e.partidas ? String(e.mediaTiros) : "–";
+    $("bn-est-melhor").textContent = e.melhor ? `${e.melhor} tiros` : "–";
+    el.apagar.disabled = e.partidas === 0;
+  }
+
+  function desenharSom() {
+    el.som.setAttribute("aria-pressed", String(somLigado));
+    el.som.setAttribute("aria-label", somLigado ? "Som ligado" : "Som desligado");
+    el.som.title = somLigado ? "Som ligado" : "Som desligado";
+    el.som.firstElementChild.textContent = somLigado ? "🔊" : "🔇";
+  }
+
+  // ---- Eventos ----
+  raiz.querySelectorAll(".bn-nivel").forEach((botao) => {
+    botao.addEventListener("click", () => escolherDificuldade(botao.dataset.dificuldade));
+  });
+  el.girar.addEventListener("click", girar);
+  el.iniciar.addEventListener("click", iniciar);
+  el.novo.addEventListener("click", () => {
+    if (!emAndamento()) {
+      novaPartida();
+      return;
+    }
+    confirmar("Novo jogo", "Tem certeza que deseja iniciar um novo jogo? O progresso atual será perdido.", "Novo jogo", novaPartida);
+  });
+  el.trocar.addEventListener("click", () => {
+    if (!emAndamento()) {
+      voltarParaDificuldade();
+      return;
+    }
+    confirmar("Trocar dificuldade", "A partida atual será perdida. Deseja escolher outra dificuldade?", "Trocar", voltarParaDificuldade);
+  });
+  el.som.addEventListener("click", () => {
+    somLigado = !somLigado;
+    gravar(CHAVE_SOM, somLigado ? "1" : "0");
+    desenharSom();
+    if (somLigado) tocar("agua");
+  });
+  el.apagar.addEventListener("click", () => {
+    confirmar(
+      "Apagar estatísticas",
+      "Tem certeza que deseja apagar todas as estatísticas salvas? Esta ação não pode ser desfeita.",
+      "Apagar",
+      () => {
+        estatisticas = L.estatisticasVazias();
+        apagarChave(CHAVE_ESTATISTICAS);
+        desenharEstatisticas();
+      },
+    );
   });
 
-  botoesOrientacao.forEach((b) =>
-    b.addEventListener("click", () => {
-      if (b.dataset.orientacao !== partida.orientacao) girar();
-    }),
-  );
-  botaoAleatorio.addEventListener("click", posicionarRestantes);
-  botaoIniciar.addEventListener("click", iniciar);
-  botaoNovo.addEventListener("click", pedirNovoJogo);
-  botaoNovoFim.addEventListener("click", novoJogo);
-
-  casasPosicao.forEach((el, i) => {
-    el.addEventListener("click", () => tocarMeuTabuleiro(i));
-    el.addEventListener("pointerenter", () => {
-      previa = i;
-      desenharPrevia();
-    });
-    el.addEventListener("focus", () => {
-      previa = i;
-      desenharPrevia();
-    });
+  el.grade.addEventListener("click", (evento) => {
+    const botao = evento.target.closest(".bn-casa");
+    if (!botao || botao.getAttribute("aria-disabled") === "true") return;
+    const p = posicaoDe(botao);
+    foco = p;
+    if (fase === "posicionamento") colocar(p);
+    else if (fase === "batalha") atirar(p);
   });
-  $("#bn-grade-posicao").addEventListener("pointerleave", () => {
-    previa = null;
-    desenharPrevia();
+  el.grade.addEventListener("pointerover", (evento) => {
+    const botao = evento.target.closest(".bn-casa");
+    if (botao && evento.pointerType === "mouse") mostrarPrevia(posicaoDe(botao));
   });
-
-  casasInimigo.forEach((el, i) => el.addEventListener("click", () => atirar(i)));
-
-  abasRecordes.forEach((aba) =>
-    aba.addEventListener("click", () => {
-      abaRecordes = aba.dataset.recordes;
-      gravar(CHAVE_ABA, abaRecordes);
-      desenharRecordes();
-    }),
-  );
-
-  document.addEventListener("keydown", (evento) => {
-    if (evento.altKey || evento.ctrlKey || evento.metaKey || dialogo.open) return;
-    if (evento.target.closest?.("input, textarea, select, [contenteditable]")) return;
-    const focoLivre = document.activeElement === document.body || telaPosicao.contains(document.activeElement);
-    if ((evento.key === "r" || evento.key === "R") && !telaPosicao.hidden && focoLivre) {
+  el.grade.addEventListener("pointerleave", limparPrevia);
+  el.grade.addEventListener("focusin", (evento) => {
+    const botao = evento.target.closest(".bn-casa");
+    if (!botao) return;
+    foco = posicaoDe(botao);
+    for (const outra of casas) outra.tabIndex = outra === botao ? 0 : -1;
+    mostrarPrevia(foco);
+  });
+  el.grade.addEventListener("focusout", (evento) => {
+    if (!el.grade.contains(evento.relatedTarget)) limparPrevia();
+  });
+  el.grade.addEventListener("keydown", (evento) => {
+    const passo = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] }[evento.key];
+    if (!passo) return;
+    evento.preventDefault();
+    const destino = L.casa(foco.linha + passo[0], foco.coluna + passo[1]);
+    if (L.dentro(destino)) casaEm(destino).focus();
+  });
+  // R gira o navio durante o posicionamento
+  raiz.addEventListener("keydown", (evento) => {
+    if ((evento.key === "r" || evento.key === "R") && !evento.ctrlKey && !evento.metaKey && !evento.altKey
+      && fase === "posicionamento" && dificuldade && !el.dialogo.open) {
       evento.preventDefault();
       girar();
+      if (el.grade.contains(document.activeElement)) mostrarPrevia(foco);
     }
   });
 
-  // ---------- Início ----------
-
-  estatisticas = B.lerEstatisticas(ler(CHAVE_ESTATISTICAS));
-  recordes = B.lerRecordes(ler(CHAVE_RECORDES));
-  const aba = ler(CHAVE_ABA);
-  if (aba && recordes[aba]) abaRecordes = aba;
-  // Partida terminada não volta: começa outra
-  const salva = B.lerPartida(ler(CHAVE_PARTIDA));
-  partida = salva && salva.fase !== "fim" ? salva : B.novaPartida();
-  selecionado = B.naviosFaltando(partida)[0] || null;
-  salvarPartida();
+  desenharSom();
+  desenharEstatisticas();
   desenhar();
-  if (B.vezDaIa(partida)) agendarIa();
 })();

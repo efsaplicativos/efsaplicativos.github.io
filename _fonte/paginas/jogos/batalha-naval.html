@@ -13,103 +13,83 @@ app: Batalha Naval | GameApplication
   </ol>
   <h1>Batalha Naval online contra o computador</h1>
   <p>
-    Posicione seus cinco navios, escolha a dificuldade e troque tiros com o computador até
-    afundar a frota inteira dele. Funciona no computador e no celular, e a partida fica salva se
-    você fechar a página.
+    Escolha a dificuldade, posicione seus cinco navios e troque tiros com o computador até
+    afundar a frota inteira dele. Funciona no computador e no celular, com os navios e os sons do
+    app.
   </p>
 </header>
 
 <section class="bnaval" id="bnaval" aria-label="Jogo Batalha Naval">
-  <div class="bn-barra">
-    <p class="bn-resumo" id="bn-resumo"></p>
-    <button type="button" class="button secondary" id="bn-novo" hidden>Novo jogo</button>
-  </div>
-
-  <div class="bn-painel bn-tela-dificuldade" id="bn-tela-dificuldade" hidden>
-    <p class="bn-painel-titulo" id="bn-dificuldade-titulo">Escolha a dificuldade</p>
-    <p class="bn-painel-texto">Quanto mais difícil, mais esperto o computador fica para caçar seus navios.</p>
+  <div class="bn-tela bn-tela-dificuldade" id="bn-tela-dificuldade">
+    <img class="bn-capa" src="/assets/jogos/batalha-naval/capa.webp" alt="Batalha Naval: navios trocando tiros no mar" width="480" height="480" />
+    <h2 class="bn-titulo" id="bn-dificuldade-titulo">Escolha a dificuldade</h2>
     <div class="bn-niveis" role="group" aria-labelledby="bn-dificuldade-titulo">
-      <button type="button" class="bn-nivel" data-dificuldade="easy">
-        <strong>Fácil</strong><span>O computador atira quase sempre ao acaso</span>
+      <button type="button" class="bn-nivel bn-nivel-facil" data-dificuldade="facil">
+        <span class="bn-nivel-icone" aria-hidden="true">🙂</span><strong>Fácil</strong><span>Ideal para iniciantes</span>
       </button>
-      <button type="button" class="bn-nivel" data-dificuldade="medium">
-        <strong>Médio</strong><span>Às vezes ele caça perto dos acertos</span>
+      <button type="button" class="bn-nivel bn-nivel-medio" data-dificuldade="medio">
+        <span class="bn-nivel-icone" aria-hidden="true">😐</span><strong>Médio</strong><span>Um desafio equilibrado</span>
       </button>
-      <button type="button" class="bn-nivel" data-dificuldade="hard">
-        <strong>Difícil</strong><span>Ele persegue cada navio atingido</span>
+      <button type="button" class="bn-nivel bn-nivel-dificil" data-dificuldade="dificil">
+        <span class="bn-nivel-icone" aria-hidden="true">🙁</span><strong>Difícil</strong><span>Para mestres da Batalha Naval</span>
       </button>
     </div>
   </div>
 
-  <div class="bn-tela-posicionamento" id="bn-tela-posicionamento" hidden>
-    <div class="bn-controles">
-      <div class="bn-cartao" id="bn-cartao-posicao">
-        <div class="bn-cartao-textos" aria-live="polite">
-          <p class="bn-cartao-titulo" id="bn-posicao-titulo">Posicione seus navios</p>
-          <p class="bn-cartao-texto" id="bn-posicao-texto"></p>
+  <div class="bn-tela bn-tela-jogo" id="bn-tela-jogo" hidden>
+    <div class="bn-topo">
+      <p class="bn-dificuldade">Dificuldade: <strong id="bn-dificuldade"></strong></p>
+      <div class="bn-topo-botoes">
+        <button type="button" class="button secondary bn-pequeno" id="bn-trocar">Trocar dificuldade</button>
+        <button type="button" class="bn-icone" id="bn-som" aria-pressed="true" aria-label="Som" title="Som"><span aria-hidden="true">🔊</span></button>
+      </div>
+    </div>
+
+    <div class="bn-status">
+      <p class="bn-vez" id="bn-vez"></p>
+      <p class="bn-tiros">Tiros: <strong id="bn-tiros">0</strong></p>
+    </div>
+
+    <div class="bn-corpo" id="bn-corpo">
+      <div class="bn-seletor" id="bn-seletor">
+        <p class="bn-seletor-titulo" id="bn-seletor-titulo">Posicione seus navios</p>
+        <div class="bn-frota" id="bn-frota" role="group" aria-labelledby="bn-seletor-titulo"></div>
+        <div class="bn-orientacao" id="bn-orientacao" hidden>
+          <span>Orientação:</span>
+          <button type="button" class="button bn-pequeno" id="bn-girar"></button>
         </div>
-        <span class="bn-selo" id="bn-posicao-dificuldade"></span>
+        <button type="button" class="button bn-iniciar" id="bn-iniciar" hidden>Iniciar jogo</button>
       </div>
-      <div class="bn-frota" id="bn-frota" role="group" aria-label="Navios para posicionar"></div>
-      <div class="bn-linha">
-        <div class="segmented bn-orientacao" role="group" aria-label="Direção do navio">
-          <button type="button" class="filter active" data-orientacao="horizontal" aria-pressed="true"><span aria-hidden="true">↔</span> Horizontal</button>
-          <button type="button" class="filter" data-orientacao="vertical" aria-pressed="false"><span aria-hidden="true">↕</span> Vertical</button>
+
+      <div class="bn-lado">
+        <p class="bn-rotulo" id="bn-rotulo">Seu tabuleiro</p>
+        <div class="bn-grade" id="bn-grade" role="group" aria-labelledby="bn-rotulo" aria-describedby="bn-instrucoes"></div>
+        <div class="bn-acoes">
+          <button type="button" class="button" id="bn-novo"><span aria-hidden="true">↻</span> Novo jogo</button>
         </div>
-        <button type="button" class="button secondary bn-aleatorio" id="bn-aleatorio">Aleatório</button>
+        <p class="bn-instrucoes" id="bn-instrucoes"></p>
       </div>
-      <button type="button" class="button bn-iniciar" id="bn-iniciar" hidden>Iniciar jogo</button>
     </div>
-    <div class="bn-lado">
-      <p class="bn-rotulo" id="bn-rotulo-posicao">Seu tabuleiro</p>
-      <div class="bn-grade" id="bn-grade-posicao" role="group" aria-labelledby="bn-rotulo-posicao" aria-describedby="bn-ajuda"></div>
-    </div>
+    <p class="sr-only" id="bn-aviso" aria-live="polite"></p>
   </div>
 
-  <div class="bn-tela-batalha" id="bn-tela-batalha" hidden>
-    <div class="bn-cartao bn-status">
-      <div class="bn-cartao-textos">
-        <p class="bn-cartao-titulo"><span id="bn-vez-titulo"></span> <span class="bn-pensando" id="bn-pensando" hidden></span></p>
-        <p class="bn-cartao-texto" id="bn-vez-texto"></p>
-      </div>
-      <div class="bn-contador"><strong id="bn-tiros">0</strong><span>Tiros</span></div>
-      <div class="bn-contador"><strong id="bn-afundados">0/5</strong><span>Afundados</span></div>
-    </div>
-    <p class="bn-ultimo" id="bn-ultimo" aria-live="polite"></p>
-    <button type="button" class="button bn-novo-fim" id="bn-novo-fim" hidden>Novo jogo</button>
-    <div class="bn-tabuleiros">
-      <div class="bn-lado bn-lado-inimigo">
-        <p class="bn-rotulo" id="bn-rotulo-inimigo">Tabuleiro inimigo</p>
-        <div class="bn-grade" id="bn-grade-inimigo" role="group" aria-labelledby="bn-rotulo-inimigo" aria-describedby="bn-ajuda"></div>
-      </div>
-      <div class="bn-lado bn-lado-meu">
-        <p class="bn-rotulo" id="bn-rotulo-meu">Seu tabuleiro</p>
-        <div class="bn-grade bn-grade-meu" id="bn-grade-meu" role="img" aria-labelledby="bn-rotulo-meu bn-meu-resumo"></div>
-        <span class="sr-only" id="bn-meu-resumo"></span>
-      </div>
-    </div>
-  </div>
-
-  <p class="bn-ajuda" id="bn-ajuda">
-    Clique ou toque nas casas. No teclado, mova-se pelo tabuleiro com as setas e use Enter; no
-    posicionamento, a tecla R gira o navio.
-  </p>
-
-  <div class="bn-recordes">
-    <p class="bn-recordes-titulo" id="bn-recordes-titulo">Seus recordes (menos tiros numa vitória)</p>
-    <div class="segmented" role="group" aria-labelledby="bn-recordes-titulo">
-      <button type="button" class="filter active" data-recordes="easy" aria-pressed="true">Fácil</button>
-      <button type="button" class="filter" data-recordes="medium" aria-pressed="false">Médio</button>
-      <button type="button" class="filter" data-recordes="hard" aria-pressed="false">Difícil</button>
-    </div>
-    <ol class="bn-lista-recordes" id="bn-lista-recordes"></ol>
-    <p class="bn-sem-recordes" id="bn-sem-recordes" hidden>Nenhuma vitória neste nível ainda.</p>
+  <div class="bn-estatisticas">
+    <p class="bn-estatisticas-titulo" id="bn-estatisticas-titulo">Suas estatísticas</p>
+    <dl class="bn-numeros" aria-labelledby="bn-estatisticas-titulo">
+      <div><dt>Partidas</dt><dd id="bn-est-partidas">0</dd></div>
+      <div><dt>Vitórias</dt><dd id="bn-est-vitorias">0</dd></div>
+      <div><dt>Derrotas</dt><dd id="bn-est-derrotas">0</dd></div>
+      <div><dt>Aproveitamento</dt><dd id="bn-est-aproveitamento">0%</dd></div>
+      <div><dt>Média de tiros</dt><dd id="bn-est-media">–</dd></div>
+      <div><dt>Melhor vitória</dt><dd id="bn-est-melhor">–</dd></div>
+    </dl>
+    <button type="button" class="button secondary bn-pequeno" id="bn-apagar"><span aria-hidden="true">🗑</span> Apagar estatísticas</button>
   </div>
 
   <dialog class="bn-dialogo" id="bn-dialogo" aria-labelledby="bn-dialogo-titulo">
-    <p class="bn-dialogo-icone" id="bn-dialogo-icone" aria-hidden="true"></p>
     <p class="bn-dialogo-titulo" id="bn-dialogo-titulo"></p>
-    <div class="bn-dialogo-corpo" id="bn-dialogo-corpo"></div>
+    <p class="bn-dialogo-texto" id="bn-dialogo-texto"></p>
+    <div class="bn-dialogo-numero" id="bn-dialogo-numero" hidden><span>Tiros disparados</span><strong id="bn-dialogo-tiros"></strong></div>
     <div class="bn-dialogo-botoes" id="bn-dialogo-botoes"></div>
   </dialog>
 </section>
@@ -118,14 +98,14 @@ app: Batalha Naval | GameApplication
   <h2>Como jogar Batalha Naval</h2>
   <p>
     Cada lado tem um tabuleiro de 10 × 10 casas com cinco navios escondidos. Você não vê os
-    navios do computador, e ele não vê os seus. Os jogadores se alternam atirando em uma casa do
-    tabuleiro adversário: se houver um navio ali, é <strong>acerto</strong>; se não, o tiro cai na
-    <strong>água</strong>. Ganha quem afundar primeiro todos os navios do outro.
+    navios do computador, e ele não vê os seus. Os dois se alternam atirando em uma casa do
+    tabuleiro adversário: se houver um navio ali, é <strong>acerto</strong> (💥); se não, o tiro
+    cai na <strong>água</strong> (💧). Ganha quem afundar primeiro todos os navios do outro.
   </p>
   <ol>
-    <li><strong>Escolha a dificuldade.</strong> Ela define como o computador mira e também separa os seus recordes.</li>
-    <li><strong>Posicione a frota.</strong> Escolha um navio, a direção (horizontal ou vertical) e clique na casa onde ele começa: ele ocupa as casas seguintes para a direita ou para baixo. Para mudar um navio de lugar, clique nele no tabuleiro. O botão <strong>Aleatório</strong> completa os que faltam.</li>
-    <li><strong>Atire.</strong> Clique numa casa do tabuleiro inimigo. Acertou? Você atira de novo. Errou? A vez passa para o computador, que também continua atirando enquanto acerta.</li>
+    <li><strong>Escolha a dificuldade.</strong> Ela define como o computador mira.</li>
+    <li><strong>Posicione a frota.</strong> Toque em um navio da lista, escolha horizontal ou vertical e toque na casa onde ele começa: ele ocupa as casas seguintes para a direita ou para baixo. No computador, a casa sob o mouse já mostra onde o navio vai ficar. Com os cinco no lugar, toque em <strong>Iniciar jogo</strong>.</li>
+    <li><strong>Atire.</strong> Na sua vez aparece o tabuleiro inimigo. Acertou? Você atira de novo. Errou? Depois de um instante a tela mostra o seu tabuleiro e o computador atira, e ele também continua enquanto acerta.</li>
   </ol>
 
   <h2>A frota</h2>
@@ -145,27 +125,27 @@ app: Batalha Naval | GameApplication
   </div>
   <p>
     São 17 casas ocupadas em 100. Os navios não podem se cruzar nem sair do tabuleiro, mas podem
-    ficar encostados um no outro. Um navio afunda quando todas as casas dele são atingidas; aí as
-    casas dele ficam escuras nos dois tabuleiros.
+    ficar encostados um no outro. Quando todas as casas de um navio são atingidas, ele afunda: as
+    casas dele ficam vermelhas e o desenho do navio aparece, inclusive no tabuleiro inimigo.
   </p>
 
   <h2>Como o computador joga em cada nível</h2>
   <ul>
-    <li><strong>Fácil:</strong> atira ao acaso e só em 20% das vezes tenta uma casa ao lado de um acerto.</li>
-    <li><strong>Médio:</strong> em 60% das vezes procura ao redor dos acertos.</li>
-    <li><strong>Difícil:</strong> sempre persegue um navio atingido; com dois acertos em linha, segue a linha pelas pontas. Sem acertos, atira em casas alternadas, como as de mesma cor de um tabuleiro de xadrez: como o menor navio ocupa duas casas, nenhum fica de fora desse padrão.</li>
+    <li><strong>Fácil:</strong> atira sempre ao acaso, mesmo depois de acertar um navio.</li>
+    <li><strong>Médio:</strong> depois de um acerto, em 60% das vezes tenta uma casa vizinha do último acerto; se erra, muda de direção.</li>
+    <li><strong>Difícil:</strong> persegue o navio atingido até afundar. Com um acerto, testa os vizinhos; com dois em linha, segue pelas pontas da linha.</li>
   </ul>
   <p>
-    Numa simulação com 2.000 frotas sorteadas, o computador precisou em média de cerca de 80 tiros
-    para afundar tudo no fácil, 65 no médio e 52 no difícil. Para ganhar no difícil, você precisa
-    ser mais rápido do que isso.
+    Numa simulação com 3.000 frotas sorteadas, o computador precisou em média de cerca de 95 tiros
+    para afundar tudo no fácil, 84 no médio e 66 no difícil. Para ganhar, você precisa afundar os
+    navios dele com menos tiros do que isso.
   </p>
 
   <div class="anuncio" data-bloco="meio" hidden></div>
 
   <h2>Dicas de estratégia</h2>
   <ol>
-    <li><strong>Atire em xadrez no começo.</strong> Mirar só nas casas alternadas encontra qualquer navio gastando metade dos tiros.</li>
+    <li><strong>Atire em xadrez no começo.</strong> Mirar só nas casas alternadas encontra qualquer navio gastando metade dos tiros, porque o menor ocupa duas casas.</li>
     <li><strong>Depois do primeiro acerto, cace.</strong> Teste as quatro casas vizinhas; com dois acertos em linha, continue na mesma direção até afundar.</li>
     <li><strong>Use o que já afundou.</strong> Se o porta-aviões já foi, não sobra navio de 5 casas, e corredores estreitos podem ser ignorados.</li>
     <li><strong>Espalhe sua frota.</strong> Navios encostados ajudam o computador: quando ele caça um, acaba achando o vizinho.</li>
@@ -175,15 +155,20 @@ app: Batalha Naval | GameApplication
   <h2>Perguntas frequentes</h2>
   <h3>Minha partida fica salva?</h3>
   <p>
-    Sim. O posicionamento, os tiros, as estatísticas e os recordes ficam guardados no próprio
-    navegador. Uma partida que já terminou não volta: ao reabrir a página, começa outra. Se você
-    limpar os dados do navegador ou jogar em outro aparelho, eles não aparecem.
+    Não. Como no app, cada vez que você abre a página começa uma partida nova. O que fica guardado
+    no navegador são as estatísticas e a preferência de som. Se você limpar os dados do navegador
+    ou jogar em outro aparelho, elas não aparecem.
   </p>
-  <h3>Como funcionam os recordes?</h3>
+  <h3>Como são contadas as estatísticas?</h3>
   <p>
-    Cada vitória entra numa lista com as 10 melhores de cada dificuldade, ordenada pelo menor
-    número de tiros. Empatar com o melhor resultado não conta como novo recorde. Derrotas contam
-    só nas estatísticas de partidas e vitórias.
+    Cada partida terminada conta uma vitória ou uma derrota. A média de tiros considera todas as
+    partidas, e a melhor vitória é a que você ganhou com menos tiros. O botão Apagar estatísticas
+    zera tudo.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Sim, os mesmos do app: água no tiro que erra, explosão no acerto e uma comemoração quando você
+    vence. O botão com o alto-falante liga e desliga.
   </p>
   <h3>Dá para jogar contra outra pessoa?</h3>
   <p>
