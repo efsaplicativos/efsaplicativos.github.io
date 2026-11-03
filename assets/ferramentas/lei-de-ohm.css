@@ -1,0 +1,257 @@
+/* Lei de Ohm — complementos de assets/web.css, só dentro de .ohm */
+
+.ohm {
+  --ohm-ativo: rgba(59, 130, 246, 0.16);
+  --ohm-ativo-borda: rgba(96, 165, 250, 0.55);
+  --ohm-ativo-texto: #93c5fd;
+  --ohm-corpo: #d6bf8f;
+  --ohm-corpo-borda: #a88b55;
+  --ohm-terminal: #9ca3af;
+}
+:root[data-theme="light"] .ohm {
+  --ohm-ativo: rgba(37, 99, 235, 0.1);
+  --ohm-ativo-borda: rgba(37, 99, 235, 0.45);
+  --ohm-ativo-texto: #1d4ed8;
+  --ohm-corpo: #e3cc9c;
+  --ohm-corpo-borda: #a88b55;
+  --ohm-terminal: #6b7280;
+}
+
+.ohm .ohm-abas {
+  margin-bottom: 22px;
+}
+.ohm .ohm-dica {
+  margin: 0;
+}
+.ohm-coluna {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+.ohm-titulo {
+  margin: 0 0 2px;
+  font-size: 16px;
+  font-weight: 750;
+}
+.ohm .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+/* ---------- Resultados ---------- */
+.ohm-destaques {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin: 8px 0 14px;
+}
+.ohm-destaque {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.ohm-destaque-valor {
+  font-size: clamp(22px, 2.6vw, 28px);
+  font-weight: 800;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+.ohm .ohm-calculado dt,
+.ohm .ohm-calculado dd {
+  color: var(--ohm-ativo-texto);
+}
+.ohm .ohm-nota {
+  margin: 12px 0 0;
+}
+.ohm-formula {
+  margin: 10px 0 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+/* ---------- Roda de fórmulas ---------- */
+.ohm-roda {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.ohm-quadrante {
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  transition: background 0.2s, border-color 0.2s;
+}
+.ohm-quadrante.ohm-ativo {
+  background: var(--ohm-ativo);
+  border-color: var(--ohm-ativo-borda);
+}
+.ohm-simbolo {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+}
+.ohm-quadrante ul {
+  display: grid;
+  gap: 2px;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: var(--text-2);
+}
+.ohm-quadrante li.ohm-usada {
+  font-weight: 800;
+  color: var(--ohm-ativo-texto);
+}
+.ohm-quadrante li.ohm-usada::before {
+  content: "▶ ";
+}
+
+/* ---------- Série e paralelo ---------- */
+.ohm-resistores {
+  display: grid;
+  gap: 12px;
+}
+.ohm .ohm-remover {
+  flex: 0 0 auto;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* ---------- Divisor ---------- */
+.ohm-esquema {
+  display: block;
+  width: min(100%, 240px);
+  height: auto;
+  margin: 4px 0 0;
+}
+.ohm-fio {
+  fill: none;
+  stroke: var(--text-2);
+  stroke-width: 2;
+}
+.ohm-corpo-esquema {
+  fill: var(--surface-2);
+  stroke: var(--text-2);
+  stroke-width: 2;
+}
+.ohm-no {
+  fill: var(--text-2);
+}
+.ohm-rotulo-esquema {
+  fill: var(--text-2);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ---------- Código de cores ---------- */
+.ohm-resistor {
+  display: block;
+  width: min(100%, 420px);
+  height: auto;
+  margin: 18px auto 22px;
+}
+.ohm-terminal {
+  stroke: var(--ohm-terminal);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.ohm-corpo {
+  fill: var(--ohm-corpo);
+  stroke: var(--ohm-corpo-borda);
+  stroke-width: 1.5;
+}
+.ohm-faixa-desenho {
+  stroke: rgba(0, 0, 0, 0.25);
+  stroke-width: 0.75;
+}
+.ohm-faixa {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.ohm-faixa[hidden] {
+  display: none;
+}
+.ohm-faixa legend {
+  margin-bottom: 8px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+}
+.ohm-faixa-nome {
+  font-weight: 800;
+  color: var(--text);
+}
+.ohm-amostras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ohm-amostra {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+.ohm-amostra input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.ohm-amostra-cor {
+  width: 32px;
+  height: 32px;
+  background: var(--cor, transparent);
+  border: 1px solid var(--border-2);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.15s;
+}
+.ohm-amostra-cor.ohm-sem-cor {
+  border-style: dashed;
+  background: repeating-linear-gradient(45deg, transparent 0 4px, var(--border-2) 4px 5px);
+}
+.ohm-amostra input:checked + .ohm-amostra-cor {
+  transform: scale(1.12);
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--blue-2);
+}
+.ohm-amostra input:focus-visible + .ohm-amostra-cor {
+  outline: 3px solid var(--ring);
+  outline-offset: 4px;
+}
+
+@media (max-width: 420px) {
+  .ohm-roda {
+    grid-template-columns: 1fr;
+  }
+  .ohm-amostra {
+    width: 36px;
+    height: 36px;
+  }
+  .ohm-amostra-cor {
+    width: 28px;
+    height: 28px;
+  }
+}

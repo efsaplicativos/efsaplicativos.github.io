@@ -1,0 +1,613 @@
+/* ==========================================================================
+   Puzzles de xadrez — tabuleiro marrom e marcas do Lance Certo (core/ui/board/BoardColors.kt,
+   ChessBoard.kt); peças cburnett em pecas.svg. Tudo prefixado por .pzx para não vazar.
+   ========================================================================== */
+
+.pzx {
+  --pzx-clara: #f0d9b5;
+  --pzx-escura: #b58863;
+  --pzx-ultimo: rgba(155, 199, 0, 0.41);
+  --pzx-selecionada: rgba(20, 85, 30, 0.5);
+  --pzx-ponto: rgba(20, 85, 30, 0.5);
+  --pzx-captura: rgba(20, 85, 0, 0.3);
+  --pzx-dica: rgba(54, 146, 231, 0.55);
+  --pzx-certo: #629924;
+  --pzx-errado: #df5353;
+  /* Texto de acerto e erro sobre as superfícies do site */
+  --pzx-ok: #9ccc65;
+  --pzx-erro: #ff8a80;
+  --pzx-veu: rgba(5, 10, 30, 0.86);
+  max-width: 1080px;
+  margin: 0 auto;
+}
+:root[data-theme="light"] .pzx {
+  --pzx-ok: #3f7a12;
+  --pzx-erro: #c62828;
+  --pzx-veu: rgba(255, 255, 255, 0.9);
+}
+
+.pzx-grade {
+  display: grid;
+  grid-template-columns: minmax(0, 580px) minmax(0, 1fr);
+  gap: clamp(18px, 3vw, 30px);
+  align-items: start;
+}
+@media (max-width: 880px) {
+  .pzx-grade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pzx-mesa {
+    width: min(100%, 580px);
+    margin-inline: auto;
+  }
+}
+
+/* ---------- Barra acima do tabuleiro ---------- */
+.pzx-barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.pzx-vez {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-weight: 700;
+  color: var(--text);
+}
+.pzx-vez-cor {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--border-2);
+  background: #fff;
+}
+.pzx-vez-cor[data-cor="b"] {
+  background: #1b1b1b;
+}
+.pzx .pzx-pequeno {
+  min-height: 40px;
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+/* ---------- Tabuleiro ---------- */
+
+/* O tabuleiro recebe os gestos: sem rolar a página nem selecionar texto ao arrastar uma peça */
+.pzx-tabuleiro {
+  position: relative;
+  container-type: inline-size;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--pzx-escura);
+  box-shadow: var(--shadow-sm);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.pzx-casas {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template: repeat(8, 1fr) / repeat(8, 1fr);
+}
+.pzx-casa {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  background: var(--pzx-escura);
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.pzx-casa.clara {
+  background: var(--pzx-clara);
+}
+.pzx-casa::before,
+.pzx-casa::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+.pzx-casa::before {
+  inset: 0;
+}
+.pzx-casa.ultimo::before {
+  background: var(--pzx-ultimo);
+}
+.pzx-casa.dica::before {
+  background: var(--pzx-dica);
+}
+.pzx-casa.selecionada::before {
+  background: var(--pzx-selecionada);
+}
+.pzx-casa.xeque::before {
+  background: radial-gradient(
+    ellipse at center,
+    rgb(255, 0, 0) 0%,
+    rgb(231, 0, 0) 25%,
+    rgba(169, 0, 0, 0) 89%,
+    rgba(158, 0, 0, 0) 100%
+  );
+}
+.pzx-casa.sob::before {
+  box-shadow: inset 0 0 0 max(2px, 0.6cqi) rgba(255, 255, 255, 0.75);
+}
+/* Lance possível: um ponto na casa vazia, um anel em volta da peça que pode ser capturada */
+.pzx-casa.alvo::after {
+  inset: 36%;
+  border-radius: 50%;
+  background: var(--pzx-ponto);
+}
+.pzx-casa.alvo.captura::after {
+  inset: 0;
+  border-radius: 0;
+  background: radial-gradient(circle, transparent 0 79%, var(--pzx-captura) 80%);
+}
+@media (hover: hover) {
+  .pzx-casa.alvo:hover::after {
+    inset: 0;
+    border-radius: 0;
+    background: var(--pzx-captura);
+  }
+}
+.pzx-casa:focus-visible {
+  z-index: 1;
+  outline: max(3px, 0.7cqi) solid var(--ring);
+  outline-offset: calc(-1 * max(3px, 0.7cqi));
+}
+.pzx-coord {
+  position: absolute;
+  z-index: 1;
+  font-size: max(9px, 2.5cqi);
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+.pzx-casa.clara .pzx-coord {
+  color: var(--pzx-escura);
+}
+.pzx-casa.escura .pzx-coord {
+  color: var(--pzx-clara);
+}
+.pzx-fileira {
+  top: 0.5cqi;
+  left: 0.6cqi;
+}
+.pzx-coluna {
+  right: 0.6cqi;
+  bottom: 0.4cqi;
+}
+
+.pzx-pecas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.pzx-peca,
+.pzx-selo {
+  --x: 0;
+  --y: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12.5%;
+  height: 12.5%;
+  transform: translate(calc(var(--x) * 100%), calc(var(--y) * 100%));
+}
+.pzx-peca {
+  transition: transform 180ms ease-out;
+}
+.pzx-peca svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.pzx-peca.sem-transicao,
+.pzx-peca.arrastando {
+  transition: none;
+}
+.pzx-peca.arrastando {
+  z-index: 4;
+  scale: 1.15;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
+}
+
+/* Selo de certo ou errado no canto da casa */
+.pzx-selo {
+  z-index: 3;
+}
+.pzx-selo svg {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  width: 40%;
+  height: 40%;
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+  animation: pzx-aparecer 160ms ease-out;
+}
+.pzx-selo circle {
+  fill: var(--pzx-certo);
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+.pzx-selo.errado circle {
+  fill: var(--pzx-errado);
+}
+.pzx-selo path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@keyframes pzx-aparecer {
+  from {
+    scale: 0.3;
+    opacity: 0;
+  }
+}
+
+/* ---------- Promoção e avisos sobre o tabuleiro ---------- */
+.pzx-promocao,
+.pzx-aviso {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-content: center;
+  gap: 14px;
+  padding: 16px;
+  text-align: center;
+  color: var(--text);
+  background: var(--pzx-veu);
+  animation: pzx-surgir 200ms ease-out;
+}
+.pzx-promocao p,
+.pzx-aviso p {
+  margin: 0;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.pzx-promocao p {
+  font-size: clamp(16px, 4.5cqi, 22px);
+}
+.pzx-aviso p {
+  max-width: 34ch;
+  font-size: clamp(17px, 5cqi, 26px);
+}
+.pzx-aviso .button {
+  justify-self: center;
+}
+.pzx-promocao-pecas {
+  display: flex;
+  justify-content: center;
+  gap: clamp(6px, 2cqi, 12px);
+}
+.pzx-promocao-peca {
+  width: clamp(54px, 17cqi, 96px);
+  aspect-ratio: 1;
+  padding: 4px;
+  background: var(--pzx-clara);
+  border: 2px solid var(--border-2);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.pzx-promocao-peca:hover {
+  border-color: var(--violet-2);
+}
+.pzx-promocao-peca:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.pzx-promocao-peca svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.pzx-promocao .button {
+  justify-self: center;
+}
+@keyframes pzx-surgir {
+  from {
+    opacity: 0;
+  }
+}
+
+.pzx-ajuda {
+  margin: 12px 0 0;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ---------- Painel ---------- */
+.pzx-painel {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.pzx-cartao {
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-xs);
+}
+.pzx-cartao h2 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pzx-status-caixa {
+  border-left: 4px solid var(--border-2);
+}
+.pzx-status-caixa[data-tom="certo"] {
+  border-left-color: var(--pzx-certo);
+}
+.pzx-status-caixa[data-tom="errado"] {
+  border-left-color: var(--pzx-errado);
+}
+.pzx-status {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--text);
+}
+.pzx-status-caixa[data-tom="certo"] .pzx-status {
+  color: var(--pzx-ok);
+}
+.pzx-status-caixa[data-tom="errado"] .pzx-status {
+  color: var(--pzx-erro);
+}
+.pzx-detalhe {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.pzx-detalhe:empty {
+  display: none;
+}
+.pzx-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.pzx-acoes .button {
+  flex: 1 1 auto;
+  min-height: 44px;
+  padding: 10px 16px;
+}
+.pzx .button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+.pzx-nota {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.pzx-nota[data-tom="certo"] {
+  color: var(--pzx-ok);
+}
+.pzx-nota[data-tom="errado"] {
+  color: var(--pzx-erro);
+}
+.pzx-nota:empty {
+  display: none;
+}
+
+.pzx-navegacao {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.pzx-navegacao .button {
+  min-height: 44px;
+  padding: 8px;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.pzx-info p {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+.pzx-info a {
+  color: var(--blue-2);
+}
+:root[data-theme="light"] .pzx-info a {
+  color: var(--brand);
+}
+.pzx-lances {
+  font-variant-numeric: tabular-nums;
+}
+.pzx-temas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.pzx-temas li {
+  padding: 4px 10px;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-pill);
+}
+.pzx-guia {
+  margin: 12px 0 0;
+  font-size: 13.5px;
+}
+.pzx-guia dt {
+  font-weight: 750;
+  color: var(--text);
+}
+.pzx-guia dd {
+  margin: 2px 0 8px;
+  color: var(--text-2);
+}
+
+/* ---------- Placar ---------- */
+.pzx-placar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+.pzx-placar div {
+  padding: 10px 8px;
+  text-align: center;
+  background: var(--surface-2);
+  border-radius: var(--r-sm);
+}
+.pzx-placar dt {
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.pzx-placar dd {
+  margin: 4px 0 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.pzx-placar .pzx-largo dd {
+  font-size: 15px;
+}
+@media (max-width: 1060px) {
+  .pzx-placar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 880px) and (min-width: 560px) {
+  .pzx-placar {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ---------- Filtros ---------- */
+.pzx-filtro + .pzx-filtro {
+  margin-top: 14px;
+}
+.pzx-filtro > span,
+.pzx-filtro > label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+}
+.pzx .filter {
+  padding: 7px 13px;
+}
+.pzx .filter:focus-visible,
+.pzx-hist:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.pzx .pzx-tema {
+  width: 100%;
+}
+.pzx-destaques {
+  margin-top: 10px;
+}
+.pzx-destaques .filter {
+  padding: 5px 11px;
+  font-size: 12.5px;
+}
+.pzx-revisar {
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* ---------- Histórico ---------- */
+.pzx-historico {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pzx-hist {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 34px;
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+}
+.pzx-hist:hover {
+  border-color: var(--violet-2);
+  color: var(--text);
+}
+.pzx-hist.certo span {
+  color: var(--pzx-ok);
+}
+.pzx-hist.errado span {
+  color: var(--pzx-erro);
+}
+.pzx-historico-nota {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.pzx-fonte {
+  margin: 18px 0 0;
+  font-size: 12.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pzx-peca {
+    transition: none;
+  }
+  .pzx-selo svg,
+  .pzx-promocao,
+  .pzx-aviso {
+    animation: none;
+  }
+}

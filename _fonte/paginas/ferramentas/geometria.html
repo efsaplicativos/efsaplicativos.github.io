@@ -1,0 +1,183 @@
+<!--
+titulo: Calculadora de Área, Perímetro e Volume de Figuras — EFS Aplicativos
+descricao: Calcule área, perímetro e volume de 18 figuras planas e sólidos, como círculo, triângulo, trapézio, cilindro e cone, com desenho, fórmulas e unidades.
+scripts: /assets/numeros.js /assets/ferramentas/matematica-comum.js /assets/ferramentas/geometria-logica.js /assets/ferramentas/geometria.js
+estilos: /assets/ferramentas/geometria.css
+app: Calculadora de geometria | EducationalApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Geometria</li>
+  </ol>
+  <h1>Calculadora de geometria</h1>
+  <p>
+    Área, perímetro, volume e outras medidas de 11 figuras planas e 7 sólidos geométricos, com
+    um desenho da figura, as fórmulas usadas e a unidade de medida que você escolher.
+  </p>
+</header>
+
+<section class="tool geo" id="geometria" aria-label="Calculadora de geometria">
+  <div class="tool-grid">
+    <form class="fields" id="geo-form" novalidate>
+      <fieldset class="field">
+        <legend>Tipo</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-dimensao="plana" aria-pressed="true">Figuras planas (2D)</button>
+          <button type="button" class="filter" data-dimensao="solida" aria-pressed="false">Sólidos (3D)</button>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="geo-forma">Figura</label>
+        <select class="select" id="geo-forma">
+          <option value="circulo">Círculo</option>
+        </select>
+      </div>
+      <fieldset class="field">
+        <legend>Unidade</legend>
+        <div class="segmented geo-unidades">
+          <button type="button" class="filter" data-unidade="mm" aria-pressed="false">mm</button>
+          <button type="button" class="filter active" data-unidade="cm" aria-pressed="true">cm</button>
+          <button type="button" class="filter" data-unidade="m" aria-pressed="false">m</button>
+          <button type="button" class="filter" data-unidade="km" aria-pressed="false">km</button>
+          <button type="button" class="filter" data-unidade="in" aria-pressed="false" aria-label="polegadas (in)">in</button>
+          <button type="button" class="filter" data-unidade="ft" aria-pressed="false" aria-label="pés (ft)">ft</button>
+        </div>
+      </fieldset>
+      <fieldset class="field" id="geo-modo-circulo">
+        <legend>Informar o círculo pelo</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-diametro="nao" aria-pressed="true">Raio</button>
+          <button type="button" class="filter" data-diametro="sim" aria-pressed="false">Diâmetro</button>
+        </div>
+      </fieldset>
+      <div class="geo-campos" id="geo-campos"></div>
+      <div>
+        <button type="button" class="button secondary" id="geo-limpar">Limpar</button>
+      </div>
+    </form>
+
+    <div class="geo-lado">
+      <figure class="geo-desenho">
+        <div class="geo-desenho-area" id="geo-desenho"></div>
+        <figcaption class="hint">Desenho esquemático: as letras são as medidas usadas nas fórmulas.</figcaption>
+      </figure>
+      <div class="result" id="geo-resultado">
+        <p class="result-label" id="geo-principal-rotulo">Resultados</p>
+        <p class="result-value" id="geo-principal">—</p>
+        <dl class="result-list" id="geo-medidas"></dl>
+        <p class="result-message" id="geo-mensagem">Preencha as medidas para ver os resultados.</p>
+        <p class="sr-only" aria-live="polite" id="geo-anuncio"></p>
+      </div>
+      <div class="geo-formulas-bloco" id="geo-formulas-bloco" hidden>
+        <h2 class="table-title">Fórmulas</h2>
+        <ul class="geo-formulas" id="geo-formulas"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar</h2>
+  <p>
+    Escolha entre figuras planas e sólidos, selecione a figura e digite as medidas. Os resultados
+    aparecem enquanto você digita, junto com as fórmulas. A unidade escolhida vale para todas as
+    medidas: com lados em centímetros, a área sai em cm² e o volume em cm³. A ferramenta não converte
+    unidades; para isso, converta as medidas antes ou use um conversor de medidas.
+  </p>
+  <p>
+    As medidas ficam guardadas pelo nome: se você digitou o raio de um círculo e trocar para cilindro,
+    o raio continua preenchido e só falta a altura. O círculo pode ser informado pelo raio ou pelo
+    diâmetro.
+  </p>
+
+  <h2>Figuras disponíveis</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Figura</th>
+          <th scope="col">Você informa</th>
+          <th scope="col">Principais resultados</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Círculo</td><td>raio ou diâmetro</td><td>área, circunferência</td></tr>
+        <tr><td>Quadrado e retângulo</td><td>lados</td><td>área, perímetro, diagonal</td></tr>
+        <tr><td>Triângulo</td><td>base e altura, ou os 3 lados</td><td>área, perímetro, ângulos, classificação</td></tr>
+        <tr><td>Trapézio</td><td>bases e altura</td><td>área, lado inclinado, perímetro</td></tr>
+        <tr><td>Paralelogramo e losango</td><td>base, altura e lado; ou diagonais</td><td>área, perímetro</td></tr>
+        <tr><td>Elipse</td><td>semieixos</td><td>área, perímetro aproximado</td></tr>
+        <tr><td>Polígono regular</td><td>número de lados e lado</td><td>área, apótema, ângulo interno</td></tr>
+        <tr><td>Setor circular</td><td>raio e ângulo</td><td>área, comprimento do arco</td></tr>
+        <tr><td>Cubo e paralelepípedo</td><td>arestas</td><td>volume, área, diagonais</td></tr>
+        <tr><td>Esfera, cilindro e cone</td><td>raio e altura</td><td>volume, áreas, geratriz</td></tr>
+        <tr><td>Pirâmide e tronco de cone</td><td>lado ou raios e altura</td><td>volume, áreas, apótema ou geratriz</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Exemplo: quanto cabe em uma caixa-d'água cilíndrica</h2>
+  <p>
+    Uma caixa-d'água com 50 cm de raio e 120 cm de altura tem volume π · 50² · 120 ≈ 942.477,8 cm³.
+    Como 1 litro equivale a 1.000 cm³, ela comporta cerca de 942 litros. Para pintar a parte de fora,
+    a área lateral é 2 · π · 50 · 120 ≈ 37.699,1 cm², ou seja, aproximadamente 3,77 m².
+  </p>
+  <p class="formula">V = π · r² · h     Al = 2 · π · r · h</p>
+
+  <h2>Triângulo pelos três lados</h2>
+  <p>
+    Com os três lados, a área sai pela fórmula de Herão, que usa o semiperímetro s, e os ângulos
+    pela lei dos cossenos:
+  </p>
+  <p class="formula">s = (a + b + c) / 2     A = √(s · (s − a) · (s − b) · (s − c))</p>
+  <p>
+    Para os lados 3, 4 e 5 cm, s = 6 e A = √(6 · 3 · 2 · 1) = 6 cm². O ângulo oposto ao lado 5 é de
+    90°, então o triângulo é classificado como escaleno e retângulo. Se um lado for maior ou igual à
+    soma dos outros dois, os lados não fecham um triângulo e a ferramenta avisa.
+  </p>
+
+  <h2>Limitações</h2>
+  <ul>
+    <li>O perímetro da elipse não tem fórmula exata simples; o resultado usa a aproximação de Ramanujan, com erro muito pequeno para elipses comuns.</li>
+    <li>O trapézio é tratado como isósceles para calcular o lado inclinado e o perímetro.</li>
+    <li>No paralelogramo, a altura não pode ser maior que o lado inclinado, e no setor o ângulo vai até 360°.</li>
+    <li>O desenho é esquemático: segue as proporções digitadas quando possível, dentro de limites para continuar legível.</li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Qual a diferença entre circunferência e círculo?</h3>
+  <p>
+    A circunferência é a linha que contorna o círculo; o círculo é a região inteira. Por isso o
+    resultado mostra a área do círculo e o comprimento da circunferência, que é o seu perímetro.
+  </p>
+  <h3>O que é a geratriz do cone?</h3>
+  <p>
+    É a distância do vértice até a borda da base, medida pela superfície lateral. Pelo teorema de
+    Pitágoras, g = √(r² + h²). Num cone com raio 3 e altura 4, a geratriz é 5.
+  </p>
+  <h3>Por que o polígono regular só aceita número inteiro de lados?</h3>
+  <p>
+    Um polígono tem uma quantidade inteira de lados, e o menor possível é o triângulo, com 3. Valores
+    como 2,5 mostram uma mensagem de erro. O desenho representa polígonos de 3 a 14 lados.
+  </p>
+  <h3>Como transformo o volume em litros?</h3>
+  <p>
+    Com as medidas em centímetros, divida o volume em cm³ por 1.000. Com as medidas em metros, cada
+    m³ equivale a 1.000 litros.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Geometria com desenho das figuras, equações, estatística, conversores e mais de 20 ferramentas no mesmo app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

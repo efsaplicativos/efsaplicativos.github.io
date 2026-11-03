@@ -1,0 +1,892 @@
+/* ==========================================================================
+   Relógio de blinds — destaques nas cores do app Poker Manager (ui/tema/Cores.kt):
+   dourado nos blinds, verde nos intervalos e vermelho no último minuto
+   ========================================================================== */
+
+.poker {
+  --pk-dourado: #f0c040;
+  --pk-verde: #22c55e;
+  --pk-vermelho: #ef4444;
+  --pk-prata: #c9ced6;
+  --pk-bronze: #cd8b4a;
+  --pk-fundo-dourado: rgba(240, 192, 64, 0.15);
+  --pk-fundo-verde: rgba(34, 197, 94, 0.15);
+}
+/* No tema claro, tons mais escuros para o texto continuar legível sobre fundo claro */
+:root[data-theme="light"] .poker {
+  --pk-dourado: #8a5a00;
+  --pk-verde: #166534;
+  --pk-vermelho: #b91c1c;
+  --pk-prata: #64748b;
+  --pk-bronze: #9a5b20;
+  --pk-fundo-dourado: rgba(202, 138, 4, 0.14);
+  --pk-fundo-verde: rgba(22, 163, 74, 0.12);
+}
+
+/* ---------- Topo ---------- */
+.poker .poker-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.poker .poker-nome {
+  min-width: 0;
+  margin: 0;
+  font-size: 18px;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.poker .poker-nome-rotulo {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.poker .poker-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.poker .poker-acoes .button {
+  min-height: 44px;
+  padding: 10px 16px;
+}
+
+.poker .poker-grade {
+  display: grid;
+  gap: clamp(16px, 2.4vw, 24px);
+}
+@media (min-width: 900px) {
+  .poker .poker-grade {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/* ---------- Relógio ---------- */
+.poker .poker-palco {
+  display: grid;
+  gap: 14px;
+}
+.poker .poker-relogio {
+  --destaque: var(--pk-dourado);
+  container-type: inline-size;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: clamp(16px, 3vw, 26px);
+  text-align: center;
+  background: var(--surface-2);
+  border: 1px solid rgba(240, 192, 64, 0.35);
+  border-radius: var(--r-lg);
+}
+.poker .poker-relogio[data-tipo="intervalo"] {
+  --destaque: var(--pk-verde);
+  border-color: rgba(34, 197, 94, 0.45);
+}
+.poker .poker-relogio-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+.poker .poker-selo {
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--destaque);
+  background: var(--pk-fundo-dourado);
+  border-radius: var(--r-pill);
+}
+.poker .poker-relogio[data-tipo="intervalo"] .poker-selo {
+  background: var(--pk-fundo-verde);
+}
+.poker .poker-posicao {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tamanho pela largura do cartão: "MM:SS" ou, com horas, "H:MM:SS" um pouco menor */
+.poker .poker-tempo {
+  margin: 4px 0 0;
+  font-size: clamp(64px, 18vw, 150px);
+  font-size: clamp(64px, 30cqi, 170px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.poker .poker-tempo.longo {
+  font-size: clamp(46px, 13vw, 110px);
+  font-size: clamp(46px, 21cqi, 124px);
+}
+.poker .poker-relogio[data-tipo="intervalo"] .poker-tempo {
+  color: var(--pk-verde);
+}
+.poker .poker-relogio[data-aviso="true"] .poker-tempo {
+  color: var(--pk-vermelho);
+  animation: poker-piscar 0.8s ease-in-out infinite alternate;
+}
+.poker .poker-relogio[data-encerrado="true"] .poker-tempo {
+  color: var(--muted);
+}
+@keyframes poker-piscar {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.4;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .poker .poker-relogio[data-aviso="true"] .poker-tempo {
+    animation: none;
+  }
+}
+.poker .poker-legenda {
+  min-height: 1.5em;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+  color: var(--muted);
+}
+.poker .poker-relogio[data-aviso="true"] .poker-legenda {
+  color: var(--pk-vermelho);
+}
+.poker .poker-progresso {
+  width: 100%;
+  height: 6px;
+  margin-top: 4px;
+  overflow: hidden;
+  background: var(--surface-3);
+  border-radius: 3px;
+}
+.poker .poker-progresso span {
+  display: block;
+  height: 100%;
+  background: var(--destaque);
+  border-radius: 3px;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.poker .poker-relogio[data-aviso="true"] .poker-progresso span {
+  background: var(--pk-vermelho);
+}
+
+.poker .poker-blinds {
+  display: grid;
+  justify-items: center;
+  margin-top: 12px;
+}
+.poker .poker-blinds-rotulo {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.poker .poker-blinds-valor {
+  display: block;
+  font-size: clamp(30px, 9vw, 52px);
+  font-size: clamp(30px, 11cqi, 60px);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--pk-dourado);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.poker .poker-ante {
+  display: block;
+  font-size: 17px;
+  color: var(--text-2);
+}
+.poker .poker-intervalo-texto {
+  font-size: clamp(26px, 8vw, 40px);
+  font-weight: 800;
+  color: var(--pk-verde);
+}
+
+.poker .poker-info {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.poker .poker-info div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.poker .poker-info dt {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--muted);
+}
+.poker .poker-info dd {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 650;
+  text-align: right;
+  color: var(--text);
+}
+.poker #linha-intervalo {
+  justify-content: flex-end;
+}
+.poker #linha-intervalo dd {
+  color: var(--pk-verde);
+}
+
+/* ---------- Controles ---------- */
+.poker .poker-controles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.poker .poker-controles-extra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.poker .poker-controles-extra .button {
+  min-height: 44px;
+  padding: 10px 18px;
+}
+.poker .poker-principal {
+  min-width: 140px;
+  min-height: 60px;
+  font-size: 18px;
+  border-radius: var(--r-pill);
+}
+.poker .poker-botao {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: 50%;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+.poker .poker-controles-extra .poker-botao {
+  width: 44px;
+  height: 44px;
+}
+.poker .poker-botao:hover:not(:disabled) {
+  background: var(--surface-3);
+  border-color: var(--violet-2);
+}
+.poker .poker-botao svg {
+  width: 50%;
+  height: 50%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.poker .poker-botao svg .cheio {
+  fill: currentColor;
+  stroke: none;
+}
+.poker #alternar-alerta[aria-pressed="true"] .icone-mudo,
+.poker #alternar-alerta[aria-pressed="false"] .icone-som {
+  display: none;
+}
+.poker #alternar-alerta[aria-pressed="false"] {
+  color: var(--muted);
+}
+.poker .poker-botao:focus-visible,
+.poker .poker-mais-menos:focus-visible,
+.poker .poker-linha-nivel:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.poker .poker-botao:disabled,
+.poker .poker-mais-menos:disabled,
+.poker .button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+/* ---------- Tela cheia ---------- */
+.poker .poker-palco:fullscreen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3vh;
+  padding: 4vh 4vw;
+  overflow: auto;
+  background: var(--bg);
+}
+.poker .poker-palco:fullscreen .poker-tempo {
+  font-size: min(30cqi, 40vh);
+}
+.poker .poker-palco:fullscreen .poker-tempo.longo {
+  font-size: min(21cqi, 32vh);
+}
+.poker .poker-palco:-webkit-full-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3vh;
+  padding: 4vh 4vw;
+  overflow: auto;
+  background: var(--bg);
+}
+.poker .poker-palco:-webkit-full-screen .poker-tempo {
+  font-size: min(30cqi, 40vh);
+}
+.poker .poker-palco:-webkit-full-screen .poker-tempo.longo {
+  font-size: min(21cqi, 32vh);
+}
+
+/* ---------- Cartões de jogadores, financeiro e prêmios ---------- */
+.poker .poker-detalhes {
+  display: grid;
+  gap: 14px;
+}
+.poker .poker-cartao {
+  display: grid;
+  gap: 12px;
+  padding: 16px 18px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r);
+}
+/* Títulos dos cartões são h2 (hierarquia da página), sem o gradiente que o site põe nos h2 */
+.poker .poker-cartao-titulo {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: normal;
+  line-height: 1.3;
+  color: var(--text);
+  background: none;
+}
+.poker .poker-numeros {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.poker .poker-numero {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  padding: 10px 12px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.poker .poker-numero span {
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--muted);
+}
+.poker .poker-numero strong {
+  font-size: 20px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.poker .poker-numero small {
+  font-size: 13px;
+  color: var(--text-2);
+}
+.poker .poker-numero small:empty {
+  display: none;
+}
+
+.poker .poker-contador {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.poker .poker-contador-texto {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.poker .poker-contador-rotulo {
+  font-weight: 700;
+  color: var(--text);
+}
+.poker .poker-contador-texto small {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.poker .poker-contador-botoes {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+}
+.poker .poker-mais-menos {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font: inherit;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 50%;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.poker .poker-mais-menos:hover:not(:disabled) {
+  border-color: var(--violet-2);
+}
+.poker .poker-contador-valor {
+  min-width: 3ch;
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.poker .poker-pool {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  margin: 0;
+  text-align: center;
+}
+.poker .poker-pool span {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.poker .poker-pool strong {
+  font-size: clamp(28px, 4vw, 36px);
+  color: var(--pk-dourado);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.poker .poker-buyin {
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+  color: var(--text-2);
+}
+
+.poker .poker-premios {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.poker .poker-premio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+.poker .poker-premio:first-child {
+  border-top: 0;
+}
+.poker .poker-premio-lugar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 650;
+  color: var(--text);
+}
+.poker .poker-premio[data-medalha] .poker-premio-lugar::before {
+  content: "";
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--pk-dourado);
+}
+.poker .poker-premio[data-medalha="2"] .poker-premio-lugar::before {
+  background: var(--pk-prata);
+}
+.poker .poker-premio[data-medalha="3"] .poker-premio-lugar::before {
+  background: var(--pk-bronze);
+}
+.poker .poker-premio-parte {
+  font-size: 14px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.poker .poker-premio-valor {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.poker .poker-reiniciar {
+  justify-self: center;
+  min-height: 44px;
+}
+
+.poker .poker-ajuda {
+  margin: 18px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+/* ---------- Diálogos ---------- */
+.poker .poker-dialogo {
+  width: min(560px, calc(100% - 24px));
+  max-height: calc(100% - 24px);
+  padding: 0;
+  overflow: auto;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.poker .poker-dialogo-largo {
+  width: min(720px, calc(100% - 24px));
+}
+.poker .poker-dialogo-curto {
+  width: min(420px, calc(100% - 24px));
+}
+.poker .poker-dialogo::backdrop {
+  background: rgba(2, 6, 23, 0.72);
+}
+.poker .poker-dialogo-corpo {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: clamp(16px, 4vw, 26px);
+}
+.poker .poker-dialogo-corpo > p:not(.hint):not(.result-message) {
+  margin: 0;
+  color: var(--text-2);
+}
+.poker .poker-dialogo-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+/* O site pinta h2 com gradiente; nos diálogos o título fica com a cor do texto */
+.poker .poker-dialogo-titulo {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.25;
+  color: var(--text);
+  background: none;
+}
+.poker .poker-fechar {
+  width: 44px;
+  height: 44px;
+}
+.poker .poker-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.poker .poker-dialogo-botoes .button {
+  min-width: 120px;
+}
+.poker .poker-dialogo .hint {
+  margin: 0;
+}
+
+/* Estrutura de blinds */
+.poker .poker-estrutura-cabecalho {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: 0 13px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.poker .poker-estrutura {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.poker .poker-linha-nivel {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 54px;
+  padding: 10px 12px;
+  font: inherit;
+  text-align: left;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.poker .poker-linha-nivel:hover:not(:disabled) {
+  border-color: var(--violet-2);
+}
+/* O nível atual não é clicável, mas não deve parecer apagado */
+.poker .poker-linha-nivel:disabled {
+  cursor: default;
+}
+.poker .poker-estrutura-item[aria-current] .poker-linha-nivel {
+  background: var(--pk-fundo-dourado);
+  border-color: var(--pk-dourado);
+}
+.poker .poker-estrutura-item.intervalo .poker-linha-nivel {
+  background: rgba(34, 197, 94, 0.06);
+}
+.poker .poker-estrutura-item.passado .poker-linha-nivel {
+  opacity: 0.55;
+}
+.poker .poker-linha-numero {
+  display: grid;
+  place-items: start;
+  font-weight: 800;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.poker .poker-linha-numero svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--pk-verde);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.poker .poker-linha-blinds {
+  display: grid;
+  min-width: 0;
+}
+.poker .poker-linha-blinds strong {
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+.poker .poker-linha-blinds small {
+  font-size: 13px;
+  color: var(--muted);
+}
+.poker .poker-estrutura-item.intervalo .poker-linha-blinds {
+  font-weight: 700;
+  color: var(--pk-verde);
+}
+.poker .poker-linha-duracao {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+/* Selo de cor fixa: texto escuro nos dois temas */
+.poker .poker-selo-atual {
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #1a1400;
+  background: #f0c040;
+  border-radius: var(--r-pill);
+}
+
+/* Configuração */
+.poker .poker-config {
+  gap: 24px;
+}
+.poker .poker-secao {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.poker .poker-secao legend {
+  padding: 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 750;
+  color: var(--text);
+}
+.poker .poker-campos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.poker .poker-campos-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 560px) {
+  .poker .poker-campos-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.poker .poker-campo-curto {
+  max-width: 160px;
+}
+.poker .poker-opcao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--text);
+  cursor: pointer;
+}
+.poker .poker-opcao input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--violet);
+}
+
+.poker .poker-niveis-edicao {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.poker .poker-nivel-edicao {
+  padding: 8px 12px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+}
+.poker .poker-nivel-edicao.intervalo {
+  background: rgba(34, 197, 94, 0.06);
+  border-color: rgba(34, 197, 94, 0.5);
+}
+.poker .poker-nivel-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.poker .poker-nivel-nome {
+  font-weight: 750;
+  color: var(--text);
+}
+.poker .poker-nivel-edicao.intervalo .poker-nivel-nome {
+  color: var(--pk-verde);
+}
+.poker .poker-remover {
+  width: 40px;
+  height: 40px;
+  color: var(--pk-vermelho);
+}
+.poker .poker-nivel-campos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+/* Intervalo só tem a duração, na mesma coluna dos minutos dos blinds */
+.poker .poker-nivel-edicao.intervalo .poker-nivel-campos .field {
+  grid-column: 4;
+}
+.poker .poker-nivel-campos .input {
+  padding-inline: 8px;
+}
+.poker .poker-nivel-campos .field > label {
+  font-size: 13px;
+}
+.poker .poker-adicionar {
+  display: flex;
+  gap: 8px;
+}
+.poker .poker-adicionar .button {
+  flex: 1;
+  min-height: 44px;
+}
+
+.poker .poker-premios-edicao {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.poker .poker-premio-edicao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.poker .poker-premio-edicao label {
+  font-weight: 650;
+  color: var(--text);
+}
+.poker .poker-campo-porcentagem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-2);
+}
+.poker .poker-campo-porcentagem .input {
+  width: 96px;
+  text-align: right;
+}
+.poker .poker-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding-top: 10px;
+  font-weight: 650;
+  border-top: 1px solid var(--border);
+}
+.poker .poker-total strong {
+  font-size: 18px;
+  color: var(--pk-vermelho);
+}
+.poker .poker-total[data-certo="true"] strong {
+  color: var(--pk-verde);
+}
+.poker .poker-erro {
+  padding: 10px 14px;
+  border: 1px solid currentColor;
+  border-radius: var(--r-sm);
+}

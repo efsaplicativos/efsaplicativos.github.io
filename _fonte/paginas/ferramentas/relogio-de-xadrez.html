@@ -1,0 +1,294 @@
+<!--
+titulo: Relógio de Xadrez Online com Fischer, Bronstein e Atraso — EFS Aplicativos
+descricao: Relógio de xadrez online para dois jogadores: bullet, blitz, rápida ou clássica, com incremento Fischer, Bronstein ou atraso. Funciona no celular e no PC.
+scripts: /assets/ferramentas/relogio-de-xadrez-logica.js /assets/ferramentas/relogio-de-xadrez.js
+estilos: /assets/ferramentas/relogio-de-xadrez.css
+app: Relógio de Xadrez | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Relógio de xadrez</li>
+  </ol>
+  <h1>Relógio de xadrez online</h1>
+  <p>
+    Coloque o celular ou o computador entre os dois jogadores e toque na sua metade ao terminar
+    cada lance. Escolha um ritmo pronto ou monte o seu, com incremento Fischer, Bronstein ou
+    atraso.
+  </p>
+</header>
+
+<section class="tool xadrez" id="relogio-xadrez" aria-label="Relógio de xadrez">
+  <p class="xadrez-ritmo">
+    Ritmo <strong id="ritmo-atual">5 + 2</strong> · <span id="sistema-atual">Fischer</span>
+  </p>
+
+  <div class="xadrez-palco" id="palco">
+    <div class="xadrez-relogio" id="relogio" data-estado="pronto">
+      <button type="button" class="xadrez-metade" id="metade-distante" data-aparencia="inativa">
+        <span class="xadrez-conteudo">
+          <span class="xadrez-cabecalho">
+            <span class="xadrez-disco" aria-hidden="true"></span>
+            <span class="xadrez-nome">Pretas</span>
+            <span class="xadrez-lances">Lances: 0</span>
+          </span>
+          <span class="xadrez-centro">
+            <span class="xadrez-tempo">5:00</span>
+            <span class="xadrez-status">Toque para iniciar</span>
+          </span>
+          <span class="xadrez-atraso" hidden><span class="xadrez-atraso-barra"></span></span>
+        </span>
+      </button>
+
+      <div class="xadrez-controles" role="toolbar" aria-label="Controles do relógio">
+        <button type="button" class="xadrez-botao" id="trocar-lados" aria-label="Trocar lados" title="Trocar lados">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v13M3.5 13.5 7 17l3.5-3.5M17 20V7m-3.5 3.5L17 7l3.5 3.5" /></svg>
+        </button>
+        <button type="button" class="xadrez-botao" id="reiniciar" aria-label="Reiniciar" title="Reiniciar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5" /></svg>
+        </button>
+        <button type="button" class="xadrez-botao xadrez-principal" id="iniciar-pausar" aria-label="Iniciar" title="Iniciar">
+          <svg class="icone-iniciar" viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M8 5.5v13l10.5-6.5Z" /></svg>
+          <svg class="icone-pausar" viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" /></svg>
+        </button>
+        <button type="button" class="xadrez-botao" id="abrir-config" aria-label="Configurar tempo" title="Configurar tempo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 2.5h5M12 2.5v3M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM12 9v4l2.5 1.5" /></svg>
+        </button>
+        <button type="button" class="xadrez-botao" id="alternar-som" aria-pressed="true" aria-label="Som quando o tempo acabar" title="Som quando o tempo acabar">
+          <svg class="icone-som" viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4Z" /><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" /></svg>
+          <svg class="icone-mudo" viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4Z" /><path d="m15.5 9.5 5 5m0-5-5 5" /></svg>
+        </button>
+        <button type="button" class="xadrez-botao" id="tela-cheia" aria-pressed="false" aria-label="Tela cheia" title="Tela cheia" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" /></svg>
+        </button>
+      </div>
+
+      <button type="button" class="xadrez-metade" id="metade-proxima" data-aparencia="inativa">
+        <span class="xadrez-conteudo">
+          <span class="xadrez-cabecalho">
+            <span class="xadrez-disco" aria-hidden="true"></span>
+            <span class="xadrez-nome">Brancas</span>
+            <span class="xadrez-lances">Lances: 0</span>
+          </span>
+          <span class="xadrez-centro">
+            <span class="xadrez-tempo">5:00</span>
+            <span class="xadrez-status">Toque para iniciar</span>
+          </span>
+          <span class="xadrez-atraso" hidden><span class="xadrez-atraso-barra"></span></span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <p class="xadrez-ajuda">
+    Toque em qualquer metade para começar: as brancas jogam primeiro. No computador, a barra de
+    espaço encerra o lance de quem está na vez e a tecla P pausa ou retoma. Ao trocar de aba ou
+    bloquear a tela, o relógio pausa sozinho.
+  </p>
+  <p class="sr-only" aria-live="polite" id="aviso-relogio"></p>
+
+  <dialog class="xadrez-dialogo" id="config-xadrez" aria-labelledby="config-titulo">
+    <form class="xadrez-dialogo-corpo xadrez-config" id="form-config" method="dialog" novalidate>
+      <h2 class="xadrez-dialogo-titulo" id="config-titulo">Configurar tempo</h2>
+
+      <fieldset class="xadrez-grupo">
+        <legend>Ritmos de jogo</legend>
+        <div id="lista-predefinicoes"></div>
+      </fieldset>
+
+      <fieldset class="xadrez-grupo">
+        <legend>Personalizado</legend>
+        <div class="xadrez-campos">
+          <div class="field">
+            <label for="campo-minutos">Minutos</label>
+            <input class="input" id="campo-minutos" inputmode="numeric" autocomplete="off" maxlength="3" aria-describedby="dica-minutos" />
+            <span class="hint" id="dica-minutos">De 1 a 600</span>
+          </div>
+          <div class="field">
+            <label for="campo-incremento">Incremento (segundos)</label>
+            <input class="input" id="campo-incremento" inputmode="numeric" autocomplete="off" maxlength="3" aria-describedby="dica-incremento" />
+            <span class="hint" id="dica-incremento">De 0 a 600</span>
+          </div>
+        </div>
+        <div class="field">
+          <span id="rotulo-sistema">Sistema de incremento</span>
+          <div class="segmented" role="group" aria-labelledby="rotulo-sistema">
+            <button type="button" class="filter" data-sistema="nenhum" aria-pressed="false">Nenhum</button>
+            <button type="button" class="filter" data-sistema="fischer" aria-pressed="false">Fischer</button>
+            <button type="button" class="filter" data-sistema="bronstein" aria-pressed="false">Bronstein</button>
+            <button type="button" class="filter" data-sistema="atraso" aria-pressed="false">Atraso</button>
+          </div>
+          <span class="hint" id="descricao-sistema"></span>
+        </div>
+      </fieldset>
+
+      <fieldset class="xadrez-grupo">
+        <legend>Alertas</legend>
+        <label class="xadrez-opcao"><input type="checkbox" id="opcao-som" /> Som quando o tempo acabar</label>
+        <label class="xadrez-opcao" id="linha-vibracao"><input type="checkbox" id="opcao-vibracao" /> Vibrar quando o tempo acabar</label>
+      </fieldset>
+
+      <p class="xadrez-aviso" id="aviso-reinicio" hidden>Ao salvar, o relógio volta ao início.</p>
+      <div class="xadrez-dialogo-botoes">
+        <button type="button" class="button secondary" id="cancelar-config">Cancelar</button>
+        <button type="submit" class="button" id="salvar-config">Salvar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="xadrez-dialogo xadrez-dialogo-curto" id="confirmar-reinicio" aria-labelledby="reinicio-titulo" aria-describedby="reinicio-texto">
+    <div class="xadrez-dialogo-corpo">
+      <h2 class="xadrez-dialogo-titulo" id="reinicio-titulo">Reiniciar o relógio?</h2>
+      <p id="reinicio-texto">Os tempos e os lances voltarão ao início.</p>
+      <div class="xadrez-dialogo-botoes">
+        <button type="button" class="button secondary" id="cancelar-reinicio">Cancelar</button>
+        <button type="button" class="button" id="confirmar-reinicio-botao">Reiniciar</button>
+      </div>
+    </div>
+  </dialog>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar o relógio de xadrez</h2>
+  <p>
+    Deixe o aparelho na mesa, entre o tabuleiro e os dois jogadores. Qualquer toque no relógio
+    começa a partida, e quem corre primeiro é sempre o tempo das brancas. Ao fazer o lance, o
+    jogador toca na própria metade: o tempo dele para e o do adversário começa a correr. Um
+    toque na metade de quem não está na vez é ignorado, então encostar sem querer no lado errado
+    não atrapalha.
+  </p>
+  <p>
+    Com o celular em pé, a metade de cima aparece de cabeça para baixo, para ser lida por quem
+    está do outro lado da mesa. Com o celular deitado ou no computador, as metades ficam lado a
+    lado. O botão de trocar lados inverte qual metade é das brancas, e o botão de tela cheia
+    deixa só o relógio na tela.
+  </p>
+
+  <h2>Sistemas de incremento</h2>
+  <p>
+    O ritmo é escrito como <strong>minutos + segundos</strong>. Em um jogo 5 + 2, cada jogador
+    começa com 5 minutos, e os 2 segundos são tratados de acordo com o sistema escolhido:
+  </p>
+  <ul>
+    <li>
+      <strong>Nenhum</strong> (morte súbita): só existe o tempo inicial. Quem chegar a zero perde
+      pelo tempo.
+    </li>
+    <li>
+      <strong>Fischer</strong>: o incremento é somado depois de cada lance. No 5 + 2, um primeiro
+      lance de 8 segundos deixa o jogador com 5:00 − 0:08 + 0:02 = <strong>4:54</strong>.
+    </li>
+    <li>
+      <strong>Bronstein</strong>: o relógio desconta normalmente e, no fim do lance, devolve o
+      tempo gasto, até o valor do incremento. No 5 + 3, um lance de 2 segundos devolve os 2
+      segundos (o tempo volta a 5:00); um lance de 5 segundos devolve só 3 e deixa 4:58.
+    </li>
+    <li>
+      <strong>Atraso</strong> (delay simples): a cada lance, o relógio espera os segundos de
+      atraso antes de começar a descontar. No 5 + 3 com atraso, um lance de 2 segundos não gasta
+      nada; um de 4,5 segundos gasta 1,5. Uma barra fina na metade mostra o atraso que ainda
+      resta.
+    </li>
+  </ul>
+  <p class="formula">Fischer: tempo − gasto + incremento<br />Bronstein: tempo − gasto + menor(gasto, incremento)<br />Atraso: tempo − maior(0, gasto − atraso)</p>
+  <p>
+    Na prática, o Fischer pode fazer o tempo crescer quando o jogador joga rápido. O Bronstein e
+    o atraso nunca deixam o tempo passar do que havia no começo do lance.
+  </p>
+
+  <h2>Ritmos prontos</h2>
+  <p>
+    As predefinições são agrupadas pela duração estimada de uma partida de 40 lances, uma regra
+    comum nos sites de xadrez: minutos × 60 + 40 × incremento, em segundos.
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Categoria</th>
+          <th scope="col">Duração estimada</th>
+          <th scope="col">Ritmos prontos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Bullet</td><td>menos de 3 min</td><td>1 + 0, 2 + 1</td></tr>
+        <tr><td>Blitz</td><td>de 3 a 8 min</td><td>3 + 0, 3 + 2, 5 + 0, 5 + 3</td></tr>
+        <tr><td>Rápida</td><td>de 8 a 25 min</td><td>10 + 0, 10 + 5, 15 + 10</td></tr>
+        <tr><td>Clássica</td><td>25 min ou mais</td><td>30 + 0, 30 + 20, 90 + 30</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Por exemplo, 3 + 2 dá 180 + 80 = 260 segundos, cerca de 4 minutos e 20 segundos: blitz. Já
+    15 + 10 dá 900 + 400 = 1.300 segundos, quase 22 minutos: rápida. No modo personalizado você
+    escolhe de 1 a 600 minutos e de 0 a 600 segundos de incremento.
+  </p>
+
+  <h2>Como o tempo é medido</h2>
+  <p>
+    O relógio não desconta um segundo a cada "tique". Ele guarda quanto cada jogador tinha no
+    começo do lance e o instante em que o lance começou, e calcula o restante pela diferença,
+    usando o relógio interno do navegador, que não muda se o horário do aparelho for ajustado.
+    Assim, partidas longas não acumulam atraso. Abaixo de 10 segundos aparecem os décimos e a
+    metade fica vermelha.
+  </p>
+  <p>
+    Quando o tempo de alguém chega a zero, a metade de quem perdeu fica vermelha, a do adversário
+    mostra "Vencedor" e o aparelho toca um alerta, se o som estiver ligado. Tocar na metade depois
+    disso não devolve incremento.
+  </p>
+
+  <h2>Limitações</h2>
+  <ul>
+    <li>
+      Se você trocar de aba, minimizar o navegador ou bloquear a tela, o relógio pausa sozinho,
+      porque o navegador pode suspender páginas em segundo plano. Toque em retomar para continuar.
+    </li>
+    <li>
+      Durante a partida, a página pede ao navegador para manter a tela acesa. Nem todos os
+      navegadores atendem; se a tela apagar, aumente o tempo de bloqueio do aparelho.
+    </li>
+    <li>
+      O navegador só libera o som depois de um toque na página, e o volume depende do aparelho.
+      A vibração funciona apenas em navegadores que a suportam, como o Chrome no Android.
+    </li>
+    <li>
+      É um relógio para partidas casuais e treinos. Torneios oficiais usam relógios homologados e
+      regras próprias para casos como lance ilegal e acréscimo de tempo.
+    </li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>A partida fica salva se eu fechar a página?</h3>
+  <p>
+    Sim. O ritmo escolhido e a partida em andamento ficam guardados no navegador. Ao abrir a
+    página de novo, a partida volta pausada, sem descontar o tempo em que ela ficou fechada.
+  </p>
+  <h3>Qual é o ritmo padrão?</h3>
+  <p>
+    5 + 2 com incremento Fischer: 5 minutos para cada jogador e 2 segundos a mais por lance.
+  </p>
+  <h3>Posso mudar o tempo no meio da partida?</h3>
+  <p>
+    Pause o relógio e abra a configuração. Ao salvar um novo ritmo, o relógio volta ao início
+    com o tempo novo para os dois lados.
+  </p>
+  <h3>Preciso de internet?</h3>
+  <p>
+    Só para abrir a página. Para jogar sem internet, instale o app Relógio Xadrez no celular.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/relogioxadrez.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Relógio Xadrez no celular</h2>
+    <p>O mesmo relógio sem internet, com a tela sempre acesa, som e vibração no fim do tempo e nove idiomas.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.relogioxadrez&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

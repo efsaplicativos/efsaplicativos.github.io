@@ -1,0 +1,456 @@
+/* Lista de Compras: catálogo de itens e lista da compra, lado a lado no computador. */
+
+.lista-compras {
+  --lc-ok-fundo: rgba(74, 222, 128, 0.1);
+  --lc-ok-borda: rgba(74, 222, 128, 0.45);
+  --lc-erro: #f97066;
+}
+
+.lista-compras .lc-abas {
+  margin-bottom: 18px;
+}
+.lista-compras .lc-abas .filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+.lista-compras .lc-contagem {
+  min-width: 24px;
+  padding: 1px 7px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  background: var(--surface-3);
+  border-radius: var(--r-pill);
+}
+.lista-compras .filter.active .lc-contagem {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.lista-compras .lc-painel:not(.ativo) {
+  display: none;
+}
+.lista-compras .lc-titulo {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 750;
+  color: var(--text);
+}
+
+/* ---------- Novo item / editar ---------- */
+.lista-compras .lc-novo {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 14px;
+}
+.lista-compras .lc-rotulo {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+}
+.lista-compras .lc-linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.lista-compras .lc-linha .input {
+  flex: 1 1 200px;
+}
+.lista-compras .lc-linha .button {
+  flex: 0 0 auto;
+  min-height: 48px;
+}
+.lista-compras .lc-erro {
+  min-height: 1.4em;
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--lc-erro);
+}
+.lista-compras .lc-resumo {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---------- Listas ---------- */
+.lista-compras .lc-lista {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lista-compras .lc-lista:empty {
+  display: none;
+}
+.lista-compras .lc-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 52px;
+  padding: 4px 6px 4px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.lista-compras .lc-item.na-lista {
+  border-color: var(--border-2);
+  background: var(--surface-3);
+}
+.lista-compras .lc-item.editando {
+  border-color: var(--violet-2);
+  box-shadow: 0 0 0 1px var(--violet-2);
+}
+.lista-compras .lc-marca {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 44px;
+  cursor: pointer;
+}
+.lista-compras .lc-marca input {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--blue);
+  cursor: pointer;
+}
+.lista-compras .lc-nome {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--text);
+}
+.lista-compras .lc-icone {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  border-radius: var(--r-xs);
+  cursor: pointer;
+}
+.lista-compras .lc-icone:hover {
+  color: var(--text);
+  background: var(--surface);
+}
+.lista-compras .lc-icone[data-acao="excluir"]:hover,
+.lista-compras .lc-icone[data-acao="tirar"]:hover {
+  color: var(--lc-erro);
+}
+.lista-compras .lc-icone svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---------- Itens da compra ---------- */
+.lista-compras .lc-compra {
+  display: grid;
+  gap: 10px;
+  padding: 10px 12px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.lista-compras .lc-compra.comprado {
+  background: var(--lc-ok-fundo);
+  border-color: var(--lc-ok-borda);
+}
+.lista-compras .lc-compra.comprado .lc-nome {
+  color: var(--text-2);
+  text-decoration: line-through;
+  text-decoration-color: var(--muted);
+}
+.lista-compras .lc-compra-topo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.lista-compras .lc-compra .lc-marca input {
+  accent-color: #16a34a;
+}
+.lista-compras .lc-campos {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 10px;
+}
+.lista-compras .lc-campo {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.lista-compras .lc-campo label {
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--text-2);
+}
+.lista-compras .lc-campo .input {
+  min-height: 44px;
+  padding: 8px 12px;
+  font-variant-numeric: tabular-nums;
+}
+.lista-compras .lc-prefixo {
+  position: relative;
+}
+.lista-compras .lc-prefixo span {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  font-size: 14px;
+  color: var(--muted);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.lista-compras .lc-prefixo .input {
+  padding-left: 38px;
+}
+.lista-compras .lc-subtotal {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  font-size: 14px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+.lista-compras .lc-subtotal strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Rodapé com o total ---------- */
+.lista-compras .lc-rodape {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 14px 16px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r);
+}
+.lista-compras .lc-progresso {
+  height: 8px;
+  overflow: hidden;
+  background: var(--surface-3);
+  border-radius: var(--r-pill);
+}
+.lista-compras .lc-progresso span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #16a34a, #4ade80);
+  border-radius: inherit;
+  transition: width 0.3s var(--ease);
+}
+.lista-compras .lc-total {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.lista-compras .lc-total-rotulo {
+  display: block;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--text-2);
+}
+.lista-compras .lc-total-detalhe {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+}
+.lista-compras .lc-total-valor {
+  font-size: clamp(24px, 6vw, 30px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.lista-compras .lc-estimado {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.lista-compras .lc-finalizar {
+  width: 100%;
+}
+
+/* ---------- Estados vazios e avisos ---------- */
+.lista-compras .lc-vazio {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--muted);
+  background: var(--surface-2);
+  border: 1px dashed var(--border-2);
+  border-radius: var(--r-sm);
+}
+.lista-compras .lc-vazio p {
+  margin: 0;
+}
+.lista-compras .lc-vazio-titulo {
+  font-weight: 700;
+  color: var(--text);
+}
+.lista-compras .lc-vazio .button {
+  margin-top: 10px;
+}
+.lista-compras .lc-nota {
+  margin: 16px 0 0;
+  font-size: 14px;
+  color: var(--text-2);
+}
+
+/* Aviso com "Desfazer", no rodapé da janela como a snackbar do app */
+.lista-compras .lc-aviso {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  padding: 8px 8px 8px 16px;
+  font-size: 14px;
+  color: #eef3ff;
+  background: #1b2a58;
+  border: 1px solid #344a86;
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 12px);
+  transition:
+    opacity 0.2s var(--ease),
+    transform 0.2s var(--ease),
+    visibility 0s linear 0.2s;
+}
+.lista-compras .lc-aviso.visivel {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  transition:
+    opacity 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+.lista-compras .lc-aviso span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.lista-compras .lc-desfazer {
+  flex: 0 0 auto;
+  min-height: 40px;
+  padding: 6px 12px;
+  font-weight: 750;
+  color: #ffb020;
+  background: none;
+  border: 0;
+  border-radius: var(--r-xs);
+  cursor: pointer;
+}
+.lista-compras .lc-desfazer:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- Diálogos ---------- */
+.lista-compras .lc-dialogo {
+  width: min(92vw, 400px);
+  padding: 24px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.lista-compras .lc-dialogo::backdrop {
+  background: rgba(5, 10, 30, 0.6);
+}
+.lista-compras .lc-dialogo p {
+  margin: 0 0 14px;
+  color: var(--text-2);
+}
+.lista-compras .lc-dialogo .lc-dialogo-titulo {
+  margin-bottom: 8px;
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--text);
+}
+.lista-compras .lc-dialogo-total {
+  font-size: 17px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.lista-compras .lc-dialogo .lc-dialogo-total {
+  color: var(--text);
+}
+.lista-compras .lc-manter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin: 0 0 16px;
+  cursor: pointer;
+}
+.lista-compras .lc-manter input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--blue);
+}
+.lista-compras .lc-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ---------- Tema claro ---------- */
+:root[data-theme="light"] .lista-compras {
+  --lc-ok-fundo: rgba(22, 163, 74, 0.08);
+  --lc-ok-borda: rgba(22, 163, 74, 0.45);
+  --lc-erro: #b42318;
+}
+:root[data-theme="light"] .lista-compras .lc-dialogo::backdrop {
+  background: rgba(15, 21, 51, 0.45);
+}
+
+/* ---------- Computador: as duas partes lado a lado ---------- */
+@media (min-width: 900px) {
+  .lista-compras .lc-abas {
+    display: none;
+  }
+  .lista-compras .lc-paineis {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(18px, 3vw, 32px);
+    align-items: start;
+  }
+  .lista-compras .lc-painel:not(.ativo) {
+    display: block;
+  }
+}
+
+@media (max-width: 420px) {
+  .lista-compras .lc-linha .button {
+    flex: 1 1 auto;
+  }
+  .lista-compras .lc-campos {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}

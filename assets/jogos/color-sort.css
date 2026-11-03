@@ -1,0 +1,406 @@
+/* ==========================================================================
+   Color Sort — cores do app (jogos/colorsort/ui/TemaColorSort.kt): mesa azul-noite,
+   seleção ciano, verde de tubo pronto e as sete cores das bolas, cada uma com um símbolo
+   ========================================================================== */
+
+.csort {
+  --cs-mesa: #1a1a2e;
+  --cs-tubo: #2a2a4a;
+  --cs-borda: #3a4478;
+  --cs-selecao: #00d4ff;
+  --cs-sucesso: #4caf50;
+  --cs-contorno-bola: rgba(255, 255, 255, 0.55);
+  --cs-destaque: #e94560;
+  max-width: 760px;
+  margin: 0 auto;
+}
+:root[data-theme="light"] .csort {
+  --cs-mesa: #e2e9fd;
+  --cs-tubo: #ffffff;
+  --cs-borda: #9fb0e0;
+  --cs-selecao: #0284c7;
+  --cs-sucesso: #2e7d32;
+  --cs-contorno-bola: rgba(15, 21, 51, 0.35);
+  --cs-destaque: #c81e45;
+}
+
+/* ---------- Barra e placar ---------- */
+.cs-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  margin-bottom: 14px;
+}
+.cs-opcao-simbolos {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.cs-opcao-simbolos input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--blue-2);
+  cursor: pointer;
+}
+.cs-placar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.cs-indicador {
+  display: grid;
+  padding: 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.cs-indicador span {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cs-indicador strong {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+/* ---------- Mesa e tubos ---------- */
+.cs-mesa {
+  padding: 30px 12px 20px;
+  background: var(--cs-mesa);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  /* Toques rápidos não dão zoom; a página continua rolando com o dedo */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.cs-tabuleiro {
+  --largura-tubo: 64px;
+  display: grid;
+  justify-items: center;
+  gap: 24px;
+  width: 100%;
+}
+.cs-linha {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 12px;
+}
+.cs-tubo {
+  --w: var(--largura-tubo);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: var(--w);
+  padding: calc(var(--w) * 0.3) 4px calc(var(--w) * 0.12);
+  font: inherit;
+  background: var(--cs-tubo);
+  border: 2px solid var(--cs-borda);
+  border-radius: 8px 8px calc(var(--w) / 2) calc(var(--w) / 2);
+  cursor: pointer;
+  transition:
+    translate 0.25s cubic-bezier(0.3, 1.6, 0.5, 1),
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.cs-tubo:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+}
+.cs-tubo[aria-disabled="true"] {
+  cursor: default;
+}
+.cs-tubo.cs-selecionado {
+  translate: 0 -14px;
+  border: 3px solid var(--cs-selecao);
+  padding: calc(var(--w) * 0.3 - 1px) 3px calc(var(--w) * 0.12 - 1px);
+  box-shadow: 0 8px 22px -6px var(--cs-selecao);
+}
+.cs-tubo.cs-completo {
+  border-color: var(--cs-sucesso);
+}
+.cs-tubo.cs-completo::after {
+  content: "✓";
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  translate: -50% 0;
+  font-size: calc(var(--w) * 0.24);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--cs-sucesso);
+}
+.cs-tubo.cs-recusado {
+  animation: cs-tremer 320ms ease-in-out;
+}
+@keyframes cs-tremer {
+  15% {
+    transform: translateX(-8px);
+  }
+  37% {
+    transform: translateX(8px);
+  }
+  60% {
+    transform: translateX(-6px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.cs-bola,
+.cs-vaga {
+  display: grid;
+  place-items: center;
+  width: calc((var(--w) - 12px) * 0.9);
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+.cs-bola {
+  --c: #888;
+  --simbolo: #fff;
+  background: radial-gradient(
+    circle at 35% 30%,
+    color-mix(in srgb, var(--c) 55%, #fff) 0,
+    var(--c) 45%,
+    color-mix(in srgb, var(--c) 82%, #000) 100%
+  );
+  border: 1.5px solid var(--cs-contorno-bola);
+}
+.cs-bola.cs-nova {
+  animation: cs-entrar 180ms ease-out;
+}
+.cs-vaga svg {
+  display: none;
+}
+@keyframes cs-entrar {
+  from {
+    scale: 0.7;
+    opacity: 0;
+  }
+}
+.cs-bola svg {
+  width: 58%;
+  height: 58%;
+  fill: var(--simbolo);
+}
+.csort.cs-sem-simbolos .cs-bola svg {
+  display: none;
+}
+.cs-bola[data-cor="0"] {
+  --c: #f23a3a;
+}
+.cs-bola[data-cor="1"] {
+  --c: #3d7bff;
+}
+.cs-bola[data-cor="2"] {
+  --c: #36d16b;
+  --simbolo: #14142b;
+}
+.cs-bola[data-cor="3"] {
+  --c: #ffd93d;
+  --simbolo: #14142b;
+}
+.cs-bola[data-cor="4"] {
+  --c: #e04ce0;
+}
+.cs-bola[data-cor="5"] {
+  --c: #2fd6e6;
+  --simbolo: #14142b;
+}
+.cs-bola[data-cor="6"] {
+  --c: #ff9a2e;
+  --simbolo: #14142b;
+}
+
+.cs-dica {
+  margin: 12px 0 0;
+  min-height: 3em;
+  font-size: 14.5px;
+  text-align: center;
+  color: var(--text-2);
+}
+.cs-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.cs-acoes .button {
+  min-height: 46px;
+  padding: 10px 18px;
+}
+.cs-acoes .button:disabled {
+  opacity: 0.5;
+  cursor: default;
+  transform: none;
+}
+.cs-ajuda {
+  margin: 14px auto 0;
+  max-width: 600px;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ---------- Recordes ---------- */
+.cs-recordes {
+  display: grid;
+  gap: 10px;
+  max-width: 520px;
+  margin: 22px auto 0;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+}
+.cs-recordes-titulo {
+  margin: 0;
+  font-weight: 800;
+  color: var(--text);
+}
+.cs-lista-recordes {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 28px;
+  font-variant-numeric: tabular-nums;
+}
+.cs-lista-recordes li {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-2);
+}
+.cs-lista-recordes li:last-child {
+  border-bottom: 0;
+}
+.cs-lista-recordes strong {
+  color: var(--text);
+}
+.cs-lista-recordes span {
+  float: right;
+  font-size: 13px;
+  color: var(--muted);
+}
+.cs-sem-recordes {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ---------- Diálogo ---------- */
+.cs-dialogo {
+  width: min(calc(100% - 32px), 400px);
+  padding: 24px 20px;
+  text-align: center;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.cs-dialogo::backdrop {
+  background: rgba(5, 10, 30, 0.7);
+}
+:root[data-theme="light"] .cs-dialogo::backdrop {
+  background: rgba(15, 21, 51, 0.45);
+}
+.cs-dialogo[open] {
+  animation: cs-abrir 220ms ease-out;
+}
+@keyframes cs-abrir {
+  from {
+    opacity: 0;
+    scale: 0.94;
+  }
+}
+.cs-dialogo p {
+  margin: 0;
+}
+.cs-dialogo-icone {
+  font-size: 42px;
+  line-height: 1.2;
+}
+.cs-dialogo-titulo {
+  margin: 4px 0 10px !important;
+  font-size: 24px;
+  font-weight: 900;
+}
+.cs-dialogo-corpo {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  color: var(--text-2);
+}
+.cs-dialogo-resumo {
+  display: flex;
+  gap: 12px;
+}
+.cs-dialogo-resumo > div {
+  padding: 10px 18px;
+  background: var(--surface-2);
+  border-radius: var(--r);
+}
+.cs-dialogo-numero {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.cs-selo-recorde {
+  padding: 6px 16px;
+  font-weight: 800;
+  color: #3d2e00;
+  background: #ffc857;
+  border-radius: var(--r-pill);
+}
+.cs-posicao-recorde {
+  font-weight: 650;
+  color: var(--text);
+}
+.cs-dialogo-botoes {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+.cs-dialogo.cs-travado .cs-dialogo-botoes {
+  pointer-events: none;
+}
+
+@media (max-width: 420px) {
+  .cs-indicador {
+    padding: 8px 10px;
+  }
+  .cs-indicador strong {
+    font-size: 18px;
+  }
+  .cs-mesa {
+    padding: 26px 8px 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-tubo {
+    transition: none;
+  }
+  .cs-bola.cs-nova,
+  .cs-tubo.cs-recusado,
+  .cs-dialogo[open] {
+    animation: none;
+  }
+}

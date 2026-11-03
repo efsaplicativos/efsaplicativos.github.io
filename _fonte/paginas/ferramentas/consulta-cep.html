@@ -1,0 +1,228 @@
+<!--
+titulo: Consulta CEP Online: Busque o Endereço pelo CEP ou pela Rua — EFS Aplicativos
+descricao: Consulte um CEP e veja rua, bairro, cidade, estado, DDD e código IBGE, ou descubra o CEP pelo nome da rua em um estado ou em todos. Dados do ViaCEP.
+scripts: /assets/ferramentas/consulta-cep-logica.js /assets/ferramentas/consulta-cep.js
+estilos: /assets/ferramentas/consulta-cep.css
+app: Pesquisa CEP | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Consulta CEP</li>
+  </ol>
+  <h1>Consulta CEP</h1>
+  <p>
+    Digite um CEP para ver o endereço completo, ou informe a cidade e o nome da rua para
+    descobrir o CEP. A consulta é feita no ViaCEP, um serviço gratuito de busca de CEPs.
+  </p>
+</header>
+
+<section class="tool cep" id="cep" aria-label="Consulta de CEP">
+  <div class="segmented cep-abas" role="group" aria-label="Tipo de busca">
+    <button type="button" class="filter active" data-aba="cep" aria-pressed="true" aria-controls="cep-painel-cep">Por CEP</button>
+    <button type="button" class="filter" data-aba="rua" aria-pressed="false" aria-controls="cep-painel-rua">Por rua</button>
+  </div>
+
+  <div class="cep-painel" id="cep-painel-cep">
+    <div class="tool-grid">
+      <form class="fields" id="cep-form" novalidate>
+        <p class="cep-instrucao">Digite o CEP para consultar o endereço completo.</p>
+        <div class="field">
+          <label for="cep-numero">CEP</label>
+          <div class="input-row">
+            <input class="input" id="cep-numero" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" enterkeyhint="search" aria-describedby="cep-numero-dica" />
+            <button type="button" class="button secondary cep-limpar" id="cep-limpar" aria-label="Limpar CEP" hidden>×</button>
+          </div>
+          <span class="hint" id="cep-numero-dica">Formato: 00000-000. A busca começa sozinha quando os 8 números estiverem completos.</span>
+        </div>
+        <button type="submit" class="button" id="cep-buscar" aria-disabled="true">Buscar endereço</button>
+      </form>
+      <div class="cep-resultado" id="cep-resultado">
+        <div class="cep-aviso">
+          <p class="cep-aviso-titulo">Não sabe o CEP?</p>
+          <p class="cep-aviso-texto">Descubra pelo nome da rua e da cidade na busca por rua.</p>
+          <button type="button" class="cep-link" data-ir-para="rua">Buscar por rua</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cep-painel" id="cep-painel-rua" hidden>
+    <div class="tool-grid">
+      <form class="fields" id="cep-form-rua" novalidate>
+        <p class="cep-instrucao" id="cep-instrucao-rua">Digite a cidade e a rua para buscar em todos os estados.</p>
+        <div class="field">
+          <label for="cep-uf">Estado (UF)</label>
+          <select class="select cep-uf" id="cep-uf">
+            <option value="">Todos os estados</option>
+            <option value="AC">AC — Acre</option>
+            <option value="AL">AL — Alagoas</option>
+            <option value="AP">AP — Amapá</option>
+            <option value="AM">AM — Amazonas</option>
+            <option value="BA">BA — Bahia</option>
+            <option value="CE">CE — Ceará</option>
+            <option value="DF">DF — Distrito Federal</option>
+            <option value="ES">ES — Espírito Santo</option>
+            <option value="GO">GO — Goiás</option>
+            <option value="MA">MA — Maranhão</option>
+            <option value="MT">MT — Mato Grosso</option>
+            <option value="MS">MS — Mato Grosso do Sul</option>
+            <option value="MG">MG — Minas Gerais</option>
+            <option value="PA">PA — Pará</option>
+            <option value="PB">PB — Paraíba</option>
+            <option value="PR">PR — Paraná</option>
+            <option value="PE">PE — Pernambuco</option>
+            <option value="PI">PI — Piauí</option>
+            <option value="RJ">RJ — Rio de Janeiro</option>
+            <option value="RN">RN — Rio Grande do Norte</option>
+            <option value="RS">RS — Rio Grande do Sul</option>
+            <option value="RO">RO — Rondônia</option>
+            <option value="RR">RR — Roraima</option>
+            <option value="SC">SC — Santa Catarina</option>
+            <option value="SP">SP — São Paulo</option>
+            <option value="SE">SE — Sergipe</option>
+            <option value="TO">TO — Tocantins</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="cep-cidade">Cidade</label>
+          <input class="input" id="cep-cidade" placeholder="Ex.: São Paulo" autocomplete="off" autocapitalize="words" enterkeyhint="next" aria-describedby="cep-cidade-dica" />
+          <span class="hint" id="cep-cidade-dica">Mínimo de 3 caracteres</span>
+        </div>
+        <div class="field">
+          <label for="cep-logradouro">Nome da rua</label>
+          <input class="input" id="cep-logradouro" placeholder="Ex.: Paulista" autocomplete="off" autocapitalize="words" enterkeyhint="search" aria-describedby="cep-logradouro-dica" />
+          <span class="hint" id="cep-logradouro-dica">Sem número, mínimo de 3 caracteres</span>
+        </div>
+        <button type="submit" class="button" id="cep-buscar-rua" aria-disabled="true">Buscar em todos os estados</button>
+        <div class="cep-progresso" id="cep-progresso" hidden>
+          <progress id="cep-progresso-barra" max="27" value="0" aria-labelledby="cep-progresso-texto"></progress>
+          <p class="hint" id="cep-progresso-texto">Consultando estados: 0 de 27</p>
+        </div>
+      </form>
+      <div class="cep-resultado" id="cep-resultado-rua">
+        <div class="cep-aviso">
+          <p class="cep-aviso-titulo">Dica</p>
+          <p class="cep-aviso-texto">Digite o nome da rua sem o número (ex.: Paulista). Escolher o estado deixa a busca mais rápida.</p>
+        </div>
+      </div>
+    </div>
+    <ul class="cep-lista" id="cep-lista" aria-label="Endereços encontrados" hidden></ul>
+  </div>
+
+  <div class="cep-toast" id="cep-toast" role="status" aria-live="polite"></div>
+  <p class="sr-only" role="status" aria-live="polite" id="cep-status"></p>
+  <p class="cep-creditos">
+    Endereços fornecidos pelo <a href="https://viacep.com.br/" rel="noopener">ViaCEP</a>. Esta página não
+    tem ligação com os Correios.
+  </p>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como funciona a consulta</h2>
+  <p>
+    Na aba <strong>Por CEP</strong>, digite os 8 números do CEP, com ou sem o hífen. Assim que o
+    número estiver completo, a página consulta o ViaCEP e mostra o logradouro, o complemento,
+    o bairro, a cidade e o estado, além do DDD da região e do código do município no IBGE. O
+    endereço pode ser copiado, compartilhado ou aberto no mapa.
+  </p>
+  <p>
+    Na aba <strong>Por rua</strong>, escolha o estado (ou deixe em todos), escreva a cidade e o
+    nome da rua sem o número, cada um com pelo menos 3 letras. Acentos não atrapalham: “São
+    Paulo” e “Sao Paulo” dão o mesmo resultado.
+  </p>
+
+  <h2>Exemplos</h2>
+  <p>
+    O CEP <strong>01001-000</strong> corresponde à Praça da Sé, lado ímpar, no bairro Sé, em
+    São Paulo - SP. O DDD é 11 e o código IBGE do município é 3550308.
+  </p>
+  <p>
+    Na busca por rua, o estado SP, a cidade São Paulo e a rua “Paulista” trazem vários CEPs da
+    Avenida Paulista, um para cada trecho da avenida, como o 01310-100, que vai do número 612
+    ao 1510 do lado par.
+  </p>
+
+  <h2>Como o CEP é organizado</h2>
+  <p>
+    O CEP tem 5 algarismos, um hífen e mais 3 (00000-000). Os 5 primeiros vão do geral para o
+    particular (região, sub-região, setor, subsetor e divisor de subsetor); os 3 últimos,
+    chamados de sufixo, identificam o trecho de rua, um grande usuário ou uma unidade dos
+    Correios. O primeiro algarismo já mostra a região do país:
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Começa com</th>
+          <th scope="col">Região</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>0</td><td>Grande São Paulo</td></tr>
+        <tr><td>1</td><td>Interior e litoral de São Paulo</td></tr>
+        <tr><td>2</td><td>Rio de Janeiro e Espírito Santo</td></tr>
+        <tr><td>3</td><td>Minas Gerais</td></tr>
+        <tr><td>4</td><td>Bahia e Sergipe</td></tr>
+        <tr><td>5</td><td>Pernambuco, Alagoas, Paraíba e Rio Grande do Norte</td></tr>
+        <tr><td>6</td><td>Ceará, Piauí, Maranhão, Pará, Amazonas, Acre, Amapá e Roraima</td></tr>
+        <tr><td>7</td><td>Distrito Federal, Goiás, Tocantins, Mato Grosso, Mato Grosso do Sul e Rondônia</td></tr>
+        <tr><td>8</td><td>Paraná e Santa Catarina</td></tr>
+        <tr><td>9</td><td>Rio Grande do Sul</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Limitações</h2>
+  <ul>
+    <li>
+      Os dados vêm do ViaCEP, que é independente dos Correios. Um CEP criado há pouco tempo
+      pode ainda não aparecer, e o serviço pode ficar fora do ar de vez em quando.
+    </li>
+    <li>
+      Cidades pequenas costumam ter um <strong>CEP geral do município</strong>, que vale para
+      a cidade inteira e não tem rua nem bairro.
+    </li>
+    <li>
+      A busca por rua mostra no máximo 50 endereços por estado. Com “todos os estados”, são 27
+      consultas, feitas 5 de cada vez, e algum estado pode não responder.
+    </li>
+    <li>O número da casa não entra na busca, porque o CEP vale para um trecho da rua.</li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>O que significa “CEP geral do município”?</h3>
+  <p>
+    Em cidades com um só CEP, todos os endereços usam o mesmo número. Por isso o resultado
+    mostra só a cidade e o estado, sem logradouro nem bairro.
+  </p>
+  <h3>Por que a busca por rua não encontrou o endereço?</h3>
+  <p>
+    Confira se o estado e a cidade estão certos e escreva só o nome da rua, sem “nº” nem
+    número. Às vezes ajuda escrever só a parte principal do nome (“Paulista” em vez de
+    “Avenida Paulista”); quando a lista chega ao limite de 50, faça o contrário e escreva o
+    nome mais completo.
+  </p>
+  <h3>O que é enviado e o que fica salvo?</h3>
+  <p>
+    O CEP ou o nome da rua e da cidade vão para o ViaCEP, que responde com os endereços. Os
+    campos digitados ficam guardados só neste navegador, para você não precisar digitar de
+    novo, e não são enviados para outro lugar.
+  </p>
+  <h3>Preciso de cadastro ou pago alguma coisa?</h3>
+  <p>Não. A consulta é gratuita e funciona direto no navegador, no celular ou no computador.</p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/pesquisacep.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Pesquisa CEP no celular</h2>
+    <p>Consulte CEPs e descubra o CEP pelo nome da rua no Android, com cópia e mapa em um toque.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.pesquisacep&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

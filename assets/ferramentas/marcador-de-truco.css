@@ -1,0 +1,919 @@
+/* ==========================================================================
+   Marcador de Truco — mesa de feltro com as cores do app (ui/tema/Cores.kt).
+   A mesa e os diálogos têm cores fixas (iguais nos dois temas) e definem as
+   próprias cores de texto; o histórico usa os tokens do site.
+   ========================================================================== */
+
+.truco {
+  display: grid;
+  gap: clamp(22px, 3vw, 32px);
+}
+
+/* ---------- Mesa ---------- */
+.truco .truco-mesa {
+  padding: clamp(14px, 2.6vw, 26px);
+  color: #f7f1df;
+  background: radial-gradient(120% 90% at 50% 0%, #184838 0%, #0b241e 72%);
+  border: 1px solid #315247;
+  border-radius: var(--r-lg);
+}
+.truco .truco-mesa :where(p) {
+  margin: 0;
+}
+.truco .truco-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.truco .truco-titulos {
+  min-width: 0;
+}
+.truco .truco-mesa h2 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  color: #f7f1df;
+  background: none;
+}
+.truco .truco-subtitulo {
+  margin-top: 2px;
+  font-size: 14px;
+  color: #abc0b3;
+}
+.truco .truco-acoes {
+  display: flex;
+  gap: 8px;
+}
+.truco .truco-sobretitulo {
+  font-size: 11.5px;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #eac477;
+}
+.truco .truco-legenda {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: #abc0b3;
+}
+
+/* Botões próprios da mesa (o .button do site é azul e não combina com o feltro) */
+.truco .truco-botao-linha,
+.truco .truco-botao-aviso,
+.truco .truco-botao-ouro,
+.truco .truco-botao-perigo,
+.truco .truco-botao-perigo-cheio,
+.truco .truco-botao-texto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  border-radius: 12px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s var(--ease),
+    border-color 0.15s var(--ease),
+    filter 0.15s var(--ease);
+}
+.truco .truco-botao-linha {
+  color: #f7f1df;
+  background: transparent;
+  border: 1px solid #466349;
+}
+.truco .truco-botao-linha:hover {
+  border-color: #eac477;
+}
+.truco .truco-botao-ouro {
+  min-height: 48px;
+  padding: 12px 22px;
+  font-size: 15px;
+  color: #17352a;
+  background: #eac477;
+  border: 1px solid #eac477;
+  border-radius: 14px;
+}
+.truco .truco-botao-ouro:hover {
+  filter: brightness(1.06);
+}
+.truco .truco-botao-aviso {
+  color: #f7f1df;
+  background: transparent;
+  border: 1px solid #6b603a;
+  font-weight: 650;
+}
+.truco .truco-botao-aviso:hover {
+  border-color: #eac477;
+}
+.truco .truco-botao-aviso[aria-disabled="true"] {
+  color: rgba(234, 196, 119, 0.85);
+  cursor: default;
+}
+.truco .truco-botao-aviso[aria-disabled="true"]:hover {
+  border-color: #6b603a;
+}
+.truco .truco-botao-perigo {
+  min-height: 48px;
+  color: #f3b5a6;
+  background: transparent;
+  border: 1px solid rgba(243, 181, 166, 0.55);
+  border-radius: 14px;
+}
+.truco .truco-botao-perigo:hover:not(:disabled) {
+  border-color: #f3b5a6;
+  background: rgba(243, 181, 166, 0.08);
+}
+.truco .truco-botao-perigo:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.truco .truco-botao-perigo-cheio {
+  color: #f7f1df;
+  background: #873d34;
+  border: 1px solid #873d34;
+}
+.truco .truco-botao-perigo-cheio:hover {
+  filter: brightness(1.12);
+}
+.truco .truco-botao-texto {
+  color: #eac477;
+  background: transparent;
+  border: 1px solid transparent;
+}
+.truco .truco-botao-texto:hover {
+  background: rgba(234, 196, 119, 0.1);
+}
+.truco .truco-mesa [aria-disabled="true"] {
+  cursor: not-allowed;
+}
+.truco .truco-botao-linha[aria-disabled="true"] {
+  opacity: 0.4;
+}
+.truco .truco-botao-linha[aria-disabled="true"]:hover {
+  border-color: #466349;
+}
+.truco button:focus-visible,
+.truco .truco-opcao input:focus-visible + .truco-opcao-face,
+.truco .truco-formato input:focus-visible + .truco-formato-face {
+  outline: 3px solid #eac477;
+  outline-offset: 2px;
+}
+
+.truco .truco-corpo {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+.truco .truco-controles {
+  display: grid;
+  gap: 16px;
+}
+
+/* ---------- Vitórias ---------- */
+.truco .truco-vitorias {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.truco .truco-vitorias-rotulo {
+  flex: 1;
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.truco .truco-vitorias-placar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 27px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  color: #f7f1df;
+}
+.truco .truco-trofeu {
+  display: block;
+  color: #eac477;
+}
+
+/* ---------- Mão de 11 ---------- */
+.truco .truco-aviso {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: #343d28;
+  border: 1px solid #6b603a;
+  border-radius: 16px;
+}
+.truco .truco-naipe {
+  flex: 0 0 auto;
+  font-size: 20px;
+  line-height: 1.2;
+  font-variant-emoji: text;
+}
+.truco .truco-naipe-ouros {
+  color: #eac477;
+}
+.truco .truco-aviso-conteudo {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.truco .truco-aviso-titulo {
+  font-size: 15px;
+  font-weight: 750;
+  color: #eac477;
+}
+.truco .truco-aviso-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* ---------- Cartão de vitória ---------- */
+.truco .truco-vencedor {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 22px 18px;
+  text-align: center;
+  background: #14372d;
+  border: 1.5px solid #eac477;
+  border-radius: 20px;
+}
+.truco .truco-vencedor-titulo {
+  font-size: clamp(22px, 3vw, 27px);
+  font-weight: 800;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  color: #f7f1df;
+}
+.truco .truco-vencedor-texto {
+  color: #abc0b3;
+}
+.truco .truco-vencedor .truco-botao-ouro {
+  margin-top: 8px;
+}
+
+/* ---------- Placar das duplas (PainelDupla.kt) ---------- */
+.truco .truco-placar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.truco .truco-dupla {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding: 14px;
+  border-radius: 24px;
+}
+.truco .truco-dupla-clara {
+  color: #17352a;
+  background: #f7f1df;
+  border: 1px solid #f7f1df;
+}
+.truco .truco-dupla-escura {
+  color: #f7f1df;
+  background: #14372d;
+  border: 1px solid #315247;
+}
+.truco .truco-dupla-clara button:focus-visible {
+  outline-color: #17352a;
+}
+.truco .truco-nome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 48px;
+  padding: 4px 2px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 750;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.truco .truco-nome-texto {
+  display: -webkit-box;
+  min-width: 0;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+.truco .truco-lapis {
+  flex: 0 0 auto;
+  font-size: 13px;
+  color: #556857;
+}
+.truco .truco-dupla-escura .truco-lapis {
+  color: #abc0b3;
+}
+.truco .truco-naipe-copas {
+  color: #f0ab8f;
+}
+.truco .truco-pontos {
+  font-size: 72px;
+  font-size: min(104px, 72cqi);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.truco .truco-de {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #556857;
+}
+.truco .truco-dupla-escura .truco-de {
+  color: #abc0b3;
+}
+.truco .truco-pontinhos {
+  display: grid;
+  grid-template-columns: repeat(6, 10px);
+  gap: 7px;
+  margin: 12px 0 16px;
+}
+.truco .truco-pontinhos span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d5d8c6;
+  transition: background-color 0.2s var(--ease);
+}
+.truco .truco-pontinhos span.aceso {
+  background: #17352a;
+}
+.truco .truco-dupla-escura .truco-pontinhos span {
+  background: #35584a;
+}
+.truco .truco-dupla-escura .truco-pontinhos span.aceso {
+  background: #eac477;
+}
+.truco .truco-marcar {
+  width: 100%;
+  min-height: 52px;
+  margin-top: auto;
+  padding: 12px 8px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 750;
+  color: #f7f1df;
+  background: #17352a;
+  border: 0;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: filter 0.15s var(--ease);
+}
+.truco .truco-dupla-escura .truco-marcar {
+  color: #17352a;
+  background: #eac477;
+}
+.truco .truco-marcar:hover {
+  filter: brightness(1.1);
+}
+.truco .truco-dupla-escura .truco-marcar:hover {
+  filter: brightness(1.05);
+}
+.truco .truco-ajustes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+  margin-top: 8px;
+}
+.truco .truco-ajuste {
+  min-height: 48px;
+  padding: 0;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 650;
+  color: inherit;
+  background: transparent;
+  border: 1px solid #cbd0bb;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.truco .truco-dupla-escura .truco-ajuste {
+  border-color: #315247;
+}
+.truco .truco-ajuste:hover {
+  background: rgba(23, 53, 42, 0.06);
+}
+.truco .truco-dupla-escura .truco-ajuste:hover {
+  background: rgba(247, 241, 223, 0.06);
+}
+.truco .truco-marcar[aria-disabled="true"],
+.truco .truco-ajuste[aria-disabled="true"] {
+  opacity: 0.38;
+  filter: none;
+}
+
+/* ---------- Valor da mão (SeletorValor.kt) ---------- */
+.truco .truco-valor {
+  min-width: 0;
+  margin: 0;
+  padding: 16px;
+  background: #14372d;
+  border: 1px solid #315247;
+  border-radius: 20px;
+}
+.truco .truco-valor legend {
+  float: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 0;
+}
+.truco .truco-valor-nome {
+  font-size: 15px;
+  font-weight: 750;
+  color: #eac477;
+}
+.truco .truco-valores {
+  clear: both;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.truco .truco-opcao {
+  position: relative;
+  display: block;
+}
+.truco .truco-opcao input,
+.truco .truco-formato input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.truco .truco-opcao-face {
+  display: grid;
+  place-items: center;
+  min-height: 48px;
+  font-size: 22px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  color: #abc0b3;
+  background: #0b241e;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  transition:
+    background-color 0.15s var(--ease),
+    color 0.15s var(--ease);
+}
+.truco .truco-opcao:hover .truco-opcao-face {
+  border-color: #466349;
+}
+.truco .truco-opcao input:checked + .truco-opcao-face {
+  color: #17352a;
+  background: #eac477;
+  border-color: #eac477;
+}
+.truco .truco-salvo {
+  margin-top: 12px;
+  font-size: 12.5px;
+  text-align: center;
+  color: #abc0b3;
+}
+.truco .truco-salvo::before {
+  content: "✓ ";
+  color: #9ed9b3;
+}
+
+/* Computador: placar à esquerda, controles à direita (como no tablet do app) */
+@media (min-width: 900px) {
+  .truco .truco-corpo {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 24px;
+  }
+  .truco .truco-placar {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+  .truco .truco-controles {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .truco .truco-rodape {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+/* ---------- Histórico (cores do site) ---------- */
+.truco .truco-historico h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  color: var(--text);
+  background: none;
+}
+.truco .truco-historico h2:focus {
+  outline: none;
+}
+.truco .truco-historico h2:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.truco .truco-historico-resumo {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+.truco .truco-historico .hint {
+  margin: 0;
+}
+.truco .truco-vazio {
+  margin-top: 16px;
+  padding: 24px 16px;
+  text-align: center;
+  border: 2px dashed var(--border-2);
+  border-radius: var(--r);
+}
+.truco .truco-vazio :where(p) {
+  margin: 0;
+}
+.truco .truco-vazio-titulo {
+  margin-bottom: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+.truco .truco-lista {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.truco .truco-lista:empty {
+  display: none;
+}
+.truco .truco-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.truco .truco-item :where(p) {
+  margin: 0;
+}
+.truco .truco-item-titulo {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.truco .truco-item-detalhe {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.truco .truco-item-placar {
+  font-size: 24px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--muted);
+}
+.truco .truco-item-placar .venceu {
+  color: var(--text);
+}
+.truco .truco-item-excluir {
+  min-height: 40px;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 650;
+  color: #ffb4a8;
+  background: transparent;
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.truco .truco-item-excluir:hover {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.6);
+}
+.truco .truco-historico button:focus-visible {
+  outline-color: var(--ring);
+}
+.truco .truco-limpar {
+  margin-top: 16px;
+}
+
+/* Aviso "Partida excluída · Desfazer": fica visível ao rolar a lista */
+.truco .truco-toast {
+  position: sticky;
+  bottom: 16px;
+  z-index: 2;
+}
+.truco .truco-toast-caixa {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 8px 8px 8px 16px;
+  font-size: 14.5px;
+  color: #f7f1df;
+  background: #1d4136;
+  border: 1px solid #466349;
+  border-radius: 14px;
+  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.6);
+}
+.truco .truco-toast-desfazer {
+  min-height: 40px;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 750;
+  color: #eac477;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.truco .truco-toast-desfazer:hover {
+  background: rgba(234, 196, 119, 0.12);
+}
+.truco .truco-historico .truco-toast-desfazer:focus-visible {
+  outline-color: #eac477;
+}
+
+/* ---------- Diálogos (FolhaNovaMesa.kt, FolhaAjustes.kt) ---------- */
+.truco .truco-dialogo {
+  /* Os campos .input e .field do site passam a usar as cores do feltro */
+  --text: #f7f1df;
+  --text-2: #abc0b3;
+  --muted: #abc0b3;
+  --surface-2: #0b241e;
+  --border-2: #466349;
+  --violet-2: #eac477;
+  --ring: #eac477;
+  position: fixed;
+  inset: 0;
+  width: min(100% - 32px, 560px);
+  height: fit-content;
+  max-height: calc(100% - 32px);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  color: #f7f1df;
+  background: #14372d;
+  border: 1px solid #315247;
+  border-radius: 24px;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.75);
+  z-index: 50;
+}
+.truco .truco-dialogo:not([open]) {
+  display: none;
+}
+.truco .truco-dialogo::backdrop {
+  background: rgba(2, 10, 8, 0.68);
+}
+.truco .truco-dialogo-pequeno {
+  width: min(100% - 32px, 440px);
+}
+.truco .truco-form {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  padding: 24px clamp(18px, 4vw, 28px);
+}
+.truco .truco-dialogo h2 {
+  margin: 0;
+  padding-right: 44px;
+  font-size: 22px;
+  line-height: 1.25;
+  color: #f7f1df;
+  background: none;
+}
+.truco .truco-dialogo-texto {
+  margin: 0;
+  color: #abc0b3;
+}
+.truco .truco-fechar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-family: inherit;
+  font-size: 26px;
+  line-height: 1;
+  color: #abc0b3;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.truco .truco-fechar:hover {
+  color: #f7f1df;
+  background: rgba(247, 241, 223, 0.08);
+}
+.truco .truco-campos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.truco .truco-formatos {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.truco .truco-formatos legend {
+  margin-bottom: 10px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 650;
+  color: #abc0b3;
+}
+.truco .truco-formatos-grade {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.truco .truco-formato {
+  position: relative;
+  display: block;
+}
+.truco .truco-formato-face {
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  height: 100%;
+  min-height: 80px;
+  padding: 12px 14px;
+  background: #0b241e;
+  border: 1px solid #315247;
+  border-radius: 16px;
+}
+.truco .truco-formato-face strong {
+  font-size: 15px;
+  color: #f7f1df;
+}
+.truco .truco-formato-face span {
+  font-size: 13px;
+  color: #abc0b3;
+}
+.truco .truco-formato:hover .truco-formato-face {
+  border-color: #466349;
+}
+.truco .truco-formato input:checked + .truco-formato-face {
+  background: #2a4937;
+  border-color: #eac477;
+}
+.truco .truco-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* Interruptor de vibração */
+.truco .truco-interruptor {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  cursor: pointer;
+}
+.truco .truco-interruptor-texto {
+  display: grid;
+  gap: 2px;
+  flex: 1;
+}
+.truco .truco-interruptor-texto strong {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f7f1df;
+}
+.truco .truco-interruptor-texto span {
+  font-size: 13px;
+  color: #abc0b3;
+}
+.truco .truco-interruptor input {
+  order: 2;
+  position: relative;
+  flex: 0 0 auto;
+  width: 52px;
+  height: 32px;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #315247;
+  border: 2px solid #315247;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
+}
+.truco .truco-interruptor input::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f7f1df;
+  transition: transform 0.15s var(--ease);
+}
+.truco .truco-interruptor input:checked {
+  background: #2a4937;
+  border-color: #eac477;
+}
+.truco .truco-interruptor input:checked::before {
+  background: #eac477;
+  transform: translateX(20px);
+}
+.truco .truco-interruptor input:focus-visible {
+  outline: 3px solid #eac477;
+  outline-offset: 2px;
+}
+
+/* ---------- Tema claro (só o que usa cores do site) ---------- */
+:root[data-theme="light"] .truco .truco-item-excluir {
+  color: #b42318;
+}
+:root[data-theme="light"] .truco .truco-item-excluir:hover {
+  background: rgba(180, 35, 24, 0.08);
+}
+
+/* ---------- Telas estreitas ---------- */
+@media (max-width: 520px) {
+  .truco .truco-item {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .truco .truco-item-excluir {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+  .truco .truco-campos,
+  .truco .truco-formatos-grade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .truco .truco-formato-face {
+    min-height: 0;
+  }
+}
+@media (max-width: 400px) {
+  .truco .truco-dupla {
+    padding: 12px 10px;
+  }
+  .truco .truco-pontinhos {
+    grid-template-columns: repeat(6, 8px);
+    gap: 6px;
+  }
+  .truco .truco-pontinhos span {
+    width: 8px;
+    height: 8px;
+  }
+  .truco .truco-acoes .truco-botao-linha {
+    padding: 8px 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .truco *,
+  .truco *::before {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,207 @@
+<!--
+titulo: Lumibricks: Jogo de Blocos que Caem Online — EFS Aplicativos
+descricao: Jogue Lumibricks online e grátis: encaixe os blocos que caem, complete linhas e suba de nível. Tem peça-guia, Segurar e bloco dourado, no teclado ou no celular.
+estilos: /assets/jogos/lumibricks.css
+scripts: /assets/jogos/lumibricks-logica.js /assets/jogos/lumibricks.js
+app: Lumibricks | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Lumibricks</li>
+  </ol>
+  <h1>Lumibricks online</h1>
+  <p>
+    Encaixe os blocos que caem, complete linhas inteiras para apagá-las e veja até que nível você
+    chega. Funciona no teclado e no celular, e a partida fica salva, pausada, se você sair da página.
+  </p>
+</header>
+
+<section class="lumibricks" id="lumibricks" aria-label="Jogo Lumibricks">
+  <div class="lb-area" id="lb-area">
+    <div class="lb-jogo" id="lb-jogo">
+      <div
+        class="lb-quadro"
+        id="lb-quadro"
+        tabindex="0"
+        role="application"
+        aria-label="Tabuleiro do Lumibricks"
+        aria-describedby="lb-ajuda"
+      >
+        <canvas id="lb-tela" aria-hidden="true"></canvas>
+      </div>
+      <div class="lb-painel">
+        <div class="lb-cartao">
+          <span class="lb-rotulo">Próxima</span>
+          <canvas class="lb-mini" id="lb-proxima" aria-hidden="true"></canvas>
+          <span class="sr-only" id="lb-proxima-texto"></span>
+        </div>
+        <div class="lb-cartao" id="lb-cartao-guardada">
+          <span class="lb-rotulo">Segurar</span>
+          <canvas class="lb-mini" id="lb-guardada" aria-hidden="true"></canvas>
+          <span class="sr-only" id="lb-guardada-texto"></span>
+        </div>
+        <dl class="lb-numeros">
+          <div><dt>Pontuação</dt><dd class="lb-destaque" id="lb-pontos">0</dd></div>
+          <div><dt>Linhas</dt><dd id="lb-linhas">0</dd></div>
+          <div><dt>Nível</dt><dd id="lb-nivel">1</dd></div>
+          <div><dt>Tempo</dt><dd id="lb-tempo">00:00</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="lb-controles" id="lb-controles">
+      <button type="button" class="lb-botao" data-acao="segurar" aria-label="Segurar" aria-keyshortcuts="C">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 20V5M4 9l4-4 4 4M16 4v15M12 15l4 4 4-4" /></svg>
+        <span>Segurar</span>
+      </button>
+      <button type="button" class="lb-botao lb-pausa" data-acao="pausar" aria-label="Pausar" aria-keyshortcuts="P">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" /></svg>
+      </button>
+      <button type="button" class="lb-botao" data-acao="girar-anti" aria-label="Girar no sentido anti-horário" aria-keyshortcuts="Q">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4 3v4.5h4.5" /></svg>
+      </button>
+      <button type="button" class="lb-botao" data-acao="girar" aria-label="Girar" aria-keyshortcuts="ArrowUp">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M20 3v4.5h-4.5" /></svg>
+      </button>
+      <button type="button" class="lb-botao lb-mover" data-acao="esquerda" data-repetir aria-label="Mover para a esquerda" aria-keyshortcuts="ArrowLeft">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+      </button>
+      <button type="button" class="lb-botao lb-suave" data-acao="suave" data-repetir aria-label="Queda suave" aria-keyshortcuts="ArrowDown">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5l6 6 6-6M6 12l6 6 6-6" /></svg>
+      </button>
+      <button type="button" class="lb-botao lb-mover" data-acao="direita" data-repetir aria-label="Mover para a direita" aria-keyshortcuts="ArrowRight">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+      </button>
+      <button type="button" class="lb-botao lb-queda" data-acao="queda" aria-label="Queda instantânea" aria-keyshortcuts="Space">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 20h14" /></svg>
+      </button>
+    </div>
+
+    <div class="lb-sobreposicao" id="lb-sobreposicao" hidden>
+      <div class="lb-aviso" id="lb-aviso" role="dialog" aria-labelledby="lb-aviso-titulo"></div>
+    </div>
+  </div>
+
+  <p class="lb-ajuda" id="lb-ajuda">
+    Teclado: ← → ou A e D movem, ↑ ou W gira, Q gira para o outro lado, ↓ ou S desce mais rápido,
+    espaço derruba a peça, C segura e P pausa. No celular, use os botões ou deslize o dedo sobre o
+    tabuleiro: toque para girar, arraste para os lados ou para baixo e deslize para cima para segurar.
+  </p>
+
+  <div class="lb-recordes">
+    <div class="lb-recordes-topo">
+      <h2 class="lb-recordes-titulo">Top 5 pontuações</h2>
+      <button type="button" class="button secondary" id="lb-limpar">Limpar pontuações</button>
+    </div>
+    <div class="lb-confirmar" id="lb-confirmar" hidden>
+      <p>Tem certeza que deseja apagar todas as pontuações salvas?</p>
+      <div class="lb-confirmar-botoes">
+        <button type="button" class="button" id="lb-limpar-sim">Limpar</button>
+        <button type="button" class="button secondary" id="lb-limpar-nao">Cancelar</button>
+      </div>
+    </div>
+    <ol class="lb-lista" id="lb-lista"></ol>
+    <p class="lb-vazio" id="lb-vazio">Nenhuma pontuação ainda. Jogue uma partida!</p>
+  </div>
+  <p class="sr-only" aria-live="polite" id="lb-status"></p>
+</section>
+
+<article class="texto">
+  <h2>Como jogar Lumibricks</h2>
+  <p>
+    As peças caem uma de cada vez em um tabuleiro de 10 colunas por 20 linhas. Mova, gire e
+    encaixe cada peça na pilha. Quando uma linha fica completa de lado a lado, ela some e tudo o
+    que estava acima desce. A partida termina quando uma peça nova já não cabe no alto do
+    tabuleiro.
+  </p>
+  <ul>
+    <li><strong>Peça-guia:</strong> o contorno no fundo mostra onde a peça vai cair.</li>
+    <li><strong>Próxima:</strong> o painel ao lado mostra a peça que vem depois.</li>
+    <li><strong>Segurar:</strong> guarda a peça atual para usar depois, ou troca pela que está guardada. Vale uma vez por peça; a peça guardada volta na posição inicial, sem o giro.</li>
+    <li><strong>Queda suave</strong> desce uma linha por vez; <strong>queda instantânea</strong> leva a peça direto ao chão e trava.</li>
+    <li><strong>Peça no chão</strong> ainda pode ser movida ou girada por meio segundo antes de travar. Cada movimento renova esse tempo, até 15 vezes por linha.</li>
+  </ul>
+
+  <h2>O bloco dourado</h2>
+  <p>
+    De vez em quando (cerca de uma peça em cada sete) aparece um bloco de uma célula só, dourado e
+    piscando. Ele atravessa as outras peças, para os lados e para baixo, e cai no buraco vazio mais
+    fundo da coluna em que está. É a forma de tapar aquele buraco coberto que nenhuma outra peça
+    alcança. Se a coluna não tem buraco embaixo, ele para no vazio mais próximo acima.
+  </p>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Pontos, níveis e velocidade</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th scope="col">Jogada</th><th scope="col">Pontos</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1 linha</td><td>100 × nível</td></tr>
+        <tr><td>2 linhas de uma vez</td><td>300 × nível</td></tr>
+        <tr><td>3 linhas de uma vez</td><td>500 × nível</td></tr>
+        <tr><td>4 linhas de uma vez</td><td>800 × nível</td></tr>
+        <tr><td>Queda suave</td><td>1 por linha descida</td></tr>
+        <tr><td>Queda instantânea</td><td>2 por linha descida</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    O nível sobe a cada 10 linhas apagadas, e a cada nível a peça desce 15% mais rápido. O tempo
+    para descer uma linha é:
+  </p>
+  <p class="formula">intervalo = máx(70 ms; 1.000 ms × 0,85<sup>nível − 1</sup>)</p>
+  <p>
+    No nível 1 a peça desce uma linha por segundo; no nível 3, a cada 722 ms; no nível 10, a cada
+    232 ms. A partir do nível 18 chega ao limite de 70 ms. Exemplo de conta: apagar 4 linhas de uma
+    vez no nível 3 vale 800 × 3 = <strong>2.400 pontos</strong>, mais 2 pontos por linha que a peça
+    caiu na queda instantânea.
+  </p>
+
+  <h2>Dicas para durar mais</h2>
+  <ol>
+    <li><strong>Mantenha a pilha baixa e plana.</strong> Degraus de uma célula aceitam quase qualquer peça.</li>
+    <li><strong>Deixe uma coluna livre na lateral</strong> para a peça reta de quatro blocos: é ela que apaga 4 linhas de uma vez e vale mais pontos.</li>
+    <li><strong>Use o Segurar</strong> para guardar a peça reta ou para fugir de uma peça que não encaixa agora.</li>
+    <li><strong>Olhe a próxima peça</strong> antes de encaixar a atual.</li>
+    <li><strong>Guarde o bloco dourado para buracos cobertos.</strong> Ele vai direto ao fundo da coluna.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>A partida fica salva?</h3>
+  <p>
+    Sim. Se você trocar de aba, minimizar a janela ou rolar a página para longe do tabuleiro, o jogo
+    pausa sozinho e guarda a partida no navegador. Ao voltar, ela aparece pausada; é só retomar.
+    As 5 melhores pontuações também ficam guardadas, com nível e data.
+  </p>
+  <h3>Quais são os controles no teclado?</h3>
+  <p>
+    Setas ou W, A, S e D para girar, mover e descer; Q gira no sentido anti-horário; espaço faz a
+    queda instantânea; C segura a peça; P ou Esc pausa. Segurar uma seta para os lados ou para baixo
+    repete o movimento.
+  </p>
+  <h3>Como as peças são sorteadas?</h3>
+  <p>
+    Em grupos de sete: cada grupo traz uma peça de cada formato, em ordem aleatória, então nenhuma
+    some por muito tempo. O bloco dourado é sorteado à parte, com 15% de chance a cada peça.
+  </p>
+  <h3>Preciso de internet para jogar?</h3>
+  <p>
+    Só para abrir a página. Para jogar sem internet, instale o app Lumibricks no celular.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/lumibricks.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Lumibricks no celular</h2>
+    <p>O mesmo jogo, com vibração, gestos no tabuleiro, nove idiomas e a partida salva, também sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.lumibricks&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

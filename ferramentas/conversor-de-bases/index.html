@@ -1,0 +1,372 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/ferramentas/conversor-de-bases.html. Edite lá. -->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050a1e" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        if (theme === "light" || theme === "dark") {
+          root.setAttribute("data-theme", theme);
+        }
+        if (theme === "light") {
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#f3f6ff");
+        }
+      })();
+    </script>
+    <title>Conversor de Bases: Binário, Hexadecimal, Octal e Decimal — EFS Aplicativos</title>
+    <meta name="description" content="Converta números entre binário, octal, decimal, hexadecimal e qualquer base de 2 a 36, com frações e complemento de dois, e transforme texto em bytes UTF-8." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/ferramentas/conversor-de-bases/" />
+    <meta property="og:title" content="Conversor de Bases: Binário, Hexadecimal, Octal e Decimal — EFS Aplicativos" />
+    <meta property="og:description" content="Converta números entre binário, octal, decimal, hexadecimal e qualquer base de 2 a 36, com frações e complemento de dois, e transforme texto em bytes UTF-8." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/ferramentas/conversor-de-bases/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
+    <link rel="stylesheet" href="/assets/web.css?v=8aa4a1ab9334" />
+    <link rel="stylesheet" href="/assets/ferramentas/conversor-de-bases.css?v=0b81378c2750" />
+    <script src="/site.js?v=b4f7be01c332" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/ferramentas/conversor-de-bases-logica.js?v=84b4c004450f" defer></script>
+    <script src="/assets/ferramentas/conversor-de-bases.js?v=447701919f11" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Conversor de bases", "url": "https://efsaplicativos.com.br/ferramentas/conversor-de-bases/", "description": "Converta números entre binário, octal, decimal, hexadecimal e qualquer base de 2 a 36, com frações e complemento de dois, e transforme texto em bytes UTF-8.", "applicationCategory": "EducationalApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas" aria-current="page">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Ativar tema claro"
+            title="Alternar tema claro/escuro"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Conversor de bases</li>
+  </ol>
+  <h1>Conversor de bases numéricas</h1>
+  <p>
+    Digite um número e veja na hora o valor em binário, octal, decimal e hexadecimal, ou em qualquer
+    base de 2 a 36. Também mostra o complemento de dois e converte texto em códigos de bytes UTF-8.
+  </p>
+</header>
+
+<section class="tool bas" id="conversor-bases" aria-label="Conversor de bases">
+  <div class="segmented bas-abas" role="group" aria-label="O que você quer converter?">
+    <button type="button" class="filter active" data-aba="numeros" aria-pressed="true">Números</button>
+    <button type="button" class="filter" data-aba="texto" aria-pressed="false">Texto</button>
+  </div>
+
+  <div class="bas-painel" id="bas-numeros">
+    <form class="fields bas-entrada" id="bas-form-numeros" novalidate>
+      <fieldset class="field">
+        <legend>Base de entrada</legend>
+        <div class="segmented">
+          <button type="button" class="filter" data-base="2" aria-pressed="false">Binário (2)</button>
+          <button type="button" class="filter" data-base="8" aria-pressed="false">Octal (8)</button>
+          <button type="button" class="filter active" data-base="10" aria-pressed="true">Decimal (10)</button>
+          <button type="button" class="filter" data-base="16" aria-pressed="false">Hexadecimal (16)</button>
+          <button type="button" class="filter" data-base="outra" aria-pressed="false">Outra base</button>
+        </div>
+      </fieldset>
+
+      <div class="field bas-personalizada" id="bas-campo-personalizada" hidden>
+        <label for="bas-personalizada">Base (2 a 36)</label>
+        <input class="input" id="bas-personalizada" inputmode="numeric" autocomplete="off" maxlength="3" placeholder="3" aria-describedby="bas-personalizada-erro" aria-invalid="false" />
+        <p class="bas-erro" id="bas-personalizada-erro" hidden>A base deve estar entre 2 e 36</p>
+      </div>
+
+      <div class="field">
+        <label for="bas-numero" id="bas-numero-rotulo">Número em Decimal (10)</label>
+        <input class="input bas-numero" id="bas-numero" inputmode="decimal" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Ex.: 255" aria-describedby="bas-numero-dica" aria-invalid="false" />
+        <p class="hint" id="bas-numero-dica">Aceita negativos e parte fracionária (ex.: -1A.8)</p>
+      </div>
+
+      <div class="bas-acoes">
+        <button type="button" class="button secondary" id="bas-sinal" title="Coloca ou tira o sinal de menos">± Trocar sinal</button>
+        <button type="button" class="button secondary" id="bas-limpar">Limpar</button>
+      </div>
+    </form>
+
+    <div class="bas-resultados">
+      <div class="result" id="bas-conversoes-bloco">
+        <p class="result-label" id="bas-conversoes-titulo">Conversões</p>
+        <ul class="bas-lista" id="bas-conversoes" aria-labelledby="bas-conversoes-titulo"></ul>
+        <p class="hint bas-nota" id="bas-truncado" hidden>Frações que não terminam na base de destino são mostradas com até 20 dígitos (…).</p>
+        <p class="result-message" id="bas-vazio">Digite um número para ver as conversões.</p>
+      </div>
+
+      <div class="result" id="bas-complemento-bloco" hidden>
+        <p class="result-label" id="bas-complemento-titulo">Complemento de dois</p>
+        <dl class="result-list">
+          <div>
+            <dt>Bits necessários (parte inteira)</dt>
+            <dd id="bas-bits-total"></dd>
+          </div>
+          <div>
+            <dt>Bits com valor 1</dt>
+            <dd id="bas-bits-um"></dd>
+          </div>
+        </dl>
+        <p class="hint bas-nota">Representação com sinal em inteiros de 8, 16, 32 e 64 bits (apenas quando o valor cabe).</p>
+        <ul class="bas-lista" id="bas-complemento" aria-labelledby="bas-complemento-titulo"></ul>
+        <p class="result-message" id="bas-complemento-vazio" hidden>O valor não cabe em 64 bits com sinal.</p>
+      </div>
+    </div>
+    <p class="sr-only" aria-live="polite" id="bas-anuncio"></p>
+  </div>
+
+  <div class="bas-painel" id="bas-texto-painel" hidden>
+    <div class="tool-grid">
+      <form class="fields" id="bas-form-texto" novalidate>
+        <div class="segmented" role="group" aria-label="Direção da conversão">
+          <button type="button" class="filter active" data-direcao="codificar" aria-pressed="true">Texto → códigos</button>
+          <button type="button" class="filter" data-direcao="decodificar" aria-pressed="false">Códigos → texto</button>
+        </div>
+
+        <fieldset class="field">
+          <legend>Formato dos bytes</legend>
+          <div class="segmented">
+            <button type="button" class="filter active" data-formato="binario" aria-pressed="true">Binário</button>
+            <button type="button" class="filter" data-formato="hexadecimal" aria-pressed="false">Hexadecimal</button>
+            <button type="button" class="filter" data-formato="decimal" aria-pressed="false">Decimal</button>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="bas-texto" id="bas-texto-rotulo">Texto</label>
+          <textarea class="input bas-texto" id="bas-texto" rows="4" autocomplete="off" aria-describedby="bas-texto-dica" aria-invalid="false"></textarea>
+          <p class="hint" id="bas-texto-dica">Cada caractere ocupa de 1 a 4 bytes em UTF-8 (letras acentuadas e emojis usam mais de um byte).</p>
+        </div>
+
+        <div class="bas-acoes">
+          <button type="button" class="button secondary" id="bas-texto-limpar">Limpar</button>
+        </div>
+      </form>
+
+      <div class="result bas-texto-resultado" id="bas-texto-resultado">
+        <p class="result-label">Resultado</p>
+        <p class="bas-saida" id="bas-saida"></p>
+        <p class="hint" id="bas-bytes"></p>
+        <p class="result-message" id="bas-texto-vazio">Digite um texto ou os códigos dos bytes.</p>
+        <p class="result-message error" id="bas-texto-erro" hidden></p>
+        <div class="bas-acoes" id="bas-texto-acoes" hidden>
+          <button type="button" class="button secondary bas-pequeno" id="bas-texto-copiar">Copiar</button>
+        </div>
+        <p class="sr-only" aria-live="polite" id="bas-texto-anuncio"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar</h2>
+  <p>
+    Escolha a base em que o número está escrito e digite o valor. As conversões para binário, octal,
+    decimal e hexadecimal aparecem enquanto você digita; se a base de entrada for outra, como a
+    base 3 ou a base 36, ela também entra na lista. Cada linha tem um botão para copiar o valor sem os
+    espaços de agrupamento.
+  </p>
+  <p>
+    Letras maiúsculas e minúsculas valem o mesmo (ff é igual a FF), e espaços ou sublinhados podem
+    separar os dígitos, como em 1101 0110 ou FF_FF. A parte fracionária pode ser separada por vírgula
+    ou ponto; no resultado ela aparece com ponto, como é costume em programação.
+  </p>
+
+  <h2>Como funciona a mudança de base</h2>
+  <p>
+    Em uma base b, cada posição vale uma potência de b. No sistema decimal, 255 significa duas
+    centenas, cinco dezenas e cinco unidades. Em hexadecimal, as letras A a F representam os valores
+    10 a 15, e FF vale 15 · 16 + 15:
+  </p>
+  <p class="formula">255 = 2 · 10² + 5 · 10¹ + 5 · 10⁰ = 15 · 16¹ + 15 · 16⁰</p>
+  <p>
+    Para ir do decimal para outra base, divida o número pela base repetidas vezes e anote os restos,
+    de baixo para cima. Exemplo: 255 ÷ 16 = 15, resto 15 (F); 15 ÷ 16 = 0, resto 15 (F). Resultado:
+    FF. O mesmo 255 é 11111111 em binário e 377 em octal (3 · 64 + 7 · 8 + 7).
+  </p>
+
+  <h2>Números com parte fracionária</h2>
+  <p>
+    A parte depois da vírgula é convertida ao contrário: multiplica-se pela base e o dígito inteiro
+    que aparece é o próximo dígito do resultado. Para 0,625 em binário: 0,625 × 2 = 1,25 (dígito 1),
+    0,25 × 2 = 0,5 (dígito 0) e 0,5 × 2 = 1 (dígito 1). Assim, 10,625 vira 1010.101.
+  </p>
+  <p>
+    Algumas frações nunca terminam na base de destino. O decimal 0,1, por exemplo, é uma dízima
+    periódica em binário (0.000110011…). Nesses casos o conversor mostra até 20 dígitos fracionários
+    e termina o valor com reticências, para deixar claro que ele foi cortado. Os cálculos usam
+    aritmética exata, então números inteiros de qualquer tamanho são convertidos sem erro de
+    arredondamento.
+  </p>
+
+  <h2>Por que binário e hexadecimal combinam tão bem</h2>
+  <p>
+    Como 16 = 2⁴, cada dígito hexadecimal corresponde a exatamente quatro bits; e como 8 = 2³, cada
+    dígito octal corresponde a três. Por isso o resultado em binário aparece em grupos de quatro
+    dígitos: cada grupo é um dígito hexadecimal. Em 1101 0110, o grupo 1101 é D e 0110 é 6, então o
+    número é D6 (214 em decimal).
+  </p>
+
+  <h2>Complemento de dois</h2>
+  <p>
+    É a forma como processadores guardam números inteiros com sinal. Em n bits, os valores vão de
+    −2ⁿ⁻¹ a 2ⁿ⁻¹ − 1; com 8 bits, de −128 a 127. Para um número negativo, escreva o valor positivo em
+    binário, inverta todos os bits e some 1:
+  </p>
+  <p class="formula">5 = 0000 0101  →  inverte: 1111 1010  →  soma 1: 1111 1011 = −5</p>
+  <p>
+    Para números inteiros, a ferramenta mostra essa representação em 8, 16, 32 e 64 bits, em binário
+    e em hexadecimal (−5 em 8 bits é 0xFB), além de quantos bits a parte inteira ocupa e quantos deles
+    valem 1. As larguras em que o valor não cabe ficam de fora.
+  </p>
+
+  <h2>Texto e bytes em UTF-8</h2>
+  <p>
+    Na aba Texto, cada caractere é transformado nos bytes que o representam na codificação UTF-8,
+    usada pela maior parte das páginas e arquivos de texto. Letras sem acento, números e sinais comuns
+    ocupam um byte; letras acentuadas ocupam dois; emojis, quatro. A palavra “Olá” vira
+    4F 6C C3 A1 em hexadecimal: o “á” sozinho ocupa os dois últimos bytes.
+  </p>
+  <p>
+    No sentido contrário, cole os códigos separados por espaço, vírgula ou quebra de linha. Em binário
+    e hexadecimal, também dá para colar a sequência contínua, como 4F6CC3A1, e prefixos como 0x são
+    ignorados. Ao trocar a direção, o resultado atual vira a nova entrada; e, em “Códigos → texto”,
+    trocar o formato reescreve os códigos já digitados no novo formato.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Qual é a maior base aceita?</h3>
+  <p>
+    A base 36, que usa os dez algarismos e as 26 letras de A a Z como dígitos. A menor é a base 2.
+  </p>
+  <h3>Existe limite para o tamanho do número?</h3>
+  <p>
+    Não há limite prático. A conversão é feita com inteiros de precisão arbitrária, então um número
+    com 30 ou 100 algarismos volta exatamente igual depois de ir para hexadecimal e retornar ao
+    decimal. Muitas calculadoras comuns perdem precisão a partir de 2⁵³ (cerca de 9 quatrilhões).
+  </p>
+  <h3>Por que aparece a mensagem de dígitos inválidos?</h3>
+  <p>
+    Porque o número tem algum dígito que não existe na base escolhida, como um 2 em binário ou um G em
+    hexadecimal. Confira se a base de entrada selecionada é a mesma em que o número está escrito.
+  </p>
+  <h3>Por que um código de byte é recusado?</h3>
+  <p>
+    Cada byte vai de 0 a 255 (00 a FF em hexadecimal, 00000000 a 11111111 em binário). Valores fora
+    dessa faixa, ou com mais dígitos do que o formato permite, são apontados na mensagem. Quando todos
+    os códigos são válidos mas a sequência não forma caracteres UTF-8, como um C3 sozinho, a
+    ferramenta avisa que os bytes não formam um texto válido.
+  </p>
+  <h3>Os números e textos que digito são enviados para algum lugar?</h3>
+  <p>
+    Não. Tudo é calculado no seu navegador. A base escolhida e o último número ficam guardados apenas
+    neste aparelho; o conteúdo da aba Texto não é guardado.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Conversor de bases, calculadora científica, equações, matrizes e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

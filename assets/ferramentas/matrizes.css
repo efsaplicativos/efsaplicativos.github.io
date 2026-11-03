@@ -1,0 +1,202 @@
+/* ==========================================================================
+   Matrizes — editores de A e B, operações e tabela do resultado.
+   ========================================================================== */
+
+.mat {
+  --mat-erro: #ffb4a8;
+}
+:root[data-theme="light"] .mat {
+  --mat-erro: #b42318;
+}
+
+.mat-editores {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.mat-editor {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.mat-editor legend {
+  padding: 0 6px;
+  font-size: 16px;
+  font-weight: 750;
+  color: var(--text);
+}
+.mat-trocar {
+  align-self: center;
+  white-space: nowrap;
+}
+
+.mat-dimensoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+.mat-passo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.mat-passo output {
+  min-width: 1.4em;
+  font-size: 17px;
+  font-weight: 800;
+  text-align: center;
+  color: var(--text);
+}
+.mat-botao {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  font: inherit;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--text);
+  background: var(--surface-3);
+  border: 1px solid var(--border-2);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.mat-botao:hover:not(:disabled) {
+  border-color: var(--violet-2);
+}
+.mat-botao:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.mat-botao:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 1px;
+}
+
+.mat-grade-area {
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.mat-grade {
+  display: grid;
+  grid-template-columns: repeat(var(--mat-colunas, 2), minmax(54px, 76px));
+  gap: 6px;
+}
+.mat-celula[hidden] {
+  display: none;
+}
+.mat-celula .input {
+  min-height: 42px;
+  padding: 8px 6px;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 15px;
+  text-align: center;
+}
+.mat .input[aria-invalid="true"] {
+  border-color: var(--mat-erro);
+}
+
+.mat-acoes,
+.mat-resultado-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mat .mat-pequeno {
+  min-height: 36px;
+  padding: 6px 14px;
+  font-size: 13px;
+}
+.mat-dica {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin: 12px 0 22px;
+}
+.mat-dica .hint {
+  margin: 0;
+}
+
+.mat-operacoes {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+.mat-alvo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.mat-parametros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 220px));
+  gap: 12px;
+  margin-top: 8px;
+}
+.mat-parametros .field[hidden] {
+  display: none;
+}
+
+.mat-resultado .result-value[hidden],
+.mat-resultado .hint[hidden],
+.mat-tabela-area[hidden],
+.mat-resultado-acoes[hidden],
+.mat-resultado .result-message[hidden] {
+  display: none;
+}
+.mat-resultado .result-message.error {
+  color: var(--mat-erro);
+}
+.mat-tabela-area {
+  max-width: 100%;
+  margin: 8px 0 14px;
+  overflow-x: auto;
+}
+.mat-tabela {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  /* Colchetes da matriz */
+  border-left: 2px solid var(--text-2);
+  border-right: 2px solid var(--text-2);
+  border-radius: 6px;
+}
+.mat-tabela td {
+  min-width: 72px;
+  padding: 6px 12px;
+  text-align: right;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+@media (max-width: 860px) {
+  .mat-editores {
+    grid-template-columns: 1fr;
+  }
+  .mat-trocar {
+    justify-self: start;
+  }
+}
+@media (max-width: 400px) {
+  .mat-editor {
+    padding: 12px;
+  }
+  .mat-grade {
+    grid-template-columns: repeat(var(--mat-colunas, 2), minmax(48px, 64px));
+  }
+}

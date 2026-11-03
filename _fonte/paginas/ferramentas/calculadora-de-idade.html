@@ -1,0 +1,124 @@
+<!--
+titulo: Calculadora de Idade Exata em Anos, Meses e Dias — EFS Aplicativos
+descricao: Descubra sua idade exata em anos, meses e dias, quantos dias faltam para o próximo aniversário, o dia da semana em que nasceu, seu signo e sua geração.
+scripts: /assets/numeros.js /assets/ferramentas/calculadora-de-datas-logica.js /assets/ferramentas/calculadora-de-idade-logica.js /assets/ferramentas/calculadora-de-idade.js
+estilos: /assets/ferramentas/calculadora-de-idade.css
+app: Calculadora de Idade | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Calculadora de idade</li>
+  </ol>
+  <h1>Calculadora de idade</h1>
+  <p>
+    Informe a data de nascimento para ver a idade exata em anos, meses e dias, o total de dias
+    vividos, a contagem para o próximo aniversário e algumas curiosidades sobre a data.
+  </p>
+</header>
+
+<section class="tool idade" aria-label="Calculadora de idade">
+  <div class="tool-grid">
+    <form class="fields" id="form-idade" novalidate>
+      <div class="field">
+        <label for="nascimento">Data de nascimento</label>
+        <input class="input" type="date" id="nascimento" min="0001-01-01" max="9999-12-31" autocomplete="bday" />
+      </div>
+      <div class="field">
+        <label for="referencia">Calcular a idade em</label>
+        <div class="input-row">
+          <input class="input" type="date" id="referencia" min="0001-01-01" max="9999-12-31" aria-describedby="referencia-dica" />
+          <button type="button" class="button secondary" id="referencia-hoje">Hoje</button>
+        </div>
+        <span class="hint" id="referencia-dica">Deixe em hoje ou escolha outra data para saber a idade nela.</span>
+      </div>
+      <p class="hint idade-privacidade">A data fica só no seu navegador: nada é salvo nem enviado.</p>
+    </form>
+
+    <div class="idade-resultados" aria-live="polite">
+      <div class="result" id="resultado-idade">
+        <p class="result-message">Escolha a data de nascimento.</p>
+      </div>
+      <div class="result idade-cartao" id="proximo-aniversario" hidden>
+        <h2 class="idade-titulo">Próximo aniversário</h2>
+        <div id="proximo-conteudo"></div>
+      </div>
+      <div class="result idade-cartao" id="curiosidades" hidden>
+        <h2 class="idade-titulo">Curiosidades</h2>
+        <div id="curiosidades-conteudo"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como a idade é calculada</h2>
+  <p>
+    A idade é o número de aniversários completos até a data escolhida. Os meses contam a partir
+    do último aniversário e os dias, a partir do último "mesversário". Quem nasceu em 10/05/1990,
+    por exemplo, tem em 03/11/2026:
+  </p>
+  <p class="formula">36 anos, 5 meses e 24 dias</p>
+  <p>
+    São 36 anos porque o aniversário de 2026 já passou (10/05), 5 meses de 10/05 a 10/10 e 24 dias
+    de 10/10 a 03/11. O total de dias vividos é a diferença direta entre as duas datas, contando os
+    anos bissextos.
+  </p>
+
+  <h2>Quem nasceu em 29 de fevereiro</h2>
+  <p>
+    Nos anos que não são bissextos, o aniversário é considerado em 28 de fevereiro, como faz a
+    maioria dos sistemas de calendário. A calculadora avisa quando o próximo aniversário cai nessa
+    data ajustada.
+  </p>
+
+  <h2>Signo, horóscopo chinês e geração</h2>
+  <ul>
+    <li>
+      <strong>Signo:</strong> pelas datas mais usadas no Brasil (Áries de 21/03 a 19/04, Touro de
+      20/04 a 20/05 e assim por diante). Quem nasceu no dia da troca de signo pode ver outra data
+      em outras fontes, porque o início de cada signo varia um dia conforme o ano.
+    </li>
+    <li>
+      <strong>Horóscopo chinês:</strong> o ano chinês começa no Ano-Novo Lunar, que cai entre 21 de
+      janeiro e 20 de fevereiro. Para nascimentos nesse intervalo o animal é aproximado e aparece
+      com um asterisco: confira a data exata do Ano-Novo Lunar daquele ano.
+    </li>
+    <li>
+      <strong>Geração:</strong> pelas faixas de ano de nascimento mais citadas (Baby Boomers de 1946
+      a 1964, Geração X de 1965 a 1980, Millennials de 1981 a 1996, Geração Z de 1997 a 2012, e assim
+      por diante). Os limites não são oficiais e mudam um pouco de autor para autor.
+    </li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Posso calcular a idade em uma data passada ou futura?</h3>
+  <p>
+    Sim. Troque a data em "Calcular a idade em" para saber, por exemplo, quantos anos alguém tinha
+    numa formatura ou terá numa viagem. A data de nascimento precisa ser anterior a ela.
+  </p>
+  <h3>Por que o total de meses parece menor do que anos × 12?</h3>
+  <p>
+    Porque só entram meses completos: o total é anos × 12 mais os meses da idade, sem contar os
+    dias que sobram.
+  </p>
+  <h3>A idade muda conforme o fuso horário?</h3>
+  <p>
+    Não. As datas são tratadas como dias do calendário, sem hora. "Hoje" é a data do relógio do seu
+    aparelho.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Calculadora de idade, de datas, conversor de medidas e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

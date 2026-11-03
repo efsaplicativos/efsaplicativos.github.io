@@ -1,0 +1,194 @@
+<!--
+titulo: Cronômetro Online com Voltas e Timer (Temporizador) — EFS Aplicativos
+descricao: Cronômetro online com voltas, volta mais rápida e mais lenta, e timer regressivo com alarme. Não atrasa com a aba em segundo plano. Grátis e sem instalar.
+scripts: /assets/ferramentas/cronometro-e-timer-logica.js /assets/ferramentas/cronometro-e-timer.js
+estilos: /assets/ferramentas/cronometro-e-timer.css
+app: Cronômetro e Timer | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Cronômetro e timer</li>
+  </ol>
+  <h1>Cronômetro e timer online</h1>
+  <p>
+    Marque o tempo com centésimos de segundo e registre voltas, ou faça uma contagem regressiva
+    com alarme. O tempo é calculado pelo relógio do aparelho, então continua certo mesmo se
+    você trocar de aba ou recarregar a página.
+  </p>
+</header>
+
+<section class="tool cronometro" aria-label="Cronômetro e temporizador">
+  <div class="segmented cronometro-abas" role="group" aria-label="Modo">
+    <button type="button" class="filter active" data-aba="cronometro" aria-pressed="true">Cronômetro</button>
+    <button type="button" class="filter" data-aba="timer" aria-pressed="false">Temporizador</button>
+  </div>
+
+  <div class="cronometro-painel" data-painel="cronometro">
+    <div class="cronometro-visor">
+      <div class="cronometro-tempo" id="cr-tempo" role="timer" aria-label="Tempo do cronômetro">00:00.00</div>
+      <div class="cronometro-volta-atual" id="cr-volta-atual" hidden></div>
+    </div>
+    <div class="cronometro-botoes">
+      <button type="button" class="button secondary" id="cr-secundario" disabled>Zerar</button>
+      <button type="button" class="button" id="cr-principal">Iniciar</button>
+    </div>
+    <p class="sr-only" id="cr-status" aria-live="polite"></p>
+    <div class="cronometro-voltas" id="cr-voltas" hidden>
+      <div class="cronometro-voltas-topo">
+        <h2 class="table-title" id="voltas-titulo">Voltas</h2>
+        <button type="button" class="button secondary" id="cr-copiar">Copiar voltas</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data" aria-labelledby="voltas-titulo">
+          <thead>
+            <tr>
+              <th scope="col">Volta</th>
+              <th scope="col">Tempo da volta</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="cronometro-painel" data-painel="timer" hidden>
+    <div class="timer-visor">
+      <svg class="timer-anel" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+        <circle class="timer-trilha" cx="60" cy="60" r="54" />
+        <circle class="timer-progresso" id="tm-anel" cx="60" cy="60" r="54" pathLength="100" />
+      </svg>
+      <div class="timer-centro">
+        <div class="cronometro-tempo" id="tm-tempo" role="timer" aria-label="Tempo restante">00:05:00</div>
+        <div class="timer-fim" id="tm-fim" hidden>Tempo esgotado!</div>
+      </div>
+    </div>
+    <div class="cronometro-botoes">
+      <button type="button" class="button secondary" id="tm-zerar" disabled>Reiniciar</button>
+      <button type="button" class="button" id="tm-principal">Iniciar</button>
+      <button type="button" class="button secondary" id="tm-mais">+1 min</button>
+    </div>
+    <p class="sr-only" id="tm-status" aria-live="assertive"></p>
+    <fieldset class="timer-definir" id="tm-definir">
+      <legend>Definir tempo</legend>
+      <div class="timer-campos">
+        <div class="field">
+          <label for="tm-horas">Horas</label>
+          <input class="input" id="tm-horas" inputmode="numeric" autocomplete="off" maxlength="2" value="0" />
+        </div>
+        <div class="field">
+          <label for="tm-minutos">Minutos</label>
+          <input class="input" id="tm-minutos" inputmode="numeric" autocomplete="off" maxlength="2" value="5" />
+        </div>
+        <div class="field">
+          <label for="tm-segundos">Segundos</label>
+          <input class="input" id="tm-segundos" inputmode="numeric" autocomplete="off" maxlength="2" value="0" />
+        </div>
+      </div>
+      <span class="timer-rotulo" id="predefinicoes-rotulo">Predefinições</span>
+      <div class="segmented" role="group" aria-labelledby="predefinicoes-rotulo">
+        <button type="button" class="filter" data-minutos="1">1 min</button>
+        <button type="button" class="filter" data-minutos="3">3 min</button>
+        <button type="button" class="filter" data-minutos="5">5 min</button>
+        <button type="button" class="filter" data-minutos="10">10 min</button>
+        <button type="button" class="filter" data-minutos="15">15 min</button>
+        <button type="button" class="filter" data-minutos="30">30 min</button>
+      </div>
+      <p class="hint timer-bloqueado" id="tm-bloqueado" hidden>Para mudar o tempo, reinicie o temporizador.</p>
+    </fieldset>
+  </div>
+
+  <fieldset class="cronometro-opcoes">
+    <legend>Opções</legend>
+    <label class="cronometro-check" for="op-som">
+      <input type="checkbox" id="op-som" checked />
+      <span>Som</span>
+    </label>
+    <label class="cronometro-check" for="op-vibracao" id="op-vibracao-rotulo">
+      <input type="checkbox" id="op-vibracao" checked />
+      <span>Vibração ao terminar</span>
+    </label>
+  </fieldset>
+  <p class="hint cronometro-aviso">
+    A contagem continua com a aba em segundo plano e depois de recarregar a página. Mantenha a
+    aba aberta para ouvir o alarme; com ela em segundo plano, o navegador pode atrasar o som em
+    alguns segundos.
+  </p>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar o cronômetro</h2>
+  <p>
+    Toque em <strong>Iniciar</strong> para começar a contar. Enquanto ele corre, o botão
+    <strong>Volta</strong> registra o tempo daquela volta e o total até ali, sem parar a
+    contagem. <strong>Pausar</strong> congela o tempo e <strong>Retomar</strong> continua de onde
+    parou. Com o cronômetro pausado, <strong>Zerar</strong> apaga o tempo e as voltas.
+  </p>
+  <p>
+    A partir de duas voltas, a mais rápida aparece em verde e a mais lenta em vermelho. O botão
+    <strong>Copiar voltas</strong> copia a tabela em texto, pronta para colar numa planilha ou
+    numa mensagem.
+  </p>
+
+  <h2>Como usar o temporizador</h2>
+  <p>
+    Escolha horas, minutos e segundos, ou toque numa predefinição, e depois em
+    <strong>Iniciar</strong>. O anel mostra quanto falta. Nos três últimos segundos você ouve um
+    bipe por segundo e, ao terminar, um alarme. O botão <strong>+1 min</strong> acrescenta um
+    minuto, mesmo com a contagem em andamento. O tempo máximo é 99:59:59.
+  </p>
+
+  <h2>Por que este cronômetro não atrasa</h2>
+  <p>
+    Muitos cronômetros de navegador somam um segundo a cada "tique" do relógio interno da
+    página. Quando a aba vai para o segundo plano, o navegador espaça esses tiques e o tempo
+    fica para trás. Aqui é diferente: ao iniciar, a página guarda o instante de início e, a cada
+    atualização da tela, calcula a diferença para o instante atual:
+  </p>
+  <p class="formula">tempo decorrido = tempo acumulado + (agora − instante do início)</p>
+  <p>
+    No temporizador, a conta é a mesma ao contrário: guarda-se o instante em que a contagem
+    termina, e o restante é esse instante menos o atual. Por isso o resultado continua certo
+    depois de trocar de aba, bloquear a tela ou recarregar a página. Só uma mudança manual no
+    relógio do aparelho durante a contagem afeta o tempo marcado.
+  </p>
+
+  <h2>Dicas</h2>
+  <ul>
+    <li>Nos navegadores compatíveis, a tela do celular fica acesa enquanto algo estiver contando.</li>
+    <li>Com o temporizador rodando, o tempo restante aparece no título da aba.</li>
+    <li>A vibração depende do celular e do navegador; em computadores e iPhones ela não existe.</li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Qual é a precisão do cronômetro?</h3>
+  <p>
+    A tela mostra centésimos de segundo. A precisão real depende do relógio do aparelho e do
+    tempo que você leva para tocar no botão, que costuma ser de alguns centésimos.
+  </p>
+  <h3>Posso usar o cronômetro e o temporizador ao mesmo tempo?</h3>
+  <p>
+    Sim. Os dois são independentes: um continua contando enquanto você usa o outro.
+  </p>
+  <h3>O que fica salvo no navegador?</h3>
+  <p>
+    O estado do cronômetro (com as voltas), o do temporizador e as opções de som e vibração,
+    para a contagem sobreviver a uma recarga da página. Nada disso é enviado para a internet.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Cronômetro com voltas, temporizador com alarme e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

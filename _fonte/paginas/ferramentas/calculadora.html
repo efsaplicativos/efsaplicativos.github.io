@@ -1,0 +1,193 @@
+<!--
+titulo: Calculadora Online Grátis com Porcentagem e Histórico — EFS Aplicativos
+descricao: Calculadora online grátis com porcentagem, memória (M+ e M−) e histórico das contas. Use o mouse, o toque ou o teclado do computador. Conta decimal exata.
+scripts: /assets/numeros.js /assets/ferramentas/matematica-comum.js /assets/ferramentas/expressao-logica.js /assets/ferramentas/calculadora.js
+estilos: /assets/ferramentas/calculadora.css
+app: Calculadora básica | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Calculadora</li>
+  </ol>
+  <h1>Calculadora online</h1>
+  <p>
+    A calculadora básica da Calculadora Multifunção no navegador: as quatro operações, porcentagem,
+    memória e histórico. Funciona com o toque, com o mouse e com o teclado do computador.
+  </p>
+</header>
+
+<section class="tool calc" id="calculadora" aria-label="Calculadora básica">
+  <div class="calc-grid">
+    <div class="calc-corpo">
+      <div class="calc-visor">
+        <div class="calc-visor-topo">
+          <span class="calc-memoria" id="calc-memoria" hidden></span>
+          <button type="button" class="calc-copiar" id="calc-copiar">Copiar</button>
+        </div>
+        <div class="calc-linha" id="calc-acima"></div>
+        <output class="calc-principal" id="calc-principal" data-tipo="digitando" aria-label="Visor">0</output>
+        <div class="calc-linha" id="calc-abaixo"></div>
+      </div>
+      <p class="sr-only" aria-live="polite" id="calc-anuncio"></p>
+
+      <div class="calc-teclado" id="calc-teclado" role="group" aria-label="Teclas da calculadora">
+        <button type="button" class="tecla funcao" data-acao="mc" aria-label="Limpar memória (MC)" title="MC limpa a memória">MC</button>
+        <button type="button" class="tecla funcao" data-acao="mr" aria-label="Recuperar memória (MR)" title="MR recupera o valor da memória">MR</button>
+        <button type="button" class="tecla funcao" data-acao="m+" aria-label="Somar à memória (M+)" title="M+ soma o valor exibido à memória">M+</button>
+        <button type="button" class="tecla funcao" data-acao="m-" aria-label="Subtrair da memória (M−)" title="M− subtrai o valor exibido da memória">M−</button>
+
+        <button type="button" class="tecla destaque" data-acao="limpar" id="calc-limpar" aria-label="Apagar tudo">AC</button>
+        <button type="button" class="tecla destaque" data-acao="apagar" aria-label="Apagar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1Z" /><path d="m17 9-6 6M11 9l6 6" /></svg>
+        </button>
+        <button type="button" class="tecla operador" data-acao="porcentagem" aria-label="Porcentagem">%</button>
+        <button type="button" class="tecla operador" data-acao="operador" data-valor="÷" aria-label="Dividir">÷</button>
+
+        <button type="button" class="tecla" data-acao="digito" data-valor="7">7</button>
+        <button type="button" class="tecla" data-acao="digito" data-valor="8">8</button>
+        <button type="button" class="tecla" data-acao="digito" data-valor="9">9</button>
+        <button type="button" class="tecla operador" data-acao="operador" data-valor="×" aria-label="Multiplicar">×</button>
+
+        <button type="button" class="tecla" data-acao="digito" data-valor="4">4</button>
+        <button type="button" class="tecla" data-acao="digito" data-valor="5">5</button>
+        <button type="button" class="tecla" data-acao="digito" data-valor="6">6</button>
+        <button type="button" class="tecla operador" data-acao="operador" data-valor="−" aria-label="Subtrair">−</button>
+
+        <button type="button" class="tecla" data-acao="digito" data-valor="1">1</button>
+        <button type="button" class="tecla" data-acao="digito" data-valor="2">2</button>
+        <button type="button" class="tecla" data-acao="digito" data-valor="3">3</button>
+        <button type="button" class="tecla operador" data-acao="operador" data-valor="+" aria-label="Somar">+</button>
+
+        <button type="button" class="tecla" data-acao="sinal" aria-label="Inverter sinal">±</button>
+        <button type="button" class="tecla" data-acao="digito" data-valor="0">0</button>
+        <button type="button" class="tecla" data-acao="virgula" aria-label="Vírgula decimal">,</button>
+        <button type="button" class="tecla igual" data-acao="igual" aria-label="Igual">=</button>
+      </div>
+      <p class="calc-ajuda">
+        No teclado do computador: números, <kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> <kbd>/</kbd>,
+        vírgula ou ponto, <kbd>%</kbd>, <kbd>Enter</kbd> ou <kbd>=</kbd> para o resultado,
+        <kbd>Backspace</kbd> para apagar, <kbd>Delete</kbd> para C, <kbd>Esc</kbd> para AC e
+        <kbd>F9</kbd> para inverter o sinal.
+      </p>
+    </div>
+
+    <aside class="calc-historico" aria-labelledby="calc-historico-titulo">
+      <div class="calc-historico-topo">
+        <h2 id="calc-historico-titulo">Histórico</h2>
+        <button type="button" class="button secondary pequeno" id="calc-limpar-historico" hidden>Limpar histórico</button>
+      </div>
+      <p class="hint" id="calc-historico-dica" hidden>Toque em um resultado para reutilizá-lo.</p>
+      <p class="calc-historico-vazio" id="calc-historico-vazio">Nenhum cálculo ainda.</p>
+      <ol id="calc-historico-lista"></ol>
+    </aside>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar a calculadora</h2>
+  <p>
+    Digite o primeiro número, escolha a operação e digite o segundo número. Enquanto você digita,
+    a linha de baixo do visor já mostra o resultado parcial; o <strong>=</strong> confirma a conta
+    e a guarda no histórico. Depois do resultado, uma operação continua a conta a partir dele, e
+    um número começa uma conta nova.
+  </p>
+  <ul>
+    <li><strong>⌫</strong> apaga o último dígito. Logo depois de um operador, devolve o número anterior para edição.</li>
+    <li><strong>C</strong> apaga só o número que está sendo digitado. Quando não há o que apagar, a tecla vira <strong>AC</strong> e limpa a conta inteira.</li>
+    <li><strong>±</strong> troca o sinal do número atual.</li>
+    <li>Repetir um operador só troca o anterior: <strong>5 + ×</strong> 3 dá 15, e não um erro.</li>
+  </ul>
+
+  <h2>A ordem das operações é respeitada</h2>
+  <p>
+    Multiplicação e divisão são feitas antes de soma e subtração, como na matemática. Por isso
+    <strong>2 + 3 × 4</strong> dá 14, e não 20. Muitas calculadoras simples fazem as contas na ordem
+    em que são digitadas; esta segue a precedência, e você vê a expressão completa no visor.
+  </p>
+  <p class="formula">10 − 15 ÷ 2 = 10 − 7,5 = 2,5</p>
+
+  <h2>Como funciona a porcentagem</h2>
+  <p>
+    A tecla % depende da operação que vem antes dela, do jeito que se calcula porcentagem no dia a
+    dia:
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Você digita</th>
+          <th scope="col">O que a calculadora faz</th>
+          <th scope="col">Resultado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>100 + 10 % =</td><td>soma 10% de 100</td><td>110</td></tr>
+        <tr><td>100 − 10 % =</td><td>tira 10% de 100</td><td>90</td></tr>
+        <tr><td>50 × 10 % =</td><td>calcula 10% de 50</td><td>5</td></tr>
+        <tr><td>50 ÷ 10 % =</td><td>divide 50 por 0,10</td><td>500</td></tr>
+        <tr><td>25 %</td><td>transforma em decimal</td><td>0,25</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Um uso comum: para saber o preço de um produto de R$ 80,00 com 15% de desconto, digite
+    <strong>80 − 15 % =</strong> e o visor mostra 68.
+  </p>
+
+  <h2>Memória e igual repetido</h2>
+  <p>
+    <strong>M+</strong> soma o valor exibido à memória, <strong>M−</strong> subtrai,
+    <strong>MR</strong> traz o valor guardado para a conta e <strong>MC</strong> apaga a memória.
+    Quando há algo guardado, o valor aparece no canto do visor. É útil para somar resultados
+    parciais, como o total de vários itens com quantidades diferentes.
+  </p>
+  <p>
+    Apertar <strong>=</strong> de novo repete a última operação sobre o resultado: 5 + 3 = dá 8,
+    outro = dá 11 e mais um dá 14. Com 2 × 2 = = = você vê as potências de 2: 4, 8 e 16.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Por que 0,1 + 0,2 dá 0,3 aqui e em outros lugares dá 0,30000000000000004?</h3>
+  <p>
+    Muitos programas guardam números em binário, e 0,1 não tem representação exata nesse formato.
+    Esta calculadora faz as contas em decimal, com até 34 algarismos de trabalho, e mostra o
+    resultado com até 15 algarismos significativos. Assim, 0,1 + 0,2 dá 0,3 e 1 ÷ 3 × 3 dá 1.
+  </p>
+  <h3>Qual é o maior número que ela aceita?</h3>
+  <p>
+    Cada número digitado tem até 15 algarismos. Resultados a partir de 10¹⁵ ou abaixo de 10⁻⁹
+    aparecem em notação científica (por exemplo, 1,5 × 10¹⁶), e resultados a partir de 10¹⁰⁰
+    mostram o aviso "Número grande demais".
+  </p>
+  <h3>O histórico fica salvo?</h3>
+  <p>
+    O histórico (até 50 contas) e a memória ficam guardados nesta aba do navegador e continuam lá
+    se você recarregar a página. Ao fechar a aba, eles são apagados. Toque em um resultado do
+    histórico para usá-lo na conta atual.
+  </p>
+  <h3>Preciso de mais funções, como raiz quadrada ou seno. Onde encontro?</h3>
+  <p>
+    Use a <a href="/ferramentas/calculadora-cientifica/">calculadora científica</a>, que tem
+    funções trigonométricas, logaritmos, potências e parênteses.
+  </p>
+  <h3>Meus cálculos são enviados para algum lugar?</h3>
+  <p>
+    Não. As contas são feitas no seu navegador, e nada do que você digita é enviado para a EFS
+    Aplicativos.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Calculadora básica e científica, equações, estatística, conversores e mais de 20 ferramentas, a maioria funcionando sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

@@ -1,0 +1,344 @@
+/* ==========================================================================
+   Consulta CEP — cartões de endereço e busca por rua (cores do site).
+   ========================================================================== */
+
+.cep .cep-abas {
+  margin-bottom: 22px;
+}
+.cep .cep-instrucao {
+  margin: 0;
+  color: var(--text-2);
+}
+.cep .cep-uf {
+  width: 100%;
+}
+.cep .cep-limpar {
+  flex: 0 0 auto;
+  width: 50px;
+  min-height: 48px;
+  padding: 0;
+  font-size: 22px;
+  line-height: 1;
+}
+.cep .button[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+  box-shadow: none;
+}
+.cep .cep-resultado {
+  min-width: 0;
+}
+.cep .cep-resultado:focus {
+  outline: none;
+}
+
+/* ---------- Progresso da busca nos 27 estados ---------- */
+.cep .cep-progresso {
+  display: grid;
+  gap: 8px;
+}
+.cep .cep-progresso :where(p) {
+  margin: 0;
+}
+.cep .cep-progresso progress {
+  width: 100%;
+  height: 8px;
+  appearance: none;
+  -webkit-appearance: none;
+  overflow: hidden;
+  color: var(--blue-2);
+  background: var(--surface-3);
+  border: 0;
+  border-radius: var(--r-pill);
+}
+.cep .cep-progresso progress::-webkit-progress-bar {
+  background: var(--surface-3);
+}
+.cep .cep-progresso progress::-webkit-progress-value {
+  background: var(--grad);
+  border-radius: var(--r-pill);
+  transition: width 0.2s var(--ease);
+}
+.cep .cep-progresso progress::-moz-progress-bar {
+  background: var(--grad);
+  border-radius: var(--r-pill);
+}
+
+/* ---------- Avisos e erros (Avisos.kt) ---------- */
+.cep .cep-aviso,
+.cep .cep-resumo {
+  padding: 16px 18px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.cep .cep-aviso {
+  border-left: 4px solid var(--accent);
+}
+.cep .cep-aviso-erro {
+  border-left-color: #f97066;
+}
+.cep .cep-aviso :where(p),
+.cep .cep-resumo :where(p) {
+  margin: 0;
+}
+.cep .cep-aviso-titulo {
+  margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 750;
+  color: var(--text);
+}
+.cep .cep-aviso-erro .cep-aviso-titulo,
+.cep .cep-resumo-alerta {
+  color: #ffb4a8;
+}
+.cep .cep-aviso-texto {
+  font-size: 14.5px;
+  color: var(--text-2);
+}
+.cep .cep-link {
+  min-height: 40px;
+  margin-top: 6px;
+  padding: 6px 0;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blue-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.cep .cep-link:hover {
+  color: var(--violet-2);
+}
+.cep .cep-resumo-titulo {
+  font-size: 16px;
+  font-weight: 750;
+  color: var(--text);
+}
+.cep .cep-resumo-alerta,
+.cep .cep-resumo-nota {
+  margin-top: 6px;
+  font-size: 14px;
+}
+.cep .cep-resumo-nota {
+  color: var(--text-2);
+}
+.cep .cep-carregando {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 16px 0;
+  color: var(--muted);
+}
+.cep .cep-carregando::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-2);
+  border-top-color: var(--blue-2);
+  border-radius: 50%;
+  animation: cep-girar 0.8s linear infinite;
+}
+@keyframes cep-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Cartão de endereço (CartaoEndereco.kt) ---------- */
+.cep .cep-encontrado {
+  margin: 0 0 8px 4px;
+}
+.cep .cep-cartao {
+  min-width: 0;
+  padding: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r);
+}
+.cep .cep-cartao :where(p) {
+  margin: 0;
+}
+.cep .cep-cartao-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.cep .cep-chip-cep {
+  padding: 6px 12px;
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  color: var(--text);
+  background: rgba(59, 130, 246, 0.18);
+  border-radius: 10px;
+}
+.cep .cep-cartao-detalhado .cep-chip-cep {
+  font-size: 22px;
+}
+.cep .cep-chip-uf {
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 750;
+  color: var(--text-2);
+  background: var(--surface-3);
+  border-radius: 10px;
+}
+.cep .cep-logradouro {
+  margin-top: 12px;
+  font-size: 16.5px;
+  font-weight: 650;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.cep .cep-geral {
+  color: var(--muted);
+}
+.cep .cep-detalhe {
+  font-size: 14px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.cep .cep-bairro {
+  margin-top: 2px;
+  font-size: 14.5px;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+.cep .cep-extras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+.cep .cep-extras div {
+  display: flex;
+  gap: 5px;
+  padding: 4px 10px;
+  font-size: 13px;
+  background: var(--surface-3);
+  border-radius: 8px;
+}
+.cep .cep-extras dt {
+  color: var(--muted);
+}
+.cep .cep-extras dd {
+  margin: 0;
+  font-weight: 700;
+  color: var(--text);
+}
+.cep .cep-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.cep .cep-acao {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 650;
+  line-height: 1.2;
+  color: var(--blue-2);
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition:
+    border-color 0.15s var(--ease),
+    color 0.15s var(--ease);
+}
+.cep .cep-acao:hover {
+  color: var(--text);
+  border-color: var(--violet-2);
+}
+.cep .cep-fonte {
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.cep button:focus-visible,
+.cep .cep-acao:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ---------- Lista da busca por rua ---------- */
+.cep .cep-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 12px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- Aviso "copiado" (fica visível ao rolar a lista) ---------- */
+.cep .cep-toast {
+  position: sticky;
+  bottom: 16px;
+  z-index: 2;
+}
+.cep .cep-toast-caixa {
+  width: fit-content;
+  max-width: 100%;
+  margin: 16px auto 0;
+  padding: 10px 18px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #eef3ff;
+  background: #1b2a58;
+  border: 1px solid #344a86;
+  border-radius: 12px;
+  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.6);
+}
+.cep .cep-creditos {
+  margin: 20px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.cep .cep-creditos a {
+  color: var(--blue-2);
+}
+
+/* ---------- Tema claro ---------- */
+:root[data-theme="light"] .cep .cep-aviso-erro .cep-aviso-titulo,
+:root[data-theme="light"] .cep .cep-resumo-alerta {
+  color: #b42318;
+}
+:root[data-theme="light"] .cep .cep-link,
+:root[data-theme="light"] .cep .cep-acao,
+:root[data-theme="light"] .cep .cep-creditos a {
+  color: #2563eb;
+}
+:root[data-theme="light"] .cep .cep-acao:hover {
+  color: var(--text);
+}
+:root[data-theme="light"] .cep .cep-chip-cep {
+  background: rgba(37, 99, 235, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cep .cep-carregando::before {
+    animation-duration: 2.4s;
+  }
+  .cep .cep-acao,
+  .cep .cep-progresso progress::-webkit-progress-value {
+    transition: none;
+  }
+}

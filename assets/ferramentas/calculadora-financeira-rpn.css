@@ -1,0 +1,404 @@
+/* Calculadora financeira RPN: corpo grafite, visor verde, teclas com funções f (âmbar) e g (turquesa).
+   O corpo da calculadora é escuro nos dois temas, como um aparelho; o diálogo de ajustes segue o tema do site. */
+.rpn {
+  --rpn-corpo-1: #222930;
+  --rpn-corpo-2: #14181c;
+  --rpn-tecla-1: #3a424b;
+  --rpn-tecla-2: #2a3037;
+  --rpn-faixa: #1f242a;
+  --rpn-borda: #4b5560;
+  --rpn-digito-1: #47515c;
+  --rpn-digito-2: #353d46;
+  --rpn-texto: #f1f3f5;
+  --rpn-f: #ffb547;
+  --rpn-f-1: #ffc66e;
+  --rpn-f-2: #f0a033;
+  --rpn-g: #3dd6c3;
+  --rpn-g-1: #63e4d4;
+  --rpn-g-2: #2cb9a8;
+  --rpn-on-1: #4a3535;
+  --rpn-on-2: #382828;
+  --rpn-on-texto: #ff8a7a;
+  --rpn-escuro: #15191c;
+  --rpn-lcd-1: #13241e;
+  --rpn-lcd-2: #0b1612;
+  --rpn-lcd-borda: #29473c;
+  --rpn-lcd-texto: #8cf7c8;
+  --rpn-lcd-apagado: #24443a;
+  --rpn-lcd-erro: #ff8a7a;
+  --rpn-painel-fundo: #11161b;
+  --rpn-painel-borda: #2a323b;
+  --rpn-painel-texto: #c3cdd6;
+  --rpn-painel-apagado: #66727e;
+
+  display: grid;
+  gap: clamp(10px, 2vw, 16px);
+  width: min(100%, 980px);
+  margin: 0 auto;
+  padding: clamp(8px, 2vw, 18px);
+  background: linear-gradient(180deg, var(--rpn-corpo-1), var(--rpn-corpo-2));
+  border: 1px solid #313942;
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  color: var(--rpn-texto);
+}
+
+/* ---------- Visor e painel ---------- */
+.rpn .rpn-topo {
+  display: flex;
+  gap: clamp(8px, 1.6vw, 14px);
+}
+.rpn .rpn-lcd {
+  flex: 1 1 0;
+  display: grid;
+  align-content: space-between;
+  gap: 6px;
+  min-width: 0;
+  min-height: 132px;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, var(--rpn-lcd-1), var(--rpn-lcd-2));
+  border: 1px solid var(--rpn-lcd-borda);
+  border-radius: 10px;
+  color: var(--rpn-lcd-texto);
+}
+.rpn .rpn-lcd-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  color: var(--rpn-lcd-texto);
+}
+.rpn .rpn-lcd-cabecalho span:first-child {
+  opacity: 0.55;
+}
+.rpn .rpn-lcd-numero {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 0.3em;
+  min-width: 0;
+  overflow: hidden;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: clamp(26px, 6vw, 46px);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.rpn .rpn-lcd-expoente {
+  font-size: 0.72em;
+}
+.rpn.rpn-com-erro .rpn-lcd-numero {
+  color: var(--rpn-lcd-erro);
+}
+.rpn.rpn-executando .rpn-lcd-numero {
+  animation: rpn-piscar 0.9s steps(2, start) infinite;
+}
+@keyframes rpn-piscar {
+  to {
+    opacity: 0.35;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rpn.rpn-executando .rpn-lcd-numero {
+    animation: none;
+  }
+}
+.rpn .rpn-indicadores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--rpn-lcd-apagado);
+}
+.rpn .rpn-indicadores .rpn-ligado {
+  color: var(--rpn-lcd-texto);
+}
+.rpn .rpn-indicador-extra {
+  margin-left: auto;
+}
+.rpn .rpn-leitura {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.rpn .rpn-painel {
+  flex: 0 0 clamp(180px, 30%, 270px);
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-width: 0;
+  padding: 8px 12px 10px;
+  background: var(--rpn-painel-fundo);
+  border: 1px solid var(--rpn-painel-borda);
+  border-radius: 10px;
+  color: var(--rpn-painel-texto);
+}
+.rpn .rpn-abas {
+  display: flex;
+  gap: 4px;
+}
+.rpn .rpn-aba {
+  min-height: 32px;
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--rpn-painel-apagado);
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+.rpn .rpn-aba.active {
+  color: var(--rpn-painel-texto);
+  border-bottom-color: var(--rpn-g);
+}
+.rpn .rpn-painel-linhas {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+}
+.rpn .rpn-painel-linhas div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 13px;
+}
+.rpn .rpn-painel-linhas dt {
+  color: var(--rpn-painel-apagado);
+}
+.rpn .rpn-painel-linhas dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+/* ---------- Teclado ---------- */
+.rpn .rpn-teclado {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: clamp(3px, 1vw, 10px);
+}
+.rpn .rpn-tecla {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-width: 0;
+  min-height: clamp(48px, 9.5cqi, 70px);
+  padding: 0;
+  overflow: hidden;
+  font: inherit;
+  color: var(--rpn-texto);
+  background: linear-gradient(180deg, var(--rpn-tecla-1), var(--rpn-tecla-2));
+  border: 1px solid var(--rpn-borda);
+  border-radius: 8px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.rpn .rpn-tecla:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.rpn .rpn-tecla:active,
+.rpn .rpn-tecla.rpn-pressionada {
+  transform: translateY(1px);
+  box-shadow: none;
+  filter: brightness(1.15);
+}
+.rpn .rpn-tecla-enter {
+  grid-row: span 2;
+}
+/* Em teclados estreitos o ENTER, que ocupa duas linhas, é escrito na vertical para caber. */
+@container (max-width: 520px) {
+  .rpn .rpn-tecla-enter .rpn-rotulo {
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    letter-spacing: -0.12em;
+  }
+}
+.rpn .rpn-rotulo-f,
+.rpn .rpn-rotulo-g {
+  display: block;
+  min-height: 1.1em;
+  padding: 2px 1px;
+  font-size: clamp(7px, 1.25cqi, 11px);
+  font-weight: 650;
+  line-height: 1.05;
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+.rpn .rpn-rotulo-f {
+  color: var(--rpn-f);
+}
+.rpn .rpn-rotulo-g {
+  color: var(--rpn-g);
+  background: var(--rpn-faixa);
+}
+.rpn .rpn-rotulo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(10px, 2.2cqi, 19px);
+  font-weight: 650;
+  line-height: 1;
+  white-space: nowrap;
+}
+.rpn .rpn-tecla-digito {
+  background: linear-gradient(180deg, var(--rpn-digito-1), var(--rpn-digito-2));
+}
+.rpn .rpn-tecla-digito .rpn-rotulo {
+  font-size: clamp(13px, 2.6cqi, 22px);
+}
+.rpn .rpn-tecla-f {
+  color: var(--rpn-escuro);
+  background: linear-gradient(180deg, var(--rpn-f-1), var(--rpn-f-2));
+  border-color: var(--rpn-f-2);
+}
+.rpn .rpn-tecla-g {
+  color: var(--rpn-escuro);
+  background: linear-gradient(180deg, var(--rpn-g-1), var(--rpn-g-2));
+  border-color: var(--rpn-g-2);
+}
+.rpn .rpn-tecla-f .rpn-rotulo,
+.rpn .rpn-tecla-g .rpn-rotulo {
+  font-weight: 850;
+}
+.rpn .rpn-tecla-f .rpn-rotulo-g,
+.rpn .rpn-tecla-g .rpn-rotulo-g {
+  background: rgba(0, 0, 0, 0.12);
+}
+.rpn .rpn-tecla-on {
+  color: var(--rpn-on-texto);
+  background: linear-gradient(180deg, var(--rpn-on-1), var(--rpn-on-2));
+}
+
+/* Prefixo ativo: realça a faixa da função e apaga os rótulos principais. */
+.rpn .rpn-prefixo-f .rpn-rotulo-f,
+.rpn .rpn-prefixo-g .rpn-rotulo-g {
+  font-weight: 850;
+}
+.rpn .rpn-prefixo-f .rpn-tecla:not(.rpn-tecla-f):not(.rpn-tecla-g) .rpn-rotulo,
+.rpn .rpn-prefixo-g .rpn-tecla:not(.rpn-tecla-f):not(.rpn-tecla-g) .rpn-rotulo {
+  opacity: 0.45;
+}
+.rpn .rpn-prefixo-f .rpn-tecla-f,
+.rpn .rpn-prefixo-g .rpn-tecla-g {
+  box-shadow: 0 0 0 2px var(--rpn-texto);
+}
+
+.rpn-dica {
+  display: block;
+  margin: 12px auto 0;
+  max-width: 980px;
+}
+
+@media (max-width: 640px) {
+  .rpn .rpn-topo {
+    flex-direction: column;
+  }
+  .rpn .rpn-lcd,
+  .rpn .rpn-painel {
+    flex: none;
+  }
+  .rpn .rpn-lcd {
+    min-height: 112px;
+    padding: 8px 10px;
+  }
+  .rpn .rpn-painel-linhas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 14px;
+  }
+  .rpn .rpn-tecla {
+    border-radius: 6px;
+  }
+}
+
+/* ---------- Diálogo de ajustes (segue o tema do site) ---------- */
+.rpn-dialogo {
+  width: min(92vw, 440px);
+  max-height: 90vh;
+  padding: 22px;
+  overflow: auto;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.rpn-dialogo::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+.rpn-dialogo > div {
+  display: grid;
+  gap: 16px;
+}
+.rpn-dialogo .rpn-dialogo-titulo {
+  margin: 0;
+  font-size: 20px;
+  background-image: none;
+  color: var(--text);
+  -webkit-text-fill-color: currentColor;
+}
+.rpn-dialogo p {
+  margin: 0;
+  color: var(--text-2);
+}
+.rpn-dialogo .rpn-opcao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.rpn-dialogo .rpn-opcao input {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  accent-color: var(--accent);
+}
+.rpn-dialogo .rpn-opcao-grupo {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+}
+.rpn-dialogo .rpn-dialogo-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.rpn-dialogo .button.secondary.rpn-perigo,
+.rpn-dialogo .button.secondary.rpn-perigo:hover {
+  color: #ffb4a8;
+}
+.rpn-dialogo .button.rpn-perigo:not(.secondary) {
+  color: #fff;
+  background: #b42318;
+  border-color: #b42318;
+  box-shadow: none;
+}
+:root[data-theme="light"] .rpn-dialogo .button.secondary.rpn-perigo,
+:root[data-theme="light"] .rpn-dialogo .button.secondary.rpn-perigo:hover {
+  color: #b42318;
+}

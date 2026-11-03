@@ -1,0 +1,136 @@
+<!--
+titulo: Campo Minado Online Grátis: Jogue no Navegador — EFS Aplicativos
+descricao: Jogue Campo Minado online e grátis, no computador ou no celular. Três níveis, primeira jogada segura, bandeiras, cronômetro e recordes salvos no navegador.
+estilos: /assets/jogos/campo-minado.css
+scripts: /assets/jogos/campo-minado-logica.js /assets/jogos/campo-minado.js
+app: Campo Minado | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Campo Minado</li>
+  </ol>
+  <h1>Campo Minado online</h1>
+  <p>
+    Abra todas as casas sem mina usando as pistas dos números. A primeira jogada nunca cai em
+    uma mina, e a partida e os seus melhores tempos ficam salvos no navegador.
+  </p>
+</header>
+
+<section class="campo-minado" aria-label="Jogo Campo Minado">
+  <div class="segmented cm-niveis" role="group" aria-label="Nível de dificuldade">
+    <button type="button" class="filter active" data-nivel="facil" aria-pressed="true">Fácil <small>10 × 6</small></button>
+    <button type="button" class="filter" data-nivel="medio" aria-pressed="false">Médio <small>15 × 10</small></button>
+    <button type="button" class="filter" data-nivel="dificil" aria-pressed="false">Difícil <small>20 × 15</small></button>
+  </div>
+
+  <div class="cm-placar">
+    <div class="cm-contador"><span>Minas</span><strong id="cm-minas">10</strong></div>
+    <div class="cm-contador"><span>Tempo</span><strong id="cm-tempo">00:00</strong></div>
+    <div class="cm-contador"><span>Recorde</span><strong id="cm-recorde">--:--</strong></div>
+  </div>
+
+  <div class="cm-acoes">
+    <div class="segmented cm-modo" role="group" aria-label="O que o toque faz">
+      <button type="button" class="filter active" data-modo="revelar" aria-pressed="true">Revelar</button>
+      <button type="button" class="filter" data-modo="bandeira" aria-pressed="false">Bandeira</button>
+    </div>
+    <button type="button" class="button secondary" id="cm-novo">Novo jogo</button>
+  </div>
+
+  <div class="cm-area">
+    <div
+      class="cm-tabuleiro"
+      id="cm-tabuleiro"
+      role="group"
+      aria-label="Tabuleiro do Campo Minado"
+      aria-describedby="cm-ajuda"
+    ></div>
+  </div>
+
+  <p class="cm-ajuda" id="cm-ajuda">
+    Clique para abrir uma casa. Para marcar uma bandeira, use o botão direito do mouse, toque e
+    segure no celular ou ative o modo Bandeira. No teclado, escolha a casa com as setas: Enter faz
+    a ação do modo e F, a contrária.
+  </p>
+  <p class="sr-only" aria-live="polite" id="cm-status"></p>
+
+  <details class="cm-recordes">
+    <summary>Seus melhores tempos no nível <span id="cm-recordes-nivel">Fácil</span></summary>
+    <ol id="cm-recordes-lista"></ol>
+    <p id="cm-recordes-vazio">Nenhuma vitória neste nível ainda.</p>
+  </details>
+
+  <dialog class="cm-dialogo" id="cm-dialogo" aria-labelledby="cm-dialogo-titulo">
+    <h2 id="cm-dialogo-titulo"></h2>
+    <p id="cm-dialogo-texto"></p>
+    <dl class="cm-dialogo-dados" id="cm-dialogo-dados"></dl>
+    <div class="cm-dialogo-botoes" id="cm-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<article class="texto">
+  <h2>Como jogar Campo Minado</h2>
+  <p>
+    O tabuleiro esconde minas em algumas casas. Ao abrir uma casa segura, aparece um número de 1 a
+    8: ele diz quantas minas existem nas oito casas em volta dela (em cima, embaixo, dos lados e
+    nas diagonais). Uma casa sem nenhuma mina em volta fica vazia e abre sozinha todas as vizinhas,
+    em cascata, até chegar a casas com número.
+  </p>
+  <p>
+    Você vence quando abre <strong>todas as casas que não têm mina</strong>. Não é preciso marcar
+    as minas com bandeira para ganhar, mas as bandeiras ajudam a não abrir uma casa perigosa por
+    engano. Se abrir uma mina, a partida acaba e o jogo mostra onde estavam as outras.
+  </p>
+
+  <h2>Regras desta versão</h2>
+  <ul>
+    <li><strong>Primeira jogada segura:</strong> as minas só são sorteadas depois do primeiro clique, longe da casa escolhida e das vizinhas dela. Por isso o primeiro clique sempre abre uma área vazia.</li>
+    <li><strong>Níveis:</strong> Fácil tem 10 linhas, 6 colunas e 10 minas; Médio, 15 × 10 com 25 minas; Difícil, 20 × 15 com 50 minas.</li>
+    <li><strong>Contador de minas:</strong> mostra as minas menos as bandeiras colocadas. Ele pode ficar negativo se você marcar mais casas do que há minas.</li>
+    <li><strong>Abrir as vizinhas de um número:</strong> clique num número já aberto quando todas as minas em volta dele estiverem marcadas, e as outras vizinhas abrem de uma vez. Se alguma bandeira estiver errada, a mina explode.</li>
+    <li><strong>Tempo:</strong> o cronômetro começa na primeira jogada e para quando a página fica em segundo plano.</li>
+  </ul>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para resolver o tabuleiro</h2>
+  <ol>
+    <li><strong>Comece pelos números baixos.</strong> Um 1 encostado em uma única casa coberta indica que a mina está exatamente ali.</li>
+    <li><strong>Procure o padrão 1-2-1</strong> numa parede reta: as minas ficam embaixo dos dois números 1, e a casa do meio é segura.</li>
+    <li><strong>Conte as bandeiras antes de abrir as vizinhas.</strong> Um 3 com três bandeiras em volta libera todas as outras casas ao redor.</li>
+    <li><strong>Use o contador no fim da partida.</strong> Quando faltam poucas minas, a conta total ajuda a decidir as últimas casas.</li>
+    <li><strong>Às vezes é preciso arriscar.</strong> Quando não há como deduzir, abra a casa com mais vizinhas já abertas: ela tende a dar mais informação.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>A primeira casa pode ter uma mina?</h3>
+  <p>
+    Não. O jogo só sorteia as minas depois do seu primeiro clique e deixa de fora a casa clicada e
+    as oito vizinhas. Por isso a primeira jogada sempre abre uma região vazia.
+  </p>
+  <h3>Como marco uma bandeira no celular?</h3>
+  <p>
+    Toque e segure a casa por meio segundo, ou ative o modo <strong>Bandeira</strong> acima do
+    tabuleiro: nesse modo, um toque simples marca e o toque longo abre. No nível Difícil, deslize o
+    tabuleiro para os lados se ele não couber inteiro na tela.
+  </p>
+  <h3>Minha partida e meus recordes ficam salvos?</h3>
+  <p>
+    Sim, no próprio navegador. A partida em andamento continua de onde parou se você fechar a
+    página, e os 50 melhores tempos de cada nível ficam guardados. Em outro aparelho ou depois de
+    limpar os dados do navegador, eles não aparecem.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/campominado.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Campo Minado no celular</h2>
+    <p>O mesmo jogo no Android, com zoom no tabuleiro, sons e recordes, também sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.campominado&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

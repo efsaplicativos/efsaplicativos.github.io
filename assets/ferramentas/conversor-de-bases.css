@@ -1,0 +1,167 @@
+/* ==========================================================================
+   Conversor de bases — abas, campos, listas de conversões e aba Texto.
+   ========================================================================== */
+
+.bas {
+  --bas-erro: #ffb4a8;
+  --bas-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+:root[data-theme="light"] .bas {
+  --bas-erro: #b42318;
+}
+
+.bas-abas {
+  margin-bottom: 20px;
+}
+.bas-painel[hidden] {
+  display: none;
+}
+
+.bas-entrada {
+  margin-bottom: 22px;
+}
+.bas-personalizada {
+  max-width: 220px;
+}
+.bas-numero {
+  font-family: var(--bas-mono);
+  font-size: 17px;
+  letter-spacing: 0.02em;
+}
+.bas .input[aria-invalid="true"] {
+  border-color: var(--bas-erro);
+}
+.bas-erro,
+.bas .hint.bas-erro {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--bas-erro);
+}
+.bas-erro[hidden] {
+  display: none;
+}
+.bas-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.bas-acoes[hidden] {
+  display: none;
+}
+.bas .bas-pequeno {
+  min-height: 36px;
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+/* Resultados da aba Números: as duas caixas lado a lado no desktop */
+.bas-resultados {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(18px, 3vw, 32px);
+  align-items: start;
+}
+.bas-resultados .result[hidden],
+.bas .result-message[hidden],
+.bas .hint[hidden],
+.bas-saida[hidden] {
+  display: none;
+}
+.bas .result-message.error {
+  color: var(--bas-erro);
+}
+.bas-resultados .result-list {
+  margin: 10px 0 12px;
+}
+.bas-nota {
+  margin: 10px 0 0;
+}
+
+.bas-lista {
+  display: grid;
+  gap: 0;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.bas-linha {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+.bas-linha:first-child {
+  border-top: 0;
+}
+.bas-linha-corpo {
+  display: grid;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.bas-rotulo {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--muted);
+}
+.bas-valor {
+  font-family: var(--bas-mono);
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--text);
+  background: none;
+  padding: 0;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+.bas-linha .bas-pequeno {
+  flex: none;
+}
+
+/* Aba Texto */
+.bas-texto {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.5;
+}
+.bas-mono {
+  font-family: var(--bas-mono);
+}
+.bas-texto.bas-mono {
+  font-size: 15px;
+}
+.bas-saida {
+  margin: 6px 0 8px;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.bas-saida.bas-mono {
+  font-size: 15px;
+}
+.bas-texto-resultado .bas-acoes {
+  margin-top: 10px;
+}
+.bas-texto-resultado .hint {
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .bas-resultados {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 400px) {
+  .bas-valor {
+    font-size: 15px;
+  }
+  .bas-linha {
+    gap: 8px;
+  }
+}

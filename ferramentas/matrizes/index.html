@@ -1,0 +1,354 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/ferramentas/matrizes.html. Edite lá. -->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050a1e" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        if (theme === "light" || theme === "dark") {
+          root.setAttribute("data-theme", theme);
+        }
+        if (theme === "light") {
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#f3f6ff");
+        }
+      })();
+    </script>
+    <title>Calculadora de Matrizes: Determinante, Inversa e Produto — EFS Aplicativos</title>
+    <meta name="description" content="Calcule determinante, inversa, produto, soma, transposta, posto, traço e potência de matrizes até 6 × 6, com resultado na hora e opção de reaproveitar." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/ferramentas/matrizes/" />
+    <meta property="og:title" content="Calculadora de Matrizes: Determinante, Inversa e Produto — EFS Aplicativos" />
+    <meta property="og:description" content="Calcule determinante, inversa, produto, soma, transposta, posto, traço e potência de matrizes até 6 × 6, com resultado na hora e opção de reaproveitar." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/ferramentas/matrizes/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
+    <link rel="stylesheet" href="/assets/web.css?v=8aa4a1ab9334" />
+    <link rel="stylesheet" href="/assets/ferramentas/matrizes.css?v=5154025184a0" />
+    <script src="/site.js?v=b4f7be01c332" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/numeros.js?v=ab57092e489e" defer></script>
+    <script src="/assets/ferramentas/matematica-comum.js?v=0eae9ffeb3f8" defer></script>
+    <script src="/assets/ferramentas/matrizes-logica.js?v=3f9d1ca073a7" defer></script>
+    <script src="/assets/ferramentas/matrizes.js?v=d3bfa11bc428" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Calculadora de matrizes", "url": "https://efsaplicativos.com.br/ferramentas/matrizes/", "description": "Calcule determinante, inversa, produto, soma, transposta, posto, traço e potência de matrizes até 6 × 6, com resultado na hora e opção de reaproveitar.", "applicationCategory": "EducationalApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas" aria-current="page">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Ativar tema claro"
+            title="Alternar tema claro/escuro"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Matrizes</li>
+  </ol>
+  <h1>Calculadora de matrizes</h1>
+  <p>
+    Monte duas matrizes de até 6 linhas e 6 colunas e calcule soma, produto, determinante, inversa,
+    transposta, posto, traço e potências. O resultado pode virar a matriz A ou B da próxima conta.
+  </p>
+</header>
+
+<section class="tool mat" id="matrizes" aria-label="Calculadora de matrizes">
+  <div class="mat-editores">
+    <fieldset class="mat-editor" data-matriz="A">
+      <legend>Matriz A</legend>
+      <div class="mat-dimensoes">
+        <div class="mat-passo">
+          <span id="mat-A-linhas-rotulo">Linhas</span>
+          <button type="button" class="mat-botao" data-passo="linhas" data-delta="-1" aria-label="Diminuir linhas da matriz A">−</button>
+          <output id="mat-A-linhas" aria-labelledby="mat-A-linhas-rotulo">2</output>
+          <button type="button" class="mat-botao" data-passo="linhas" data-delta="1" aria-label="Aumentar linhas da matriz A">+</button>
+        </div>
+        <div class="mat-passo">
+          <span id="mat-A-colunas-rotulo">Colunas</span>
+          <button type="button" class="mat-botao" data-passo="colunas" data-delta="-1" aria-label="Diminuir colunas da matriz A">−</button>
+          <output id="mat-A-colunas" aria-labelledby="mat-A-colunas-rotulo">2</output>
+          <button type="button" class="mat-botao" data-passo="colunas" data-delta="1" aria-label="Aumentar colunas da matriz A">+</button>
+        </div>
+      </div>
+      <div class="mat-grade-area">
+        <div class="mat-grade" id="mat-A-grade"></div>
+      </div>
+      <div class="mat-acoes">
+        <button type="button" class="button secondary mat-pequeno" data-preencher="identidade">Identidade</button>
+        <button type="button" class="button secondary mat-pequeno" data-preencher="zerar">Zerar</button>
+      </div>
+    </fieldset>
+
+    <button type="button" class="button secondary mat-trocar" id="mat-trocar">Trocar A ↔ B</button>
+
+    <fieldset class="mat-editor" data-matriz="B">
+      <legend>Matriz B</legend>
+      <div class="mat-dimensoes">
+        <div class="mat-passo">
+          <span id="mat-B-linhas-rotulo">Linhas</span>
+          <button type="button" class="mat-botao" data-passo="linhas" data-delta="-1" aria-label="Diminuir linhas da matriz B">−</button>
+          <output id="mat-B-linhas" aria-labelledby="mat-B-linhas-rotulo">2</output>
+          <button type="button" class="mat-botao" data-passo="linhas" data-delta="1" aria-label="Aumentar linhas da matriz B">+</button>
+        </div>
+        <div class="mat-passo">
+          <span id="mat-B-colunas-rotulo">Colunas</span>
+          <button type="button" class="mat-botao" data-passo="colunas" data-delta="-1" aria-label="Diminuir colunas da matriz B">−</button>
+          <output id="mat-B-colunas" aria-labelledby="mat-B-colunas-rotulo">2</output>
+          <button type="button" class="mat-botao" data-passo="colunas" data-delta="1" aria-label="Aumentar colunas da matriz B">+</button>
+        </div>
+      </div>
+      <div class="mat-grade-area">
+        <div class="mat-grade" id="mat-B-grade"></div>
+      </div>
+      <div class="mat-acoes">
+        <button type="button" class="button secondary mat-pequeno" data-preencher="identidade">Identidade</button>
+        <button type="button" class="button secondary mat-pequeno" data-preencher="zerar">Zerar</button>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="mat-dica">
+    <p class="hint">Células vazias valem 0. Aceita números negativos e decimais.</p>
+    <button type="button" class="button secondary mat-pequeno" id="mat-sinal" title="Troca o sinal do último campo editado">± Trocar sinal</button>
+  </div>
+
+  <div class="mat-operacoes">
+    <fieldset class="field">
+      <legend>Operações entre A e B</legend>
+      <div class="segmented">
+        <button type="button" class="filter" data-op="soma" aria-pressed="false">A + B</button>
+        <button type="button" class="filter" data-op="subtracao" aria-pressed="false">A − B</button>
+        <button type="button" class="filter" data-op="produtoAB" aria-pressed="false">A × B</button>
+        <button type="button" class="filter" data-op="produtoBA" aria-pressed="false">B × A</button>
+      </div>
+    </fieldset>
+    <fieldset class="field">
+      <legend>Operações com uma matriz</legend>
+      <div class="mat-alvo">
+        <span id="mat-alvo-rotulo">Aplicar em</span>
+        <div class="segmented" role="group" aria-labelledby="mat-alvo-rotulo">
+          <button type="button" class="filter active" data-alvo="A" aria-pressed="true">A</button>
+          <button type="button" class="filter" data-alvo="B" aria-pressed="false">B</button>
+        </div>
+      </div>
+      <div class="segmented">
+        <button type="button" class="filter" data-op="determinante" aria-pressed="false">Determinante (det A)</button>
+        <button type="button" class="filter" data-op="inversa" aria-pressed="false">Inversa (A⁻¹)</button>
+        <button type="button" class="filter" data-op="transposta" aria-pressed="false">Transposta (Aᵀ)</button>
+        <button type="button" class="filter" data-op="posto" aria-pressed="false">Posto</button>
+        <button type="button" class="filter" data-op="traco" aria-pressed="false">Traço (tr A)</button>
+        <button type="button" class="filter" data-op="escalar" aria-pressed="false">Multiplicar por k (k·A)</button>
+        <button type="button" class="filter" data-op="potencia" aria-pressed="false">Potência (Aⁿ)</button>
+      </div>
+      <div class="mat-parametros">
+        <div class="field" id="mat-campo-k" hidden>
+          <label for="mat-k">Escalar k</label>
+          <input class="input" id="mat-k" inputmode="decimal" autocomplete="off" value="2" />
+        </div>
+        <div class="field" id="mat-campo-n" hidden>
+          <label for="mat-n">Expoente n (inteiro)</label>
+          <input class="input" id="mat-n" inputmode="numeric" autocomplete="off" value="2" />
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="result mat-resultado" id="mat-resultado">
+    <p class="result-label" id="mat-titulo">Resultado</p>
+    <p class="result-value" id="mat-escalar" hidden></p>
+    <p class="hint" id="mat-nota" hidden></p>
+    <div class="mat-tabela-area" id="mat-tabela-area" hidden>
+      <table class="mat-tabela" id="mat-tabela">
+        <caption class="sr-only" id="mat-tabela-legenda"></caption>
+        <tbody id="mat-tabela-corpo"></tbody>
+      </table>
+    </div>
+    <div class="mat-resultado-acoes" id="mat-resultado-acoes" hidden>
+      <button type="button" class="button secondary mat-pequeno" id="mat-copiar">Copiar</button>
+      <button type="button" class="button secondary mat-pequeno" id="mat-usar-a">Usar como A</button>
+      <button type="button" class="button secondary mat-pequeno" id="mat-usar-b">Usar como B</button>
+    </div>
+    <p class="result-message" id="mat-mensagem">Escolha uma operação para ver o resultado.</p>
+    <p class="sr-only" aria-live="polite" id="mat-anuncio"></p>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar</h2>
+  <p>
+    Ajuste o número de linhas e colunas de cada matriz com os botões − e + e digite os valores nas
+    células. Escolha uma operação e o resultado aparece logo abaixo, sendo refeito a cada número
+    digitado. Ao diminuir uma matriz, os valores das células escondidas ficam guardados e voltam se
+    você aumentá-la de novo.
+  </p>
+  <p>
+    O botão <strong>Usar como A</strong> (ou B) copia o resultado para uma das matrizes, o que permite
+    encadear contas, como calcular A⁻¹ e depois multiplicar por B. <strong>Trocar A ↔ B</strong>
+    inverte as duas matrizes, e <strong>Copiar</strong> leva o resultado separado por tabulações,
+    pronto para colar em uma planilha.
+  </p>
+
+  <h2>Operações e quando cada uma existe</h2>
+  <ul>
+    <li><strong>Soma e subtração</strong>: as duas matrizes precisam ter as mesmas dimensões; a conta é feita elemento por elemento.</li>
+    <li><strong>Produto</strong>: o número de colunas da primeira deve ser igual ao número de linhas da segunda. Uma 2 × 3 vezes uma 3 × 2 dá uma 2 × 2. A × B e B × A em geral são diferentes.</li>
+    <li><strong>Determinante, inversa, traço e potência</strong>: só para matrizes quadradas. A inversa só existe quando o determinante é diferente de zero.</li>
+    <li><strong>Transposta, posto e multiplicação por k</strong>: valem para qualquer matriz.</li>
+  </ul>
+
+  <h2>Como o determinante e a inversa são calculados</h2>
+  <p>
+    O determinante sai por eliminação de Gauss com pivoteamento parcial: a matriz vira triangular e o
+    determinante é o produto da diagonal, com o sinal trocado a cada troca de linhas. A inversa usa o
+    método de Gauss-Jordan, escalonando a matriz ao lado da identidade.
+  </p>
+  <p class="formula">det [[a, b], [c, d]] = a·d − b·c     A⁻¹ = (1 / det A) · [[d, −b], [−c, a]]</p>
+  <p>
+    Exemplo: para A = [[4, 7], [2, 6]], det A = 4 · 6 − 7 · 2 = 10, e a inversa é
+    [[0,6; −0,7], [−0,2; 0,4]]. Multiplicando A pela inversa, o resultado é a identidade.
+  </p>
+  <p>
+    Potências usam multiplicações sucessivas por quadrados, e expoentes negativos usam a inversa:
+    A⁻² é a inversa de A elevada ao quadrado. O expoente vai de −1000 a 1000. A potência da matriz
+    [[1, 1], [1, 0]] gera a sequência de Fibonacci: na quinta potência aparecem 8, 5, 5 e 3.
+  </p>
+
+  <h2>Precisão</h2>
+  <p>
+    As contas usam ponto flutuante de dupla precisão. Resíduos muito pequenos em relação aos valores
+    da matriz, como 4,4 × 10⁻¹⁶, são mostrados como 0, e um determinante praticamente nulo é tratado
+    como zero. Matrizes quase singulares podem ter inversas com números muito grandes; nesse caso,
+    vale conferir os dados.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>O que é o posto de uma matriz?</h3>
+  <p>
+    É o número de linhas (ou colunas) linearmente independentes. Em [[1, 2], [2, 4]], a segunda linha
+    é o dobro da primeira, então o posto é 1. Uma matriz quadrada n × n é inversível exatamente quando
+    o posto é n.
+  </p>
+  <h3>O que é o traço?</h3>
+  <p>
+    É a soma dos elementos da diagonal principal. Para [[1, 2], [3, 4]], o traço é 1 + 4 = 5. Ele é
+    igual à soma dos autovalores da matriz.
+  </p>
+  <h3>Posso resolver um sistema linear aqui?</h3>
+  <p>
+    Sim: coloque os coeficientes em A e os termos independentes em B, como uma matriz de uma coluna,
+    calcule A⁻¹, use o resultado como A e faça A × B. Para sistemas 2 × 2 e 3 × 3 com o passo a passo,
+    use a página de <a href="/ferramentas/equacoes/">equações</a>.
+  </p>
+  <h3>As matrizes ficam salvas?</h3>
+  <p>
+    Os valores ficam guardados apenas neste navegador, para você continuar depois. Nada é enviado
+    para a EFS Aplicativos.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Matrizes, equações, estatística, geometria e calculadora científica no mesmo app, a maioria funcionando sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,168 @@
+<!--
+titulo: Fuso Horário: Conversor de Horas e Relógio Mundial — EFS Aplicativos
+descricao: Veja a hora certa em qualquer cidade, a diferença entre fusos horários e converta data e hora de um fuso para outro, com horário de verão e relógio mundial.
+scripts: /assets/ferramentas/fuso-horario-logica.js /assets/ferramentas/fuso-horario.js
+estilos: /assets/ferramentas/fuso-horario.css
+app: Conversor de Fuso Horário | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Fuso horário</li>
+  </ol>
+  <h1>Fuso horário e relógio mundial</h1>
+  <p>
+    Compare a hora de duas cidades em tempo real, descubra a diferença entre os fusos, converta
+    um horário de reunião ou de voo e monte o seu relógio mundial. O horário de verão de cada
+    lugar já entra na conta.
+  </p>
+</header>
+
+<section class="tool fuso" aria-label="Conversor de fuso horário">
+  <form class="fuso-escolha" id="form-fusos" novalidate>
+    <div class="field">
+      <label for="fuso-de">Fuso de origem</label>
+      <select class="select fuso-select" id="fuso-de"></select>
+    </div>
+    <button type="button" class="button secondary fuso-inverter" id="fuso-inverter" aria-label="Inverter origem e destino" title="Inverter origem e destino">
+      <span aria-hidden="true">⇄</span>
+    </button>
+    <div class="field">
+      <label for="fuso-para">Fuso de destino</label>
+      <select class="select fuso-select" id="fuso-para"></select>
+    </div>
+  </form>
+
+  <div class="result fuso-agora">
+    <div class="result-label">Agora</div>
+    <div class="fuso-relogios">
+      <div class="fuso-relogio" id="relogio-de">
+        <span class="fuso-cidade"></span>
+        <span class="fuso-hora"></span>
+        <span class="fuso-data"></span>
+        <span class="fuso-offset"></span>
+        <span class="fuso-verao" hidden><span aria-hidden="true">☀</span> Horário de verão em vigor</span>
+      </div>
+      <div class="fuso-relogio" id="relogio-para">
+        <span class="fuso-cidade"></span>
+        <span class="fuso-hora"></span>
+        <span class="fuso-data"></span>
+        <span class="fuso-offset"></span>
+        <span class="fuso-verao" hidden><span aria-hidden="true">☀</span> Horário de verão em vigor</span>
+      </div>
+    </div>
+    <div class="fuso-diferenca">
+      <span class="result-label">Diferença de horário</span>
+      <p class="fuso-frase" id="diferenca" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="tool-grid fuso-blocos">
+    <div class="fuso-bloco">
+      <h2 class="fuso-titulo">Converter data e hora</h2>
+      <form class="fields" id="form-conversao" novalidate>
+        <p class="fuso-origem">Horário em <strong id="conv-origem"></strong></p>
+        <div class="fuso-par">
+          <div class="field">
+            <label for="conv-data">Data na origem</label>
+            <input class="input" type="date" id="conv-data" min="0001-01-01" max="9999-12-31" />
+          </div>
+          <div class="field">
+            <label for="conv-hora">Hora na origem</label>
+            <input class="input" type="time" id="conv-hora" />
+          </div>
+        </div>
+        <div>
+          <button type="button" class="button secondary" id="conv-agora">Usar a hora atual</button>
+        </div>
+      </form>
+      <div class="result fuso-conversao" id="resultado-conversao" aria-live="polite">
+        <p class="result-message">Escolha a data e a hora.</p>
+      </div>
+    </div>
+
+    <div class="fuso-bloco">
+      <h2 class="fuso-titulo">Relógio mundial</h2>
+      <p class="hint fuso-dica" id="mundo-vazio">Adicione cidades para acompanhar vários horários ao mesmo tempo.</p>
+      <ul class="fuso-mundo" id="mundo"></ul>
+      <form class="fuso-adicionar" id="form-mundo" novalidate>
+        <label class="sr-only" for="mundo-cidade">Cidade para adicionar</label>
+        <select class="select fuso-select" id="mundo-cidade"></select>
+        <button type="submit" class="button secondary" id="mundo-adicionar">Adicionar</button>
+      </form>
+      <p class="hint fuso-dica" id="mundo-limite" hidden>Limite de 20 cidades.</p>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como funcionam os fusos horários</h2>
+  <p>
+    Cada fuso é definido pela diferença em relação ao UTC, o Tempo Universal Coordenado. Brasília
+    está em <strong>UTC−03:00</strong>: quando são 12:00 em UTC, são 9:00 em Brasília. Para saber
+    a diferença entre duas cidades, basta subtrair os deslocamentos:
+  </p>
+  <p class="formula">diferença = deslocamento do destino − deslocamento da origem</p>
+  <p>
+    Tóquio está em UTC+09:00, então fica 9 − (−3) = <strong>12 horas à frente</strong> de
+    Brasília. Alguns lugares usam meia hora ou 45 minutos, como a Índia (UTC+05:30) e o Nepal
+    (UTC+05:45).
+  </p>
+
+  <h2>Horário de verão</h2>
+  <p>
+    Em muitos países os relógios são adiantados uma hora durante o verão local, e a diferença
+    entre duas cidades muda ao longo do ano. Entre São Paulo e Londres, por exemplo, são 3 horas
+    no inverno europeu e 4 horas no verão europeu. Nos Estados Unidos o horário de verão vai do
+    segundo domingo de março ao primeiro domingo de novembro; na União Europeia, do último domingo
+    de março ao último domingo de outubro. O Brasil não adota horário de verão desde 2019.
+  </p>
+  <p>
+    Por isso a conversão usa a data escolhida, e não só o fuso: uma reunião às 10:00 de Nova York
+    cai às 12:00 de Brasília em janeiro e às 11:00 em julho. No dia da mudança, um horário pode não
+    existir (quando o relógio pula de 2:00 para 3:00) ou acontecer duas vezes (quando volta de 2:00
+    para 1:00); a calculadora avisa e explica qual horário considerou.
+  </p>
+
+  <h2>Os fusos do Brasil</h2>
+  <ul>
+    <li><strong>UTC−02:00:</strong> Fernando de Noronha e ilhas oceânicas.</li>
+    <li><strong>UTC−03:00 (Brasília):</strong> Sul, Sudeste, Nordeste, Goiás, Distrito Federal, Tocantins, Pará e Amapá.</li>
+    <li><strong>UTC−04:00:</strong> Amazonas (quase todo), Roraima, Rondônia, Mato Grosso e Mato Grosso do Sul.</li>
+    <li><strong>UTC−05:00:</strong> Acre e o sudoeste do Amazonas.</li>
+  </ul>
+
+  <h2>De onde vêm os horários</h2>
+  <p>
+    A página usa o banco de fusos horários IANA que vem no próprio navegador, o mesmo usado por
+    sistemas operacionais e celulares, com as regras de horário de verão de cada lugar. A hora atual
+    é a do relógio do seu aparelho. Quando um país muda as regras, a mudança chega com a atualização
+    do navegador.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Por que algumas cidades aparecem com o nome em inglês?</h3>
+  <p>
+    As cidades mais procuradas têm nome em português. As demais usam o nome do fuso no padrão
+    internacional, como "Kathmandu" ou "Ulaanbaatar", que é como aparecem nos sistemas.
+  </p>
+  <h3>O relógio mundial fica salvo?</h3>
+  <p>
+    Sim, os fusos escolhidos e as cidades do relógio mundial ficam guardados no seu navegador para
+    a próxima visita. Nada é enviado para a internet.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Fuso horário com relógio mundial, conversor de medidas e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

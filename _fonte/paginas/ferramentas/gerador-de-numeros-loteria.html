@@ -1,0 +1,199 @@
+<!--
+titulo: Gerador de Números da Loteria: Mega-Sena, Lotofácil e mais — EFS Aplicativos
+descricao: Gere números aleatórios para Mega-Sena, Lotofácil, Quina, Lotomania, Timemania, Dupla Sena, Dia de Sorte, +Milionária, Super Sete e Loteca. Grátis.
+scripts: /assets/ferramentas/gerador-de-numeros-loteria-logica.js /assets/ferramentas/gerador-de-numeros-loteria.js
+estilos: /assets/ferramentas/gerador-de-numeros-loteria.css
+app: Gerar Números Loteria | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Gerador de números da loteria</li>
+  </ol>
+  <h1>Gerador de números da loteria</h1>
+  <p>
+    Escolha a modalidade e a quantidade de números para montar um jogo sorteado ao acaso, sem
+    números repetidos e já em ordem. Serve para quem não quer escolher os números na hora de
+    preencher o volante.
+  </p>
+</header>
+
+<section class="tool loteria" id="loteria" aria-label="Gerador de números">
+  <p class="loteria-aviso">
+    Site não oficial, sem relação com a Caixa. Números aleatórios não aumentam a chance de ganhar.
+  </p>
+
+  <fieldset class="field loteria-modalidades">
+    <legend>Modalidade</legend>
+    <div class="segmented">
+      <button type="button" class="filter active" data-modalidade="mega-sena" aria-pressed="true">Mega-Sena</button>
+      <button type="button" class="filter" data-modalidade="lotofacil" aria-pressed="false">Lotofácil</button>
+      <button type="button" class="filter" data-modalidade="quina" aria-pressed="false">Quina</button>
+      <button type="button" class="filter" data-modalidade="lotomania" aria-pressed="false">Lotomania</button>
+      <button type="button" class="filter" data-modalidade="timemania" aria-pressed="false">Timemania</button>
+      <button type="button" class="filter" data-modalidade="dupla-sena" aria-pressed="false">Dupla Sena</button>
+      <button type="button" class="filter" data-modalidade="dia-de-sorte" aria-pressed="false">Dia de Sorte</button>
+      <button type="button" class="filter" data-modalidade="mais-milionaria" aria-pressed="false">+Milionária</button>
+      <button type="button" class="filter" data-modalidade="super-sete" aria-pressed="false">Super Sete</button>
+      <button type="button" class="filter" data-modalidade="loteca" aria-pressed="false">Loteca</button>
+    </div>
+  </fieldset>
+
+  <div class="tool-grid">
+    <form class="fields" id="loteria-form" novalidate>
+      <div class="field" id="campo-quantidade">
+        <label for="quantidade">Quantos números</label>
+        <input class="input" id="quantidade" inputmode="numeric" autocomplete="off" maxlength="3" placeholder="Digite um número" aria-describedby="quantidade-dica" value="6" />
+        <span class="hint" id="quantidade-dica">Entre 6 e 20 números, de 01 a 60.</span>
+      </div>
+      <p class="loteria-chance" id="quantidade-fixa" hidden></p>
+      <p class="loteria-chance" id="chance">Chance de acertar os 6 números sorteados com esta aposta: 1 em 50.063.860.</p>
+      <div class="loteria-botoes">
+        <button type="submit" class="button" id="gerar">Gerar números</button>
+        <button type="button" class="button secondary" id="sortear-extra" hidden></button>
+      </div>
+    </form>
+    <div>
+      <div class="result" id="resultado" aria-live="polite">
+        <p class="result-message">Use o botão Gerar números para montar um jogo de Mega-Sena.</p>
+      </div>
+      <div class="loteria-acoes">
+        <button type="button" class="button secondary" id="copiar" disabled>Copiar números</button>
+        <p class="hint" id="copiado" role="status"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como o gerador escolhe os números</h2>
+  <p>
+    Cada jogo é sorteado no seu próprio navegador com <code>crypto.getRandomValues</code>, o
+    gerador de números aleatórios que o sistema usa para criptografia. Nada é enviado pela
+    internet e nenhum jogo fica guardado.
+  </p>
+  <p>
+    Para que todos os números tenham exatamente a mesma chance, o sorteio descarta os valores
+    que deixariam alguns números com vantagem (o chamado método da rejeição) e tira os números
+    um a um de uma lista que vai diminuindo, como bolas saindo de um globo. Assim nenhum número
+    se repete no mesmo jogo. No fim, os números aparecem em ordem crescente, como ficam no
+    volante.
+  </p>
+  <p>
+    Na Timemania o botão também sorteia o time do coração, e no Dia de Sorte, o mês da sorte. O
+    botão ao lado sorteia só o time ou só o mês de novo, sem trocar os números.
+  </p>
+
+  <h2>Modalidades e quantidades</h2>
+  <p>
+    As quantidades são as mesmas do app Gerar Números Loteria. Nas modalidades em que dá para
+    apostar mais números, você escolhe quantos; nas outras, o jogo sai com a aposta mínima.
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Modalidade</th>
+          <th scope="col">Números no jogo</th>
+          <th scope="col">Faixa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Mega-Sena</td><td>6 a 20</td><td>01 a 60</td></tr>
+        <tr><td>Lotofácil</td><td>15 a 20</td><td>01 a 25</td></tr>
+        <tr><td>Quina</td><td>5 a 15</td><td>01 a 80</td></tr>
+        <tr><td>Lotomania</td><td>50</td><td>00 a 99</td></tr>
+        <tr><td>Timemania</td><td>10 + time do coração</td><td>01 a 80</td></tr>
+        <tr><td>Dupla Sena</td><td>6 a 15</td><td>01 a 50</td></tr>
+        <tr><td>Dia de Sorte</td><td>7 a 15 + mês da sorte</td><td>01 a 31</td></tr>
+        <tr><td>+Milionária</td><td>6 + 2 trevos</td><td>01 a 50 e trevos de 1 a 6</td></tr>
+        <tr><td>Super Sete</td><td>1 por coluna, 7 colunas</td><td>0 a 9</td></tr>
+        <tr><td>Loteca</td><td>14 palpites</td><td>1, X ou 2</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Quem define as regras, os preços e os limites de cada modalidade é a Caixa, e eles podem
+    mudar. Antes de apostar, confira as regras atuais no canal oficial.
+  </p>
+
+  <h2>Números aleatórios não aumentam a chance de ganhar</h2>
+  <p>
+    Em um sorteio justo, qualquer combinação tem a mesma chance de sair, seja ela gerada aqui,
+    escolhida por data de aniversário ou uma sequência como 01 02 03 04 05 06. Nenhum método,
+    padrão ou histórico de resultados muda isso. O gerador só poupa o trabalho de escolher.
+  </p>
+  <p>A chance de acertar a faixa principal depende só de quantos números a aposta cobre:</p>
+  <p class="formula">chance = C(números da aposta, sorteados) ÷ C(números da faixa, sorteados)</p>
+  <p>
+    Em que C(n, k) é o número de combinações de n elementos tomados k a k. Na Mega-Sena saem 6
+    números entre 60, e há C(60, 6) = 50.063.860 combinações possíveis. Com uma aposta de 6
+    números, a chance é de <strong>1 em 50.063.860</strong>. Com 7 números a aposta cobre
+    C(7, 6) = 7 combinações, e a chance passa a 1 em 7.151.980, mas ela custa o mesmo que 7
+    apostas simples. A conta aparece embaixo do campo de quantidade, para a modalidade escolhida.
+  </p>
+
+  <h2>Jogue com responsabilidade</h2>
+  <ul>
+    <li>Loteria é um jogo de azar: na média, quem aposta recebe de volta bem menos do que gastou.</li>
+    <li>Aposte só o que não vai fazer falta e nunca para recuperar perdas.</li>
+    <li>Apostas são proibidas para menores de 18 anos.</li>
+    <li>Desconfie de quem vende “dicas”, “sistemas” ou “números quentes” para ganhar: eles não existem.</li>
+  </ul>
+
+  <h2>Site não oficial</h2>
+  <p>
+    Esta página e o app Gerar Números Loteria não têm nenhuma relação com a Caixa Econômica
+    Federal nem com as Loterias Caixa e não vendem apostas. Para apostar, conferir resultados e
+    ler as regras oficiais, use o site
+    <a href="https://loterias.caixa.gov.br/" rel="noopener">loterias.caixa.gov.br</a> ou uma
+    lotérica.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Usar números gerados ao acaso aumenta a chance de ganhar?</h3>
+  <p>
+    Não. Todas as combinações têm a mesma chance. O que muda a chance é a quantidade de números
+    da aposta, e uma aposta com mais números também custa mais.
+  </p>
+  <h3>Os números podem se repetir?</h3>
+  <p>
+    Dentro de um jogo, não: cada número sai uma vez só. Entre um jogo e outro, sim, porque cada
+    jogo é sorteado do zero, sem lembrar dos anteriores. Na Super Sete, cada coluna é sorteada
+    à parte, então o mesmo algarismo pode aparecer em mais de uma coluna.
+  </p>
+  <h3>Por que aparece 00 na Lotomania?</h3>
+  <p>
+    O volante da Lotomania vai de 00 a 99. O gerador sorteia de 1 a 100 e mostra o 100 como 00,
+    que é como ele aparece no volante.
+  </p>
+  <h3>Dá para gerar a +Milionária com mais números ou mais trevos?</h3>
+  <p>
+    Não. Como no app, o gerador monta a aposta mínima: 6 números de 01 a 50 e 2 trevos de 1 a 6.
+  </p>
+  <h3>Como funciona o palpite da Loteca?</h3>
+  <p>
+    Para cada um dos 14 jogos, o gerador escolhe 1 (vitória do time da coluna 1), X (empate) ou
+    2 (vitória do time da coluna 2). Como o resultado depende das partidas, não há uma chance
+    exata para calcular.
+  </p>
+  <h3>O site guarda meus jogos?</h3>
+  <p>
+    Não. Só a última modalidade e as quantidades escolhidas ficam salvas no seu navegador, para
+    a página abrir do mesmo jeito na próxima visita. Os números não saem do seu aparelho.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/gerarnumerosloteria.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Gerar Números Loteria no celular</h2>
+    <p>Os mesmos geradores no Android, com todas as modalidades desta página, o mês da sorte e o time do coração.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.gerarnumerosloteria&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

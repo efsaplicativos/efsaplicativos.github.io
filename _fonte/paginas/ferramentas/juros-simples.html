@@ -1,0 +1,206 @@
+<!--
+titulo: Calculadora de Juros Simples Online e Grátis — EFS Aplicativos
+descricao: Calcule juros, montante, capital, taxa ou prazo com juros simples. Taxa ao dia, ao mês ou ao ano, passo a passo da fórmula e tabela de evolução. Grátis.
+scripts: /assets/numeros.js /assets/ferramentas/juros-simples-logica.js /assets/ferramentas/juros-simples.js
+app: Calculadora de Juros Simples | FinanceApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Juros simples</li>
+  </ol>
+  <h1>Calculadora de juros simples</h1>
+  <p>
+    Descubra os juros e o montante de uma aplicação ou dívida com juros simples, ou calcule o
+    capital, a taxa ou o prazo a partir do valor final. O cálculo é feito no seu navegador,
+    enquanto você digita.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora">
+  <div class="tool-grid">
+    <form class="fields" id="juros-simples" novalidate>
+      <fieldset class="field">
+        <legend>O que você quer calcular?</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-alvo="juros" aria-pressed="true">Juros e montante</button>
+          <button type="button" class="filter" data-alvo="capital" aria-pressed="false">Capital</button>
+          <button type="button" class="filter" data-alvo="taxa" aria-pressed="false">Taxa</button>
+          <button type="button" class="filter" data-alvo="prazo" aria-pressed="false">Prazo</button>
+        </div>
+      </fieldset>
+      <fieldset class="field" data-campo="conhecido" hidden>
+        <legend>Valor que você conhece</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-conhecido="montante" aria-pressed="true">Montante</button>
+          <button type="button" class="filter" data-conhecido="juros" aria-pressed="false">Juros</button>
+        </div>
+      </fieldset>
+      <div class="field" data-campo="capital">
+        <label for="capital">Capital (R$)</label>
+        <input class="input" id="capital" inputmode="decimal" autocomplete="off" value="1.000,00" placeholder="Ex.: 1.000,00" />
+      </div>
+      <div class="field" data-campo="valor-conhecido" hidden>
+        <label for="valor-conhecido" id="rotulo-conhecido">Montante (R$)</label>
+        <input class="input" id="valor-conhecido" inputmode="decimal" autocomplete="off" placeholder="Ex.: 1.240,00" />
+      </div>
+      <div class="field" data-campo="taxa">
+        <label for="taxa">Taxa de juros (%)</label>
+        <div class="input-row">
+          <input class="input" id="taxa" inputmode="decimal" autocomplete="off" value="2" placeholder="Ex.: 2" />
+          <select class="select" id="unidade-taxa" aria-label="Período da taxa">
+            <option value="dia">ao dia</option>
+            <option value="mes" selected>ao mês</option>
+            <option value="ano">ao ano</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" data-campo="saida-taxa" hidden>
+        <label for="unidade-taxa-saida">Mostrar a taxa</label>
+        <select class="select" id="unidade-taxa-saida">
+          <option value="dia">ao dia</option>
+          <option value="mes" selected>ao mês</option>
+          <option value="ano">ao ano</option>
+        </select>
+      </div>
+      <div class="field" data-campo="prazo">
+        <label for="prazo">Prazo</label>
+        <div class="input-row">
+          <input class="input" id="prazo" inputmode="decimal" autocomplete="off" value="12" placeholder="Ex.: 12" />
+          <select class="select" id="unidade-prazo" aria-label="Unidade do prazo">
+            <option value="dia">dias</option>
+            <option value="mes" selected>meses</option>
+            <option value="ano">anos</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" data-campo="saida-prazo" hidden>
+        <label for="unidade-prazo-saida">Mostrar o prazo em</label>
+        <select class="select" id="unidade-prazo-saida">
+          <option value="dia">dias</option>
+          <option value="mes" selected>meses</option>
+          <option value="ano">anos</option>
+        </select>
+      </div>
+      <p class="hint">Conversões pelo ano comercial: 1 ano = 12 meses = 360 dias e 1 mês = 30 dias.</p>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Preencha os campos para ver o resultado.</p>
+    </div>
+  </div>
+  <div id="passos" hidden>
+    <h2 class="table-title">Passo a passo</h2>
+    <div id="passos-lista"></div>
+  </div>
+  <div id="evolucao" hidden>
+    <h2 class="table-title" id="evolucao-titulo">Evolução do montante</h2>
+    <div class="table-wrap">
+      <table class="data" aria-labelledby="evolucao-titulo">
+        <thead>
+          <tr>
+            <th scope="col" id="evolucao-periodo">Mês</th>
+            <th scope="col">Juros acumulados</th>
+            <th scope="col">Montante</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>O que são juros simples</h2>
+  <p>
+    Nos juros simples, os juros de cada período são calculados sempre sobre o valor inicial, o
+    capital. Os juros de um mês não são somados à base do mês seguinte, então o valor cresce em
+    linha reta: a mesma quantia a cada período.
+  </p>
+  <p>
+    Esse regime aparece em contas de prazo curto, em alguns contratos e boletos com multa e
+    juros de mora proporcionais ao atraso, e é a base para entender os juros compostos, usados
+    na maior parte dos investimentos e financiamentos.
+  </p>
+
+  <h2>Fórmula dos juros simples</h2>
+  <p class="formula">J = C × i × t&nbsp;&nbsp;&nbsp;&nbsp;M = C + J = C × (1 + i × t)</p>
+  <ul>
+    <li><strong>J</strong> são os juros do período todo.</li>
+    <li><strong>C</strong> é o capital, o valor inicial.</li>
+    <li><strong>i</strong> é a taxa de juros por período, em decimal (2% = 0,02).</li>
+    <li><strong>t</strong> é o prazo, na mesma unidade da taxa.</li>
+    <li><strong>M</strong> é o montante, o valor final.</li>
+  </ul>
+  <p>Isolando cada parte da mesma fórmula:</p>
+  <ul>
+    <li>Capital: C = M ÷ (1 + i × t), ou C = J ÷ (i × t) quando você conhece os juros</li>
+    <li>Taxa: i = J ÷ (C × t)</li>
+    <li>Prazo: t = J ÷ (C × i)</li>
+  </ul>
+
+  <h2>Exemplo de cálculo</h2>
+  <p>R$ 1.000,00 aplicados a 2% ao mês durante 12 meses:</p>
+  <p class="formula">J = 1.000 × 0,02 × 12 = R$ 240,00&nbsp;&nbsp;&nbsp;&nbsp;M = 1.000 + 240 = R$ 1.240,00</p>
+  <p>
+    Os juros são de R$ 20,00 por mês, todos os meses. Com juros compostos, a mesma taxa e o
+    mesmo prazo levariam a cerca de R$ 1.268,24, porque os juros de cada mês também
+    renderiam. No caminho inverso, se você sabe que R$ 1.000,00 viraram R$ 1.240,00 em 12
+    meses, a taxa é i = 240 ÷ (1.000 × 12) = 0,02, ou seja, 2% ao mês.
+  </p>
+
+  <h2>Taxa e prazo em unidades diferentes</h2>
+  <p>
+    A taxa e o prazo precisam estar na mesma unidade antes de entrar na fórmula. Nos juros
+    simples, a conversão é <strong>proporcional</strong>: basta multiplicar ou dividir. Uma
+    taxa de 24% ao ano equivale a 2% ao mês (24 ÷ 12) e a cerca de 0,0667% ao dia (24 ÷ 360).
+  </p>
+  <p>
+    A calculadora usa o <strong>ano comercial</strong>, em que o ano tem 360 dias e cada mês
+    tem 30, como é comum em matemática financeira. Assim, R$ 1.000,00 a 36% ao ano por 30 dias
+    rendem 1.000 × 0,36 × 30 ÷ 360 = R$ 30,00. Se o seu contrato contar os dias corridos do
+    ano civil (365 dias), o resultado será um pouco diferente.
+  </p>
+  <p class="note">
+    Nos juros compostos a conversão é outra: a taxa equivalente não sai de uma divisão
+    simples. Para esse caso, use a
+    <a href="/ferramentas/juros-compostos/">calculadora de juros compostos</a>.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Qual a diferença entre juros simples e compostos?</h3>
+  <p>
+    Nos juros simples, a base de cálculo é sempre o capital inicial. Nos compostos, os juros
+    entram na base e passam a render também. Para um mesmo prazo de mais de um período e uma
+    mesma taxa positiva, os juros compostos dão um valor maior, e a diferença cresce com o tempo.
+  </p>
+  <h3>Posso descobrir o capital sabendo só os juros?</h3>
+  <p>
+    Sim. Escolha "Capital", marque "Juros" em "Valor que você conhece" e informe a taxa e o
+    prazo. Por exemplo, R$ 240,00 de juros a 2% ao mês em 12 meses vêm de um capital de
+    R$ 1.000,00.
+  </p>
+  <h3>Por que o prazo calculado pode ser um número quebrado?</h3>
+  <p>
+    O prazo é o tempo exato para os juros chegarem ao valor pedido, como 7,5 meses. A tabela de
+    evolução mostra os períodos inteiros e, no fim, o período quebrado.
+  </p>
+  <h3>Meus dados são enviados para algum lugar?</h3>
+  <p>
+    Não. Todo o cálculo é feito no seu navegador e nada do que você digita é enviado para a
+    EFS Aplicativos.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadorajuros.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora de Juros no celular</h2>
+    <p>Juros simples e compostos, juros com aportes e empréstimos pelas tabelas Price e SAC, em um app leve e gratuito.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadorajuros&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

@@ -1,0 +1,43 @@
+/* Correção pelo IPCA: situação da consulta ao IBGE, seletores de mês e ano, avisos. */
+.correcao-ipca-ultimo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+.correcao-ipca-situacao {
+  flex: 1 1 220px;
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.correcao-ipca-situacao.correcao-ipca-erro {
+  color: #ffb4a8;
+}
+:root[data-theme="light"] .correcao-ipca-situacao.correcao-ipca-erro {
+  color: #b42318;
+}
+.correcao-ipca-mes .select {
+  flex: 1 1 0;
+}
+.correcao-ipca-mes .select:first-child {
+  flex-grow: 1.4;
+}
+.correcao-ipca-lado {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+.correcao-ipca-fonte {
+  margin: 0;
+}
+#resultado .correcao-ipca-tentar {
+  margin-top: 14px;
+}
+#resultado .result-list + .correcao-ipca-aviso {
+  margin-top: 14px;
+  font-size: 14px;
+}
+.correcao-ipca-tabela {
+  margin-top: 12px;
+}

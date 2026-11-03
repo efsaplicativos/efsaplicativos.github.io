@@ -1,0 +1,337 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/ferramentas/calculadora-de-combustivel.html. Edite lá. -->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050a1e" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        if (theme === "light" || theme === "dark") {
+          root.setAttribute("data-theme", theme);
+        }
+        if (theme === "light") {
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#f3f6ff");
+        }
+      })();
+    </script>
+    <title>Álcool ou Gasolina? Calculadora de Combustível e Viagem — EFS Aplicativos</title>
+    <meta name="description" content="Descubra se compensa abastecer com álcool ou gasolina, calcule o consumo médio do carro em km/L e o custo de uma viagem com pedágios e divisão por pessoa." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/ferramentas/calculadora-de-combustivel/" />
+    <meta property="og:title" content="Álcool ou Gasolina? Calculadora de Combustível e Viagem — EFS Aplicativos" />
+    <meta property="og:description" content="Descubra se compensa abastecer com álcool ou gasolina, calcule o consumo médio do carro em km/L e o custo de uma viagem com pedágios e divisão por pessoa." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/ferramentas/calculadora-de-combustivel/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
+    <link rel="stylesheet" href="/assets/web.css?v=8aa4a1ab9334" />
+    <link rel="stylesheet" href="/assets/ferramentas/calculadora-de-combustivel.css?v=ea7d72306dc7" />
+    <script src="/site.js?v=b4f7be01c332" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/numeros.js?v=ab57092e489e" defer></script>
+    <script src="/assets/ferramentas/calculadora-de-combustivel-logica.js?v=78604beef337" defer></script>
+    <script src="/assets/ferramentas/calculadora-de-combustivel.js?v=1bf8b0609289" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Calculadora de Combustível", "url": "https://efsaplicativos.com.br/ferramentas/calculadora-de-combustivel/", "description": "Descubra se compensa abastecer com álcool ou gasolina, calcule o consumo médio do carro em km/L e o custo de uma viagem com pedágios e divisão por pessoa.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas" aria-current="page">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Ativar tema claro"
+            title="Alternar tema claro/escuro"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Combustível</li>
+  </ol>
+  <h1>Calculadora de combustível</h1>
+  <p>
+    Compare álcool (etanol) e gasolina pela regra dos 70% ou pelo consumo do seu carro, descubra
+    quantos quilômetros ele faz por litro e estime quanto vai gastar numa viagem.
+  </p>
+</header>
+
+<section class="tool combustivel" aria-label="Calculadora de combustível">
+  <div class="segmented combustivel-abas" role="group" aria-label="O que você quer calcular?">
+    <button type="button" class="filter active" data-aba="comparar" aria-pressed="true">Álcool ou gasolina</button>
+    <button type="button" class="filter" data-aba="consumo" aria-pressed="false">Consumo médio</button>
+    <button type="button" class="filter" data-aba="viagem" aria-pressed="false">Custo da viagem</button>
+  </div>
+
+  <div class="tool-grid" data-painel="comparar">
+    <form class="fields" id="form-comparar" novalidate>
+      <div class="field">
+        <label for="preco-etanol">Preço do etanol (R$ por litro)</label>
+        <input class="input" id="preco-etanol" inputmode="decimal" autocomplete="off" placeholder="Ex.: 4,19" />
+      </div>
+      <div class="field">
+        <label for="preco-gasolina">Preço da gasolina (R$ por litro)</label>
+        <input class="input" id="preco-gasolina" inputmode="decimal" autocomplete="off" placeholder="Ex.: 6,09" />
+      </div>
+      <p class="hint combustivel-dica">Opcional: informe o consumo do seu carro com cada combustível para um resultado mais preciso.</p>
+      <div class="combustivel-par">
+        <div class="field">
+          <label for="km-etanol">Consumo com etanol (km/L)</label>
+          <input class="input" id="km-etanol" inputmode="decimal" autocomplete="off" placeholder="Ex.: 8,2" />
+        </div>
+        <div class="field">
+          <label for="km-gasolina">Consumo com gasolina (km/L)</label>
+          <input class="input" id="km-gasolina" inputmode="decimal" autocomplete="off" placeholder="Ex.: 11,8" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="tanque">Capacidade do tanque (litros)</label>
+        <input class="input" id="tanque" inputmode="decimal" autocomplete="off" value="50" placeholder="Ex.: 50" />
+      </div>
+    </form>
+    <div class="result" id="resultado-comparar" aria-live="polite">
+      <p class="result-message">Preencha os preços do etanol e da gasolina.</p>
+    </div>
+  </div>
+
+  <div class="tool-grid" data-painel="consumo" hidden>
+    <form class="fields" id="form-consumo" novalidate>
+      <fieldset class="field">
+        <legend>Como informar a distância</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-modo="distancia" aria-pressed="true">Distância percorrida</button>
+          <button type="button" class="filter" data-modo="odometro" aria-pressed="false">Odômetro</button>
+        </div>
+      </fieldset>
+      <div class="field" data-modo-campo="distancia">
+        <label for="distancia">Distância percorrida (km)</label>
+        <input class="input" id="distancia" inputmode="decimal" autocomplete="off" placeholder="Ex.: 420" />
+      </div>
+      <div class="combustivel-par" data-modo-campo="odometro" hidden>
+        <div class="field">
+          <label for="odometro-inicial">Odômetro inicial (km)</label>
+          <input class="input" id="odometro-inicial" inputmode="decimal" autocomplete="off" placeholder="Ex.: 35.200" />
+        </div>
+        <div class="field">
+          <label for="odometro-final">Odômetro final (km)</label>
+          <input class="input" id="odometro-final" inputmode="decimal" autocomplete="off" placeholder="Ex.: 35.620" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="litros">Litros abastecidos</label>
+        <input class="input" id="litros" inputmode="decimal" autocomplete="off" placeholder="Ex.: 35" />
+      </div>
+      <div class="field">
+        <label for="preco-consumo">Preço por litro (R$, opcional)</label>
+        <input class="input" id="preco-consumo" inputmode="decimal" autocomplete="off" placeholder="Ex.: 6,09" />
+      </div>
+    </form>
+    <div class="result" id="resultado-consumo" aria-live="polite">
+      <p class="result-message">Preencha a distância e os litros abastecidos.</p>
+    </div>
+  </div>
+
+  <div class="tool-grid" data-painel="viagem" hidden>
+    <form class="fields" id="form-viagem" novalidate>
+      <div class="field">
+        <label for="distancia-viagem">Distância, somente ida (km)</label>
+        <input class="input" id="distancia-viagem" inputmode="decimal" autocomplete="off" placeholder="Ex.: 430" />
+      </div>
+      <div class="field">
+        <label for="consumo-viagem">Consumo médio do carro (km/L)</label>
+        <input class="input" id="consumo-viagem" inputmode="decimal" autocomplete="off" placeholder="Ex.: 12" />
+      </div>
+      <div class="field">
+        <label for="preco-viagem">Preço por litro (R$)</label>
+        <input class="input" id="preco-viagem" inputmode="decimal" autocomplete="off" placeholder="Ex.: 6,09" />
+      </div>
+      <label class="combustivel-check" for="ida-e-volta">
+        <input type="checkbox" id="ida-e-volta" />
+        <span>Ida e volta</span>
+      </label>
+      <div class="field">
+        <label for="pedagios">Pedágios por trecho (R$, opcional)</label>
+        <input class="input" id="pedagios" inputmode="decimal" autocomplete="off" placeholder="Ex.: 42,30" aria-describedby="pedagios-dica" />
+        <span class="hint" id="pedagios-dica">Some os pedágios de um sentido; na ida e volta, o valor conta duas vezes.</span>
+      </div>
+      <div class="field">
+        <label for="pessoas">Número de pessoas</label>
+        <input class="input" id="pessoas" inputmode="numeric" autocomplete="off" value="1" placeholder="Ex.: 3" />
+      </div>
+    </form>
+    <div class="result" id="resultado-viagem" aria-live="polite">
+      <p class="result-message">Preencha a distância, o consumo e o preço do litro.</p>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Álcool ou gasolina: a regra dos 70%</h2>
+  <p>
+    O etanol tem menos energia por litro que a gasolina, então o carro flex costuma rodar menos
+    quilômetros com ele, em média cerca de 30% a menos. Por isso a conta mais conhecida é dividir
+    o preço do etanol pelo da gasolina: se o resultado for menor que 0,70, o etanol tende a sair
+    mais barato por quilômetro; se for maior, a gasolina.
+  </p>
+  <p class="formula">relação = preço do etanol ÷ preço da gasolina</p>
+  <p>
+    Exemplo: etanol a R$ 4,19 e gasolina a R$ 6,09 dão 4,19 ÷ 6,09 ≈ 0,688, ou 68,8%. Está abaixo
+    de 70%, então o etanol compensa. O preço máximo em que ele ainda compensa é 70% da gasolina:
+    6,09 × 0,7 ≈ <strong>R$ 4,263</strong>.
+  </p>
+
+  <h2>Comparação pelo consumo do seu carro</h2>
+  <p>
+    A regra dos 70% é uma média. Se você sabe quantos km/L o seu carro faz com cada combustível,
+    a calculadora compara o custo por quilômetro, que é mais preciso:
+  </p>
+  <p class="formula">custo por km = preço do litro ÷ km por litro</p>
+  <p>
+    Com etanol a R$ 4,50 e 8 km/L, cada quilômetro custa R$ 0,5625. Com gasolina a R$ 6,00 e
+    12 km/L, custa R$ 0,50. Nesse carro, a gasolina sai mais barata, mesmo com o etanol a 75% do
+    preço. A diferença dá R$ 6,25 a cada 100 km.
+  </p>
+
+  <h2>Como calcular o consumo médio</h2>
+  <p>
+    Encha o tanque, zere o hodômetro parcial (ou anote o odômetro) e rode normalmente. No próximo
+    abastecimento, encha o tanque de novo e divida os quilômetros rodados pelos litros colocados:
+  </p>
+  <p class="formula">consumo (km/L) = distância percorrida ÷ litros abastecidos</p>
+  <p>
+    Rodando 500 km e abastecendo 40 litros, o consumo é 12,5 km/L, o mesmo que 8 litros a cada
+    100 km. Com o preço do litro, a calculadora mostra também o custo por quilômetro.
+  </p>
+
+  <h2>Custo da viagem</h2>
+  <p>
+    Os litros necessários são a distância dividida pelo consumo; o gasto com combustível é esse
+    número vezes o preço do litro. Somando os pedágios e dividindo pelo número de pessoas, você
+    tem a parte de cada um. Por exemplo, 300 km de ida e volta (600 km) num carro que faz 12 km/L,
+    com gasolina a R$ 6,00 e R$ 25,00 de pedágio por trecho, dão R$ 300,00 de combustível e
+    R$ 50,00 de pedágio: R$ 350,00 no total, ou R$ 87,50 para cada uma de 4 pessoas.
+  </p>
+  <p class="note">
+    Os resultados são estimativas. O consumo real muda com o trânsito, a velocidade, o
+    ar-condicionado, a carga, a calibragem dos pneus e a manutenção do carro.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>A regra dos 70% vale para qualquer carro?</h3>
+  <p>
+    É uma referência para carros flex em geral. Alguns modelos rendem mais ou menos com etanol;
+    por isso vale medir o consumo do seu carro com cada combustível e preencher os campos
+    opcionais.
+  </p>
+  <h3>O que é a economia estimada por tanque?</h3>
+  <p>
+    É quanto você deixa de gastar ao rodar a distância de um tanque cheio com o combustível
+    recomendado em vez do outro. A capacidade padrão é 50 litros; troque pela do seu carro.
+  </p>
+  <h3>Os valores ficam salvos?</h3>
+  <p>
+    Não. A calculadora funciona no seu navegador e não guarda nem envia os preços digitados.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Álcool ou gasolina, consumo, custo da viagem e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

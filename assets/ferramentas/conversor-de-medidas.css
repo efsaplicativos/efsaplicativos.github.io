@@ -1,0 +1,25 @@
+/* Conversor de medidas — complementos de assets/web.css, só dentro de .medidas */
+
+.medidas .field > .select {
+  width: 100%;
+}
+.medidas-inverter {
+  display: flex;
+  justify-content: center;
+}
+.medidas-inverter .button {
+  min-height: 44px;
+  padding: 8px 18px;
+}
+.medidas .medidas-nota {
+  margin: 0;
+}
+.medidas .medidas-apoio {
+  margin: -8px 0 14px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.medidas .data td:last-child {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}

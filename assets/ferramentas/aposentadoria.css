@@ -1,0 +1,27 @@
+/* Calculadora de aposentadoria: grupos de campos e espaço entre os blocos do resultado. */
+.aposentadoria-grupo {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.aposentadoria-grupo > legend {
+  margin-bottom: 12px;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 750;
+  color: var(--text);
+}
+.aposentadoria-grupo + .aposentadoria-grupo {
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+#resultado .result-list + .result-label,
+#resultado .result-message + .result-label {
+  margin-top: 20px;
+}
+#resultado .result-message + .result-message {
+  margin-top: 8px;
+}

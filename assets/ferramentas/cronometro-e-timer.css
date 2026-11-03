@@ -1,0 +1,218 @@
+/* Cronômetro e timer — complementos de assets/web.css, só dentro de .cronometro */
+
+.cronometro {
+  --cr-bom: #86efac;
+  --cr-bom-fundo: rgba(34, 197, 94, 0.14);
+  --cr-ruim: #fca5a5;
+  --cr-ruim-fundo: rgba(239, 68, 68, 0.14);
+  --cr-alarme: #f97066;
+}
+:root[data-theme="light"] .cronometro {
+  --cr-bom: #166534;
+  --cr-bom-fundo: rgba(22, 163, 74, 0.12);
+  --cr-ruim: #991b1b;
+  --cr-ruim-fundo: rgba(220, 38, 38, 0.1);
+  --cr-alarme: #c62828;
+}
+
+.cronometro .cronometro-abas {
+  justify-content: center;
+  margin-bottom: 18px;
+}
+.cronometro-painel {
+  container-type: inline-size;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* ---------- Visor ---------- */
+.cronometro-visor {
+  padding: 18px 0 8px;
+  text-align: center;
+}
+.cronometro-tempo {
+  font-size: clamp(44px, 16cqi, 92px);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.cronometro-tempo.cronometro-longo {
+  font-size: clamp(38px, 13cqi, 76px);
+}
+.cronometro-volta-atual {
+  margin-top: 6px;
+  font-size: 17px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Botões ---------- */
+.cronometro-botoes {
+  display: flex;
+  gap: 12px;
+  margin: 18px 0 8px;
+}
+.cronometro-botoes .button {
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: 16px;
+}
+.cronometro .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+/* ---------- Voltas ---------- */
+.cronometro-voltas {
+  margin-top: 18px;
+}
+.cronometro-voltas-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  margin: 8px 0 10px;
+}
+.cronometro-voltas-topo .table-title {
+  margin: 0;
+}
+.cronometro-voltas-topo .button {
+  min-height: 40px;
+  padding: 6px 14px;
+}
+.cronometro .cronometro-melhor td {
+  color: var(--cr-bom);
+  background: var(--cr-bom-fundo);
+  font-weight: 700;
+}
+.cronometro .cronometro-pior td {
+  color: var(--cr-ruim);
+  background: var(--cr-ruim-fundo);
+  font-weight: 700;
+}
+.cronometro-marca {
+  font-size: 12px;
+  font-weight: 650;
+}
+
+/* ---------- Temporizador ---------- */
+.timer-visor {
+  position: relative;
+  width: min(100%, 300px);
+  aspect-ratio: 1;
+  margin: 4px auto 0;
+  container-type: inline-size;
+}
+.timer-anel {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.timer-anel circle {
+  fill: none;
+  stroke-width: 7;
+}
+.timer-trilha {
+  stroke: var(--surface-3);
+}
+.timer-progresso {
+  stroke: var(--blue-2);
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+}
+.timer-terminado .timer-progresso {
+  stroke: var(--cr-alarme);
+}
+.timer-centro {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+.timer-centro .cronometro-tempo {
+  font-size: clamp(34px, 17cqi, 54px);
+}
+.timer-fim {
+  margin-top: 4px;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--cr-alarme);
+}
+.timer-definir {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0 0;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.timer-definir legend,
+.cronometro-opcoes legend {
+  padding: 0 6px;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+}
+.timer-definir:disabled {
+  opacity: 0.6;
+}
+.timer-campos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.timer-campos .input {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.timer-rotulo {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--muted);
+}
+.cronometro .timer-bloqueado {
+  margin: 0;
+}
+
+/* ---------- Opções ---------- */
+.cronometro-opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  max-width: 560px;
+  margin: 24px auto 0;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.cronometro-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  font-size: 15px;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.cronometro-check[hidden] {
+  display: none;
+}
+.cronometro-check input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--blue);
+}
+.cronometro .cronometro-aviso {
+  display: block;
+  max-width: 560px;
+  margin: 12px auto 0;
+}

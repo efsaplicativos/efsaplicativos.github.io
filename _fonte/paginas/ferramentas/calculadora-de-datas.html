@@ -1,0 +1,184 @@
+<!--
+titulo: Calculadora de Datas: Dias Entre Datas, Somar Dias e Dias Úteis — EFS Aplicativos
+descricao: Calcule quantos dias, semanas e meses há entre duas datas, some ou subtraia dias, meses e anos, conte dias úteis e veja dia da semana e semana do ano.
+scripts: /assets/numeros.js /assets/ferramentas/calculadora-de-datas-logica.js /assets/ferramentas/calculadora-de-datas.js
+estilos: /assets/ferramentas/calculadora-de-datas.css
+app: Calculadora de Datas | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Calculadora de datas</li>
+  </ol>
+  <h1>Calculadora de datas</h1>
+  <p>
+    Descubra quantos dias faltam ou já se passaram entre duas datas, que dia será daqui a 30 ou
+    90 dias, a data depois de alguns dias úteis e o dia da semana de qualquer data.
+  </p>
+</header>
+
+<section class="tool datas" aria-label="Calculadora de datas">
+  <div class="segmented datas-abas" role="group" aria-label="O que você quer calcular?">
+    <button type="button" class="filter active" data-aba="diferenca" aria-pressed="true">Diferença entre datas</button>
+    <button type="button" class="filter" data-aba="somar" aria-pressed="false">Somar ou subtrair</button>
+    <button type="button" class="filter" data-aba="info" aria-pressed="false">Informações da data</button>
+  </div>
+
+  <div class="tool-grid" data-painel="diferenca">
+    <form class="fields" id="form-diferenca" novalidate>
+      <div class="field">
+        <label for="dif-inicio">Data inicial</label>
+        <div class="input-row">
+          <input class="input" type="date" id="dif-inicio" min="0001-01-01" max="9999-12-31" />
+          <button type="button" class="button secondary datas-hoje" data-hoje="dif-inicio">Hoje</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="dif-fim">Data final</label>
+        <div class="input-row">
+          <input class="input" type="date" id="dif-fim" min="0001-01-01" max="9999-12-31" />
+          <button type="button" class="button secondary datas-hoje" data-hoje="dif-fim">Hoje</button>
+        </div>
+      </div>
+      <div class="datas-linha">
+        <button type="button" class="button secondary" id="dif-inverter"><span aria-hidden="true">⇅</span> Inverter datas</button>
+      </div>
+      <label class="datas-check" for="dif-incluir">
+        <input type="checkbox" id="dif-incluir" />
+        <span>Incluir a data final na contagem</span>
+      </label>
+    </form>
+    <div class="result" id="resultado-diferenca" aria-live="polite">
+      <p class="result-message">Escolha as duas datas.</p>
+    </div>
+  </div>
+
+  <div class="tool-grid" data-painel="somar" hidden>
+    <form class="fields" id="form-somar" novalidate>
+      <div class="field">
+        <label for="som-base">Data de partida</label>
+        <div class="input-row">
+          <input class="input" type="date" id="som-base" min="0001-01-01" max="9999-12-31" />
+          <button type="button" class="button secondary datas-hoje" data-hoje="som-base">Hoje</button>
+        </div>
+      </div>
+      <fieldset class="field">
+        <legend>Operação</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-operacao="somar" aria-pressed="true">Somar</button>
+          <button type="button" class="filter" data-operacao="subtrair" aria-pressed="false">Subtrair</button>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="som-quantidade">Quantidade</label>
+        <input class="input" id="som-quantidade" inputmode="numeric" autocomplete="off" maxlength="9" value="30" placeholder="Ex.: 30" />
+      </div>
+      <fieldset class="field">
+        <legend>Unidade</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-unidade="dias" aria-pressed="true">Dias</button>
+          <button type="button" class="filter" data-unidade="semanas" aria-pressed="false">Semanas</button>
+          <button type="button" class="filter" data-unidade="meses" aria-pressed="false">Meses</button>
+          <button type="button" class="filter" data-unidade="anos" aria-pressed="false">Anos</button>
+        </div>
+      </fieldset>
+      <label class="datas-check" for="som-uteis" id="som-uteis-rotulo">
+        <input type="checkbox" id="som-uteis" />
+        <span>Contar somente dias úteis (segunda a sexta)</span>
+      </label>
+    </form>
+    <div class="result" id="resultado-somar" aria-live="polite">
+      <p class="result-message">Escolha a data e a quantidade.</p>
+    </div>
+  </div>
+
+  <div class="tool-grid" data-painel="info" hidden>
+    <form class="fields" id="form-info" novalidate>
+      <div class="field">
+        <label for="info-data">Data</label>
+        <div class="input-row">
+          <input class="input" type="date" id="info-data" min="0001-01-01" max="9999-12-31" />
+          <button type="button" class="button secondary datas-hoje" data-hoje="info-data">Hoje</button>
+        </div>
+      </div>
+    </form>
+    <div class="result" id="resultado-info" aria-live="polite">
+      <p class="result-message">Escolha uma data.</p>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como contar os dias entre duas datas</h2>
+  <p>
+    A calculadora conta os dias de calendário entre a data inicial e a final. Por padrão, o
+    primeiro dia não entra na conta e o último também não, como numa subtração: de 1º a 10 de
+    março são <strong>9 dias</strong>. Marque "Incluir a data final na contagem" quando os dois
+    extremos contarem, como numa reserva em que você usa o primeiro e o último dia: aí o mesmo
+    período tem <strong>10 dias</strong>.
+  </p>
+  <p>
+    O resultado em anos, meses e dias segue o calendário: primeiro contam-se os meses completos
+    e depois os dias que sobram. De 10/01/2024 a 15/03/2026, por exemplo, são 2 anos, 2 meses e
+    5 dias, ou 795 dias no total.
+  </p>
+
+  <h2>Dias úteis</h2>
+  <p>
+    Os dias úteis são contados de segunda a sexta-feira. Na aba "Somar ou subtrair", a opção de
+    dias úteis pula sábados e domingos, como a função DIATRABALHO das planilhas: 5 dias úteis
+    depois de uma sexta-feira caem na sexta-feira seguinte.
+  </p>
+  <p class="note">
+    Feriados nacionais, estaduais e municipais não são descontados, porque mudam de cidade para
+    cidade e de ano para ano. Para prazos legais ou bancários, confira o calendário oficial do
+    órgão responsável.
+  </p>
+
+  <h2>Somar meses e anos</h2>
+  <p>
+    Ao somar meses, o dia do mês é mantido. Se esse dia não existir no mês de destino, vale o
+    último dia do mês: 31 de janeiro + 1 mês = 28 de fevereiro (ou 29 em ano bissexto), e 29 de
+    fevereiro de 2024 + 1 ano = 28 de fevereiro de 2025. Semanas são sempre blocos de 7 dias.
+  </p>
+
+  <h2>Semana do ano e outras informações</h2>
+  <p>
+    A aba "Informações da data" mostra o dia da semana, o dia do ano, o trimestre, se o ano é
+    bissexto e quantos dias faltam para o fim do ano. A semana segue a norma ISO 8601, usada em
+    agendas e planilhas: a semana começa na segunda-feira e a semana 1 é a que contém a primeira
+    quinta-feira do ano. Por isso 1º de janeiro de 2027, uma sexta-feira, ainda pertence à semana
+    53 de 2026.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Quantos dias tem um ano?</h3>
+  <p>
+    365 dias, ou 366 nos anos bissextos. É bissexto o ano divisível por 4, exceto os divisíveis
+    por 100 que não são divisíveis por 400: 2024 e 2028 são bissextos, 2100 não será.
+  </p>
+  <h3>A ordem das datas importa?</h3>
+  <p>
+    Não para os números. A calculadora só avisa se a data final é anterior ou posterior à
+    inicial, e o botão "Inverter datas" troca as duas de lugar.
+  </p>
+  <h3>O fuso horário interfere no resultado?</h3>
+  <p>
+    Não. As datas são tratadas como dias do calendário, sem hora, então o resultado é o mesmo em
+    qualquer lugar e não sofre com o horário de verão.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Calculadora de datas, de idade, fuso horário e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

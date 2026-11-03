@@ -1,0 +1,382 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/ferramentas/lista-de-tarefas.html. Edite lá. -->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050a1e" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        if (theme === "light" || theme === "dark") {
+          root.setAttribute("data-theme", theme);
+        }
+        if (theme === "light") {
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#f3f6ff");
+        }
+      })();
+    </script>
+    <title>Lista de Tarefas Online com Datas, Subtarefas e Filtros — EFS Aplicativos</title>
+    <meta name="description" content="Organize suas tarefas online: escolha a data, divida em subtarefas, veja o que é para hoje e o que está atrasado e marque o que já fez. Tudo salvo no navegador." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/ferramentas/lista-de-tarefas/" />
+    <meta property="og:title" content="Lista de Tarefas Online com Datas, Subtarefas e Filtros — EFS Aplicativos" />
+    <meta property="og:description" content="Organize suas tarefas online: escolha a data, divida em subtarefas, veja o que é para hoje e o que está atrasado e marque o que já fez. Tudo salvo no navegador." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/ferramentas/lista-de-tarefas/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
+    <link rel="stylesheet" href="/assets/web.css?v=8aa4a1ab9334" />
+    <link rel="stylesheet" href="/assets/ferramentas/lista-de-tarefas.css?v=185a3ba24456" />
+    <script src="/site.js?v=b4f7be01c332" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/ferramentas/lista-de-tarefas-logica.js?v=01f332f83176" defer></script>
+    <script src="/assets/ferramentas/lista-de-tarefas.js?v=eff2e8c63663" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Lista de Tarefas", "url": "https://efsaplicativos.com.br/ferramentas/lista-de-tarefas/", "description": "Organize suas tarefas online: escolha a data, divida em subtarefas, veja o que é para hoje e o que está atrasado e marque o que já fez. Tudo salvo no navegador.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas" aria-current="page">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Ativar tema claro"
+            title="Alternar tema claro/escuro"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Lista de tarefas</li>
+  </ol>
+  <h1>Lista de tarefas online</h1>
+  <p>
+    Anote o que precisa fazer, escolha o dia de cada tarefa e divida as maiores em
+    subtarefas. A lista separa tudo por data, avisa o que está atrasado e fica salva neste
+    navegador, sem cadastro.
+  </p>
+</header>
+
+<section class="tool lista-tarefas" aria-label="Lista de tarefas">
+  <div class="lt-vista" id="lt-vista-lista">
+    <div class="lt-resumo" id="lt-resumo">
+      <div class="lt-indicador">
+        <strong id="lt-para-hoje">0</strong>
+        <span>para hoje</span>
+      </div>
+      <div class="lt-indicador lt-indicador-atrasadas" id="lt-indicador-atrasadas">
+        <strong id="lt-atrasadas">0</strong>
+        <span id="lt-atrasadas-rotulo">atrasadas</span>
+      </div>
+      <div class="lt-indicador">
+        <strong id="lt-pendentes">0</strong>
+        <span id="lt-pendentes-rotulo">pendentes</span>
+      </div>
+    </div>
+
+    <div class="lt-barra">
+      <div class="segmented lt-filtros" role="group" aria-label="Mostrar">
+        <button type="button" class="filter active" data-filtro="todas" aria-pressed="true">
+          Todas <span class="lt-contagem" data-contagem="todas">0</span>
+        </button>
+        <button type="button" class="filter" data-filtro="pendentes" aria-pressed="false">
+          Pendentes <span class="lt-contagem" data-contagem="pendentes">0</span>
+        </button>
+        <button type="button" class="filter" data-filtro="concluidas" aria-pressed="false">
+          Concluídas <span class="lt-contagem" data-contagem="concluidas">0</span>
+        </button>
+      </div>
+      <button type="button" class="button lt-nova" id="lt-nova">
+        <span aria-hidden="true">+</span> Nova tarefa
+      </button>
+    </div>
+
+    <div class="lt-secoes" id="lt-secoes"></div>
+
+    <div class="lt-vazio" id="lt-vazio" hidden>
+      <p class="lt-vazio-titulo" id="lt-vazio-titulo">Nenhuma tarefa ainda.</p>
+      <p id="lt-vazio-texto">Adicione uma nova tarefa!</p>
+      <button type="button" class="button" id="lt-vazio-nova">Nova tarefa</button>
+    </div>
+  </div>
+
+  <form class="lt-form" id="lt-form" novalidate hidden aria-labelledby="lt-form-titulo">
+    <h2 class="lt-form-titulo" id="lt-form-titulo">Nova tarefa</h2>
+
+    <div class="field">
+      <label for="lt-titulo">Título</label>
+      <input
+        class="input"
+        id="lt-titulo"
+        autocomplete="off"
+        autocapitalize="sentences"
+        enterkeyhint="next"
+        aria-describedby="lt-titulo-erro"
+      />
+      <p class="lt-erro" id="lt-titulo-erro"></p>
+    </div>
+
+    <div class="field">
+      <label for="lt-descricao">Descrição (opcional)</label>
+      <textarea class="input lt-descricao" id="lt-descricao" rows="3" autocapitalize="sentences"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="lt-data">Data da tarefa</label>
+      <div class="lt-data-linha">
+        <input class="input lt-data" type="date" id="lt-data" min="0001-01-01" max="9999-12-31" aria-describedby="lt-data-detalhe" />
+        <div class="segmented lt-atalhos" role="group" aria-label="Atalhos de data">
+          <button type="button" class="filter" data-atalho="0" aria-pressed="false">Hoje</button>
+          <button type="button" class="filter" data-atalho="1" aria-pressed="false">Amanhã</button>
+        </div>
+      </div>
+      <p class="lt-data-detalhe" id="lt-data-detalhe"></p>
+    </div>
+
+    <fieldset class="lt-subtarefas">
+      <legend id="lt-sub-titulo">Subtarefas (0)</legend>
+      <ul class="lt-sub-lista" id="lt-sub-lista" aria-labelledby="lt-sub-titulo"></ul>
+      <div class="lt-sub-nova">
+        <label class="sr-only" for="lt-sub-nova">Nova subtarefa</label>
+        <input
+          class="input"
+          id="lt-sub-nova"
+          placeholder="Nova subtarefa"
+          autocomplete="off"
+          autocapitalize="sentences"
+          enterkeyhint="done"
+        />
+        <button type="button" class="button secondary" id="lt-sub-adicionar" disabled>
+          <span aria-hidden="true">+</span> Adicionar<span class="sr-only"> subtarefa</span>
+        </button>
+      </div>
+    </fieldset>
+
+    <div class="lt-form-botoes">
+      <button type="button" class="button secondary" id="lt-cancelar">Cancelar</button>
+      <button type="submit" class="button" id="lt-salvar">Salvar</button>
+    </div>
+  </form>
+
+  <p class="lt-nota" id="lt-sem-armazenamento" hidden>
+    Este navegador não está deixando a página salvar dados. As tarefas valem só enquanto a
+    página estiver aberta.
+  </p>
+
+  <div class="lt-aviso" id="lt-aviso">
+    <span id="lt-aviso-texto" aria-hidden="true"></span>
+    <button type="button" class="lt-desfazer" id="lt-desfazer">Desfazer</button>
+  </div>
+  <p class="sr-only" role="status" aria-live="polite" id="lt-status"></p>
+
+  <dialog class="lt-dialogo" id="lt-dialogo-descartar" aria-labelledby="lt-descartar-titulo" aria-describedby="lt-descartar-texto">
+    <p class="lt-dialogo-titulo" id="lt-descartar-titulo">Descartar alterações?</p>
+    <p id="lt-descartar-texto">O que você digitou nesta tarefa será perdido.</p>
+    <div class="lt-dialogo-botoes">
+      <button type="button" class="button secondary" id="lt-continuar">Continuar editando</button>
+      <button type="button" class="button" id="lt-descartar">Descartar</button>
+    </div>
+  </dialog>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar a lista de tarefas</h2>
+  <p>
+    Toque em <strong>Nova tarefa</strong>, escreva um título e, se quiser, uma descrição com
+    detalhes. Escolha o dia no campo de data ou use os atalhos <strong>Hoje</strong> e
+    <strong>Amanhã</strong>. Tarefas grandes podem ser divididas em subtarefas: escreva cada
+    passo e aperte Enter para adicionar o próximo. Se esquecer de adicionar o último passo, ele
+    entra mesmo assim quando você salva.
+  </p>
+  <ul>
+    <li>Marque a caixa ao lado da tarefa quando terminar; ela fica riscada.</li>
+    <li>Toque no título para editar a tarefa, mudar a data ou incluir subtarefas.</li>
+    <li>
+      Excluiu por engano? Use o botão <strong>Desfazer</strong> que aparece logo depois. Não há
+      pergunta de confirmação justamente porque dá para voltar atrás.
+    </li>
+    <li>
+      Saiu do formulário sem salvar? A página pergunta antes de descartar o que você digitou.
+    </li>
+  </ul>
+
+  <h2>Como as tarefas são organizadas</h2>
+  <p>
+    A lista é dividida em seções, uma para cada dia, da data mais antiga para a mais nova.
+    Dentro de cada dia, as tarefas aparecem na ordem em que foram criadas. Os títulos das
+    seções usam "Hoje", "Amanhã" e "Ontem" quando cabe, e mostram o ano só quando a data é de
+    outro ano.
+  </p>
+  <p>
+    Uma tarefa é <strong>atrasada</strong> quando ainda não foi concluída e o dia dela já
+    passou. Ela ganha um destaque em vermelho, e o título da seção também fica vermelho
+    enquanto houver alguma tarefa pendente naquele dia. A data de hoje vem do relógio do seu
+    aparelho e é conferida de novo quando você volta para a página, então quem deixa a aba
+    aberta de um dia para o outro vê as atrasadas corretamente.
+  </p>
+  <p>
+    Os botões <strong>Todas</strong>, <strong>Pendentes</strong> e <strong>Concluídas</strong>
+    filtram a lista e mostram quantas tarefas há em cada grupo.
+  </p>
+
+  <h2>Exemplo</h2>
+  <p>Imagine que hoje é segunda-feira, 26/10/2026, e a lista tem cinco tarefas:</p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Tarefa</th>
+          <th scope="col">Data</th>
+          <th scope="col">Situação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Pagar a conta de luz</td><td>Sábado, 24/10</td><td>pendente, atrasada</td></tr>
+        <tr><td>Devolver o livro</td><td>Ontem · domingo, 25/10</td><td>concluída</td></tr>
+        <tr><td>Reunião da escola</td><td>Hoje · segunda-feira, 26/10</td><td>pendente</td></tr>
+        <tr><td>Comprar ração</td><td>Hoje · segunda-feira, 26/10</td><td>concluída</td></tr>
+        <tr><td>Consulta no dentista</td><td>Amanhã · terça-feira, 27/10</td><td>pendente</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    O resumo do topo mostra <strong>1 para hoje</strong> (a reunião; a ração já foi comprada),
+    <strong>1 atrasada</strong> (a conta de luz) e <strong>3 pendentes</strong> no total. Os
+    filtros indicam Todas 5, Pendentes 3 e Concluídas 2. Se a reunião tiver quatro subtarefas
+    e uma já estiver feita, o cartão mostra 1/4 com a barra de progresso, as três primeiras
+    subtarefas e o botão "+1 mais".
+  </p>
+
+  <h2>Limitações</h2>
+  <ul>
+    <li>
+      As tarefas ficam guardadas só neste navegador. Em outro aparelho, em outro navegador ou
+      depois de limpar os dados de navegação, elas não aparecem.
+    </li>
+    <li>
+      Cada tarefa tem um dia, mas não tem horário. A página não envia lembretes nem
+      notificações: abra a lista para ver o que é para hoje.
+    </li>
+    <li>A ordem dentro de cada dia é a de criação; não dá para arrastar as tarefas.</li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Minhas tarefas são enviadas para algum lugar?</h3>
+  <p>
+    Não. Elas ficam guardadas no próprio navegador e não são enviadas para a EFS Aplicativos
+    nem para ninguém.
+  </p>
+  <h3>O que acontece com uma tarefa que não fiz no dia?</h3>
+  <p>
+    Ela continua na lista, na seção do dia original, marcada como atrasada. Para passar para
+    outro dia, toque no título e escolha a nova data.
+  </p>
+  <h3>Posso deixar uma tarefa sem data?</h3>
+  <p>
+    Não. Toda tarefa pertence a um dia, e a data começa preenchida com hoje. É isso que permite
+    separar a lista por dia e saber o que está atrasado.
+  </p>
+  <h3>Dá para usar a mesma lista em duas abas?</h3>
+  <p>Sim. As alterações feitas em uma aba aparecem nas outras abas do mesmo navegador.</p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/listatarefas.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Lista de Tarefas no celular</h2>
+    <p>Suas tarefas com data e subtarefas sempre no bolso, também sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.listatarefas&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

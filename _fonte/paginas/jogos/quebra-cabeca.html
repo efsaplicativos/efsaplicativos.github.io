@@ -1,0 +1,139 @@
+<!--
+titulo: Quebra-Cabeça Deslizante Online Grátis — EFS Aplicativos
+descricao: Jogue quebra-cabeça deslizante online e grátis: escolha uma imagem ou o modo numérico, grades de 3 × 3 a 5 × 5, e monte com o menor tempo e menos movimentos.
+estilos: /assets/jogos/quebra-cabeca.css
+scripts: /assets/jogos/quebra-cabeca-logica.js /assets/jogos/quebra-cabeca.js
+app: Quebra-Cabeça Deslizante | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Quebra-Cabeça Deslizante</li>
+  </ol>
+  <h1>Quebra-cabeça deslizante online</h1>
+  <p>
+    Deslize as peças pelo espaço vazio até remontar a imagem. Escolha a figura e o tamanho da
+    grade; todo embaralhamento tem solução, e a partida fica salva no navegador.
+  </p>
+</header>
+
+<section class="quebra-cabeca" aria-label="Jogo Quebra-Cabeça Deslizante">
+  <div class="qc-config">
+    <div class="qc-campo">
+      <span class="qc-rotulo" id="qc-rotulo-imagem">Imagem</span>
+      <div class="qc-imagens" id="qc-imagens" role="group" aria-labelledby="qc-rotulo-imagem"></div>
+    </div>
+    <div class="qc-campo">
+      <span class="qc-rotulo" id="qc-rotulo-nivel">Dificuldade</span>
+      <div class="segmented" role="group" aria-labelledby="qc-rotulo-nivel">
+        <button type="button" class="filter active" data-tamanho="3" aria-pressed="true">Fácil <small>3 × 3</small></button>
+        <button type="button" class="filter" data-tamanho="4" aria-pressed="false">Médio <small>4 × 4</small></button>
+        <button type="button" class="filter" data-tamanho="5" aria-pressed="false">Difícil <small>5 × 5</small></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="qc-info">
+    <div class="qc-dado"><span>Movimentos</span><strong id="qc-movimentos">0</strong></div>
+    <div class="qc-dado"><span>Tempo</span><strong id="qc-tempo">00:00</strong></div>
+    <div class="qc-dado"><span>Recorde</span><strong id="qc-recorde">--:--</strong></div>
+  </div>
+
+  <div
+    class="qc-tabuleiro"
+    id="qc-tabuleiro"
+    tabindex="0"
+    role="application"
+    aria-label="Tabuleiro do quebra-cabeça. Use as setas do teclado, toque numa peça vizinha ao espaço vazio ou deslize o dedo."
+    aria-describedby="qc-ajuda"
+  >
+    <div class="qc-pecas" id="qc-pecas" aria-hidden="true"></div>
+    <div class="qc-previa" id="qc-previa" hidden></div>
+    <div class="qc-pausado" id="qc-pausado" hidden>
+      <p>Jogo pausado</p>
+      <button type="button" class="button" id="qc-continuar">Continuar</button>
+    </div>
+  </div>
+
+  <div class="qc-botoes">
+    <button type="button" class="button secondary" id="qc-pausa" aria-pressed="false">Pausar</button>
+    <button type="button" class="button secondary" id="qc-ver" aria-pressed="false">Ver imagem</button>
+    <button type="button" class="button secondary" id="qc-reiniciar">Reiniciar</button>
+  </div>
+
+  <p class="qc-ajuda" id="qc-ajuda">
+    Toque ou deslize uma peça vizinha ao espaço vazio. No computador, as setas do teclado (ou W, A,
+    S e D) deslizam a peça para aquele lado.
+  </p>
+  <p class="sr-only" aria-live="polite" id="qc-status"></p>
+
+  <dialog class="qc-dialogo" id="qc-dialogo" aria-labelledby="qc-dialogo-titulo">
+    <h2 id="qc-dialogo-titulo"></h2>
+    <p id="qc-dialogo-texto"></p>
+    <dl class="qc-dialogo-dados" id="qc-dialogo-dados"></dl>
+    <div class="qc-dialogo-botoes" id="qc-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<article class="texto">
+  <h2>Como jogar o quebra-cabeça deslizante</h2>
+  <p>
+    A imagem é cortada em quadrados e uma peça é retirada, deixando um espaço vazio. As peças
+    estão fora de ordem, e a única jogada possível é deslizar para o espaço vazio uma peça que
+    esteja <strong>encostada nele</strong>, em cima, embaixo ou de lado (nunca na diagonal).
+  </p>
+  <p>
+    O quebra-cabeça está montado quando todas as peças voltam ao lugar e o espaço vazio fica no
+    canto inferior direito. No modo numérico, as peças levam os números de 1 a 8 (ou até 24) e
+    precisam ficar em ordem, linha por linha.
+  </p>
+
+  <h2>Regras desta versão</h2>
+  <ul>
+    <li><strong>Tamanhos:</strong> Fácil tem 3 × 3 casas (8 peças), Médio 4 × 4 (15 peças) e Difícil 5 × 5 (24 peças).</li>
+    <li><strong>Sempre com solução:</strong> metade das ordens possíveis das peças não pode ser resolvida. O jogo confere a paridade das inversões antes de começar e só entrega embaralhamentos que têm saída.</li>
+    <li><strong>Movimentos:</strong> cada peça deslizada conta um movimento.</li>
+    <li><strong>Tempo:</strong> o cronômetro começa no primeiro movimento e para quando você pausa ou sai da página.</li>
+    <li><strong>Recorde:</strong> vale o menor tempo para cada imagem em cada tamanho; no empate, ganha quem usou menos movimentos.</li>
+  </ul>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para montar mais rápido</h2>
+  <ol>
+    <li><strong>Monte a primeira linha inteira</strong> antes de mexer no resto e depois não a desfaça.</li>
+    <li><strong>Em seguida, a primeira coluna.</strong> O tabuleiro vira um menor: um 4 × 4 vira um 3 × 3, que se resolve do mesmo jeito.</li>
+    <li><strong>Coloque as duas últimas peças de uma linha juntas.</strong> Leve a última para o lugar da penúltima, a penúltima logo abaixo dela, e gire as duas para dentro.</li>
+    <li><strong>Use o modo numérico para treinar.</strong> Com números fica mais fácil ver quais peças estão no lugar.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Todo jogo tem solução mesmo?</h3>
+  <p>
+    Tem. Em grades ímpares (3 × 3 e 5 × 5), o número de pares de peças fora de ordem precisa ser
+    par. Em grades pares (4 × 4), essa conta somada à linha do espaço vazio precisa ser ímpar. Se o
+    sorteio sair do jeito errado, o jogo troca duas peças e a paridade se corrige.
+  </p>
+  <h3>Posso ver a imagem completa durante o jogo?</h3>
+  <p>
+    Sim. O botão <strong>Ver imagem</strong> mostra a figura montada por cima do tabuleiro; toque
+    nele de novo para voltar às peças. O tempo continua correndo enquanto você olha.
+  </p>
+  <h3>De onde vêm as imagens?</h3>
+  <p>
+    São ilustrações do próprio app Quebra-Cabeça Deslizante. A versão para Android tem 25 imagens
+    para escolher.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/quebracabeca.jpg" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Quebra-Cabeça Deslizante no celular</h2>
+    <p>O mesmo jogo no Android, com 25 imagens, recordes e salvamento automático, também sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.quebracabeca&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

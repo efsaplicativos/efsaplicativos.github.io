@@ -1,0 +1,560 @@
+/* Lista de Tarefas: resumo, filtros, seções por dia e formulário da tarefa. */
+
+.lista-tarefas {
+  --lt-ok: #4ade80;
+  --lt-atraso: #f97066;
+  --lt-atraso-fundo: rgba(249, 112, 102, 0.08);
+  --lt-atraso-borda: rgba(249, 112, 102, 0.45);
+}
+
+/* Títulos dentro da ferramenta sem o gradiente dos h2 do site */
+.lista-tarefas h2 {
+  margin: 0;
+  background-image: none;
+  color: var(--text);
+}
+
+/* ---------- Resumo ---------- */
+.lista-tarefas .lt-resumo {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.lista-tarefas .lt-indicador {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 12px 8px;
+  text-align: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.lista-tarefas .lt-indicador strong {
+  font-size: clamp(22px, 5vw, 28px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.lista-tarefas .lt-indicador span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.lista-tarefas .lt-indicador-atrasadas.ativo {
+  background: var(--lt-atraso-fundo);
+  border-color: var(--lt-atraso-borda);
+}
+.lista-tarefas .lt-indicador-atrasadas.ativo strong {
+  color: var(--lt-atraso);
+}
+
+/* ---------- Filtros e "Nova tarefa" ---------- */
+.lista-tarefas .lt-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.lista-tarefas .lt-filtros .filter,
+.lista-tarefas .lt-atalhos .filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+.lista-tarefas .lt-contagem {
+  min-width: 24px;
+  padding: 1px 7px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  background: var(--surface-3);
+  border-radius: var(--r-pill);
+}
+.lista-tarefas .filter.active .lt-contagem {
+  background: rgba(255, 255, 255, 0.22);
+}
+.lista-tarefas .lt-nova span {
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* ---------- Seções por dia ---------- */
+.lista-tarefas .lt-secao-cabecalho {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 4px 8px;
+}
+.lista-tarefas .lt-secao-titulo {
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.3;
+  color: var(--blue-2);
+}
+.lista-tarefas .lt-secao-titulo.atrasada {
+  color: var(--lt-atraso);
+}
+.lista-tarefas .lt-secao-contagem {
+  flex: 0 0 auto;
+  font-size: 13px;
+  color: var(--muted);
+}
+.lista-tarefas .lt-tarefas {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- Cartão da tarefa ---------- */
+.lista-tarefas .lt-tarefa {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  transition: background 0.2s var(--ease);
+}
+.lista-tarefas .lt-tarefa.atrasada {
+  background: var(--lt-atraso-fundo);
+  border-color: var(--lt-atraso-borda);
+}
+.lista-tarefas .lt-tarefa.concluida {
+  background: var(--surface);
+}
+.lista-tarefas .lt-marca {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 44px;
+  height: 48px;
+  cursor: pointer;
+}
+.lista-tarefas input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--blue);
+  cursor: pointer;
+}
+.lista-tarefas .lt-corpo {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 2px 8px;
+}
+.lista-tarefas .lt-abrir {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 4px 4px;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: var(--r-xs);
+  cursor: pointer;
+}
+.lista-tarefas .lt-titulo {
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.35;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.lista-tarefas .lt-abrir:hover .lt-titulo {
+  color: var(--violet-2);
+}
+.lista-tarefas .lt-descricao {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-2);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+}
+.lista-tarefas .lt-tarefa.concluida .lt-titulo,
+.lista-tarefas .lt-tarefa.concluida .lt-descricao {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+.lista-tarefas .lt-selo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 6px 4px 0;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--lt-atraso);
+}
+.lista-tarefas .lt-selo svg {
+  width: 16px;
+  height: 16px;
+}
+.lista-tarefas .lt-icone {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  border-radius: var(--r-xs);
+  cursor: pointer;
+}
+.lista-tarefas .lt-tarefa > .lt-icone {
+  margin-top: 2px;
+}
+.lista-tarefas .lt-icone:hover {
+  color: var(--lt-atraso);
+  background: var(--surface-3);
+}
+.lista-tarefas .lt-icone svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---------- Subtarefas no cartão ---------- */
+.lista-tarefas .lt-subs {
+  margin: 10px 4px 0;
+}
+.lista-tarefas .lt-subs-topo {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.lista-tarefas .lt-subs-contagem {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.lista-tarefas .lt-subs-contagem.completa {
+  color: var(--lt-ok);
+}
+.lista-tarefas .lt-subs-barra {
+  height: 4px;
+  margin: 6px 0 4px;
+  overflow: hidden;
+  background: var(--surface-3);
+  border-radius: var(--r-pill);
+}
+.lista-tarefas .lt-subs-barra span {
+  display: block;
+  height: 100%;
+  background: var(--lt-ok);
+  border-radius: inherit;
+}
+.lista-tarefas .lt-subs-lista,
+.lista-tarefas .lt-sub-lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lista-tarefas .lt-sub {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 0 4px;
+  font-size: 14.5px;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.lista-tarefas .lt-sub input {
+  flex: 0 0 auto;
+}
+.lista-tarefas .lt-sub span {
+  min-width: 0;
+}
+.lista-tarefas .lt-sub.riscada {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+.lista-tarefas .lt-mais {
+  min-height: 40px;
+  padding: 6px 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--blue-2);
+  background: none;
+  border: 0;
+  border-radius: var(--r-xs);
+  cursor: pointer;
+}
+.lista-tarefas .lt-mais:hover {
+  background: var(--surface-3);
+}
+
+/* ---------- Lista vazia e avisos ---------- */
+.lista-tarefas .lt-vazio {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  margin-top: 12px;
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--muted);
+  background: var(--surface-2);
+  border: 1px dashed var(--border-2);
+  border-radius: var(--r-sm);
+}
+.lista-tarefas .lt-vazio p {
+  margin: 0;
+}
+.lista-tarefas .lt-vazio-titulo {
+  font-weight: 700;
+  color: var(--text);
+}
+.lista-tarefas .lt-vazio .button {
+  margin-top: 14px;
+}
+.lista-tarefas .lt-nota {
+  margin: 16px 0 0;
+  font-size: 14px;
+  color: var(--text-2);
+}
+
+/* ---------- Formulário ---------- */
+.lista-tarefas .lt-form {
+  display: grid;
+  gap: 18px;
+  max-width: 640px;
+  margin-inline: auto;
+}
+.lista-tarefas .lt-form-titulo {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.lista-tarefas .lt-descricao.input {
+  min-height: 96px;
+  resize: vertical;
+  line-height: 1.5;
+}
+.lista-tarefas .lt-erro {
+  min-height: 1.4em;
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--lt-atraso);
+}
+.lista-tarefas .lt-data-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.lista-tarefas .lt-data.input {
+  flex: 1 1 180px;
+  width: auto;
+  cursor: pointer;
+}
+.lista-tarefas .lt-data-detalhe {
+  min-height: 1.4em;
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.lista-tarefas .lt-data-detalhe::first-letter {
+  text-transform: uppercase;
+}
+.lista-tarefas .lt-data-detalhe.passado {
+  color: var(--lt-atraso);
+}
+.lista-tarefas .lt-subtarefas {
+  min-width: 0;
+  margin: 0;
+  padding: 12px 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.lista-tarefas .lt-subtarefas legend {
+  float: left;
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 0 4px;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+}
+.lista-tarefas .lt-sub-lista {
+  clear: both;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.lista-tarefas .lt-sub-lista li {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.lista-tarefas .lt-sub-lista .lt-sub {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.lista-tarefas .lt-sub-lista .lt-icone:hover {
+  background: var(--surface-3);
+}
+.lista-tarefas .lt-sub-nova {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  clear: both;
+}
+.lista-tarefas .lt-sub-nova .input {
+  flex: 1 1 200px;
+}
+.lista-tarefas .lt-sub-nova .button {
+  flex: 0 0 auto;
+  min-height: 48px;
+}
+.lista-tarefas .button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+.lista-tarefas .lt-form-botoes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+/* Aviso com "Desfazer", no rodapé da janela como a snackbar do app */
+.lista-tarefas .lt-aviso {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  padding: 8px 8px 8px 16px;
+  font-size: 14px;
+  color: #eef3ff;
+  background: #1b2a58;
+  border: 1px solid #344a86;
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 12px);
+  transition:
+    opacity 0.2s var(--ease),
+    transform 0.2s var(--ease),
+    visibility 0s linear 0.2s;
+}
+.lista-tarefas .lt-aviso.visivel {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  transition:
+    opacity 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+.lista-tarefas .lt-desfazer {
+  flex: 0 0 auto;
+  min-height: 40px;
+  padding: 6px 12px;
+  font-weight: 750;
+  color: #ffb020;
+  background: none;
+  border: 0;
+  border-radius: var(--r-xs);
+  cursor: pointer;
+}
+.lista-tarefas .lt-desfazer:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- Diálogo de descarte ---------- */
+.lista-tarefas .lt-dialogo {
+  width: min(92vw, 400px);
+  padding: 24px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.lista-tarefas .lt-dialogo::backdrop {
+  background: rgba(5, 10, 30, 0.6);
+}
+.lista-tarefas .lt-dialogo p {
+  margin: 0 0 18px;
+  color: var(--text-2);
+}
+.lista-tarefas .lt-dialogo .lt-dialogo-titulo {
+  margin-bottom: 8px;
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--text);
+}
+.lista-tarefas .lt-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ---------- Tema claro ---------- */
+:root[data-theme="light"] .lista-tarefas {
+  --lt-ok: #15803d;
+  --lt-atraso: #b42318;
+  --lt-atraso-fundo: rgba(180, 35, 24, 0.06);
+  --lt-atraso-borda: rgba(180, 35, 24, 0.35);
+}
+:root[data-theme="light"] .lista-tarefas .lt-secao-titulo:not(.atrasada),
+:root[data-theme="light"] .lista-tarefas .lt-mais {
+  color: #1d4ed8;
+}
+:root[data-theme="light"] .lista-tarefas .lt-dialogo::backdrop {
+  background: rgba(15, 21, 51, 0.45);
+}
+
+@media (max-width: 480px) {
+  .lista-tarefas .lt-barra {
+    align-items: stretch;
+  }
+  .lista-tarefas .lt-nova {
+    width: 100%;
+  }
+  .lista-tarefas .lt-filtros {
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+  /* Como no app: a contagem vai para baixo do nome para os três filtros caberem numa linha */
+  .lista-tarefas .lt-filtros .filter {
+    flex: 1 1 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
+    padding: 6px 4px;
+    font-size: 12.5px;
+    line-height: 1.2;
+    border-radius: var(--r-sm);
+  }
+  .lista-tarefas .lt-sub-nova .button {
+    flex: 1 1 auto;
+  }
+}

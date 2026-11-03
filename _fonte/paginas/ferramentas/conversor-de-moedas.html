@@ -1,0 +1,149 @@
+<!--
+titulo: Conversor de Moedas Online com Cotação do Dia — EFS Aplicativos
+descricao: Converta real, dólar, euro e mais de 150 moedas e criptomoedas com cotações da AwesomeAPI, taxa inversa, variação do dia e histórico dos últimos 30 dias.
+scripts: /assets/ferramentas/conversor-de-moedas-logica.js /assets/ferramentas/conversor-de-moedas.js
+estilos: /assets/ferramentas/conversor-de-moedas.css
+app: Conversor de Moedas | FinanceApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Conversor de moedas</li>
+  </ol>
+  <h1>Conversor de moedas</h1>
+  <p>
+    Converta valores entre o real, o dólar, o euro e mais de 150 moedas do mundo, além de
+    criptomoedas, ouro e prata, com a cotação mais recente da AwesomeAPI.
+  </p>
+</header>
+
+<section class="tool" aria-label="Conversor">
+  <div class="tool-grid">
+    <form class="fields" id="conversor-moedas" novalidate>
+      <div class="field">
+        <label for="valor">Valor</label>
+        <input class="input" id="valor" inputmode="decimal" autocomplete="off" maxlength="18" value="1" placeholder="Ex.: 1.250,50" aria-describedby="valor-dica" />
+        <span class="hint conversor-dica-erro" id="valor-dica" hidden>Valor inválido. Exemplo: 1.250,50</span>
+      </div>
+      <div class="field">
+        <label for="origem">De</label>
+        <select class="select conversor-select" id="origem"></select>
+      </div>
+      <div class="conversor-inverter">
+        <button type="button" class="button secondary" id="inverter">
+          <span aria-hidden="true">⇅</span> Inverter moedas
+        </button>
+      </div>
+      <div class="field">
+        <label for="destino">Para</label>
+        <select class="select conversor-select" id="destino"></select>
+      </div>
+    </form>
+    <div class="conversor-lado">
+      <div class="result" id="resultado" aria-live="polite">
+        <p class="result-message">Buscando cotação…</p>
+      </div>
+      <div class="conversor-cotacao" id="cotacao" hidden>
+        <div class="conversor-cotacao-topo">
+          <div>
+            <p class="conversor-taxa" id="taxa-direta"></p>
+            <p class="hint" id="taxa-inversa"></p>
+            <p class="hint" id="momento"></p>
+          </div>
+          <button type="button" class="button secondary" id="atualizar">Atualizar cotação</button>
+        </div>
+        <dl class="result-list" id="extras"></dl>
+        <p class="hint" id="via" hidden></p>
+      </div>
+      <p class="note conversor-aviso" id="aviso" role="status" hidden></p>
+      <div class="conversor-erro" id="erro" role="alert" hidden>
+        <p class="result-message error" id="erro-texto"></p>
+        <button type="button" class="button secondary" id="tentar">Tentar novamente</button>
+      </div>
+      <p class="hint conversor-fonte">
+        Cotações: AwesomeAPI. Valores de referência; bancos e casas de câmbio aplicam taxas
+        próprias. As últimas cotações ficam salvas neste navegador para uso sem conexão.
+      </p>
+    </div>
+  </div>
+  <div id="historico" hidden>
+    <h2 class="table-title">Últimos 30 dias</h2>
+    <p class="hint" id="historico-periodo"></p>
+    <svg class="conversor-grafico" id="grafico" viewBox="0 0 300 90" preserveAspectRatio="none" role="img" aria-label="Gráfico da cotação nos últimos 30 dias"></svg>
+    <dl class="result-list conversor-historico-dados" id="historico-dados"></dl>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como a conversão é feita</h2>
+  <p>
+    A cotação de um par de moedas diz quanto vale uma unidade da primeira moeda na segunda. O
+    conversor usa o preço de compra informado pela AwesomeAPI e multiplica o valor digitado por
+    essa taxa. A taxa inversa, mostrada logo abaixo, é simplesmente 1 dividido pela taxa.
+  </p>
+  <p class="formula">valor convertido = valor × cotação</p>
+  <p>
+    Nem todo par tem cotação direta. Quando não existe, por exemplo, uma cotação do real para
+    o afegane, o conversor monta o caminho mais curto passando pelo dólar, pelo real ou pelo
+    euro e combina as cotações de cada trecho. Isso é a <strong>conversão cruzada</strong>.
+  </p>
+
+  <h2>Exemplo de cálculo</h2>
+  <p>
+    Os números a seguir são apenas ilustrativos. Se 1 dólar vale R$ 5,00, então R$ 100,00
+    compram 100 ÷ 5 = 20 dólares, e 1 real vale 0,20 dólar. Se, além disso, 1 dólar vale 70
+    afeganes, a conversão cruzada do real para o afegane fica:
+  </p>
+  <p class="formula">1 BRL = (1 ÷ 5) × 70 = 14 AFN</p>
+  <p>
+    Assim, R$ 100,00 equivalem a 1.400 afeganes. No conversor, as cotações são as mais
+    recentes publicadas pela fonte, com a data e a hora de cada uma.
+  </p>
+
+  <h2>O que aparece junto com a cotação</h2>
+  <ul>
+    <li><strong>Compra e venda:</strong> os preços de referência do par na fonte, quando são diferentes.</li>
+    <li><strong>Máxima e mínima do dia:</strong> disponíveis quando a conversão é direta, sem moeda intermediária.</li>
+    <li><strong>Variação do dia:</strong> quanto a cotação mudou em relação ao fechamento anterior.</li>
+    <li><strong>Últimos 30 dias:</strong> um gráfico simples com a variação, a mínima e a máxima do período, para pares com cotação direta.</li>
+  </ul>
+
+  <h2>Limitações</h2>
+  <p class="note">
+    As cotações são valores de referência do mercado e servem para ter uma ideia do câmbio. Na
+    compra de moeda em espécie, no cartão ou em remessas, bancos e casas de câmbio cobram
+    margens, tarifas e impostos, como o IOF, que não entram nesta conta. Algumas moedas pouco
+    negociadas passam dias sem cotação nova; nesses casos, a página avisa.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Por que o valor é diferente do que o banco cobra?</h3>
+  <p>
+    Porque o banco aplica a própria taxa de câmbio, com margem sobre a cotação de mercado, e
+    pode cobrar tarifas e IOF. O conversor mostra a cotação de referência, sem esses custos.
+  </p>
+  <h3>Funciona sem internet?</h3>
+  <p>
+    As últimas cotações consultadas ficam guardadas neste navegador. Se a consulta falhar, o
+    conversor usa essas cotações salvas e avisa que elas podem estar desatualizadas.
+  </p>
+  <h3>De que horário é a cotação?</h3>
+  <p>
+    A data e a hora aparecem abaixo da taxa. Na conversão cruzada, vale o horário da cotação
+    mais antiga entre as usadas na conta. O botão "Atualizar cotação" consulta a fonte de novo.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/conversormoedas.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Conversor de Moedas no celular</h2>
+    <p>Mais de 150 moedas e criptomoedas, busca por nome ou código e a última cotação salva para usar sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.conversormoedas&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

@@ -1,0 +1,119 @@
+<!--
+titulo: Jogo da Memória Online Grátis: 3 Níveis — EFS Aplicativos
+descricao: Jogue o jogo da memória online e grátis: vire as cartas e encontre os pares de bichinhos em 3 níveis, de 8 a 32 pares. Tempo, movimentos e recordes salvos.
+estilos: /assets/jogos/jogo-da-memoria.css
+scripts: /assets/jogos/jogo-da-memoria-logica.js /assets/jogos/jogo-da-memoria.js
+app: Jogo da Memória | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Jogo da Memória</li>
+  </ol>
+  <h1>Jogo da memória online</h1>
+  <p>
+    Vire duas cartas por vez e encontre os pares de bichinhos com o menor tempo e o menor número
+    de movimentos. São três níveis, de 16 a 64 cartas.
+  </p>
+</header>
+
+<section class="jogo-memoria" aria-label="Jogo da memória">
+  <div class="segmented jm-niveis" role="group" aria-label="Nível">
+    <button type="button" class="filter active" data-nivel="facil" aria-pressed="true">Fácil <small>8 pares</small></button>
+    <button type="button" class="filter" data-nivel="medio" aria-pressed="false">Médio <small>18 pares</small></button>
+    <button type="button" class="filter" data-nivel="dificil" aria-pressed="false">Difícil <small>32 pares</small></button>
+  </div>
+
+  <div class="jm-info">
+    <div class="jm-dado"><span>Tempo</span><strong id="jm-tempo">00:00</strong></div>
+    <div class="jm-dado"><span>Movimentos</span><strong id="jm-movimentos">0</strong></div>
+    <div class="jm-dado"><span>Pares</span><strong id="jm-pares">0/8</strong></div>
+  </div>
+  <p class="jm-recorde" id="jm-recorde">Sem recorde ainda</p>
+
+  <div class="jm-tabuleiro" id="jm-tabuleiro" role="group" aria-label="Cartas" aria-describedby="jm-ajuda"></div>
+
+  <div class="jm-botoes">
+    <button type="button" class="button secondary" id="jm-reiniciar">Reiniciar jogo</button>
+  </div>
+
+  <p class="jm-ajuda" id="jm-ajuda">
+    Clique ou toque numa carta para virá-la. No teclado, escolha a carta com as setas e vire com
+    Enter.
+  </p>
+  <p class="sr-only" aria-live="polite" id="jm-status"></p>
+
+  <details class="jm-recordes">
+    <summary>Seus 10 melhores resultados no nível <span id="jm-recordes-nivel">Fácil</span></summary>
+    <ol id="jm-recordes-lista"></ol>
+    <p id="jm-recordes-vazio">Complete uma partida neste nível para ver seus resultados aqui.</p>
+  </details>
+
+  <dialog class="jm-dialogo" id="jm-dialogo" aria-labelledby="jm-dialogo-titulo">
+    <h2 id="jm-dialogo-titulo"></h2>
+    <p id="jm-dialogo-texto"></p>
+    <dl class="jm-dialogo-dados" id="jm-dialogo-dados"></dl>
+    <div class="jm-dialogo-botoes" id="jm-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<article class="texto">
+  <h2>Como jogar o jogo da memória</h2>
+  <p>
+    Todas as cartas começam viradas para baixo. Cada bichinho aparece em exatamente duas cartas.
+    Vire uma carta, depois outra: se as duas forem iguais, o par fica aberto; se forem diferentes,
+    elas ficam à mostra por um segundo e voltam para baixo. Guarde onde estava cada uma para
+    acertar o par depois.
+  </p>
+  <p>
+    A partida termina quando todos os pares estão abertos. O tempo começa a contar quando você
+    vira a primeira carta.
+  </p>
+
+  <h2>Níveis e pontuação</h2>
+  <ul>
+    <li><strong>Fácil:</strong> 16 cartas (8 pares) numa grade de 4 × 4.</li>
+    <li><strong>Médio:</strong> 36 cartas (18 pares) numa grade de 6 × 6.</li>
+    <li><strong>Difícil:</strong> 64 cartas (32 pares) numa grade de 8 × 8.</li>
+    <li><strong>Movimentos:</strong> cada par de cartas viradas conta um movimento, acertando ou não. O mínimo possível é um movimento por par.</li>
+    <li><strong>Recordes:</strong> o menor tempo fica em primeiro; com o mesmo tempo, vence quem usou menos movimentos. Os 10 melhores de cada nível ficam guardados.</li>
+  </ul>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para lembrar das cartas</h2>
+  <ol>
+    <li><strong>Vire primeiro as cartas que você nunca viu.</strong> Cada carta nova é informação; repetir uma conhecida sem saber o par desperdiça um movimento.</li>
+    <li><strong>Trabalhe por regiões.</strong> No 8 × 8, explore um canto de cada vez em vez de pular pelo tabuleiro todo.</li>
+    <li><strong>Diga o nome do bicho em voz baixa</strong> e a posição ("gato, segunda linha"). Ouvir ajuda a memória.</li>
+    <li><strong>Quando a primeira carta for nova</strong>, use a segunda para testar uma carta que você ainda não conhece, e não uma já vista.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>As cartas mudam a cada partida?</h3>
+  <p>
+    Mudam. A cada jogo, os bichinhos são sorteados entre 59 figuras e embaralhados de novo, então
+    a posição das cartas nunca se repete de propósito.
+  </p>
+  <h3>Se eu sair da página, perco a partida?</h3>
+  <p>
+    Não. A partida em andamento fica salva no navegador com o tempo e os movimentos. Uma carta que
+    estava virada sem par volta para baixo quando você retoma.
+  </p>
+  <h3>Posso jogar com crianças?</h3>
+  <p>
+    Pode. O nível Fácil, com 8 pares, é bom para começar, e as cartas mostram bichos conhecidos, como cachorro, gato, leão e tartaruga.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/jogodamemoria.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Jogo da Memória no celular</h2>
+    <p>O mesmo jogo no Android, com cartas que giram, recordes por nível e tema escuro, também sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.jogodamemoria&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

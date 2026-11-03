@@ -1,0 +1,149 @@
+<!--
+titulo: Conversor de Medidas Online: Comprimento, Área, Massa e Mais — EFS Aplicativos
+descricao: Converta comprimento, área, volume, massa, velocidade, dados, pressão, energia e mais 8 grandezas, com mais de 150 unidades e o valor em todas elas. Grátis.
+scripts: /assets/numeros.js /assets/ferramentas/conversor-de-medidas-logica.js /assets/ferramentas/conversor-de-medidas.js
+estilos: /assets/ferramentas/conversor-de-medidas.css
+app: Conversor de Medidas | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Conversor de medidas</li>
+  </ol>
+  <h1>Conversor de medidas</h1>
+  <p>
+    Escolha a grandeza, digite o valor e veja a conversão entre unidades do sistema métrico,
+    do sistema americano e do britânico, além de medidas brasileiras como o alqueire e a
+    arroba. O resultado aparece enquanto você digita.
+  </p>
+</header>
+
+<section class="tool medidas" aria-label="Conversor de medidas">
+  <div class="tool-grid">
+    <form class="fields" id="medidas" novalidate>
+      <div class="field">
+        <label for="categoria">Grandeza</label>
+        <select class="select" id="categoria"></select>
+      </div>
+      <div class="field">
+        <label for="valor">Valor a converter</label>
+        <input class="input" id="valor" inputmode="decimal" autocomplete="off" value="1" placeholder="Ex.: 1,5" aria-describedby="valor-dica" />
+        <span class="hint" id="valor-dica">Aceita vírgula ou ponto e notação científica, como 1e-3.</span>
+      </div>
+      <div class="field">
+        <label for="de">De</label>
+        <select class="select" id="de"></select>
+      </div>
+      <div class="medidas-inverter">
+        <button type="button" class="button secondary" id="inverter"><span aria-hidden="true">⇅</span> Inverter unidades</button>
+      </div>
+      <div class="field">
+        <label for="para">Para</label>
+        <select class="select" id="para"></select>
+      </div>
+      <p class="note medidas-nota" id="nota-categoria" hidden></p>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Digite um valor para converter.</p>
+    </div>
+  </div>
+  <div id="todas" hidden>
+    <h2 class="table-title" id="todas-titulo">Em todas as unidades</h2>
+    <div class="table-wrap">
+      <table class="data" aria-labelledby="todas-titulo">
+        <thead>
+          <tr>
+            <th scope="col">Unidade</th>
+            <th scope="col">Valor</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como o conversor funciona</h2>
+  <p>
+    Cada grandeza tem uma unidade de referência: o metro para comprimento, o metro quadrado
+    para área, o litro para volume, o quilograma para massa, o segundo para tempo, o bit para
+    dados, e assim por diante. Toda conversão é feita em dois passos: o valor digitado é
+    levado para a unidade de referência e, de lá, para a unidade de destino. Assim, qualquer
+    par de unidades da mesma grandeza pode ser convertido, inclusive os menos comuns.
+  </p>
+  <p>Para as unidades proporcionais, a conta é uma regra de três:</p>
+  <p class="formula">resultado = valor × fator da origem ÷ fator do destino</p>
+  <p>
+    O fator é quanto uma unidade vale na unidade de referência. Um pé vale 0,3048 m e uma
+    polegada vale 0,0254 m, então 1 pé = 1 × 0,3048 ÷ 0,0254 = <strong>12 polegadas</strong>.
+  </p>
+
+  <h2>Grandezas disponíveis</h2>
+  <ul>
+    <li><strong>Comprimento:</strong> do nanômetro ao ano-luz, com polegada, pé, jarda, milha e milha náutica.</li>
+    <li><strong>Área:</strong> metro quadrado, hectare, are, acre e os alqueires paulista e mineiro.</li>
+    <li><strong>Volume:</strong> litro, mililitro, metro cúbico, xícara, colheres, onça fluida, galão e barril.</li>
+    <li><strong>Massa:</strong> grama, quilo, tonelada, quilate, libra, onça, stone e arroba.</li>
+    <li><strong>Temperatura</strong>, <strong>velocidade</strong> (km/h, m/s, nó, Mach), <strong>tempo</strong> e <strong>dados</strong> (bit, byte, MB, GB, MiB, GiB).</li>
+    <li><strong>Pressão</strong> (bar, psi, atm, mmHg), <strong>energia</strong> (caloria, joule, kWh, BTU) e <strong>potência</strong> (cv, hp, W, BTU/h).</li>
+    <li><strong>Frequência</strong>, <strong>ângulo</strong>, <strong>força</strong>, <strong>consumo de combustível</strong> e <strong>torque</strong>.</li>
+  </ul>
+
+  <h2>Exemplos de conversão</h2>
+  <ul>
+    <li>1 alqueire paulista = 24.200 m² = 2,42 hectares; o mineiro tem o dobro, 4,84 hectares.</li>
+    <li>10 cv = 7,355 kW, porque 1 cv vale 735,49875 W.</li>
+    <li>1 GB = 1.000.000.000 bytes ≈ 0,931 GiB.</li>
+    <li>12,5 km/L = 8 L/100 km: quanto menor o número em L/100 km, mais econômico o carro.</li>
+  </ul>
+
+  <h2>Cuidados com algumas unidades</h2>
+  <p>
+    <strong>Temperatura</strong> e <strong>consumo em L/100 km</strong> não são proporcionais.
+    Na temperatura, as escalas começam em pontos diferentes (0 °C são 32 °F), e o conversor
+    usa as fórmulas de cada escala. No consumo, L/100 km é o inverso de km/L.
+  </p>
+  <p>
+    Em <strong>dados</strong>, kB, MB e GB usam potências de 1000, enquanto KiB, MiB e GiB usam
+    potências de 1024. Por isso um pendrive de 64 GB aparece com cerca de 59,6 GiB em alguns
+    sistemas operacionais. Mês e ano usam as durações médias do calendário (30,44 e 365,24
+    dias), e Mach considera a velocidade do som ao nível do mar a 15 °C.
+  </p>
+  <p>
+    Medidas de cozinha variam de país para país. Aqui a xícara tem 240 mL, a colher de sopa
+    15 mL e a de chá 5 mL, o padrão métrico usado nas receitas brasileiras; a xícara americana
+    tem cerca de 236,6 mL.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Quantas casas decimais o resultado mostra?</h3>
+  <p>
+    Até 10 algarismos significativos, sem zeros desnecessários. Valores muito grandes ou muito
+    pequenos aparecem em notação científica, como 1,6 × 10⁻¹⁹.
+  </p>
+  <h3>Posso digitar números negativos?</h3>
+  <p>
+    Sim. Isso é útil para temperaturas, por exemplo. Em grandezas como comprimento ou massa, o
+    resultado negativo é apenas a conversão matemática do número digitado.
+  </p>
+  <h3>O conversor guarda alguma coisa?</h3>
+  <p>
+    Só a última grandeza e as unidades escolhidas, no seu próprio navegador, para abrir do
+    mesmo jeito na próxima visita. Os valores digitados não são enviados para lugar nenhum.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Conversor de medidas, temperatura, moedas e mais de 20 ferramentas em um só app, a maioria funcionando sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

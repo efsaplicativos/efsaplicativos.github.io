@@ -1,0 +1,199 @@
+<!--
+titulo: Simulador de Financiamento Price, SAC e SAM — EFS Aplicativos
+descricao: Simule financiamento ou empréstimo pelas tabelas Price, SAC e SAM: parcelas, total de juros, CET com custos mensais e tabela de amortização mês a mês.
+scripts: /assets/numeros.js /assets/ferramentas/financiamento-logica.js /assets/ferramentas/financiamento.js
+app: Simulador de Financiamento | FinanceApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Financiamento</li>
+  </ol>
+  <h1>Simulador de financiamento</h1>
+  <p>
+    Calcule as parcelas de um financiamento ou empréstimo pelas tabelas Price, SAC e SAM,
+    compare os três sistemas e veja a tabela de amortização completa. O cálculo é feito no seu
+    navegador, enquanto você digita.
+  </p>
+</header>
+
+<section class="tool" aria-label="Simulador">
+  <div class="tool-grid">
+    <form class="fields" id="financiamento" novalidate>
+      <div class="field">
+        <label for="valor">Valor do bem ou do empréstimo (R$)</label>
+        <input class="input" id="valor" inputmode="decimal" autocomplete="off" value="150.000,00" placeholder="Ex.: 150.000,00" />
+      </div>
+      <div class="field">
+        <label for="entrada">Entrada (R$, opcional)</label>
+        <input class="input" id="entrada" inputmode="decimal" autocomplete="off" value="30.000,00" placeholder="Ex.: 30.000,00" aria-describedby="entrada-dica" />
+        <span class="hint" id="entrada-dica">Deixe em branco se não houver entrada.</span>
+      </div>
+      <div class="field">
+        <label for="taxa">Taxa de juros (%)</label>
+        <div class="input-row">
+          <input class="input" id="taxa" inputmode="decimal" autocomplete="off" value="1" placeholder="Ex.: 1" aria-describedby="taxa-dica" />
+          <select class="select" id="periodo-taxa" aria-label="Período da taxa">
+            <option value="mes">ao mês</option>
+            <option value="ano">ao ano</option>
+          </select>
+        </div>
+        <span class="hint" id="taxa-dica">Taxas anuais viram a taxa mensal equivalente, e não a taxa ÷ 12.</span>
+      </div>
+      <div class="field">
+        <label for="prazo">Prazo</label>
+        <div class="input-row">
+          <input class="input" id="prazo" inputmode="decimal" autocomplete="off" value="120" placeholder="Ex.: 120" aria-describedby="prazo-dica" />
+          <select class="select" id="unidade-prazo" aria-label="Unidade do prazo">
+            <option value="meses">meses</option>
+            <option value="anos">anos</option>
+          </select>
+        </div>
+        <span class="hint" id="prazo-dica">Até 600 meses (50 anos).</span>
+      </div>
+      <div class="field">
+        <label for="custos">Custos mensais fixos (seguro, tarifas; R$, opcional)</label>
+        <input class="input" id="custos" inputmode="decimal" autocomplete="off" placeholder="Ex.: 50,00" />
+      </div>
+      <fieldset class="field">
+        <legend>Sistema de amortização</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-sistema="price" aria-pressed="true">Price</button>
+          <button type="button" class="filter" data-sistema="sac" aria-pressed="false">SAC</button>
+          <button type="button" class="filter" data-sistema="sam" aria-pressed="false">SAM</button>
+        </div>
+        <span class="hint" id="sistema-dica">Price: parcelas iguais do início ao fim.</span>
+      </fieldset>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Preencha o valor, a taxa e o prazo para ver o resultado.</p>
+    </div>
+  </div>
+  <div id="comparativo" hidden>
+    <h2 class="table-title" id="comparativo-titulo">Comparativo entre sistemas</h2>
+    <div class="table-wrap">
+      <table class="data" aria-labelledby="comparativo-titulo">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <div id="amortizacao" hidden>
+    <h2 class="table-title" id="amortizacao-titulo">Tabela de amortização</h2>
+    <div class="table-wrap">
+      <table class="data" aria-labelledby="amortizacao-titulo">
+        <thead><tr></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como funciona um financiamento</h2>
+  <p>
+    Cada parcela tem duas partes: os <strong>juros</strong> do mês, calculados sobre o saldo
+    devedor, e a <strong>amortização</strong>, a parte que reduz a dívida. O que muda de um
+    sistema para outro é como a amortização é distribuída ao longo do prazo. Se houver seguro
+    ou tarifa mensal, esse valor fixo é somado à parcela.
+  </p>
+
+  <h2>Tabela Price, SAC e SAM</h2>
+  <ul>
+    <li>
+      <strong>Price (sistema francês):</strong> as parcelas são iguais. No começo, a maior
+      parte da parcela é juros; com o tempo, a amortização cresce.
+    </li>
+    <li>
+      <strong>SAC (sistema de amortização constante):</strong> a amortização é a mesma todo
+      mês (valor financiado ÷ número de parcelas). Como o saldo cai mais rápido, os juros e as
+      parcelas diminuem mês a mês.
+    </li>
+    <li>
+      <strong>SAM (sistema de amortização misto):</strong> a amortização de cada mês é a média
+      entre a da Price e a do SAC, e as parcelas ficam entre as dos dois.
+    </li>
+  </ul>
+  <p class="formula">Parcela Price = P × i ÷ [1 − (1 + i)⁻ⁿ]&nbsp;&nbsp;&nbsp;&nbsp;Amortização SAC = P ÷ n</p>
+  <p>
+    Aqui, <strong>P</strong> é o valor financiado (valor do bem menos a entrada),
+    <strong>i</strong> é a taxa mensal em decimal e <strong>n</strong> é o número de parcelas.
+    Os juros de cada mês são saldo devedor × i.
+  </p>
+
+  <h2>Exemplo de cálculo</h2>
+  <p>
+    Um bem de R$ 150.000,00 com R$ 30.000,00 de entrada deixa R$ 120.000,00 para financiar. A
+    1% ao mês em 120 parcelas:
+  </p>
+  <ul>
+    <li>
+      <strong>Price:</strong> parcela de R$ 1.721,65 do início ao fim, com R$ 86.598,18 de
+      juros no total.
+    </li>
+    <li>
+      <strong>SAC:</strong> amortização de R$ 1.000,00 por mês. A primeira parcela é de
+      R$ 2.200,00 (1.000 + 1% de 120.000) e a última, de R$ 1.010,00. Os juros somam
+      R$ 72.600,00.
+    </li>
+    <li>
+      <strong>SAM:</strong> começa em R$ 1.960,83, termina em R$ 1.365,82 e soma R$ 79.599,08
+      de juros.
+    </li>
+  </ul>
+  <p>
+    Os valores são arredondados em centavos mês a mês, e a última parcela é ajustada para o
+    saldo devedor terminar exatamente em zero. Por isso a última parcela da Price pode diferir
+    das outras em alguns centavos.
+  </p>
+
+  <h2>Taxa anual e CET</h2>
+  <p>
+    Se você informar a taxa ao ano, ela é convertida para a taxa mensal equivalente pelos juros
+    compostos: 12% ao ano viram cerca de 0,9489% ao mês, e não 1%. Alguns contratos usam a
+    taxa anual nominal (taxa ÷ 12); nesse caso, digite a taxa ao mês que aparece no contrato.
+  </p>
+  <p>
+    O <strong>Custo Efetivo Total (CET)</strong> é a taxa que iguala o valor recebido ao que
+    será pago, incluindo os custos mensais. Com R$ 50,00 de custos por mês no exemplo da Price,
+    a parcela vai para R$ 1.771,65 e o CET fica em cerca de 1,06% ao mês (13,48% ao ano).
+  </p>
+  <p class="note">
+    A simulação considera taxa fixa e custos mensais fixos. Contratos reais podem ter correção
+    do saldo por um índice (como a TR ou o IPCA), seguros que variam com o saldo, tarifas
+    cobradas no início e IOF. Para tomar uma decisão, confira os valores e o CET informados
+    pela instituição.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Qual sistema tem menos juros?</h3>
+  <p>
+    Com o mesmo valor, taxa e prazo, o SAC soma menos juros que o SAM, e o SAM menos que a
+    Price, porque amortiza a dívida mais cedo. Em compensação, as primeiras parcelas do SAC são
+    as maiores. O comparativo acima mostra os três lado a lado.
+  </p>
+  <h3>Posso informar o prazo em anos?</h3>
+  <p>
+    Sim. Escolha "anos" ao lado do prazo; ele é convertido em parcelas mensais (2,5 anos = 30
+    parcelas). O prazo máximo é de 600 meses.
+  </p>
+  <h3>Meus dados são enviados para algum lugar?</h3>
+  <p>
+    Não. Todo o cálculo é feito no seu navegador e nada do que você digita é enviado para a
+    EFS Aplicativos.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Financiamento com gráficos, juros com aportes, aposentadoria, correção pelo IPCA e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

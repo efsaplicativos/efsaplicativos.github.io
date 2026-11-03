@@ -1,0 +1,429 @@
+<!--
+titulo: Relógio de Blinds Online para Torneio de Poker com Prêmios — EFS Aplicativos
+descricao: Relógio de blinds grátis para torneio de poker: níveis, intervalos e alerta na troca, stack médio, rebuys, add-ons, prize pool e divisão dos prêmios.
+scripts: /assets/ferramentas/relogio-de-blinds-poker-logica.js /assets/ferramentas/relogio-de-blinds-poker.js
+estilos: /assets/ferramentas/relogio-de-blinds-poker.css
+app: Relógio de Blinds | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Relógio de blinds</li>
+  </ol>
+  <h1>Relógio de blinds para torneio de poker</h1>
+  <p>
+    Controle o tempo de cada nível, os blinds e os intervalos, acompanhe jogadores, rebuys e
+    add-ons e veja o prize pool dividido entre os premiados, tudo na mesma tela.
+  </p>
+</header>
+
+<section class="tool poker" id="torneio-poker" aria-label="Relógio de blinds do torneio">
+  <div class="poker-topo">
+    <p class="poker-nome"><span class="poker-nome-rotulo">Torneio</span> <strong id="nome-torneio">Torneio Poker</strong></p>
+    <div class="poker-acoes">
+      <button type="button" class="button secondary" id="abrir-estrutura">Estrutura de blinds</button>
+      <button type="button" class="button secondary" id="abrir-config">Configurar torneio</button>
+    </div>
+  </div>
+
+  <div class="poker-grade">
+    <div class="poker-palco" id="palco-poker">
+      <div class="poker-relogio" id="cartao-relogio" data-tipo="blind">
+        <div class="poker-relogio-topo">
+          <span class="poker-selo" id="nome-nivel">Nível 1</span>
+          <span class="poker-posicao" id="posicao-nivel">1 / 12</span>
+        </div>
+        <p class="poker-tempo" id="tempo-nivel" role="timer">20:00</p>
+        <p class="poker-legenda" id="legenda-nivel"></p>
+        <div class="poker-progresso" aria-hidden="true"><span id="barra-progresso"></span></div>
+        <div class="poker-blinds">
+          <div id="bloco-blinds">
+            <span class="poker-blinds-rotulo">SB / BB</span>
+            <strong class="poker-blinds-valor" id="valor-blinds">25 / 50</strong>
+            <span class="poker-ante" id="valor-ante" hidden></span>
+          </div>
+          <strong class="poker-intervalo-texto" id="texto-intervalo" hidden>Intervalo</strong>
+        </div>
+        <dl class="poker-info">
+          <div>
+            <dt>Próximo</dt>
+            <dd id="proximo-nivel">Nível 2 · 50 / 100</dd>
+          </div>
+          <div id="linha-intervalo" hidden>
+            <dt class="sr-only">Próximo intervalo</dt>
+            <dd id="intervalo-em"></dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="poker-controles">
+        <button type="button" class="poker-botao" id="nivel-anterior" aria-label="Nível anterior" title="Nível anterior">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M6 5h2.5v14H6zM19 5.5v13L9.5 12Z" /></svg>
+        </button>
+        <button type="button" class="button poker-principal" id="alternar-relogio">Iniciar</button>
+        <button type="button" class="poker-botao" id="nivel-seguinte" aria-label="Próximo nível" title="Próximo nível">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M15.5 5H18v14h-2.5zM5 5.5v13l9.5-6.5Z" /></svg>
+        </button>
+      </div>
+      <div class="poker-controles-extra">
+        <button type="button" class="button secondary" id="reiniciar-nivel">Reiniciar nível</button>
+        <button type="button" class="poker-botao" id="alternar-alerta" aria-pressed="true" aria-label="Som e vibração na troca de nível" title="Som e vibração na troca de nível">
+          <svg class="icone-som" viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4Z" /><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" /></svg>
+          <svg class="icone-mudo" viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4Z" /><path d="m15.5 9.5 5 5m0-5-5 5" /></svg>
+        </button>
+        <button type="button" class="poker-botao" id="tela-cheia" aria-pressed="false" aria-label="Tela cheia" title="Tela cheia" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" /></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="poker-detalhes">
+      <section class="poker-cartao" aria-labelledby="titulo-jogadores">
+        <h2 class="poker-cartao-titulo" id="titulo-jogadores">Jogadores</h2>
+        <div class="poker-numeros">
+          <div class="poker-numero">
+            <span>Stack médio</span>
+            <strong id="stack-medio">10.000</strong>
+            <small id="stack-medio-bb"></small>
+          </div>
+          <div class="poker-numero">
+            <span>Fichas em jogo</span>
+            <strong id="fichas-em-jogo">90.000</strong>
+          </div>
+        </div>
+        <div class="poker-contador">
+          <div class="poker-contador-texto">
+            <span class="poker-contador-rotulo" id="rotulo-restantes">Restantes</span>
+            <small>Use + apenas para corrigir eliminação incorreta</small>
+          </div>
+          <div class="poker-contador-botoes">
+            <button type="button" class="poker-mais-menos" data-acao="eliminarJogador" aria-label="Diminuir restantes">−</button>
+            <output class="poker-contador-valor" id="valor-restantes" aria-labelledby="rotulo-restantes">9</output>
+            <button type="button" class="poker-mais-menos" data-acao="corrigirEliminacao" aria-label="Aumentar restantes">+</button>
+          </div>
+        </div>
+        <div class="poker-contador">
+          <div class="poker-contador-texto">
+            <span class="poker-contador-rotulo" id="rotulo-entradas">Entradas</span>
+            <small id="detalhe-entradas"></small>
+          </div>
+          <div class="poker-contador-botoes">
+            <button type="button" class="poker-mais-menos" data-acao="removerEntrada" aria-label="Diminuir entradas">−</button>
+            <output class="poker-contador-valor" id="valor-entradas" aria-labelledby="rotulo-entradas">9</output>
+            <button type="button" class="poker-mais-menos" data-acao="adicionarEntrada" aria-label="Aumentar entradas">+</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="poker-cartao" aria-labelledby="titulo-financeiro">
+        <h2 class="poker-cartao-titulo" id="titulo-financeiro">Financeiro do Torneio</h2>
+        <p class="poker-pool"><span>Prize Pool</span> <strong id="prize-pool">R$ 405,00</strong></p>
+        <div class="poker-numeros">
+          <div class="poker-numero">
+            <span>Bruto</span>
+            <strong id="valor-bruto">R$ 450,00</strong>
+          </div>
+          <div class="poker-numero">
+            <span id="rotulo-casa">Casa (10%)</span>
+            <strong id="valor-casa">R$ 45,00</strong>
+          </div>
+        </div>
+        <div class="poker-contador" id="contador-rebuys">
+          <div class="poker-contador-texto">
+            <span class="poker-contador-rotulo" id="rotulo-rebuys">Rebuys</span>
+            <small id="detalhe-rebuys"></small>
+          </div>
+          <div class="poker-contador-botoes">
+            <button type="button" class="poker-mais-menos" data-acao="removerRebuy" aria-label="Diminuir rebuys">−</button>
+            <output class="poker-contador-valor" id="valor-rebuys" aria-labelledby="rotulo-rebuys">0</output>
+            <button type="button" class="poker-mais-menos" data-acao="adicionarRebuy" aria-label="Aumentar rebuys">+</button>
+          </div>
+        </div>
+        <div class="poker-contador" id="contador-addons">
+          <div class="poker-contador-texto">
+            <span class="poker-contador-rotulo" id="rotulo-addons">Add-ons</span>
+            <small id="detalhe-addons"></small>
+          </div>
+          <div class="poker-contador-botoes">
+            <button type="button" class="poker-mais-menos" data-acao="removerAddOn" aria-label="Diminuir add-ons">−</button>
+            <output class="poker-contador-valor" id="valor-addons" aria-labelledby="rotulo-addons">0</output>
+            <button type="button" class="poker-mais-menos" data-acao="adicionarAddOn" aria-label="Aumentar add-ons">+</button>
+          </div>
+        </div>
+        <p class="poker-buyin" id="valor-buyin">Buy-in: R$ 50,00</p>
+      </section>
+
+      <section class="poker-cartao" id="cartao-premios" aria-labelledby="titulo-premios">
+        <h2 class="poker-cartao-titulo" id="titulo-premios">Distribuição de Prêmios</h2>
+        <ol class="poker-premios" id="lista-premios"></ol>
+      </section>
+
+      <button type="button" class="button secondary poker-reiniciar" id="reiniciar-torneio">Reiniciar torneio</button>
+    </div>
+  </div>
+
+  <p class="poker-ajuda">
+    No computador, a barra de espaço inicia ou pausa o relógio. O torneio fica salvo neste
+    navegador: se a página for fechada com o relógio rodando, ao abrir de novo ele continua no
+    ponto em que estaria.
+  </p>
+  <p class="sr-only" aria-live="polite" id="aviso-poker"></p>
+
+  <dialog class="poker-dialogo" id="dialogo-estrutura" aria-labelledby="estrutura-titulo">
+    <div class="poker-dialogo-corpo">
+      <div class="poker-dialogo-cabecalho">
+        <h2 class="poker-dialogo-titulo" id="estrutura-titulo">Estrutura de Blinds</h2>
+        <button type="button" class="poker-botao poker-fechar" id="fechar-estrutura" aria-label="Fechar" title="Fechar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        </button>
+      </div>
+      <p class="hint">Escolha um nível para ir direto até ele.</p>
+      <div class="poker-estrutura-cabecalho" aria-hidden="true">
+        <span>#</span><span>SB / BB</span><span>Duração</span>
+      </div>
+      <ol class="poker-estrutura" id="lista-estrutura"></ol>
+    </div>
+  </dialog>
+
+  <dialog class="poker-dialogo poker-dialogo-largo" id="dialogo-config" aria-labelledby="config-titulo">
+    <form class="poker-dialogo-corpo poker-config" id="form-config" novalidate>
+      <h2 class="poker-dialogo-titulo" id="config-titulo">Configurar Torneio</h2>
+
+      <fieldset class="poker-secao">
+        <legend>Configurações Gerais</legend>
+        <div class="field">
+          <label for="campo-nome">Nome do torneio</label>
+          <input class="input" id="campo-nome" data-campo="nome" maxlength="40" autocomplete="off" placeholder="Ex.: Friday Night Poker" />
+        </div>
+        <div class="poker-campos">
+          <div class="field">
+            <label for="campo-stack">Stack inicial</label>
+            <input class="input" id="campo-stack" data-campo="stack" data-casas="0" inputmode="numeric" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="campo-jogadores">Nº de jogadores</label>
+            <input class="input" id="campo-jogadores" data-campo="jogadores" data-casas="0" inputmode="numeric" autocomplete="off" />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="poker-secao">
+        <legend>Níveis de Blind</legend>
+        <ol class="poker-niveis-edicao" id="lista-niveis-edicao"></ol>
+        <div class="poker-adicionar">
+          <button type="button" class="button secondary" id="adicionar-nivel">+ Nível</button>
+          <button type="button" class="button secondary" id="adicionar-intervalo">+ Intervalo</button>
+        </div>
+      </fieldset>
+
+      <fieldset class="poker-secao">
+        <legend>Financeiro do Torneio</legend>
+        <div class="poker-campos poker-campos-3">
+          <div class="field">
+            <label for="campo-moeda">Moeda</label>
+            <input class="input" id="campo-moeda" data-campo="moeda" maxlength="4" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="campo-buyin">Buy-in</label>
+            <input class="input" id="campo-buyin" data-campo="buyIn" data-casas="2" inputmode="decimal" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="campo-casa">% da casa</label>
+            <input class="input" id="campo-casa" data-campo="casa" data-casas="2" inputmode="decimal" autocomplete="off" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="campo-latereg">Late reg. até o nível (0 = desabilitado)</label>
+          <input class="input poker-campo-curto" id="campo-latereg" data-campo="lateReg" data-casas="0" inputmode="numeric" autocomplete="off" />
+        </div>
+        <label class="poker-opcao"><input type="checkbox" id="campo-rebuy" data-campo="rebuy" /> Rebuy habilitado</label>
+        <div class="poker-campos poker-campos-3" id="grupo-rebuy">
+          <div class="field">
+            <label for="campo-rebuy-valor">Valor do rebuy</label>
+            <input class="input" id="campo-rebuy-valor" data-campo="rebuyValor" data-casas="2" inputmode="decimal" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="campo-rebuy-fichas">Fichas do rebuy</label>
+            <input class="input" id="campo-rebuy-fichas" data-campo="fichasRebuy" data-casas="0" inputmode="numeric" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="campo-rebuy-max">Máx. rebuys/jogador (0 = ∞)</label>
+            <input class="input" id="campo-rebuy-max" data-campo="maxRebuys" data-casas="0" inputmode="numeric" autocomplete="off" />
+          </div>
+        </div>
+        <label class="poker-opcao"><input type="checkbox" id="campo-addon" data-campo="addOn" /> Add-on habilitado</label>
+        <div class="poker-campos" id="grupo-addon">
+          <div class="field">
+            <label for="campo-addon-valor">Valor do add-on</label>
+            <input class="input" id="campo-addon-valor" data-campo="addOnValor" data-casas="2" inputmode="decimal" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="campo-addon-fichas">Fichas do add-on</label>
+            <input class="input" id="campo-addon-fichas" data-campo="fichasAddOn" data-casas="0" inputmode="numeric" autocomplete="off" />
+          </div>
+        </div>
+        <p class="hint">As fichas de rebuy e add-on entram no cálculo do stack médio. Em branco, valem o stack inicial.</p>
+      </fieldset>
+
+      <fieldset class="poker-secao">
+        <legend>Distribuição de Prêmios</legend>
+        <p class="hint">A soma das % deve ser 100. Ao mudar o número de posições, a divisão sugerida é aplicada.</p>
+        <div class="poker-contador">
+          <div class="poker-contador-texto">
+            <span class="poker-contador-rotulo" id="rotulo-posicoes">Posições premiadas</span>
+          </div>
+          <div class="poker-contador-botoes">
+            <button type="button" class="poker-mais-menos" id="menos-posicoes" aria-label="Diminuir posições premiadas">−</button>
+            <output class="poker-contador-valor" id="valor-posicoes" aria-labelledby="rotulo-posicoes">3</output>
+            <button type="button" class="poker-mais-menos" id="mais-posicoes" aria-label="Aumentar posições premiadas">+</button>
+          </div>
+        </div>
+        <ol class="poker-premios-edicao" id="lista-premios-edicao"></ol>
+        <p class="poker-total" id="linha-total"><span>Total</span> <strong id="total-premios">100%</strong></p>
+        <p class="result-message error" id="erro-total" hidden>A soma das porcentagens deve ser 100%.</p>
+      </fieldset>
+
+      <p class="result-message error poker-erro" id="erro-config" role="alert" hidden></p>
+      <div class="poker-dialogo-botoes">
+        <button type="button" class="button secondary" id="cancelar-config">Cancelar</button>
+        <button type="submit" class="button" id="salvar-config">Salvar configuração</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="poker-dialogo poker-dialogo-curto" id="dialogo-confirmacao" aria-labelledby="confirmacao-titulo" aria-describedby="confirmacao-texto">
+    <div class="poker-dialogo-corpo">
+      <h2 class="poker-dialogo-titulo" id="confirmacao-titulo">Reiniciar torneio</h2>
+      <p id="confirmacao-texto"></p>
+      <div class="poker-dialogo-botoes">
+        <button type="button" class="button secondary" id="confirmacao-cancelar">Cancelar</button>
+        <button type="button" class="button" id="confirmacao-ok">OK</button>
+      </div>
+    </div>
+  </dialog>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar o relógio de blinds</h2>
+  <p>
+    Antes de começar, abra <strong>Configurar torneio</strong> e confira o nome, o stack inicial,
+    o número de jogadores, a estrutura de níveis e os valores de buy-in, rebuy e add-on. A
+    estrutura que vem pronta tem 10 níveis de blind de 20 minutos e dois intervalos de 10
+    minutos, começando em 25/50 e terminando em 600/1.200, com ante a partir do terceiro nível.
+  </p>
+  <p>
+    Toque em <strong>Iniciar</strong> e o relógio conta o tempo do nível. Quando ele chega a zero,
+    o próximo nível começa sozinho e a página toca um alerta. No último minuto de cada nível o
+    tempo fica vermelho e aparece o aviso "Último minuto!". Os botões ao lado do principal pulam
+    para o nível anterior ou o seguinte com o tempo cheio, e <strong>Reiniciar nível</strong>
+    para o relógio e volta o nível atual ao começo. Pela <strong>Estrutura de blinds</strong>
+    você vai direto a qualquer nível.
+  </p>
+  <p>
+    Conforme o torneio anda, use os botões − e + para registrar eliminações, novas entradas
+    (late registration), rebuys e add-ons. O stack médio, as fichas em jogo, o prize pool e os
+    prêmios de cada posição se recalculam na hora.
+  </p>
+
+  <h2>Exemplo com os valores padrão</h2>
+  <p>
+    Nove jogadores pagam buy-in de R$ 50,00 e recebem 10.000 fichas cada. Durante o torneio
+    acontecem 3 rebuys e 2 add-ons, também de R$ 50,00 e 10.000 fichas, e três jogadores são
+    eliminados.
+  </p>
+  <ul>
+    <li>Bruto: 9 × 50 + 3 × 50 + 2 × 50 = <strong>R$ 700,00</strong></li>
+    <li>Casa (10%): <strong>R$ 70,00</strong></li>
+    <li>Prize pool: 700 − 70 = <strong>R$ 630,00</strong></li>
+    <li>Prêmios (50%, 30% e 20%): <strong>R$ 315,00</strong>, <strong>R$ 189,00</strong> e <strong>R$ 126,00</strong></li>
+    <li>Fichas em jogo: (9 + 3 + 2) × 10.000 = <strong>140.000</strong></li>
+    <li>Stack médio com 6 jogadores restantes: 140.000 ÷ 6 = <strong>23.333</strong> fichas</li>
+  </ul>
+  <p class="formula">Prize pool = bruto − casa<br />Stack médio = fichas em jogo ÷ jogadores restantes</p>
+  <p>
+    Ao lado do stack médio aparece quantos big blinds ele representa no nível atual. Nos
+    intervalos, a conta usa o big blind do último nível jogado.
+  </p>
+
+  <h2>Como os prêmios são divididos</h2>
+  <p>
+    As contas são feitas em centavos, sem arredondar no meio do caminho. Quando a porcentagem de
+    uma posição não dá um número exato de centavos, cada premiado recebe a parte inteira e os
+    centavos que sobram vão, um por um, para quem tinha a maior fração (em caso de empate, para a
+    melhor colocação). Assim a soma dos prêmios é sempre igual ao prize pool. A parte da casa é
+    arredondada ao centavo mais próximo.
+  </p>
+  <p>
+    Ao escolher de 1 a 20 posições premiadas, a configuração sugere uma divisão comum em
+    torneios, como 65/35 para dois lugares ou 40/23/15/12/10 para cinco. Você pode mudar cada
+    porcentagem, desde que o total feche em 100%.
+  </p>
+
+  <h2>Rebuy, add-on e late registration</h2>
+  <ul>
+    <li>
+      <strong>Rebuy</strong>: recompra de fichas, normalmente para quem perdeu tudo. O limite por
+      jogador vale para o total de entradas; com limite 2 e 9 entradas, são até 18 rebuys. Com
+      limite 0 não há máximo.
+    </li>
+    <li><strong>Add-on</strong>: compra extra de fichas, em geral oferecida uma vez a todos, no intervalo.</li>
+    <li>
+      <strong>Late registration</strong>: novas entradas aceitas até o nível escolhido. O painel
+      mostra se o late reg ainda está aberto; durante um intervalo vale o último nível jogado.
+    </li>
+  </ul>
+
+  <h2>Limitações</h2>
+  <ul>
+    <li>
+      Os navegadores atrasam ou suspendem páginas em segundo plano. Deixe a página aberta e
+      visível durante o torneio: com a aba escondida, o alerta da troca de nível pode tocar com
+      atraso ou não tocar. A contagem em si não se perde, porque é feita pelo relógio do aparelho.
+    </li>
+    <li>
+      Com o relógio rodando, a página pede para manter a tela acesa, mas nem todo navegador
+      atende. O som só é liberado depois de um toque na página.
+    </li>
+    <li>
+      O torneio fica guardado só neste navegador, no aparelho em que você está. Limpar os dados do
+      site apaga a configuração e o andamento.
+    </li>
+    <li>Esta versão está só em português, com valores no formato brasileiro (R$ 1.234,56).</li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Posso mudar a estrutura com o torneio em andamento?</h3>
+  <p>
+    Pode, mas salvar a configuração reinicia o torneio: o relógio volta ao primeiro nível e os
+    contadores são zerados. A página avisa antes de salvar.
+  </p>
+  <h3>Como colocar um intervalo para o add-on?</h3>
+  <p>
+    Na configuração, toque em "+ Intervalo" e ajuste a duração em minutos. O intervalo entra no
+    fim da lista; para colocá-lo no meio, remova e adicione os níveis seguintes de novo.
+  </p>
+  <h3>Dá para usar níveis com minutos quebrados?</h3>
+  <p>
+    Sim. A duração aceita casas decimais: 1,5 minuto vira 1 minuto e 30 segundos, e 12,5 minutos
+    viram 12 minutos e 30 segundos.
+  </p>
+  <h3>O que acontece no fim do último nível?</h3>
+  <p>
+    O relógio para em "Torneio encerrado". O botão de nível anterior reabre o torneio pausado no
+    penúltimo nível, com o tempo cheio; para começar de novo, use Reiniciar torneio.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/pokermanager.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Poker Manager no celular</h2>
+    <p>O mesmo relógio de blinds no Android, com alerta da troca de nível mesmo com a tela desligada e em nove idiomas.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.pokermanager&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

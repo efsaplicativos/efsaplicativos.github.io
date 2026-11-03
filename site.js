@@ -1,6 +1,7 @@
 "use strict";
-const filters = document.querySelector(".filters");
-const cards = Array.from(document.querySelectorAll(".app-card"));
+// Só o catálogo da página inicial tem filtros e busca
+const filters = document.querySelector("#aplicativos .filters");
+const cards = Array.from(document.querySelectorAll("#aplicativos .app-card"));
 const search = document.querySelector("#app-search");
 let selectedCategory = "todos";
 const normalize = (value) =>

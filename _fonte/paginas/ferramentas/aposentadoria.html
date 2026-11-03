@@ -1,0 +1,209 @@
+<!--
+titulo: Calculadora de Aposentadoria: Quanto Juntar — EFS Aplicativos
+descricao: Estime o patrimônio para a renda que você quer na aposentadoria e o aporte mensal necessário, com inflação, rentabilidade real e projeção ano a ano.
+scripts: /assets/numeros.js /assets/ferramentas/aposentadoria-logica.js /assets/ferramentas/aposentadoria.js
+estilos: /assets/ferramentas/aposentadoria.css
+app: Calculadora de Aposentadoria | FinanceApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Aposentadoria</li>
+  </ol>
+  <h1>Calculadora de aposentadoria</h1>
+  <p>
+    Estime quanto patrimônio seria preciso para ter a renda mensal que você quer quando parar
+    de trabalhar e quanto aportar por mês para chegar lá. Tudo é calculado em valores de hoje,
+    já descontada a inflação.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora">
+  <div class="tool-grid">
+    <form class="fields" id="aposentadoria" novalidate>
+      <fieldset class="aposentadoria-grupo">
+        <legend>Você</legend>
+        <div class="field">
+          <label for="idade-atual">Idade atual (anos)</label>
+          <input class="input" id="idade-atual" inputmode="numeric" autocomplete="off" value="30" placeholder="Ex.: 30" />
+        </div>
+        <div class="field">
+          <label for="idade-aposentadoria">Idade para se aposentar (anos)</label>
+          <input class="input" id="idade-aposentadoria" inputmode="numeric" autocomplete="off" value="65" placeholder="Ex.: 65" />
+        </div>
+        <div class="field">
+          <label for="expectativa">Expectativa de vida (anos)</label>
+          <input class="input" id="expectativa" inputmode="numeric" autocomplete="off" value="85" placeholder="Ex.: 85" />
+        </div>
+      </fieldset>
+      <fieldset class="aposentadoria-grupo">
+        <legend>Patrimônio e renda</legend>
+        <div class="field">
+          <label for="renda">Renda mensal desejada, em valores de hoje (R$)</label>
+          <input class="input" id="renda" inputmode="decimal" autocomplete="off" value="5.000,00" placeholder="Ex.: 5.000,00" />
+        </div>
+        <div class="field">
+          <label for="patrimonio">Patrimônio já acumulado (R$)</label>
+          <input class="input" id="patrimonio" inputmode="decimal" autocomplete="off" value="20.000,00" placeholder="Ex.: 20.000,00" />
+        </div>
+        <div class="field">
+          <label for="aporte">Aporte mensal atual (R$, opcional)</label>
+          <input class="input" id="aporte" inputmode="decimal" autocomplete="off" value="500,00" placeholder="Ex.: 500,00" />
+        </div>
+        <div class="field">
+          <label for="outras">Outras rendas mensais: aposentadoria pública, aluguéis… (R$, opcional)</label>
+          <input class="input" id="outras" inputmode="decimal" autocomplete="off" placeholder="Ex.: 1.500,00" />
+        </div>
+      </fieldset>
+      <fieldset class="aposentadoria-grupo">
+        <legend>Inflação e rentabilidade (ao ano)</legend>
+        <div class="field">
+          <label for="inflacao">Inflação (%)</label>
+          <input class="input" id="inflacao" inputmode="decimal" autocomplete="off" value="4" placeholder="Ex.: 4" />
+        </div>
+        <div class="field">
+          <label for="retorno-antes">Rentabilidade até se aposentar (%)</label>
+          <input class="input" id="retorno-antes" inputmode="decimal" autocomplete="off" value="10" placeholder="Ex.: 10" aria-describedby="real-dica" />
+        </div>
+        <div class="field">
+          <label for="retorno-durante">Rentabilidade na aposentadoria (%)</label>
+          <input class="input" id="retorno-durante" inputmode="decimal" autocomplete="off" value="8" placeholder="Ex.: 8" aria-describedby="real-dica" />
+          <span class="hint" id="real-dica">Informe as taxas ao ano. O cálculo desconta a inflação da rentabilidade.</span>
+        </div>
+      </fieldset>
+      <fieldset class="field">
+        <legend>Estratégia na aposentadoria</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-estrategia="perpetuidade" aria-pressed="true">Viver de renda</button>
+          <button type="button" class="filter" data-estrategia="consumir" aria-pressed="false">Consumir o patrimônio</button>
+        </div>
+        <span class="hint" id="estrategia-dica">Você vive apenas dos rendimentos reais e o patrimônio é preservado.</span>
+      </fieldset>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Preencha as idades, a renda desejada e as taxas para ver o resultado.</p>
+    </div>
+  </div>
+  <div id="projecao" hidden>
+    <h2 class="table-title" id="projecao-titulo">Evolução do patrimônio (valores de hoje)</h2>
+    <div class="table-wrap">
+      <table class="data" aria-labelledby="projecao-titulo">
+        <thead>
+          <tr>
+            <th scope="col">Idade</th>
+            <th scope="col">Plano atual</th>
+            <th scope="col">Com o aporte necessário</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como a calculadora faz a conta</h2>
+  <p>
+    O cálculo tem duas fases. Na fase de <strong>acumulação</strong>, do momento atual até a
+    idade de aposentadoria, o patrimônio rende e recebe o aporte todo mês. Na fase de
+    <strong>retirada</strong>, a renda mensal sai do patrimônio no início de cada mês, e o que
+    sobra continua rendendo.
+  </p>
+  <p>
+    Para não misturar valores de épocas diferentes, tudo é feito em <strong>valores de
+    hoje</strong>: a rentabilidade é convertida em rentabilidade real, acima da inflação, pela
+    equação de Fisher, e os aportes e a renda são considerados corrigidos pela inflação ao longo
+    do tempo.
+  </p>
+  <p class="formula">taxa real = (1 + rentabilidade) ÷ (1 + inflação) − 1</p>
+  <p>
+    Com 10% de rentabilidade e 4% de inflação ao ano, a taxa real é de cerca de 5,77% ao ano,
+    e não 6%. A taxa real anual é então convertida na taxa mensal equivalente.
+  </p>
+
+  <h2>Viver de renda ou consumir o patrimônio</h2>
+  <ul>
+    <li>
+      <strong>Viver de renda:</strong> o patrimônio necessário é aquele cujo rendimento real
+      paga a renda todos os meses sem diminuir o saldo. Com retiradas no início do mês, ele é
+      renda × (1 + r) ÷ r, sendo r a taxa real mensal.
+    </li>
+    <li>
+      <strong>Consumir o patrimônio:</strong> o saldo é gasto aos poucos e chega a zero na
+      expectativa de vida. O patrimônio necessário é o valor presente das retiradas desse
+      período, por isso é menor.
+    </li>
+  </ul>
+  <p>
+    As outras rendas mensais, como a aposentadoria pública ou aluguéis, são descontadas da
+    renda desejada: o patrimônio só precisa gerar a diferença.
+  </p>
+
+  <h2>Exemplo de cálculo</h2>
+  <p>
+    Uma pessoa de 30 anos quer parar aos 65, com expectativa de vida de 85 anos e renda de
+    R$ 5.000,00 por mês em valores de hoje. Ela já tem R$ 20.000,00 e aporta R$ 500,00 por mês.
+    Com inflação de 4% ao ano, rentabilidade de 10% ao ano até a aposentadoria e de 8% ao ano
+    depois dela:
+  </p>
+  <ul>
+    <li>
+      Para viver de renda, o patrimônio necessário é de cerca de R$ 1.592.312,61 em valores de
+      hoje. O plano atual chega a R$ 795.741,34, e o aporte que fecharia a conta é de
+      R$ 1.109,64 por mês.
+    </li>
+    <li>
+      Para consumir o patrimônio até os 85 anos, o necessário cai para cerca de R$ 843.764,00,
+      com aporte de R$ 536,75 por mês.
+    </li>
+    <li>
+      Com o plano atual, o patrimônio projetado permitiria retirar R$ 5.000,00 por mês até
+      cerca dos 83,4 anos.
+    </li>
+  </ul>
+  <p>
+    Em valores nominais, os mesmos R$ 5.000,00 de hoje equivalem a cerca de R$ 19.730,44 por
+    mês daqui a 35 anos com 4% de inflação ao ano. A calculadora mostra os dois jeitos.
+  </p>
+
+  <h2>Limitações</h2>
+  <p class="note">
+    O resultado é uma estimativa com taxas fixas por décadas, o que não acontece na prática:
+    inflação e rentabilidade variam ano a ano. A calculadora não considera impostos, taxas de
+    administração, regras de previdência pública ou privada, nem mudanças na renda ao longo da
+    vida. Use-a para entender a ordem de grandeza e o efeito de cada variável, e não como
+    recomendação de investimento.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>O que significa "o dinheiro dura até os X anos"?</h3>
+  <p>
+    É a idade em que o patrimônio projetado com o plano atual acabaria retirando a renda que o
+    patrimônio precisa gerar. Se o rendimento real cobre as retiradas, o patrimônio não se
+    esgota.
+  </p>
+  <h3>Por que o aporte necessário pode ser zero?</h3>
+  <p>
+    Quando o patrimônio que você já tem, rendendo até a aposentadoria, já chega ao patrimônio
+    necessário, não é preciso aportar mais nada. A sobra aparece no resultado.
+  </p>
+  <h3>Meus dados são enviados para algum lugar?</h3>
+  <p>
+    Não. Todo o cálculo é feito no seu navegador e nada do que você digita é enviado para a
+    EFS Aplicativos.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Aposentadoria com gráfico da projeção, juros com aportes, financiamento e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

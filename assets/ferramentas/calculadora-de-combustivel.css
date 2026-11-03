@@ -1,0 +1,50 @@
+/* Calculadora de combustível — complementos de assets/web.css, só dentro de .combustivel */
+
+.combustivel .combustivel-abas {
+  margin-bottom: 22px;
+}
+.combustivel .combustivel-dica {
+  margin: 0;
+}
+.combustivel-par {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.combustivel-par[hidden] {
+  display: none;
+}
+.combustivel-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.combustivel-check input {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--blue);
+  cursor: pointer;
+}
+.combustivel-check input:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.combustivel .level-info {
+  color: #93c5fd;
+  background: rgba(59, 130, 246, 0.16);
+}
+:root[data-theme="light"] .combustivel .level-info {
+  color: #1e40af;
+}
+
+@media (max-width: 420px) {
+  .combustivel-par {
+    grid-template-columns: 1fr;
+  }
+}

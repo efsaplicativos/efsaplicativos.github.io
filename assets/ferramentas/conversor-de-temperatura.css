@@ -1,0 +1,55 @@
+/* Conversor de temperatura — complementos de assets/web.css, só dentro de .temperatura */
+
+.temperatura .temperatura-instrucao {
+  display: block;
+  margin: 0 0 16px;
+  font-size: 14px;
+}
+.temperatura-campos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.temperatura .temperatura-resumo {
+  margin-top: 20px;
+}
+.temperatura-equivale {
+  margin-top: 4px;
+  font-size: clamp(20px, 2.6vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+.temperatura-resumo .result-message.error {
+  margin-top: 10px;
+}
+.temperatura-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 20px;
+}
+.temperatura-rotulo {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+}
+.temperatura-acoes .button {
+  min-height: 44px;
+  margin-left: auto;
+}
+
+@media (max-width: 860px) {
+  .temperatura-campos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 380px) {
+  .temperatura-campos {
+    gap: 12px;
+  }
+  .temperatura-acoes .button {
+    margin-left: 0;
+  }
+}

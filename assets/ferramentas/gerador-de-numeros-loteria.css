@@ -1,0 +1,171 @@
+/* Gerador de números da loteria: bolas, trevos, colunas e volante da Loteca. */
+
+.loteria {
+  --loteria-bola: linear-gradient(135deg, #6d28d9 0%, #2563eb 100%);
+  --loteria-tamanho: 46px;
+}
+
+.loteria .loteria-aviso {
+  margin: 0 0 18px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--r-sm);
+}
+
+.loteria .loteria-modalidades {
+  margin: 0 0 22px;
+}
+.loteria .loteria-modalidades .filter {
+  min-height: 42px;
+  font-size: 14px;
+}
+
+.loteria .loteria-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.loteria .loteria-botoes .button {
+  flex: 1 1 180px;
+}
+
+.loteria .loteria-chance {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-2);
+}
+
+/* ---------- Números ---------- */
+.loteria .loteria-bolas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 16px;
+  padding: 0;
+  list-style: none;
+}
+.loteria .loteria-bola {
+  display: grid;
+  place-items: center;
+  width: var(--loteria-tamanho);
+  height: var(--loteria-tamanho);
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  background: var(--loteria-bola);
+  border-radius: 50%;
+  box-shadow: var(--shadow-xs);
+  animation: loteria-surgir 0.25s var(--ease, ease-out) both;
+}
+.loteria .loteria-muitas {
+  --loteria-tamanho: 38px;
+  gap: 6px;
+}
+.loteria .loteria-muitas .loteria-bola {
+  font-size: 15px;
+}
+.loteria .loteria-trevos .loteria-bola {
+  color: var(--accent-ink);
+  background: var(--grad-warm);
+  border-radius: 14px;
+}
+
+/* Super Sete: uma bola por coluna, com o nome em cima */
+.loteria .loteria-colunas {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  margin: 8px 0 16px;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+.loteria .loteria-colunas li {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+}
+.loteria .loteria-coluna-nome {
+  font-size: 11px;
+  color: var(--muted);
+}
+.loteria .loteria-colunas .loteria-bola {
+  width: 100%;
+  max-width: 42px;
+  height: auto;
+  aspect-ratio: 1;
+  font-size: 16px;
+}
+
+/* Loteca: volante com as três colunas */
+.loteria .loteria-loteca {
+  max-height: none;
+  margin: 8px 0 16px;
+}
+.loteria .loteria-loteca th,
+.loteria .loteria-loteca td {
+  padding: 6px 10px;
+  text-align: center;
+}
+.loteria .loteria-loteca th:first-child {
+  text-align: left;
+}
+.loteria .loteria-loteca abbr {
+  text-decoration: none;
+}
+.loteria .loteria-loteca td {
+  color: var(--muted);
+}
+.loteria .loteria-loteca td.marcado {
+  font-weight: 800;
+  color: #fff;
+  background: var(--loteria-bola);
+}
+
+.loteria .loteria-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-top: 14px;
+}
+.loteria .loteria-acoes .hint {
+  margin: 0;
+}
+
+@keyframes loteria-surgir {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loteria .loteria-bola {
+    animation: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .loteria {
+    --loteria-tamanho: 42px;
+  }
+  .loteria .loteria-muitas {
+    --loteria-tamanho: 34px;
+  }
+  .loteria .loteria-colunas {
+    gap: 4px;
+  }
+  .loteria .loteria-loteca th,
+  .loteria .loteria-loteca td {
+    padding: 6px 8px;
+  }
+}

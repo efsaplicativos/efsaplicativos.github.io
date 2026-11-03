@@ -1,0 +1,381 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/ferramentas/equacoes.html. Edite lá. -->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050a1e" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        if (theme === "light" || theme === "dark") {
+          root.setAttribute("data-theme", theme);
+        }
+        if (theme === "light") {
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#f3f6ff");
+        }
+      })();
+    </script>
+    <title>Resolver Equações Online: 1º, 2º e 3º Grau e Sistemas — EFS Aplicativos</title>
+    <meta name="description" content="Resolva equações do 1º, 2º e 3º grau e sistemas lineares 2×2 e 3×3 com raízes reais e complexas, gráfico, vértice e o passo a passo com Bhaskara e Cramer." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/ferramentas/equacoes/" />
+    <meta property="og:title" content="Resolver Equações Online: 1º, 2º e 3º Grau e Sistemas — EFS Aplicativos" />
+    <meta property="og:description" content="Resolva equações do 1º, 2º e 3º grau e sistemas lineares 2×2 e 3×3 com raízes reais e complexas, gráfico, vértice e o passo a passo com Bhaskara e Cramer." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/ferramentas/equacoes/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
+    <link rel="stylesheet" href="/assets/web.css?v=8aa4a1ab9334" />
+    <link rel="stylesheet" href="/assets/ferramentas/equacoes.css?v=dc7ae07a1fe4" />
+    <script src="/site.js?v=b4f7be01c332" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/numeros.js?v=ab57092e489e" defer></script>
+    <script src="/assets/ferramentas/matematica-comum.js?v=0eae9ffeb3f8" defer></script>
+    <script src="/assets/ferramentas/equacoes-logica.js?v=2a729de68b65" defer></script>
+    <script src="/assets/ferramentas/equacoes.js?v=bbf8e4d1bb6d" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Resolver equações", "url": "https://efsaplicativos.com.br/ferramentas/equacoes/", "description": "Resolva equações do 1º, 2º e 3º grau e sistemas lineares 2×2 e 3×3 com raízes reais e complexas, gráfico, vértice e o passo a passo com Bhaskara e Cramer.", "applicationCategory": "EducationalApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas" aria-current="page">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Ativar tema claro"
+            title="Alternar tema claro/escuro"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Equações</li>
+  </ol>
+  <h1>Resolver equações online</h1>
+  <p>
+    Digite os coeficientes e veja as raízes na hora, com gráfico e passo a passo: equações do 1º, 2º
+    e 3º grau (inclusive com raízes complexas) e sistemas lineares com duas ou três incógnitas.
+  </p>
+</header>
+
+<section class="tool eq" id="equacoes" aria-label="Resolver equações">
+  <div class="segmented eq-abas" role="group" aria-label="Tipo de equação">
+    <button type="button" class="filter" data-aba="linear" aria-pressed="false">1º grau</button>
+    <button type="button" class="filter active" data-aba="quadratica" aria-pressed="true">2º grau</button>
+    <button type="button" class="filter" data-aba="cubica" aria-pressed="false">3º grau</button>
+    <button type="button" class="filter" data-aba="sistema" aria-pressed="false">Sistemas</button>
+  </div>
+
+  <div class="tool-grid">
+    <form class="fields" id="eq-form" novalidate>
+      <div class="eq-painel" id="eq-polinomio">
+        <p class="eq-modelo" id="eq-modelo">ax² + bx + c = 0</p>
+        <div class="eq-coeficientes">
+          <div class="field" data-coef="0">
+            <label for="eq-c0">a</label>
+            <input class="input" id="eq-c0" inputmode="decimal" autocomplete="off" placeholder="0" />
+          </div>
+          <div class="field" data-coef="1">
+            <label for="eq-c1">b</label>
+            <input class="input" id="eq-c1" inputmode="decimal" autocomplete="off" placeholder="0" />
+          </div>
+          <div class="field" data-coef="2">
+            <label for="eq-c2">c</label>
+            <input class="input" id="eq-c2" inputmode="decimal" autocomplete="off" placeholder="0" />
+          </div>
+          <div class="field" data-coef="3" hidden>
+            <label for="eq-c3">d</label>
+            <input class="input" id="eq-c3" inputmode="decimal" autocomplete="off" placeholder="0" />
+          </div>
+        </div>
+      </div>
+
+      <div class="eq-painel" id="eq-sistema" hidden>
+        <fieldset class="field">
+          <legend>Incógnitas</legend>
+          <div class="segmented">
+            <button type="button" class="filter active" data-tamanho="2" aria-pressed="true">2 × 2</button>
+            <button type="button" class="filter" data-tamanho="3" aria-pressed="false">3 × 3</button>
+          </div>
+        </fieldset>
+        <fieldset class="eq-linha" data-linha="0">
+          <legend>Equação 1</legend>
+          <div class="eq-linha-campos">
+            <div class="field" data-coluna="0"><label for="eq-s0-0"><span class="sr-only">Equação 1, coeficiente de </span>x</label><input class="input" id="eq-s0-0" inputmode="decimal" autocomplete="off" placeholder="0" /></div>
+            <div class="field" data-coluna="1"><label for="eq-s0-1"><span class="sr-only">Equação 1, coeficiente de </span>y</label><input class="input" id="eq-s0-1" inputmode="decimal" autocomplete="off" placeholder="0" /></div>
+            <div class="field" data-coluna="2"><label for="eq-s0-2"><span class="sr-only">Equação 1, coeficiente de </span>z</label><input class="input" id="eq-s0-2" inputmode="decimal" autocomplete="off" placeholder="0" /></div>
+            <div class="field" data-coluna="3"><label for="eq-s0-3"><span class="sr-only">Equação 1, termo independente </span>=</label><input class="input" id="eq-s0-3" inputmode="decimal" autocomplete="off" placeholder="0" /></div>
+          </div>
+        </fieldset>
+        <fieldset class="eq-linha" data-linha="1">
+          <legend>Equação 2</legend>
+          <div class="eq-linha-campos">
+            <div class="field" data-coluna="0"><label for="eq-s1-0"><span class="sr-only">Equação 2, coeficiente de </span>x</label><input class="input" id="eq-s1-0" inputmode="decimal" autocomplete="off" placeholder="0" /></div>
+            <div class="field" data-coluna="1"><label for="eq-s1-1"><span class="sr-only">Equação 2, coeficiente de </span>y</label><input class="input" id="eq-s1-1" inputmode="decimal" autocomplete="off" placeholder="0" /></div>
+            <div class="field" data-coluna="2"><label for="eq-s1-2"><span class="sr-only">Equação 2, coeficiente de </span>z</label><input class="input" id="eq-s1-2" inputmode="decimal" autocomplete="off" placeholder="0" /></div>
+            <div class="field" data-coluna="3"><label for="eq-s1-3"><span class="sr-only">Equação 2, termo independente </span>=</label><input class="input" id="eq-s1-3" inputmode="decimal" autocomplete="off" placeholder="0" /></div>
+          </div>
+        </fieldset>
+        <fieldset class="eq-linha" data-linha="2">
+          <legend>Equação 3</legend>
+          <div class="eq-linha-campos">
+            <div class="field" data-coluna="0"><label for="eq-s2-0"><span class="sr-only">Equação 3, coeficiente de </span>x</label><input class="input" id="eq-s2-0" inputmode="decimal" autocomplete="off" placeholder="0" /></div>
+            <div class="field" data-coluna="1"><label for="eq-s2-1"><span class="sr-only">Equação 3, coeficiente de </span>y</label><input class="input" id="eq-s2-1" inputmode="decimal" autocomplete="off" placeholder="0" /></div>
+            <div class="field" data-coluna="2"><label for="eq-s2-2"><span class="sr-only">Equação 3, coeficiente de </span>z</label><input class="input" id="eq-s2-2" inputmode="decimal" autocomplete="off" placeholder="0" /></div>
+            <div class="field" data-coluna="3"><label for="eq-s2-3"><span class="sr-only">Equação 3, termo independente </span>=</label><input class="input" id="eq-s2-3" inputmode="decimal" autocomplete="off" placeholder="0" /></div>
+          </div>
+        </fieldset>
+      </div>
+
+      <p class="hint">Campos vazios valem 0. Aceita números negativos e decimais (vírgula ou ponto).</p>
+      <div class="eq-acoes">
+        <button type="button" class="button secondary" id="eq-sinal" title="Troca o sinal do último campo editado">± Trocar sinal</button>
+        <button type="button" class="button secondary" id="eq-limpar">Limpar</button>
+      </div>
+    </form>
+
+    <div class="result eq-resultado" id="eq-resultado">
+      <p class="result-label">Equação</p>
+      <p class="eq-equacao" id="eq-equacao"></p>
+      <p class="eq-aviso" id="eq-aviso" hidden></p>
+      <p class="eq-natureza" id="eq-natureza" hidden></p>
+      <p class="result-value" id="eq-principal" hidden></p>
+      <dl class="result-list eq-raizes" id="eq-raizes"></dl>
+      <dl class="result-list eq-detalhes" id="eq-detalhes"></dl>
+      <p class="result-message" id="eq-mensagem" hidden></p>
+      <p class="sr-only" aria-live="polite" id="eq-anuncio"></p>
+    </div>
+  </div>
+
+  <figure class="eq-grafico" id="eq-grafico" hidden>
+    <figcaption class="eq-grafico-topo">
+      <span class="eq-grafico-titulo">Gráfico</span>
+      <span class="eq-legenda" id="eq-legenda"></span>
+    </figcaption>
+    <div class="eq-grafico-area" id="eq-grafico-area"></div>
+    <p class="hint" id="eq-leitura">Passe o mouse ou o dedo sobre o gráfico para ler os valores. Com o gráfico em foco, as setas movem a leitura.</p>
+  </figure>
+
+  <div class="eq-passos-bloco" id="eq-passos-bloco" hidden>
+    <h2 class="table-title">Passo a passo</h2>
+    <ol class="eq-passos" id="eq-passos"></ol>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar</h2>
+  <p>
+    Escolha o tipo de equação e digite os coeficientes. O resultado aparece enquanto você digita,
+    junto com o gráfico e o passo a passo. Campos vazios valem zero, então para resolver
+    x² − 9 = 0 basta preencher a = 1 e c = −9. Os números aceitam vírgula ou ponto decimal e
+    notação científica, como 1,5e3 para 1500.
+  </p>
+  <p>
+    No celular, alguns teclados numéricos não têm o sinal de menos. Nesse caso, digite o número e
+    toque em <strong>± Trocar sinal</strong>: o último campo editado troca de sinal.
+  </p>
+
+  <h2>Equação do 1º grau</h2>
+  <p>
+    Uma equação do tipo ax + b = 0 tem uma única raiz quando a é diferente de zero. Basta isolar
+    o termo com x e dividir pelo coeficiente:
+  </p>
+  <p class="formula">ax + b = 0  →  x = −b / a</p>
+  <p>
+    Exemplo: em 2x − 8 = 0, o termo isolado fica 2x = 8 e, dividindo por 2, x = 4. Se a for zero, não
+    existe x: com b ≠ 0 a equação é impossível, e com b = 0 ela vira a identidade 0 = 0, verdadeira
+    para qualquer valor. O gráfico mostra a reta y = ax + b; a raiz é o ponto onde ela cruza o eixo x.
+  </p>
+
+  <h2>Equação do 2º grau e a fórmula de Bhaskara</h2>
+  <p>
+    Para ax² + bx + c = 0, o discriminante Δ decide quantas raízes reais existem: duas quando Δ é
+    positivo, uma raiz dupla quando Δ é zero, e nenhuma real (duas complexas conjugadas) quando Δ é
+    negativo.
+  </p>
+  <p class="formula">Δ = b² − 4ac     x = (−b ± √Δ) / 2a</p>
+  <p>
+    Exemplo: em x² − 5x + 6 = 0, Δ = (−5)² − 4 · 1 · 6 = 1 e x = (5 ± 1) / 2, ou seja, 2 e 3. O
+    vértice da parábola fica em (2,5; −0,25), a forma fatorada é (x − 2)(x − 3) e a forma
+    canônica é (x − 2,5)² − 0,25. Além das raízes, a ferramenta mostra soma e produto (−b/a e c/a),
+    concavidade, eixo de simetria e o valor mínimo ou máximo.
+  </p>
+  <p>
+    Com Δ negativo, como em x² + 2x + 5 = 0 (Δ = −16), as raízes são −1 + 2i e −1 − 2i, em que i é
+    a unidade imaginária (i² = −1). A parábola, nesse caso, não toca o eixo x.
+  </p>
+
+  <h2>Equação do 3º grau</h2>
+  <p>
+    Toda equação ax³ + bx² + cx + d = 0 tem pelo menos uma raiz real. A conta segue o caminho
+    clássico: divide tudo por a, troca x por t − b/(3a) para chegar à forma reduzida t³ + pt + q = 0
+    e calcula o discriminante dessa forma.
+  </p>
+  <p class="formula">Δ = (q/2)² + (p/3)³</p>
+  <p>
+    Quando Δ ≥ 0, a fórmula de Cardano dá uma raiz real; quando Δ &lt; 0, usa-se o método
+    trigonométrico, que evita raízes de números negativos. Essa raiz é refinada pelo método de
+    Newton, e o polinômio é dividido por (x − r), sobrando uma equação do 2º grau para as outras duas
+    raízes. Atenção ao sinal: aqui Δ &lt; 0 indica três raízes reais distintas, o contrário do que
+    acontece no 2º grau.
+  </p>
+  <p>
+    Exemplo: x³ − 6x² + 11x − 6 = 0 tem as raízes 1, 2 e 3. Já x³ − 1 = 0 tem uma raiz real (1) e
+    duas complexas, −0,5 ± 0,866i.
+  </p>
+
+  <h2>Sistemas lineares 2×2 e 3×3</h2>
+  <p>
+    Na aba <strong>Sistemas</strong>, cada linha é uma equação: os coeficientes de x, y e z e, depois
+    do sinal de igual, o termo independente. A solução sai pela regra de Cramer, quando o
+    determinante principal D é diferente de zero, e é confirmada pelo escalonamento de Gauss-Jordan.
+  </p>
+  <p class="formula">x = Dx / D     y = Dy / D     z = Dz / D</p>
+  <p>
+    Exemplo: para 2x + y = 5 e x − y = 1, D = 2 · (−1) − 1 · 1 = −3, Dx = −6 e Dy = −3, então x = 2 e
+    y = 1. No caso 2×2, o gráfico mostra as duas retas e o ponto onde se cruzam.
+  </p>
+  <p>
+    Se D = 0, a regra de Cramer não se aplica e a classificação vem do posto das matrizes: quando o
+    posto da matriz dos coeficientes é igual ao da matriz aumentada, mas menor que o número de
+    incógnitas, o sistema tem infinitas soluções; quando os postos são diferentes, não há solução.
+  </p>
+
+  <h2>Precisão e limitações</h2>
+  <ul>
+    <li>As contas usam números de ponto flutuante com cerca de 15 algarismos; o resultado é exibido com até 10 algarismos significativos.</li>
+    <li>Valores menores que 10⁻¹² em módulo são mostrados como 0, para não aparecer resíduo de arredondamento como 0,0000000000001.</li>
+    <li>Raízes múltiplas do 3º grau são mais sensíveis: podem sair com erro na sexta casa decimal, e raízes que diferem menos de 10⁻⁷ são tratadas como iguais.</li>
+    <li>O gráfico escolhe sozinho um intervalo que mostra todas as raízes e o vértice ou os pontos críticos.</li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>O que significa o i nas raízes?</h3>
+  <p>
+    É a unidade imaginária, definida por i² = −1. Raízes como −1 + 2i aparecem quando a equação não
+    tem solução no conjunto dos números reais; elas sempre vêm em pares conjugados quando os
+    coeficientes são reais.
+  </p>
+  <h3>E se o coeficiente a for zero?</h3>
+  <p>
+    A equação perde o grau mais alto e é resolvida com o grau imediatamente menor. Por exemplo, na
+    aba de 2º grau, 0x² + 2x − 8 = 0 é resolvida como 2x − 8 = 0, com um aviso no resultado.
+  </p>
+  <h3>Por que algumas raízes aparecem como 0,3333333333?</h3>
+  <p>
+    Porque o resultado tem até 10 algarismos significativos. Raízes irracionais ou dízimas, como 1/3
+    ou √2, não têm representação decimal finita, então são mostradas arredondadas.
+  </p>
+  <h3>Dá para resolver sistemas com mais de três incógnitas?</h3>
+  <p>
+    Aqui não. Para sistemas maiores, monte a matriz dos coeficientes na ferramenta de
+    <a href="/ferramentas/matrizes/">matrizes</a>, que trabalha com até 6 × 6 e calcula determinante e
+    inversa.
+  </p>
+  <h3>Os números que digito são enviados para algum lugar?</h3>
+  <p>
+    Não. Tudo é calculado no seu navegador. Os últimos coeficientes ficam guardados apenas neste
+    aparelho, para você continuar de onde parou.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Equações, matrizes, estatística, geometria, calculadora científica e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

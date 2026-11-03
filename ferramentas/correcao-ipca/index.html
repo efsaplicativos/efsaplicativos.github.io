@@ -1,0 +1,312 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/ferramentas/correcao-ipca.html. Edite lá. -->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050a1e" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        if (theme === "light" || theme === "dark") {
+          root.setAttribute("data-theme", theme);
+        }
+        if (theme === "light") {
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#f3f6ff");
+        }
+      })();
+    </script>
+    <title>Correção pelo IPCA: Calculadora de Inflação — EFS Aplicativos</title>
+    <meta name="description" content="Corrija valores pelo IPCA, INPC ou IPCA-15 com os dados oficiais do IBGE: inflação acumulada entre dois meses, fator de correção e variação mês a mês." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/ferramentas/correcao-ipca/" />
+    <meta property="og:title" content="Correção pelo IPCA: Calculadora de Inflação — EFS Aplicativos" />
+    <meta property="og:description" content="Corrija valores pelo IPCA, INPC ou IPCA-15 com os dados oficiais do IBGE: inflação acumulada entre dois meses, fator de correção e variação mês a mês." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/ferramentas/correcao-ipca/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
+    <link rel="stylesheet" href="/assets/web.css?v=8aa4a1ab9334" />
+    <link rel="stylesheet" href="/assets/ferramentas/correcao-ipca.css?v=ed154933ef68" />
+    <script src="/site.js?v=b4f7be01c332" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/numeros.js?v=ab57092e489e" defer></script>
+    <script src="/assets/ferramentas/correcao-ipca-logica.js?v=a23eaa724d3c" defer></script>
+    <script src="/assets/ferramentas/correcao-ipca.js?v=b1843bffb2bd" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Correção pelo IPCA", "url": "https://efsaplicativos.com.br/ferramentas/correcao-ipca/", "description": "Corrija valores pelo IPCA, INPC ou IPCA-15 com os dados oficiais do IBGE: inflação acumulada entre dois meses, fator de correção e variação mês a mês.", "applicationCategory": "FinanceApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas" aria-current="page">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Ativar tema claro"
+            title="Alternar tema claro/escuro"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Correção pelo IPCA</li>
+  </ol>
+  <h1>Correção de valores pelo IPCA</h1>
+  <p>
+    Atualize um valor pela inflação entre dois meses ou veja quanto os preços subiram no
+    período. Os índices mensais vêm direto do IBGE: IPCA, INPC ou IPCA-15.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora">
+  <div class="tool-grid">
+    <form class="fields" id="correcao-ipca" novalidate>
+      <fieldset class="field">
+        <legend>Índice</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-indice="IPCA" aria-pressed="true">IPCA</button>
+          <button type="button" class="filter" data-indice="INPC" aria-pressed="false">INPC</button>
+          <button type="button" class="filter" data-indice="IPCA15" aria-pressed="false">IPCA-15</button>
+        </div>
+        <span class="hint" id="indice-dica">IPCA: inflação oficial do Brasil (famílias com renda de 1 a 40 salários mínimos).</span>
+        <div class="correcao-ipca-ultimo">
+          <p class="correcao-ipca-situacao" id="ultimo-mes" aria-live="polite">Consultando o último mês divulgado…</p>
+          <button type="button" class="button secondary" id="tentar-ultimo" hidden>Tentar novamente</button>
+        </div>
+      </fieldset>
+      <fieldset class="field">
+        <legend>O que calcular</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-modo="corrigir" aria-pressed="true">Corrigir valor</button>
+          <button type="button" class="filter" data-modo="acumulada" aria-pressed="false">Só a inflação</button>
+          <button type="button" class="filter" data-modo="deflacionar" aria-pressed="false">Valor no passado</button>
+        </div>
+        <span class="hint" id="modo-dica">Atualiza um valor do mês inicial para o poder de compra do mês final.</span>
+      </fieldset>
+      <div class="field" id="campo-valor">
+        <label for="valor" id="rotulo-valor">Valor no mês inicial (R$)</label>
+        <input class="input" id="valor" inputmode="decimal" autocomplete="off" value="1.000,00" placeholder="Ex.: 1.000,00" />
+      </div>
+      <fieldset class="field">
+        <legend>Mês inicial</legend>
+        <div class="input-row correcao-ipca-mes">
+          <select class="select" id="inicio-mes" aria-label="Mês inicial: mês"></select>
+          <select class="select" id="inicio-ano" aria-label="Mês inicial: ano"></select>
+        </div>
+      </fieldset>
+      <fieldset class="field">
+        <legend>Mês final</legend>
+        <div class="input-row correcao-ipca-mes">
+          <select class="select" id="fim-mes" aria-label="Mês final: mês"></select>
+          <select class="select" id="fim-ano" aria-label="Mês final: ano"></select>
+        </div>
+        <span class="hint">Os meses inicial e final entram no cálculo (ex.: de janeiro a dezembro = 12 meses).</span>
+      </fieldset>
+    </form>
+    <div class="correcao-ipca-lado">
+      <div class="result" id="resultado" aria-live="polite">
+        <p class="result-message">Consultando o último mês divulgado…</p>
+      </div>
+      <p class="hint correcao-ipca-fonte">
+        Fonte: IBGE – SIDRA (variação mensal, Brasil). Os dados consultados ficam salvos neste
+        navegador para uso sem conexão.
+      </p>
+    </div>
+  </div>
+  <div id="detalhes" hidden>
+    <h2 class="table-title" id="detalhes-titulo">Variação mês a mês</h2>
+    <button type="button" class="button secondary" id="alternar-tabela" aria-expanded="false" aria-controls="tabela-meses">Mostrar tabela</button>
+    <div class="table-wrap correcao-ipca-tabela" id="tabela-meses" hidden>
+      <table class="data" aria-labelledby="detalhes-titulo">
+        <thead>
+          <tr>
+            <th scope="col">Mês</th>
+            <th scope="col">No mês</th>
+            <th scope="col">Acumulado</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como a correção é calculada</h2>
+  <p>
+    O IBGE divulga a variação de preços de cada mês. Para saber a inflação de um período, as
+    variações não são somadas: elas são <strong>multiplicadas</strong>, porque cada mês incide
+    sobre os preços já reajustados no mês anterior. O resultado é o fator de correção.
+  </p>
+  <p class="formula">fator = (1 + i₁) × (1 + i₂) × … × (1 + iₙ)</p>
+  <p class="formula">inflação acumulada = (fator − 1) × 100</p>
+  <p>
+    Para corrigir um valor do mês inicial até o mês final, ele é multiplicado pelo fator. Para
+    fazer o caminho inverso, ou seja, saber quanto um valor de hoje valia no passado, ele é
+    dividido pelo fator. Os meses inicial e final entram na conta: de janeiro a março são três
+    variações mensais.
+  </p>
+  <p>
+    A calculadora também mostra a <strong>média mensal</strong>, que é a taxa que, repetida
+    todos os meses, daria a mesma inflação acumulada, e a <strong>inflação anualizada</strong>,
+    o equivalente a 12 meses nesse ritmo.
+  </p>
+
+  <h2>Exemplo de cálculo</h2>
+  <p>
+    Suponha variações de 0,16% em janeiro, 1,31% em fevereiro e 0,56% em março. O fator do
+    trimestre é 1,0016 × 1,0131 × 1,0056 = 1,020403, o que dá uma inflação acumulada de cerca de
+    2,04%, e não 2,03%, como a soma simples sugeriria.
+  </p>
+  <p>
+    Um valor de R$ 1.000,00 de janeiro corrigido até março vira R$ 1.020,40. No sentido inverso,
+    R$ 1.000,00 de março equivaliam a R$ 980,00 em janeiro. Na calculadora, as variações são as
+    publicadas pelo IBGE para os meses escolhidos.
+  </p>
+
+  <h2>Qual índice usar</h2>
+  <ul>
+    <li>
+      <strong>IPCA:</strong> é a inflação oficial do Brasil, usada como referência para a meta
+      de inflação. Mede os preços para famílias com renda de 1 a 40 salários mínimos.
+    </li>
+    <li>
+      <strong>INPC:</strong> considera famílias com renda de 1 a 5 salários mínimos e costuma
+      ser usado em reajustes de salários e de benefícios do INSS.
+    </li>
+    <li>
+      <strong>IPCA-15:</strong> é uma prévia do IPCA, com preços coletados da segunda quinzena
+      do mês anterior até a primeira quinzena do mês de referência.
+    </li>
+  </ul>
+  <p>
+    Contratos de aluguel, financiamentos e outros acordos costumam dizer qual índice usar e em
+    que data o reajuste vale. Quando houver regra no contrato, é ela que vale.
+  </p>
+
+  <h2>Limitações</h2>
+  <p class="note">
+    A correção usa as variações mensais completas, do primeiro ao último mês escolhido, sem
+    frações de mês nem dias. Valores anteriores a julho de 1994 estavam em outras moedas
+    (cruzeiro, cruzado e outras), e a calculadora não faz a conversão entre elas. É preciso
+    estar conectado para consultar meses que ainda não foram salvos neste navegador.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Por que não consigo escolher o mês atual?</h3>
+  <p>
+    O IBGE divulga cada índice alguns dias depois do fim do mês. A calculadora consulta qual é
+    o último mês publicado e permite escolher meses até ele.
+  </p>
+  <h3>De onde vêm os dados?</h3>
+  <p>
+    Da API do SIDRA, o sistema de dados do IBGE, com a variação mensal para o Brasil. Os meses
+    já consultados ficam guardados neste navegador; se a conexão falhar, a página avisa e usa
+    esses dados salvos.
+  </p>
+  <h3>Por que o resultado é diferente do que a soma das taxas daria?</h3>
+  <p>
+    Porque a inflação é composta: a variação de cada mês incide sobre os preços já corrigidos.
+    Em períodos longos, a diferença entre multiplicar e somar fica grande.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Correção pelo IPCA com gráfico do período, aposentadoria, financiamento e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

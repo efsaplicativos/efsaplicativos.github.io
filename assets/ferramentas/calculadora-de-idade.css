@@ -1,0 +1,64 @@
+/* Calculadora de idade — complementos de assets/web.css, só dentro de .idade */
+
+.idade .input-row .button {
+  flex: 0 0 auto;
+  min-height: 48px;
+  padding: 10px 16px;
+}
+.idade .idade-privacidade {
+  margin: 0;
+}
+.idade-resultados {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.idade-resultados .result[hidden] {
+  display: none;
+}
+.idade-titulo {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 750;
+}
+.idade-subtitulo {
+  margin: 16px 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.idade-periodo {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.idade-caixa {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 12px 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.idade-caixa-valor {
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.idade-caixa-rotulo {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--muted);
+}
+.idade .idade-data {
+  margin: 0 0 2px;
+  font-size: clamp(22px, 2.8vw, 30px);
+}
+.idade .idade-semana {
+  margin: 0 0 12px;
+}
+.idade .idade-nota {
+  margin: 12px 0 0;
+}

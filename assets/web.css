@@ -355,6 +355,16 @@
 .card-title a:hover {
   color: var(--violet-2);
 }
+.indice-atalhos {
+  margin-top: 20px;
+}
+.indice-atalhos .filter {
+  text-decoration: none;
+}
+.grupo {
+  padding: 8px 0 clamp(28px, 4vw, 44px);
+  scroll-margin-top: calc(var(--header-h) + 12px);
+}
 
 /* ---------- Contato ---------- */
 .contact-email {

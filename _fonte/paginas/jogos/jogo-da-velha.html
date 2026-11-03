@@ -1,0 +1,145 @@
+<!--
+titulo: Jogo da Velha Online: Computador ou 2 Jogadores — EFS Aplicativos
+descricao: Jogue jogo da velha online e grátis contra o computador em 3 níveis, do Fácil ao Difícil que nunca perde, ou a dois no mesmo aparelho. Placar fica salvo.
+estilos: /assets/jogos/jogo-da-velha.css
+scripts: /assets/jogos/jogo-da-velha-logica.js /assets/jogos/jogo-da-velha.js
+app: Tic Tac Toe | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Tic Tac Toe</li>
+  </ol>
+  <h1>Jogo da velha online</h1>
+  <p>
+    O Tic Tac Toe da EFS no navegador: desafie o computador em três níveis ou jogue com outra
+    pessoa no mesmo aparelho. Quem fizer três em linha primeiro vence.
+  </p>
+</header>
+
+<section class="jogo-velha" aria-label="Jogo da velha">
+  <div class="segmented jv-modos" role="group" aria-label="Modo de jogo">
+    <button type="button" class="filter" data-modo="computador" aria-pressed="false">Contra o computador</button>
+    <button type="button" class="filter active" data-modo="dois" aria-pressed="true">2 jogadores</button>
+  </div>
+
+  <div class="jv-niveis" id="jv-niveis" hidden>
+    <span class="jv-rotulo" id="jv-niveis-rotulo">Dificuldade</span>
+    <div class="segmented" role="group" aria-labelledby="jv-niveis-rotulo">
+      <button type="button" class="filter" data-nivel="facil" aria-pressed="false">Fácil</button>
+      <button type="button" class="filter active" data-nivel="medio" aria-pressed="true">Médio</button>
+      <button type="button" class="filter" data-nivel="dificil" aria-pressed="false">Difícil</button>
+    </div>
+  </div>
+
+  <p class="jv-mensagem" id="jv-mensagem" aria-live="polite"></p>
+
+  <div class="jv-tabuleiro">
+    <div class="jv-grade" id="jv-grade" role="group" aria-label="Tabuleiro" aria-describedby="jv-ajuda"></div>
+  </div>
+
+  <div class="jv-botoes">
+    <button type="button" class="button" id="jv-nova">Reiniciar</button>
+    <button type="button" class="button secondary" id="jv-desfazer">Desfazer</button>
+  </div>
+
+  <p class="jv-ajuda" id="jv-ajuda">
+    Clique ou toque numa casa vazia para jogar. No teclado, escolha a casa com as setas e jogue com
+    Enter.
+  </p>
+
+  <div class="jv-cartao" id="jv-placar">
+    <div class="jv-cartao-topo">
+      <h2>Placar</h2>
+      <button type="button" class="jv-link" id="jv-zerar">Zerar placar</button>
+    </div>
+    <div class="jv-numeros">
+      <div class="jv-numero jv-cor-x"><strong id="jv-placar-x">0</strong><span>Jogador X</span></div>
+      <div class="jv-numero jv-cor-empate"><strong id="jv-placar-empates">0</strong><span>Empates</span></div>
+      <div class="jv-numero jv-cor-o"><strong id="jv-placar-o">0</strong><span>Jogador O</span></div>
+    </div>
+  </div>
+
+  <div class="jv-cartao" id="jv-desempenho" hidden>
+    <div class="jv-cartao-topo">
+      <h2>Seu desempenho no nível <span id="jv-desempenho-nivel">Médio</span></h2>
+    </div>
+    <div class="jv-numeros">
+      <div class="jv-numero jv-cor-vitoria"><strong id="jv-vitorias">0</strong><span>Vitórias</span></div>
+      <div class="jv-numero jv-cor-empate"><strong id="jv-empates">0</strong><span>Empates</span></div>
+      <div class="jv-numero jv-cor-derrota"><strong id="jv-derrotas">0</strong><span>Derrotas</span></div>
+    </div>
+    <details class="jv-historico" id="jv-historico">
+      <summary>Histórico contra o computador (<span id="jv-historico-total">0 partidas</span>)</summary>
+      <ol id="jv-historico-lista"></ol>
+      <p id="jv-historico-vazio">Nenhuma partida jogada ainda. Jogue contra o computador para ver seu histórico aqui!</p>
+      <button type="button" class="jv-link" id="jv-limpar">Limpar histórico</button>
+    </details>
+  </div>
+
+  <dialog class="jv-dialogo" id="jv-dialogo" aria-labelledby="jv-dialogo-titulo">
+    <h2 id="jv-dialogo-titulo"></h2>
+    <p id="jv-dialogo-texto"></p>
+    <div class="jv-dialogo-botoes" id="jv-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<article class="texto">
+  <h2>Como jogar jogo da velha</h2>
+  <p>
+    O tabuleiro tem 9 casas, em 3 linhas e 3 colunas. Os jogadores se alternam marcando uma casa
+    vazia por vez: X sempre começa, O joga em seguida. Vence quem completar primeiro uma linha,
+    uma coluna ou uma diagonal com três marcas iguais. Se as 9 casas forem preenchidas sem
+    ninguém fechar uma sequência, “deu velha”: a partida empata.
+  </p>
+
+  <h2>Modos e níveis</h2>
+  <ul>
+    <li><strong>2 jogadores:</strong> duas pessoas no mesmo aparelho, passando a vez. O placar soma as vitórias de X, de O e os empates, e o botão Desfazer volta a última jogada.</li>
+    <li><strong>Contra o computador:</strong> você joga com X e começa; o computador responde com O.</li>
+    <li><strong>Fácil:</strong> o computador escolhe uma casa livre qualquer.</li>
+    <li><strong>Médio:</strong> a cada jogada, ele sorteia entre uma casa qualquer e a melhor jogada possível.</li>
+    <li><strong>Difícil:</strong> ele calcula todas as continuações da partida (o método minimax) e sempre faz a melhor jogada. Nesse nível o computador nunca perde: o melhor resultado possível é o empate.</li>
+  </ul>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para não perder</h2>
+  <ol>
+    <li><strong>Comece pelo centro ou por um canto.</strong> O centro participa de 4 das 8 sequências, os cantos de 3 e as laterais de só 2.</li>
+    <li><strong>Bloqueie sempre.</strong> Se o adversário tem duas marcas numa linha com a terceira casa livre, jogue nela antes de qualquer outra coisa.</li>
+    <li><strong>Crie duas ameaças de uma vez.</strong> Uma jogada que abre duas sequências ao mesmo tempo (o “garfo”) não pode ser bloqueada nas duas.</li>
+    <li><strong>Contra canto, responda no centro.</strong> Se o primeiro jogador marcar um canto e você jogar numa lateral ou em outro canto, ele pode forçar a vitória.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>É possível ganhar do computador no Difícil?</h3>
+  <p>
+    Não. Com jogo perfeito dos dois lados, o jogo da velha sempre termina empatado, e o Difícil
+    joga perfeito. Empatar com ele já é jogar sem erro. Para treinar vitórias, use o Fácil ou o
+    Médio.
+  </p>
+  <h3>O placar e as estatísticas ficam salvos?</h3>
+  <p>
+    Ficam, no seu navegador. A partida em andamento, o placar do modo 2 jogadores e as últimas 200
+    partidas contra o computador continuam lá quando você volta. Trocar de modo zera o placar.
+  </p>
+  <h3>Quem começa tem vantagem?</h3>
+  <p>
+    Um pouco: quem começa termina com 5 marcas contra 4 e tem mais chances de montar um garfo. Com
+    jogo perfeito dos dois lados, porém, o resultado é sempre empate. Aqui o X sempre começa; no
+    modo 2 jogadores, revezem quem fica com o X.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/tictactoe.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Tic Tac Toe no celular</h2>
+    <p>O mesmo jogo da velha no Android, com histórico de partidas filtrado por nível e tema escuro, também sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.tictactoe&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

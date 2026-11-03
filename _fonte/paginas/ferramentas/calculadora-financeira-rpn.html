@@ -1,0 +1,232 @@
+<!--
+titulo: Calculadora Financeira RPN Online com NPV e IRR — EFS Aplicativos
+descricao: Calculadora financeira no estilo das calculadoras RPN: juros compostos, NPV, IRR, amortização, datas, estatística e programação, com memória no navegador.
+scripts: /assets/ferramentas/calculadora-financeira-rpn-logica.js /assets/ferramentas/calculadora-financeira-rpn.js
+estilos: /assets/ferramentas/calculadora-financeira-rpn.css
+app: Calculadora Financeira RPN | FinanceApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Calculadora financeira RPN</li>
+  </ol>
+  <h1>Calculadora financeira RPN</h1>
+  <p>
+    Uma calculadora financeira no estilo das calculadoras RPN, com pilha de quatro níveis, juros
+    compostos, fluxo de caixa, amortização, datas, estatística e programação. Use pelo mouse,
+    pelo toque ou pelo teclado do computador.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora">
+  <div class="rpn" id="calculadora-rpn">
+    <div class="rpn-topo">
+      <div class="rpn-lcd">
+        <div class="rpn-lcd-cabecalho">
+          <span>FINANCEIRA · RPN</span>
+          <span id="rpn-legenda"></span>
+        </div>
+        <div class="rpn-lcd-numero" aria-hidden="true">
+          <span id="rpn-texto">0,00</span>
+          <span class="rpn-lcd-expoente" id="rpn-expoente"></span>
+        </div>
+        <div class="rpn-indicadores" aria-hidden="true">
+          <span data-indicador="f">f</span>
+          <span data-indicador="g">g</span>
+          <span data-indicador="begin">BEGIN</span>
+          <span data-indicador="dmy">D.MY</span>
+          <span data-indicador="c">C</span>
+          <span data-indicador="prgm">PRGM</span>
+          <span class="rpn-ligado rpn-indicador-extra" id="rpn-prefixo"></span>
+        </div>
+        <p class="rpn-leitura" id="rpn-leitura" aria-live="polite" aria-atomic="true">0,00</p>
+      </div>
+      <div class="rpn-painel" id="rpn-painel">
+        <div class="rpn-abas" role="group" aria-label="Painel ao lado do visor">
+          <button type="button" class="rpn-aba active" data-painel="pilha" aria-pressed="true">Pilha</button>
+          <button type="button" class="rpn-aba" data-painel="tvm" aria-pressed="false">TVM</button>
+        </div>
+        <dl class="rpn-painel-linhas" id="rpn-painel-linhas"></dl>
+      </div>
+    </div>
+    <div class="rpn-teclado" id="rpn-teclado" role="group" aria-label="Teclado da calculadora"></div>
+  </div>
+  <p class="hint rpn-dica">
+    Teclado do computador: números, vírgula ou ponto, Enter, + − * /, Backspace apaga o último
+    dígito, Esc ou Delete zeram X e as letras f e g ativam os prefixos. A tecla ON abre os ajustes.
+  </p>
+
+  <dialog class="rpn-dialogo" id="rpn-ajustes" aria-labelledby="rpn-ajustes-titulo">
+    <div id="rpn-ajustes-principal">
+      <h2 class="rpn-dialogo-titulo" id="rpn-ajustes-titulo">Ajustes</h2>
+      <label class="rpn-opcao">
+        <input type="checkbox" id="rpn-virgula" />
+        <span>Vírgula como separador decimal</span>
+      </label>
+      <label class="rpn-opcao">
+        <input type="checkbox" id="rpn-vibrar" />
+        <span>Vibrar ao tocar nas teclas (em celulares compatíveis)</span>
+      </label>
+      <div class="rpn-opcao-grupo">
+        <span id="rpn-painel-rotulo">Painel ao lado do visor</span>
+        <div class="segmented" role="group" aria-labelledby="rpn-painel-rotulo">
+          <button type="button" class="filter active" data-painel-ajuste="pilha" aria-pressed="true">Pilha</button>
+          <button type="button" class="filter" data-painel-ajuste="tvm" aria-pressed="false">TVM</button>
+          <button type="button" class="filter" data-painel-ajuste="oculto" aria-pressed="false">Oculto</button>
+        </div>
+      </div>
+      <div class="rpn-dialogo-acoes">
+        <a class="button secondary" href="#guia" id="rpn-guia">Guia rápido das funções</a>
+        <button type="button" class="button secondary rpn-perigo" id="rpn-pedir-apagar">Apagar toda a memória</button>
+        <button type="button" class="button" id="rpn-fechar">Fechar</button>
+      </div>
+    </div>
+    <div id="rpn-ajustes-confirmar" hidden>
+      <h2 class="rpn-dialogo-titulo">Apagar toda a memória?</h2>
+      <p>Pilha, registradores, fluxos de caixa, estatística e o programa gravado serão apagados.</p>
+      <div class="rpn-dialogo-acoes">
+        <button type="button" class="button secondary" id="rpn-cancelar-apagar">Cancelar</button>
+        <button type="button" class="button rpn-perigo" id="rpn-apagar">Apagar</button>
+      </div>
+    </div>
+  </dialog>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar a notação RPN</h2>
+  <p>
+    Na notação polonesa reversa (RPN), primeiro entram os números e depois a operação. Para
+    somar 5 e 3, digite 5, toque em ENTER, digite 3 e toque em +. Não existe tecla de igual: o
+    resultado aparece na hora. A pilha tem quatro níveis, X, Y, Z e T, visíveis no painel
+    Pilha; as operações usam X e Y e o resultado fica em X.
+  </p>
+  <p class="formula">5 ENTER 3 +  →  8</p>
+  <p>
+    A tecla <strong>f</strong> (âmbar) ativa a função escrita acima de cada tecla e a tecla
+    <strong>g</strong> (turquesa), a função escrita na faixa de baixo. Tocar f ou g de novo
+    cancela o prefixo. Os indicadores do visor mostram o prefixo ativo e os modos BEGIN, D.MY,
+    C e PRGM.
+  </p>
+
+  <h2 id="guia">Guia rápido das funções</h2>
+  <h3>Juros compostos</h3>
+  <p>
+    Guarde os valores em n, i, PV, PMT e FV: digite o número e toque na tecla. Depois toque,
+    sem digitar nada, na tecla do valor que quer calcular. Entradas e saídas de dinheiro têm
+    sinais opostos (use CHS). g BEG e g END escolhem pagamentos no início ou no fim do período;
+    g 12× e g 12÷ convertem anos em meses e taxa anual em mensal. STO EEX liga o indicador C,
+    que usa juros compostos no período fracionário.
+  </p>
+  <p class="formula">1000 CHS PV  1 i  12 n  FV  →  1.126,83</p>
+  <p>
+    No exemplo, R$ 1.000,00 aplicados a 1% ao mês por 12 meses chegam a R$ 1.126,83. Para o
+    pagamento de um financiamento de R$ 100.000,00 em 360 meses a 1% ao mês, digite
+    100000 PV 1 i 360 n 0 FV PMT: o visor mostra -1.028,61, a parcela mensal.
+  </p>
+  <h3>Fluxo de caixa</h3>
+  <p>
+    Use g CFo para o fluxo inicial, g CFj para cada fluxo seguinte e g Nj para repetir o último
+    fluxo. Com a taxa em i, f NPV dá o valor presente líquido e f IRR, a taxa interna de
+    retorno. RCL g CFj e RCL g Nj revisam os fluxos guardados. Exemplo: 1000 CHS g CFo 500 g
+    CFj 3 g Nj 10 i f NPV dá 243,43, e f IRR dá 23,38% por período.
+  </p>
+  <h3>Amortização e juros simples</h3>
+  <p>
+    Com i, PV e PMT guardados (e n = 0), digite quantas parcelas amortizar e use f AMORT: X
+    mostra os juros pagos, Y a amortização do principal, e PV passa a ser o saldo devedor. f
+    INT calcula juros simples com n em dias, i anual e PV: X mostra os juros na base de 360
+    dias; R↓ e x≷y mostram a base de 365 dias.
+  </p>
+  <h3>Datas</h3>
+  <p>
+    Escolha g D.MY (dia.mêsano, por exemplo 25.122026) ou g M.DY. Data ENTER dias g DATE soma
+    ou subtrai dias e mostra o dia da semana. Data1 ENTER Data2 g ΔDYS dá os dias corridos em X
+    e os dias na base 30/360 em Y.
+  </p>
+  <h3>Títulos e depreciação</h3>
+  <p>
+    f PRICE calcula o preço de um título com cupom semestral: i = rendimento anual, PMT = cupom
+    anual, Y = data de liquidação e X = vencimento; Y recebe os juros corridos. f YTM calcula o
+    rendimento a partir do preço guardado em PV. Na depreciação, PV = custo, FV = valor
+    residual, n = vida útil, i = fator do saldo decrescente e X = ano: f SL (linear), f SOYD
+    (soma dos dígitos) e f DB (saldo decrescente).
+  </p>
+  <h3>Estatística</h3>
+  <p>
+    y ENTER x Σ+ acumula um ponto e g Σ− remove. g x̄ dá as médias, g s os desvios-padrão,
+    g x̄w a média ponderada, e g ŷ,r e g x̂,r as estimativas da regressão linear, com o
+    coeficiente de correlação r em Y.
+  </p>
+  <h3>Outras funções e limpeza</h3>
+  <p>
+    % calcula a porcentagem de Y; Δ%, a variação de Y para X; %T, a participação de X em Y.
+    Há também g √x, eˣ, LN, FRAC, INTG, n! e x². STO e RCL usam 20 registradores (0 a 9 e .0 a
+    .9), e STO + − × ÷ faz contas direto no registrador. f 0 a 9 fixa as casas decimais, f .
+    usa notação científica e f RND arredonda X para o que aparece no visor. CLx zera X; f CLR
+    Σ, CLR FIN e CLR REG limpam a estatística, os registradores financeiros e todos os
+    registradores. f CLR PREFIX mostra os 10 dígitos do número.
+  </p>
+  <h3>Programação</h3>
+  <p>
+    f P/R entra e sai do modo de programação, com até 99 linhas, e f CLR PRGM apaga o programa.
+    As teclas digitadas viram linhas; SST e g BST navegam, g GTO . nn posiciona e g ◄ apaga a
+    linha. Fora do modo PRGM, R/S executa e para, g PSE pausa por 1 segundo, g x≤y e g x=0
+    pulam a próxima linha quando o teste é falso e g GTO nn desvia. Qualquer tecla interrompe
+    um programa em execução.
+  </p>
+
+  <h2>Mensagens de erro</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Erro</th>
+          <th scope="col">Significado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>0</td><td>Operação matemática inválida, como divisão por zero.</td></tr>
+        <tr><td>1</td><td>Estouro no registrador ao usar STO com uma operação.</td></tr>
+        <tr><td>2</td><td>Dados estatísticos insuficientes.</td></tr>
+        <tr><td>3</td><td>A taxa interna de retorno não tem solução.</td></tr>
+        <tr><td>4</td><td>Memória de programa cheia ou linha inexistente.</td></tr>
+        <tr><td>5</td><td>Dados financeiros inconsistentes.</td></tr>
+        <tr><td>6</td><td>Registrador de fluxo de caixa inválido.</td></tr>
+        <tr><td>7</td><td>Fluxos de caixa sem troca de sinal.</td></tr>
+        <tr><td>8</td><td>Data inválida.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Qualquer tecla apaga a mensagem de erro e a calculadora volta ao normal.</p>
+
+  <h2>Limitações</h2>
+  <p class="note">
+    Os cálculos usam a precisão dos números do navegador e o visor mostra até 10 dígitos.
+    Os títulos consideram cupons semestrais, e as datas vão de 15/10/1582 a 25/11/4046. A
+    memória fica guardada apenas neste navegador; limpar os dados do site apaga a pilha, os
+    registradores e o programa. Os resultados servem para estudo e conferência de contas, e
+    não substituem a análise de um contrato ou de um profissional.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Preciso apertar ENTER antes de cada operação?</h3>
+  <p>
+    Só para separar dois números digitados em seguida. Depois de um resultado, basta digitar o
+    próximo número e tocar na operação: o resultado anterior sobe na pilha automaticamente.
+  </p>
+  <h3>A calculadora guarda o que eu fiz?</h3>
+  <p>
+    Sim. A pilha, os registradores, os modos e o programa ficam salvos neste navegador e voltam
+    na próxima visita. Para começar do zero, toque em ON e escolha "Apagar toda a memória".
+  </p>
+  <h3>Por que n sai sempre inteiro?</h3>
+  <p>
+    Ao calcular o número de períodos, o resultado é arredondado para cima, a não ser que a
+    fração seja desprezível. Assim, o último pagamento cobre o que falta.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

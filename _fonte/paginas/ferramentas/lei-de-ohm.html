@@ -1,0 +1,329 @@
+<!--
+titulo: Calculadora de Lei de Ohm, Resistores e Código de Cores — EFS Aplicativos
+descricao: Calcule tensão, corrente, resistência e potência pela Lei de Ohm, resistores em série e paralelo, divisor de tensão e o valor do resistor pelo código de cores.
+scripts: /assets/numeros.js /assets/ferramentas/lei-de-ohm-logica.js /assets/ferramentas/lei-de-ohm.js
+estilos: /assets/ferramentas/lei-de-ohm.css
+app: Calculadora de Lei de Ohm | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Lei de Ohm</li>
+  </ol>
+  <h1>Calculadora de Lei de Ohm e resistores</h1>
+  <p>
+    Informe duas grandezas para obter as outras duas, some resistores em série e em paralelo,
+    calcule um divisor de tensão e descubra o valor de um resistor pelas faixas coloridas.
+  </p>
+</header>
+
+<section class="tool ohm" aria-label="Calculadora de Lei de Ohm e eletrônica">
+  <div class="segmented ohm-abas" role="group" aria-label="Ferramenta">
+    <button type="button" class="filter active" data-aba="lei" aria-pressed="true">Lei de Ohm</button>
+    <button type="button" class="filter" data-aba="resistores" aria-pressed="false">Série e paralelo</button>
+    <button type="button" class="filter" data-aba="divisor" aria-pressed="false">Divisor de tensão</button>
+    <button type="button" class="filter" data-aba="cores" aria-pressed="false">Código de cores</button>
+  </div>
+
+  <!-- Lei de Ohm -->
+  <div class="ohm-painel" data-painel="lei">
+    <div class="tool-grid">
+      <form class="fields" id="form-lei" novalidate>
+        <p class="hint ohm-dica">Preencha exatamente 2 grandezas: as outras 2 são calculadas.</p>
+        <div class="field">
+          <label for="lei-tensao">Tensão (V)</label>
+          <div class="input-row">
+            <input class="input" id="lei-tensao" data-grandeza="tensao" inputmode="decimal" autocomplete="off" placeholder="Ex.: 12" />
+            <select class="select" id="lei-tensao-prefixo" data-prefixo="tensao" aria-label="Unidade da tensão"></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="lei-corrente">Corrente (I)</label>
+          <div class="input-row">
+            <input class="input" id="lei-corrente" data-grandeza="corrente" inputmode="decimal" autocomplete="off" />
+            <select class="select" id="lei-corrente-prefixo" data-prefixo="corrente" aria-label="Unidade da corrente"></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="lei-resistencia">Resistência (R)</label>
+          <div class="input-row">
+            <input class="input" id="lei-resistencia" data-grandeza="resistencia" inputmode="decimal" autocomplete="off" placeholder="Ex.: 4,7" />
+            <select class="select" id="lei-resistencia-prefixo" data-prefixo="resistencia" aria-label="Unidade da resistência"></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="lei-potencia">Potência (P)</label>
+          <div class="input-row">
+            <input class="input" id="lei-potencia" data-grandeza="potencia" inputmode="decimal" autocomplete="off" />
+            <select class="select" id="lei-potencia-prefixo" data-prefixo="potencia" aria-label="Unidade da potência"></select>
+          </div>
+        </div>
+        <div>
+          <button type="button" class="button secondary" id="lei-limpar">Limpar</button>
+        </div>
+      </form>
+      <div class="ohm-coluna">
+        <div class="result" id="resultado-lei" aria-live="polite">
+          <p class="result-message">Preencha duas grandezas.</p>
+        </div>
+        <div class="ohm-roda-bloco">
+          <h2 class="ohm-titulo" id="roda-titulo">Roda de fórmulas</h2>
+          <p class="hint ohm-dica">Em destaque, as fórmulas usadas no cálculo.</p>
+          <div class="ohm-roda" id="roda" aria-labelledby="roda-titulo">
+            <div class="ohm-quadrante" data-quadrante="tensao">
+              <span class="ohm-simbolo">V</span>
+              <ul>
+                <li data-formula="V_IR">V = I·R</li>
+                <li data-formula="V_PI">V = P / I</li>
+                <li data-formula="V_RAIZ_PR">V = √(P·R)</li>
+              </ul>
+            </div>
+            <div class="ohm-quadrante" data-quadrante="corrente">
+              <span class="ohm-simbolo">I</span>
+              <ul>
+                <li data-formula="I_VR">I = V / R</li>
+                <li data-formula="I_PV">I = P / V</li>
+                <li data-formula="I_RAIZ_PR">I = √(P / R)</li>
+              </ul>
+            </div>
+            <div class="ohm-quadrante" data-quadrante="resistencia">
+              <span class="ohm-simbolo">R</span>
+              <ul>
+                <li data-formula="R_VI">R = V / I</li>
+                <li data-formula="R_V2P">R = V² / P</li>
+                <li data-formula="R_PI2">R = P / I²</li>
+              </ul>
+            </div>
+            <div class="ohm-quadrante" data-quadrante="potencia">
+              <span class="ohm-simbolo">P</span>
+              <ul>
+                <li data-formula="P_VI">P = V·I</li>
+                <li data-formula="P_I2R">P = I²·R</li>
+                <li data-formula="P_V2R">P = V² / R</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Série e paralelo -->
+  <div class="ohm-painel" data-painel="resistores" hidden>
+    <div class="tool-grid">
+      <form class="fields" id="form-resistores" novalidate>
+        <p class="hint ohm-dica">Informe pelo menos um resistor. Campos vazios são ignorados.</p>
+        <div class="ohm-resistores" id="lista-resistores"></div>
+        <div>
+          <button type="button" class="button secondary" id="adicionar-resistor"><span aria-hidden="true">+</span> Adicionar resistor</button>
+        </div>
+        <p class="hint ohm-dica" id="limite-resistores" hidden>Limite de 20 resistores.</p>
+      </form>
+      <div class="result" id="resultado-resistores" aria-live="polite">
+        <p class="result-message">Informe pelo menos um resistor.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Divisor de tensão -->
+  <div class="ohm-painel" data-painel="divisor" hidden>
+    <div class="tool-grid">
+      <form class="fields" id="form-divisor" novalidate>
+        <div class="field">
+          <label for="div-vin">Tensão de entrada (Vin)</label>
+          <div class="input-row">
+            <input class="input" id="div-vin" inputmode="decimal" autocomplete="off" placeholder="Ex.: 12" />
+            <select class="select" id="div-vin-prefixo" data-prefixo="tensao" aria-label="Unidade da tensão de entrada"></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="div-r1">Resistor superior (R1)</label>
+          <div class="input-row">
+            <input class="input" id="div-r1" inputmode="decimal" autocomplete="off" placeholder="Ex.: 10" />
+            <select class="select" id="div-r1-prefixo" data-prefixo="resistencia" aria-label="Unidade de R1"></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="div-r2">Resistor inferior (R2)</label>
+          <div class="input-row">
+            <input class="input" id="div-r2" inputmode="decimal" autocomplete="off" placeholder="Ex.: 4,7" />
+            <select class="select" id="div-r2-prefixo" data-prefixo="resistencia" aria-label="Unidade de R2"></select>
+          </div>
+        </div>
+        <svg class="ohm-esquema" viewBox="0 0 220 150" role="img" aria-label="Divisor de tensão: Vin ligado a R1, R1 ligado a R2 e R2 ao terra; Vout é a tensão sobre R2.">
+          <path class="ohm-fio" d="M40 12 V30 M40 62 V82 M40 114 V138 M24 138 H56 M30 144 H50 M36 150 H44 M40 72 H120" />
+          <rect class="ohm-corpo-esquema" x="28" y="30" width="24" height="32" rx="4" />
+          <rect class="ohm-corpo-esquema" x="28" y="82" width="24" height="32" rx="4" />
+          <circle class="ohm-no" cx="40" cy="12" r="4" />
+          <circle class="ohm-no" cx="120" cy="72" r="4" />
+          <text class="ohm-rotulo-esquema" x="52" y="16">Vin</text>
+          <text class="ohm-rotulo-esquema" x="62" y="51">R1</text>
+          <text class="ohm-rotulo-esquema" x="62" y="103">R2</text>
+          <text class="ohm-rotulo-esquema" x="130" y="77">Vout</text>
+        </svg>
+      </form>
+      <div class="result" id="resultado-divisor" aria-live="polite">
+        <p class="result-message">Preencha Vin, R1 e R2.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Código de cores -->
+  <div class="ohm-painel" data-painel="cores" hidden>
+    <div class="segmented" role="group" aria-label="Número de faixas">
+      <button type="button" class="filter active" data-faixas="4" aria-pressed="true">4 faixas</button>
+      <button type="button" class="filter" data-faixas="5" aria-pressed="false">5 faixas</button>
+    </div>
+    <svg class="ohm-resistor" id="desenho-resistor" viewBox="0 0 320 90" role="img" aria-label="Resistor">
+      <line class="ohm-terminal" x1="0" y1="45" x2="320" y2="45" />
+      <rect class="ohm-corpo" x="52" y="14" width="216" height="62" rx="26" />
+      <rect class="ohm-faixa-desenho" data-desenho="d1" x="0" y="14" width="16" height="62" />
+      <rect class="ohm-faixa-desenho" data-desenho="d2" x="0" y="14" width="16" height="62" />
+      <rect class="ohm-faixa-desenho" data-desenho="d3" x="0" y="14" width="16" height="62" />
+      <rect class="ohm-faixa-desenho" data-desenho="mult" x="0" y="14" width="16" height="62" />
+      <rect class="ohm-faixa-desenho" data-desenho="tol" x="0" y="14" width="16" height="62" />
+    </svg>
+    <div class="tool-grid">
+      <form class="fields" id="form-cores" novalidate>
+        <fieldset class="ohm-faixa" data-faixa="d1">
+          <legend>1ª faixa · 1º dígito: <span class="ohm-faixa-nome"></span></legend>
+          <div class="ohm-amostras"></div>
+        </fieldset>
+        <fieldset class="ohm-faixa" data-faixa="d2">
+          <legend>2ª faixa · 2º dígito: <span class="ohm-faixa-nome"></span></legend>
+          <div class="ohm-amostras"></div>
+        </fieldset>
+        <fieldset class="ohm-faixa" data-faixa="d3" hidden>
+          <legend>3ª faixa · 3º dígito: <span class="ohm-faixa-nome"></span></legend>
+          <div class="ohm-amostras"></div>
+        </fieldset>
+        <fieldset class="ohm-faixa" data-faixa="mult">
+          <legend>Multiplicador: <span class="ohm-faixa-nome"></span></legend>
+          <div class="ohm-amostras"></div>
+        </fieldset>
+        <fieldset class="ohm-faixa" data-faixa="tol">
+          <legend>Tolerância: <span class="ohm-faixa-nome"></span></legend>
+          <div class="ohm-amostras"></div>
+        </fieldset>
+      </form>
+      <div class="result" id="resultado-cores" aria-live="polite">
+        <p class="result-message">Escolha as cores das faixas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>A Lei de Ohm</h2>
+  <p>
+    A Lei de Ohm relaciona a tensão (V, em volts), a corrente (I, em ampères) e a resistência
+    (R, em ohms) de um circuito. Junto com a fórmula da potência (P, em watts), ela permite
+    calcular qualquer uma das quatro grandezas a partir de outras duas:
+  </p>
+  <p class="formula">V = I × R &nbsp; e &nbsp; P = V × I</p>
+  <p>
+    Combinando as duas, saem as 12 fórmulas da roda: por exemplo, I = V / R, P = I² × R e
+    R = V² / P. A calculadora escolhe as fórmulas certas para o par informado e destaca na roda
+    as que usou.
+  </p>
+  <h3>Exemplo</h3>
+  <p>
+    Um resistor de 4,7 kΩ ligado a 12 V: I = 12 / 4.700 ≈ 0,00255 A, ou <strong>2,55 mA</strong>,
+    e P = 12² / 4.700 ≈ 0,0306 W, ou <strong>30,6 mW</strong>. Um resistor comum de 1/4 W (250 mW)
+    aguenta essa potência com folga.
+  </p>
+
+  <h2>Prefixos</h2>
+  <p>
+    Os campos aceitam prefixos do Sistema Internacional, para não ter de digitar zeros: µ (micro)
+    = 0,000001, m (mili) = 0,001, k (quilo) = 1.000 e M (mega) = 1.000.000. Os resultados são
+    mostrados com o prefixo mais adequado, como 4,7 kΩ em vez de 4.700 Ω.
+  </p>
+
+  <h2>Resistores em série e em paralelo</h2>
+  <p>
+    Em série, a corrente passa por um resistor depois do outro e a resistência equivalente é a soma.
+    Em paralelo, a corrente se divide e o inverso da resistência equivalente é a soma dos inversos,
+    então o resultado é sempre menor que o menor resistor:
+  </p>
+  <p class="formula">Série: Req = R1 + R2 + … + Rn<br />Paralelo: 1/Req = 1/R1 + 1/R2 + … + 1/Rn</p>
+  <p>
+    Dois resistores iguais em paralelo resultam na metade do valor de cada um: 10 kΩ e 10 kΩ dão
+    5 kΩ. Um resistor de 0 Ω em paralelo é um curto-circuito e zera o conjunto.
+  </p>
+
+  <h2>Divisor de tensão</h2>
+  <p>
+    Dois resistores em série dividem a tensão de entrada na proporção dos seus valores. A saída
+    é medida sobre o resistor de baixo (R2):
+  </p>
+  <p class="formula">Vout = Vin × R2 / (R1 + R2)</p>
+  <p>
+    Com 12 V, R1 = 10 kΩ e R2 = 4,7 kΩ, a saída é de cerca de 3,84 V. A conta vale sem carga na
+    saída: qualquer coisa ligada em Vout fica em paralelo com R2 e baixa a tensão.
+  </p>
+
+  <h2>Código de cores dos resistores</h2>
+  <p>
+    Nos resistores de 4 faixas, as duas primeiras são os dígitos, a terceira é o multiplicador e a
+    quarta, um pouco afastada, é a tolerância. Nos de 5 faixas, de precisão, são três dígitos. Leia
+    a partir da ponta oposta à faixa de tolerância, que costuma ser dourada ou prateada.
+  </p>
+  <p>
+    Amarelo, violeta, vermelho e dourado, por exemplo, é 4 e 7 vezes 100: 4.700 Ω, ou
+    <strong>4,7 kΩ com ±5%</strong>, ou seja, entre 4,465 kΩ e 4,935 kΩ.
+  </p>
+  <h3 class="table-title" id="tabela-cores">Valores de cada cor</h3>
+  <div class="table-wrap">
+    <table class="data" aria-labelledby="tabela-cores">
+      <thead>
+        <tr><th scope="col">Cor</th><th scope="col">Dígito</th><th scope="col">Multiplicador</th><th scope="col">Tolerância</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Preto</td><td>0</td><td>× 1</td><td>—</td></tr>
+        <tr><td>Marrom</td><td>1</td><td>× 10</td><td>±1%</td></tr>
+        <tr><td>Vermelho</td><td>2</td><td>× 100</td><td>±2%</td></tr>
+        <tr><td>Laranja</td><td>3</td><td>× 1 k</td><td>±0,05%</td></tr>
+        <tr><td>Amarelo</td><td>4</td><td>× 10 k</td><td>±0,02%</td></tr>
+        <tr><td>Verde</td><td>5</td><td>× 100 k</td><td>±0,5%</td></tr>
+        <tr><td>Azul</td><td>6</td><td>× 1 M</td><td>±0,25%</td></tr>
+        <tr><td>Violeta</td><td>7</td><td>× 10 M</td><td>±0,1%</td></tr>
+        <tr><td>Cinza</td><td>8</td><td>× 100 M</td><td>±0,01%</td></tr>
+        <tr><td>Branco</td><td>9</td><td>× 1 G</td><td>—</td></tr>
+        <tr><td>Dourado</td><td>—</td><td>× 0,1</td><td>±5%</td></tr>
+        <tr><td>Prateado</td><td>—</td><td>× 0,01</td><td>±10%</td></tr>
+        <tr><td>Sem faixa</td><td>—</td><td>—</td><td>±20%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Posso informar tensão ou corrente negativa?</h3>
+  <p>
+    Sim. O sinal indica o sentido, e os resultados saem com o sinal correspondente. Resistência e
+    potência negativas não fazem sentido num resistor e são recusadas.
+  </p>
+  <h3>Por que aparece "divisão por zero"?</h3>
+  <p>
+    Algumas combinações não têm resposta, como calcular a resistência com corrente zero. Revise os
+    valores: em geral um deles foi digitado como 0.
+  </p>
+  <p class="note">
+    Os cálculos são teóricos e consideram componentes ideais. Em circuitos ligados à rede elétrica,
+    siga as normas de segurança e procure um profissional habilitado.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Lei de Ohm, código de cores, conversores e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

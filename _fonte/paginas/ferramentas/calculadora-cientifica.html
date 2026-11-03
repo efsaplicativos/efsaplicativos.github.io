@@ -1,0 +1,219 @@
+<!--
+titulo: Calculadora Científica Online: Seno, Log e Potências — EFS Aplicativos
+descricao: Calculadora científica online e grátis: seno, cosseno e tangente em graus ou radianos, logaritmos, raízes, potências, fatorial, combinação e parênteses.
+scripts: /assets/numeros.js /assets/ferramentas/matematica-comum.js /assets/ferramentas/expressao-logica.js /assets/ferramentas/calculadora-cientifica.js
+estilos: /assets/ferramentas/calculadora.css
+app: Calculadora científica | EducationalApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Calculadora científica</li>
+  </ol>
+  <h1>Calculadora científica online</h1>
+  <p>
+    Trigonometria em graus, radianos ou grados, logaritmos, raízes, potências, fatorial, arranjo e
+    combinação, com a expressão inteira à vista e o resultado aparecendo enquanto você digita.
+  </p>
+</header>
+
+<section class="tool calc calc-cientifica" id="cientifica" aria-label="Calculadora científica">
+  <div class="calc-grid">
+    <div class="calc-corpo">
+      <div class="calc-visor">
+        <div class="calc-visor-topo">
+          <div class="calc-indicadores" aria-hidden="true">
+            <span class="ligado" id="sci-ind-modo">DEG</span>
+            <span id="sci-ind-segunda">2nd</span>
+            <span id="sci-ind-hyp">hyp</span>
+          </div>
+          <button type="button" class="calc-copiar" id="sci-copiar">Copiar</button>
+        </div>
+        <div class="calc-recentes" id="sci-recentes"></div>
+        <output class="calc-expressao" id="sci-expressao" aria-label="Expressão">0</output>
+        <div class="calc-principal" id="sci-resultado" data-tipo="vazio"></div>
+      </div>
+      <p class="sr-only" aria-live="polite" id="sci-anuncio"></p>
+
+      <div class="calc-teclado cinco" id="sci-funcoes" role="group" aria-label="Funções">
+        <button type="button" class="tecla funcao" data-f="segunda" aria-pressed="false" title="Funções secundárias (valem para a próxima tecla)">2nd</button>
+        <button type="button" class="tecla funcao" data-f="modo" aria-label="Unidade de ângulo: graus" title="Unidade de ângulo: DEG = graus, RAD = radianos, GRAD = grados">DEG</button>
+        <button type="button" class="tecla funcao" data-f="hyp" aria-pressed="false" title="Funções hiperbólicas">hyp</button>
+        <button type="button" class="tecla funcao" data-f="pi" aria-label="Pi">π</button>
+        <button type="button" class="tecla funcao" data-f="e" aria-label="Número de Euler, e">e</button>
+
+        <button type="button" class="tecla funcao" data-f="sin">sin</button>
+        <button type="button" class="tecla funcao" data-f="cos">cos</button>
+        <button type="button" class="tecla funcao" data-f="tan">tan</button>
+        <button type="button" class="tecla funcao" data-f="abre" aria-label="Abre parêntese">(</button>
+        <button type="button" class="tecla funcao" data-f="fecha" aria-label="Fecha parêntese">)</button>
+
+        <button type="button" class="tecla funcao" data-f="l3-0">ln</button>
+        <button type="button" class="tecla funcao" data-f="l3-1">log</button>
+        <button type="button" class="tecla funcao" data-f="l3-2">√</button>
+        <button type="button" class="tecla funcao" data-f="l3-3">x²</button>
+        <button type="button" class="tecla funcao" data-f="l3-4">xʸ</button>
+
+        <button type="button" class="tecla funcao" data-f="l4-0">x⁻¹</button>
+        <button type="button" class="tecla funcao" data-f="l4-1">n!</button>
+        <button type="button" class="tecla funcao" data-f="l4-2">%</button>
+        <button type="button" class="tecla funcao" data-f="l4-3">Ans</button>
+        <button type="button" class="tecla funcao" data-f="ee" aria-label="Notação científica (vezes 10 elevado a)" title="Notação científica: 1,5 EE 3 = 1500">EE</button>
+      </div>
+
+      <div class="calc-teclado cinco" id="sci-numeros" role="group" aria-label="Números e operações">
+        <button type="button" class="tecla" data-f="d7">7</button>
+        <button type="button" class="tecla" data-f="d8">8</button>
+        <button type="button" class="tecla" data-f="d9">9</button>
+        <button type="button" class="tecla destaque" data-f="apagar" aria-label="Apagar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1Z" /><path d="m17 9-6 6M11 9l6 6" /></svg>
+        </button>
+        <button type="button" class="tecla destaque" data-f="limpar" aria-label="Apagar tudo">AC</button>
+
+        <button type="button" class="tecla" data-f="d4">4</button>
+        <button type="button" class="tecla" data-f="d5">5</button>
+        <button type="button" class="tecla" data-f="d6">6</button>
+        <button type="button" class="tecla operador" data-f="vezes" aria-label="Multiplicar">×</button>
+        <button type="button" class="tecla operador" data-f="dividir" aria-label="Dividir">÷</button>
+
+        <button type="button" class="tecla" data-f="d1">1</button>
+        <button type="button" class="tecla" data-f="d2">2</button>
+        <button type="button" class="tecla" data-f="d3">3</button>
+        <button type="button" class="tecla operador" data-f="mais" aria-label="Somar">+</button>
+        <button type="button" class="tecla operador" data-f="menos" aria-label="Subtrair">−</button>
+
+        <button type="button" class="tecla largura-2" data-f="d0">0</button>
+        <button type="button" class="tecla" data-f="ponto" aria-label="Vírgula decimal">,</button>
+        <button type="button" class="tecla igual largura-2" data-f="igual" aria-label="Igual">=</button>
+      </div>
+      <p class="calc-ajuda">
+        Teclado do computador: números, <kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> <kbd>/</kbd>
+        <kbd>^</kbd> <kbd>(</kbd> <kbd>)</kbd> <kbd>!</kbd> <kbd>%</kbd>, <kbd>Enter</kbd> para o
+        resultado, <kbd>Backspace</kbd> para apagar e <kbd>Esc</kbd> para AC. Atalhos de letras:
+        <kbd>s</kbd> sin, <kbd>c</kbd> cos, <kbd>t</kbd> tan, <kbd>l</kbd> ln, <kbd>g</kbd> log,
+        <kbd>r</kbd> raiz, <kbd>p</kbd> π, <kbd>e</kbd> número e, <kbd>a</kbd> Ans e
+        <kbd>E</kbd> (maiúsculo) para EE.
+      </p>
+    </div>
+
+    <aside class="calc-historico" aria-labelledby="sci-historico-titulo">
+      <div class="calc-historico-topo">
+        <h2 id="sci-historico-titulo">Histórico</h2>
+        <button type="button" class="button secondary pequeno" id="sci-limpar-historico" hidden>Limpar histórico</button>
+      </div>
+      <p class="hint" id="sci-historico-dica" hidden>Toque na expressão para editá-la ou no resultado para inseri-lo.</p>
+      <p class="calc-historico-vazio" id="sci-historico-vazio">Nenhum cálculo ainda.</p>
+      <ol id="sci-historico-lista"></ol>
+    </aside>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar a calculadora científica</h2>
+  <p>
+    Monte a expressão como ela é escrita no papel: <strong>2 × (3 + 4)²</strong>,
+    <strong>sin(30) + cos(60)</strong> ou <strong>√(2) × π</strong>. As funções já abrem o
+    parêntese, e os parênteses que ficarem abertos são fechados sozinhos quando você aperta
+    <strong>=</strong> (eles aparecem mais claros no visor). Enquanto a expressão tem alguma
+    operação, o resultado provisório aparece embaixo dela.
+  </p>
+  <ul>
+    <li><strong>2nd</strong> troca as funções para as secundárias por uma tecla: sin vira sin⁻¹, ln vira eˣ, √ vira ∛, x² vira x³ e assim por diante.</li>
+    <li><strong>hyp</strong> liga as funções hiperbólicas (sinh, cosh, tanh e suas inversas) até ser desligado.</li>
+    <li><strong>DEG / RAD / GRAD</strong> alterna a unidade de ângulo: graus (uma volta = 360), radianos (2π) ou grados (400).</li>
+    <li><strong>Ans</strong> é o último resultado. Começar com um operador logo depois do <strong>=</strong> continua a conta a partir dele.</li>
+    <li><strong>EE</strong> digita em notação científica: 1,5 EE 3 é 1,5 × 10³ = 1.500.</li>
+    <li>Multiplicação implícita funciona: <strong>2π</strong>, <strong>3(4)</strong> e <strong>2sin(30)</strong> são multiplicações.</li>
+  </ul>
+
+  <h2>Ordem das operações</h2>
+  <p>
+    A expressão segue a ordem usual: parênteses e funções primeiro, depois os pós-fixos (!, %, ²,
+    ³ e ⁻¹), as potências, arranjo e combinação, multiplicação, divisão e mod, e por último soma e
+    subtração. A potência é associativa à direita, então 2^3^2 = 2^9 = 512. O sinal de menos na
+    frente vale para a potência inteira: −2^2 = −4.
+  </p>
+
+  <h2>Exemplos</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Expressão</th>
+          <th scope="col">Modo</th>
+          <th scope="col">Resultado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>sin(30)</td><td>DEG</td><td>0,5</td></tr>
+        <tr><td>cos(π)</td><td>RAD</td><td>−1</td></tr>
+        <tr><td>sin⁻¹(0,5)</td><td>DEG</td><td>30</td></tr>
+        <tr><td>log(1000) + ln(e)</td><td>—</td><td>4</td></tr>
+        <tr><td>5! ÷ 5C2</td><td>—</td><td>12</td></tr>
+        <tr><td>7 mod 5</td><td>—</td><td>2</td></tr>
+        <tr><td>2^−3</td><td>—</td><td>0,125</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Um exemplo prático: a altura de uma rampa com 6 m de comprimento e inclinação de 8° é
+    6 × sin(8) ≈ <strong>0,835 m</strong>, com a calculadora em DEG.
+  </p>
+
+  <h2>Mensagens de erro</h2>
+  <ul>
+    <li><strong>Erro de sintaxe</strong>: a expressão está incompleta ou malformada, como "2 +" ou "( )".</li>
+    <li><strong>Erro de domínio</strong>: a função não está definida para o valor, como √ de número negativo, log de zero, sin⁻¹ de 2, tan de 90° ou fatorial de 2,5.</li>
+    <li><strong>Divisão por zero</strong>: inclui 0⁻¹ e 0 elevado a expoente negativo.</li>
+    <li><strong>Resultado grande demais</strong>: passou do limite de cerca de 1,8 × 10³⁰⁸, como 171! ou 10^400.</li>
+  </ul>
+  <p>
+    Depois de um erro, a expressão continua no visor para você corrigir com ⌫, e um número digitado
+    começa uma conta nova.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Por que tan(90) dá erro e sin(180) dá exatamente 0?</h3>
+  <p>
+    Em graus, 90° é um ponto em que a tangente não existe, então a calculadora avisa em vez de
+    mostrar um número gigante. Nos múltiplos exatos de 180° o seno é tratado como zero, e o
+    resultado é arredondado em 15 algarismos para não exibir resíduos como 1,2 × 10⁻¹⁶.
+  </p>
+  <h3>Qual a diferença entre nPr e nCr?</h3>
+  <p>
+    nPr (arranjo) conta as maneiras de escolher r itens de n quando a ordem importa: 5P2 = 20.
+    nCr (combinação) conta quando a ordem não importa: 5C2 = 10. Os dois exigem números inteiros
+    não negativos com r ≤ n.
+  </p>
+  <h3>Qual a precisão dos resultados?</h3>
+  <p>
+    As contas usam números de ponto flutuante de 64 bits e o resultado é arredondado para 15
+    algarismos significativos, o que elimina o ruído típico (0,1 + 0,2 dá 0,3). O visor mostra até
+    12 algarismos, com notação científica para valores muito grandes ou muito pequenos.
+  </p>
+  <h3>O histórico fica salvo?</h3>
+  <p>
+    Os últimos 50 cálculos, o Ans e a unidade de ângulo ficam guardados nesta aba enquanto ela
+    estiver aberta. Toque em uma expressão do histórico para editá-la ou no resultado para
+    inseri-lo na conta atual. Nada é enviado para fora do seu navegador.
+  </p>
+  <h3>Só preciso de contas simples. Tem uma versão mais direta?</h3>
+  <p>
+    Sim: a <a href="/ferramentas/calculadora/">calculadora básica</a> tem teclas maiores,
+    porcentagem contextual e memória.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Calculadora científica, equações, matrizes, estatística e mais de 20 ferramentas, a maioria funcionando sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

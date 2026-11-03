@@ -1,0 +1,178 @@
+/* ==========================================================================
+   Estatística — campo de dados, cartões de resultados, histograma e tabelas.
+   ========================================================================== */
+
+.est {
+  --est-barra: #3b82f6;
+  --est-erro: #ffb4a8;
+  --est-destaque: #93c5fd;
+}
+:root[data-theme="light"] .est {
+  --est-barra: #2563eb;
+  --est-erro: #b42318;
+  --est-destaque: #1d4ed8;
+}
+
+.est-dados {
+  min-height: 150px;
+  resize: vertical;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.est-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.est-lidos {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--est-destaque);
+}
+.est-lidos[hidden],
+.est .result-message[hidden],
+.est-erro[hidden],
+.est .hint[hidden],
+.est-resultados[hidden],
+.est-bloco[hidden] {
+  display: none;
+}
+.est .result-message.error {
+  color: var(--est-erro);
+  overflow-wrap: anywhere;
+}
+.est-erro {
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--est-erro);
+}
+.est .result-list div.destaque dd {
+  color: var(--est-destaque);
+}
+.est .result-list dd {
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Cartões ---------- */
+.est-resultados {
+  margin-top: 26px;
+}
+.est-cartoes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.est-cartao {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+  padding: 18px 20px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.est-cartao h2 {
+  margin: 0;
+  font-size: 17px;
+}
+.est-cartao .hint {
+  margin: 0;
+}
+.est-cartao .result-list:empty {
+  display: none;
+}
+.est-sufixo {
+  align-items: center;
+}
+.est-sufixo span {
+  font-weight: 700;
+  color: var(--text-2);
+}
+
+/* ---------- Histograma ---------- */
+.est-bloco {
+  margin-top: 10px;
+}
+.est-grafico {
+  min-width: 0;
+  overflow: hidden;
+  padding: 8px 8px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.est-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.est-barra-forma {
+  fill: var(--est-barra);
+}
+.est-alvo {
+  fill: transparent;
+}
+.est-barra:hover .est-barra-forma {
+  filter: brightness(1.15);
+}
+.est-valor {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.est-eixo-texto {
+  font-size: 11px;
+  fill: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.est-base {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+.est-bloco .table-wrap {
+  margin-top: 12px;
+}
+
+/* ---------- Dados ordenados ---------- */
+.est-ordenados-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.est .est-pequeno {
+  min-height: 36px;
+  margin-top: 16px;
+  padding: 6px 14px;
+  font-size: 13px;
+}
+.est-ordenados {
+  max-height: 220px;
+  margin: 0;
+  padding: 14px 16px;
+  overflow: auto;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 14px;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 860px) {
+  .est-cartoes {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 400px) {
+  .est-cartao {
+    padding: 16px;
+  }
+}

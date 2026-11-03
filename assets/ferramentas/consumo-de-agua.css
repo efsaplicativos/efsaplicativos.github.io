@@ -1,0 +1,82 @@
+/* Consumo de água — complementos de assets/web.css, só dentro de .agua */
+
+.agua {
+  --agua-chip: rgba(59, 130, 246, 0.16);
+  --agua-chip-texto: #bfdbfe;
+  --agua-gota: #60a5fa;
+}
+:root[data-theme="light"] .agua {
+  --agua-chip: rgba(37, 99, 235, 0.1);
+  --agua-chip-texto: #1e3a8a;
+  --agua-gota: #2563eb;
+}
+
+.agua-horas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.agua-resultados {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.agua-resultados .result[hidden] {
+  display: none;
+}
+.agua-titulo {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 750;
+}
+.agua .agua-dica {
+  margin: 0 0 12px;
+}
+.agua-subtitulo {
+  margin: 16px 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.agua .agua-nota {
+  margin: 12px 0 0;
+}
+.agua .agua-aviso {
+  margin: 0;
+}
+
+/* ---------- Horários ---------- */
+.agua-copos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.agua-copo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px 6px 10px;
+  font-size: 14px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  color: var(--agua-chip-texto);
+  background: var(--agua-chip);
+  border-radius: var(--r-pill);
+}
+.agua-gota {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  background: var(--agua-gota);
+  border-radius: 50% 0 50% 50%;
+  transform: rotate(-45deg);
+}
+
+@media (max-width: 380px) {
+  .agua-horas {
+    grid-template-columns: 1fr;
+  }
+}

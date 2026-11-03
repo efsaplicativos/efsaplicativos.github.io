@@ -69,3 +69,6 @@ const Numeros = (() => {
 
   return { ler, numero, dinheiro, porcentagem };
 })();
+
+// Nos testes (node), o mesmo objeto é exportado como módulo.
+if (typeof module === "object") module.exports = Numeros;

@@ -1,0 +1,478 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/ferramentas/marcador-de-truco.html. Edite lá. -->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050a1e" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        if (theme === "light" || theme === "dark") {
+          root.setAttribute("data-theme", theme);
+        }
+        if (theme === "light") {
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#f3f6ff");
+        }
+      })();
+    </script>
+    <title>Marcador de Truco Online: Placar de 12 Pontos e Histórico — EFS Aplicativos</title>
+    <meta name="description" content="Marque os pontos do truco por dupla com truco, seis, nove e doze, aviso de mão de 11, melhor de 3 ou de 5, desfazer jogadas e histórico de partidas. Grátis." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/ferramentas/marcador-de-truco/" />
+    <meta property="og:title" content="Marcador de Truco Online: Placar de 12 Pontos e Histórico — EFS Aplicativos" />
+    <meta property="og:description" content="Marque os pontos do truco por dupla com truco, seis, nove e doze, aviso de mão de 11, melhor de 3 ou de 5, desfazer jogadas e histórico de partidas. Grátis." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/ferramentas/marcador-de-truco/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
+    <link rel="stylesheet" href="/assets/web.css?v=8aa4a1ab9334" />
+    <link rel="stylesheet" href="/assets/ferramentas/marcador-de-truco.css?v=e4e15e26fbbd" />
+    <script src="/site.js?v=b4f7be01c332" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/ferramentas/marcador-de-truco-logica.js?v=21f04df66656" defer></script>
+    <script src="/assets/ferramentas/marcador-de-truco.js?v=5428926994b2" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Marcador de Truco", "url": "https://efsaplicativos.com.br/ferramentas/marcador-de-truco/", "description": "Marque os pontos do truco por dupla com truco, seis, nove e doze, aviso de mão de 11, melhor de 3 ou de 5, desfazer jogadas e histórico de partidas. Grátis.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas" aria-current="page">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Ativar tema claro"
+            title="Alternar tema claro/escuro"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Marcador de Truco</li>
+  </ol>
+  <h1>Marcador de Truco</h1>
+  <p>
+    Marque os pontos das duas duplas até 12, com os valores do truco paulista (truco, seis,
+    nove e doze), aviso de mão de 11, disputa em melhor de 3 ou de 5 e histórico das partidas.
+    O placar fica salvo neste navegador.
+  </p>
+</header>
+
+<section class="tool truco" id="truco" aria-label="Marcador de truco">
+  <div class="truco-mesa">
+    <div class="truco-topo">
+      <div class="truco-titulos">
+        <h2 id="truco-titulo">Na mesa</h2>
+        <p class="truco-subtitulo" id="truco-subtitulo">Melhor de 3 · Partida 1</p>
+      </div>
+      <div class="truco-acoes">
+        <button type="button" class="truco-botao-linha" id="truco-desfazer" aria-label="Desfazer última jogada" aria-disabled="true">
+          <span aria-hidden="true">↶</span> Desfazer
+        </button>
+        <button type="button" class="truco-botao-linha" id="truco-abrir-ajustes" aria-haspopup="dialog">Ajustes</button>
+      </div>
+    </div>
+
+    <div class="truco-corpo">
+      <div class="truco-controles">
+        <div class="truco-vitorias">
+          <p class="sr-only" id="truco-vitorias-texto"></p>
+          <div class="truco-vitorias-rotulo" aria-hidden="true">
+            <p class="truco-sobretitulo">Vitórias</p>
+            <p class="truco-legenda" id="truco-meta">Quem vencer 2 partidas leva</p>
+          </div>
+          <p class="truco-vitorias-placar" aria-hidden="true">
+            <span id="truco-vitorias-0">0</span>
+            <svg class="truco-trofeu" viewBox="0 0 24 24" width="20" height="20" focusable="false">
+              <path fill="currentColor" d="M7 3h10v2h3v3a4 4 0 0 1-4 4h-.4A5 5 0 0 1 13 14.9V18h3v2H8v-2h3v-3.1A5 5 0 0 1 8.4 12H8a4 4 0 0 1-4-4V5h3V3Zm0 4H6v1a2 2 0 0 0 1 1.7V7Zm10 0v2.7A2 2 0 0 0 18 8V7h-1Z" />
+            </svg>
+            <span id="truco-vitorias-1">0</span>
+          </p>
+        </div>
+
+        <div class="truco-aviso" id="truco-aviso" hidden>
+          <span class="truco-naipe truco-naipe-ouros" aria-hidden="true">&#x2666;&#xFE0E;</span>
+          <div class="truco-aviso-conteudo">
+            <p class="truco-aviso-titulo" id="truco-aviso-titulo"></p>
+            <p class="truco-legenda" id="truco-aviso-texto"></p>
+            <div class="truco-aviso-botoes" id="truco-aviso-botoes">
+              <button type="button" class="truco-botao-aviso" id="truco-valer-tres">Vão jogar: vale 3</button>
+              <button type="button" class="truco-botao-aviso" id="truco-correram">Correram: +1 para Eles</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="truco-vencedor" id="truco-vencedor" hidden>
+          <svg class="truco-trofeu" viewBox="0 0 24 24" width="36" height="36" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M7 3h10v2h3v3a4 4 0 0 1-4 4h-.4A5 5 0 0 1 13 14.9V18h3v2H8v-2h3v-3.1A5 5 0 0 1 8.4 12H8a4 4 0 0 1-4-4V5h3V3Zm0 4H6v1a2 2 0 0 0 1 1.7V7Zm10 0v2.7A2 2 0 0 0 18 8V7h-1Z" />
+          </svg>
+          <p class="truco-sobretitulo" id="truco-vencedor-sobre">Mais uma pra conta</p>
+          <p class="truco-vencedor-titulo" id="truco-vencedor-titulo"></p>
+          <p class="truco-vencedor-texto" id="truco-vencedor-texto"></p>
+          <button type="button" class="truco-botao-ouro" id="truco-continuar">
+            <span id="truco-continuar-texto">Próxima partida</span> <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="truco-placar">
+        <div class="truco-dupla truco-dupla-clara" data-dupla="0">
+          <button type="button" class="truco-nome" data-acao="nome" aria-haspopup="dialog">
+            <span class="truco-naipe" aria-hidden="true">&#x2663;&#xFE0E;</span>
+            <span class="truco-nome-texto" data-nome>Nós</span>
+            <span class="truco-lapis" aria-hidden="true">&#x270E;&#xFE0E;</span>
+          </button>
+          <p class="sr-only" data-pontos-texto></p>
+          <p class="truco-pontos" data-pontos aria-hidden="true">0</p>
+          <p class="truco-de" aria-hidden="true">De 12 pontos</p>
+          <div class="truco-pontinhos" data-pontinhos aria-hidden="true"></div>
+          <button type="button" class="truco-marcar" data-acao="marcar">+1 ponto</button>
+          <div class="truco-ajustes">
+            <button type="button" class="truco-ajuste" data-acao="menos">−1</button>
+            <button type="button" class="truco-ajuste" data-acao="mais">+1</button>
+          </div>
+        </div>
+        <div class="truco-dupla truco-dupla-escura" data-dupla="1">
+          <button type="button" class="truco-nome" data-acao="nome" aria-haspopup="dialog">
+            <span class="truco-naipe truco-naipe-copas" aria-hidden="true">&#x2665;&#xFE0E;</span>
+            <span class="truco-nome-texto" data-nome>Eles</span>
+            <span class="truco-lapis" aria-hidden="true">&#x270E;&#xFE0E;</span>
+          </button>
+          <p class="sr-only" data-pontos-texto></p>
+          <p class="truco-pontos" data-pontos aria-hidden="true">0</p>
+          <p class="truco-de" aria-hidden="true">De 12 pontos</p>
+          <div class="truco-pontinhos" data-pontinhos aria-hidden="true"></div>
+          <button type="button" class="truco-marcar" data-acao="marcar">+1 ponto</button>
+          <div class="truco-ajustes">
+            <button type="button" class="truco-ajuste" data-acao="menos">−1</button>
+            <button type="button" class="truco-ajuste" data-acao="mais">+1</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="truco-rodape">
+        <fieldset class="truco-valor" id="truco-valor">
+          <legend>
+            <span class="truco-sobretitulo">Valor da mão</span>
+            <span class="truco-valor-nome" id="truco-valor-nome">Mão simples</span>
+          </legend>
+          <div class="truco-valores">
+            <label class="truco-opcao"><input type="radio" name="truco-valor" value="1" checked /><span class="truco-opcao-face">1<span class="sr-only"> ponto</span></span></label>
+            <label class="truco-opcao"><input type="radio" name="truco-valor" value="3" /><span class="truco-opcao-face">3<span class="sr-only"> pontos</span></span></label>
+            <label class="truco-opcao"><input type="radio" name="truco-valor" value="6" /><span class="truco-opcao-face">6<span class="sr-only"> pontos</span></span></label>
+            <label class="truco-opcao"><input type="radio" name="truco-valor" value="9" /><span class="truco-opcao-face">9<span class="sr-only"> pontos</span></span></label>
+            <label class="truco-opcao"><input type="radio" name="truco-valor" value="12" /><span class="truco-opcao-face">12<span class="sr-only"> pontos</span></span></label>
+          </div>
+          <p class="truco-legenda">Selecione o valor combinado e marque para a dupla que venceu a mão.</p>
+        </fieldset>
+        <p class="truco-salvo" id="truco-salvo">Mesa salva neste navegador. Pode voltar quando quiser.</p>
+      </div>
+    </div>
+    <p class="sr-only" role="status" aria-live="polite" id="truco-status"></p>
+  </div>
+
+  <div class="truco-historico">
+    <h2 class="truco-historico-titulo" id="truco-historico-titulo" tabindex="-1">Histórico</h2>
+    <p class="truco-historico-resumo" id="truco-historico-resumo"></p>
+    <p class="hint">
+      As últimas 50 partidas concluídas ficam guardadas neste navegador, com o placar e as duplas
+      de cada mesa.
+    </p>
+    <div class="truco-vazio" id="truco-vazio" hidden>
+      <p class="truco-vazio-titulo">O placar ainda está em branco.</p>
+      <p class="hint">Quando uma dupla chegar a 12 pontos, a partida aparece por aqui.</p>
+    </div>
+    <ol class="truco-lista" id="truco-lista" aria-labelledby="truco-historico-titulo"></ol>
+    <div class="truco-toast" id="truco-toast" role="status" aria-live="polite"></div>
+    <button type="button" class="button secondary truco-limpar" id="truco-limpar" hidden>Excluir todas as partidas</button>
+  </div>
+
+  <dialog class="truco-dialogo" id="truco-dialogo-mesa" aria-labelledby="truco-mesa-titulo">
+    <form class="truco-form" id="truco-form-mesa" novalidate>
+      <button type="button" class="truco-fechar" data-fechar aria-label="Fechar">×</button>
+      <h2 id="truco-mesa-titulo">Vamos pra mesa?</h2>
+      <p class="truco-legenda">Escolha as duplas e o formato. O resto é no grito.</p>
+      <div class="truco-campos">
+        <div class="field">
+          <label for="truco-mesa-nome-0">Dupla 1</label>
+          <input class="input" id="truco-mesa-nome-0" placeholder="Nós" autocomplete="off" autocapitalize="words" enterkeyhint="next" />
+        </div>
+        <div class="field">
+          <label for="truco-mesa-nome-1">Dupla 2</label>
+          <input class="input" id="truco-mesa-nome-1" placeholder="Eles" autocomplete="off" autocapitalize="words" enterkeyhint="done" />
+        </div>
+      </div>
+      <fieldset class="truco-formatos">
+        <legend>Como vai ser a disputa?</legend>
+        <div class="truco-formatos-grade">
+          <label class="truco-formato"><input type="radio" name="truco-formato" value="UNICA" /><span class="truco-formato-face"><strong>Partida única</strong><span>Até 12 pontos</span></span></label>
+          <label class="truco-formato"><input type="radio" name="truco-formato" value="MELHOR_DE_3" checked /><span class="truco-formato-face"><strong>Melhor de 3</strong><span>2 vitórias</span></span></label>
+          <label class="truco-formato"><input type="radio" name="truco-formato" value="MELHOR_DE_5" /><span class="truco-formato-face"><strong>Melhor de 5</strong><span>3 vitórias</span></span></label>
+          <label class="truco-formato"><input type="radio" name="truco-formato" value="LIVRE" /><span class="truco-formato-face"><strong>Jogo livre</strong><span>Sem limite de partidas</span></span></label>
+        </div>
+      </fieldset>
+      <p class="truco-legenda">Uma nova mesa substitui a disputa atual. As partidas concluídas continuam no histórico.</p>
+      <div class="truco-dialogo-botoes">
+        <button type="button" class="truco-botao-linha" data-fechar>Cancelar</button>
+        <button type="submit" class="truco-botao-ouro">Começar a jogar <span aria-hidden="true">→</span></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="truco-dialogo" id="truco-dialogo-ajustes" aria-labelledby="truco-ajustes-titulo">
+    <form class="truco-form" id="truco-form-ajustes" novalidate>
+      <button type="button" class="truco-fechar" data-fechar aria-label="Fechar">×</button>
+      <h2 id="truco-ajustes-titulo">Do seu jeito</h2>
+      <p class="truco-legenda">Ajustes para a mesa, sem perder o placar.</p>
+      <div class="truco-campos">
+        <div class="field">
+          <label for="truco-ajustes-nome-0">Dupla 1</label>
+          <input class="input" id="truco-ajustes-nome-0" placeholder="Nós" autocomplete="off" autocapitalize="words" enterkeyhint="next" />
+        </div>
+        <div class="field">
+          <label for="truco-ajustes-nome-1">Dupla 2</label>
+          <input class="input" id="truco-ajustes-nome-1" placeholder="Eles" autocomplete="off" autocapitalize="words" enterkeyhint="done" />
+        </div>
+      </div>
+      <button type="submit" class="truco-botao-ouro">Salvar nomes</button>
+      <label class="truco-interruptor" id="truco-vibracao-linha" hidden>
+        <input type="checkbox" id="truco-vibracao" role="switch" />
+        <span class="truco-interruptor-texto">
+          <strong>Vibração ao marcar</strong>
+          <span>Feedback de toque no celular</span>
+        </span>
+      </label>
+      <button type="button" class="truco-botao-perigo" id="truco-zerar">Zerar pontos desta partida</button>
+      <button type="button" class="truco-botao-texto" id="truco-nova-mesa">+ Começar uma nova mesa</button>
+    </form>
+  </dialog>
+
+  <dialog class="truco-dialogo truco-dialogo-pequeno" id="truco-dialogo-confirmar" aria-labelledby="truco-confirmar-titulo" aria-describedby="truco-confirmar-texto">
+    <div class="truco-form">
+      <h2 id="truco-confirmar-titulo"></h2>
+      <p class="truco-dialogo-texto" id="truco-confirmar-texto"></p>
+      <div class="truco-dialogo-botoes">
+        <button type="button" class="truco-botao-linha" id="truco-confirmar-cancelar">Cancelar</button>
+        <button type="button" class="truco-botao-perigo-cheio" id="truco-confirmar-ok"></button>
+      </div>
+    </div>
+  </dialog>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar o marcador</h2>
+  <p>
+    Cada dupla tem um painel com os pontos da partida, de 0 a 12, e uma régua de 12 bolinhas
+    que acendem conforme o placar sobe. Antes de jogar a mão, escolha em <strong>Valor da
+    mão</strong> quanto ela vale (1, 3, 6, 9 ou 12) e, quando a mão terminar, toque no botão
+    de marcar da dupla que venceu. Depois de marcar, o valor volta sozinho para a mão simples,
+    porque a próxima mão começa valendo 1.
+  </p>
+  <p>
+    Os botões <strong>−1</strong> e <strong>+1</strong> servem para correções rápidas e não
+    mudam o valor selecionado. Se marcar errado, use <strong>Desfazer</strong>: ele volta uma
+    jogada por vez (até 100) e, se a jogada tinha encerrado a partida, também retira o
+    resultado do histórico.
+  </p>
+
+  <h2>Quanto vale cada mão</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Pedido</th>
+          <th scope="col">Vale</th>
+          <th scope="col">Se a outra dupla correr</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Mão simples</td><td>1 ponto</td><td>—</td></tr>
+        <tr><td>Truco</td><td>3 pontos</td><td>1 ponto</td></tr>
+        <tr><td>Seis</td><td>6 pontos</td><td>3 pontos</td></tr>
+        <tr><td>Nove</td><td>9 pontos</td><td>6 pontos</td></tr>
+        <tr><td>Doze</td><td>12 pontos</td><td>9 pontos</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Quem corre de um pedido entrega à outra dupla o valor que a mão tinha antes do pedido. Para
+    marcar isso, selecione esse valor menor e toque em marcar na dupla que fez o pedido. O
+    placar nunca passa de 12: com 10 pontos, um truco vencido fecha a partida em 12.
+  </p>
+
+  <h2>Mão de 11 e mão de ferro</h2>
+  <p>
+    Quando só uma dupla chega a 11 pontos, aparece o aviso de <strong>mão de 11</strong>. Essa
+    dupla olha as próprias cartas e decide se joga. Se aceitar, a mão vale 3 (botão
+    <strong>Vão jogar: vale 3</strong>); se correr, a adversária ganha 1 ponto (botão
+    <strong>Correram</strong>, que marca o ponto de uma vez). Quando as duas duplas estão com
+    11, é a <strong>mão de ferro</strong>: quem vencer a mão leva a partida, e a forma de jogar
+    essa mão costuma ser combinada na mesa.
+  </p>
+
+  <h2>Exemplo de uma partida</h2>
+  <p>Com as duplas padrão, “Nós” contra “Eles”, uma partida poderia ser assim:</p>
+  <ol>
+    <li>Vencemos uma mão simples: <strong>1 a 0</strong>.</li>
+    <li>Eles pedem truco, aceitamos e eles vencem: <strong>1 a 3</strong>.</li>
+    <li>Pedimos truco, eles aumentam para seis e nós vencemos: <strong>7 a 3</strong>.</li>
+    <li>Eles pedem truco e corremos. Eles ganham o valor anterior, 1 ponto: <strong>7 a 4</strong>.</li>
+    <li>Vencemos um truco: <strong>10 a 4</strong>. Depois, uma mão simples: <strong>11 a 4</strong>, e aparece o aviso de mão de 11.</li>
+    <li>Decidimos jogar, a mão vale 3 e vencemos: 11 + 3 passaria de 12, então a partida fecha em <strong>12 a 4</strong>.</li>
+  </ol>
+  <p>
+    Numa disputa em melhor de 3, as vitórias ficam 1 a 0 e o botão <strong>Próxima
+    partida</strong> zera os pontos para a segunda partida. Quando uma dupla chega a 2
+    vitórias, a disputa termina e o botão muda para <strong>Jogar novamente</strong>.
+  </p>
+
+  <h2>Formatos da disputa</h2>
+  <ul>
+    <li><strong>Partida única:</strong> quem fizer 12 pontos primeiro vence.</li>
+    <li><strong>Melhor de 3:</strong> a disputa acaba quando uma dupla vence 2 partidas.</li>
+    <li><strong>Melhor de 5:</strong> a disputa acaba com 3 vitórias.</li>
+    <li><strong>Jogo livre:</strong> as partidas seguem sem limite, e as vitórias vão se somando.</li>
+  </ul>
+
+  <h2>Dicas e limitações</h2>
+  <ul>
+    <li>
+      O marcador segue o truco paulista de 12 pontos. Outras variantes, como o truco mineiro e
+      o gaúcho, têm valores e regras diferentes, e cada mesa costuma ter seus próprios
+      combinados.
+    </li>
+    <li>
+      Ele não confere cartas nem jogadas: só guarda o placar que as duplas informam.
+    </li>
+    <li>
+      Tudo fica salvo no armazenamento deste navegador. Limpar os dados do site ou usar uma
+      janela anônima apaga a mesa e o histórico, e o placar não passa para outro aparelho.
+    </li>
+    <li>
+      A vibração ao marcar só aparece nos navegadores que permitem vibrar o aparelho, como o
+      Chrome no Android.
+    </li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Errei a marcação. Como corrijo?</h3>
+  <p>
+    Use o botão Desfazer, que volta as últimas jogadas uma por vez, ou ajuste o placar com −1 e
+    +1. Zerar os pontos da partida também pode ser desfeito.
+  </p>
+  <h3>Dá para trocar o nome das duplas no meio do jogo?</h3>
+  <p>
+    Sim. Toque no nome da dupla ou em Ajustes. Os nomes têm até 20 caracteres, e as partidas já
+    concluídas continuam com os nomes que as duplas tinham na época.
+  </p>
+  <h3>Quantas partidas o histórico guarda?</h3>
+  <p>
+    As últimas 50 partidas concluídas, com data, formato, placar e duplas. Você pode excluir
+    uma partida (com opção de desfazer logo em seguida) ou apagar todas de uma vez.
+  </p>
+  <h3>Meus dados são enviados para algum lugar?</h3>
+  <p>
+    Não. O placar, os nomes e o histórico ficam apenas neste navegador e não são enviados para
+    nenhum servidor.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/marcadordetruco.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Marcador de Truco no celular</h2>
+    <p>O mesmo placar no Android, com a mesa sempre à mão, vibração ao marcar e histórico das partidas.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.marcadordetruco&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

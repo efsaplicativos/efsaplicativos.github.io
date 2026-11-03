@@ -1,0 +1,412 @@
+/* ==========================================================================
+   Jogo da velha — cores do tabuleiro e dos resultados do app Tic Tac Toe (ui/tema/Cores.kt)
+   ========================================================================== */
+
+.jogo-velha {
+  --jv-tabuleiro: #0e0d0c;
+  --jv-casa: #34312c;
+  --jv-casa-hover: #403c36;
+  --jv-vencedora: #7a6500;
+  --jv-x: #ff6b6b;
+  --jv-o: #8fa2ff;
+  --jv-vitoria: #81c784;
+  --jv-derrota: #ef9a9a;
+  --jv-empate: #b8b2a6;
+  max-width: 480px;
+  margin: 0 auto;
+}
+:root[data-theme="light"] .jogo-velha {
+  --jv-tabuleiro: #413e3e;
+  --jv-casa: #ffffff;
+  --jv-casa-hover: #f3efe6;
+  --jv-vencedora: #ffd700;
+  --jv-x: #e5141c;
+  --jv-o: #1c29d6;
+  --jv-vitoria: #2e7d32;
+  --jv-derrota: #c62828;
+  --jv-empate: #6d6a63;
+}
+
+.jogo-velha .jv-modos {
+  justify-content: center;
+}
+.jv-niveis {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.jv-niveis[hidden] {
+  display: none;
+}
+.jv-rotulo {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--muted);
+}
+
+/* ---------- Mensagem ---------- */
+.jv-mensagem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 56px;
+  margin: 16px 0;
+  padding: 8px 16px;
+  font-size: 20px;
+  font-weight: 650;
+  text-align: center;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.jv-mensagem[data-tipo="vitoria"] {
+  color: var(--jv-vitoria);
+}
+.jv-mensagem[data-tipo="derrota"] {
+  color: var(--jv-derrota);
+}
+.jv-icone {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  font-size: 22px;
+  line-height: 1;
+}
+.jv-icone .jv-marca {
+  width: 24px;
+  height: 24px;
+}
+.jv-icone .jv-marca * {
+  stroke-dashoffset: 0;
+  animation: none;
+}
+.jv-girando {
+  border: 3px solid var(--border-2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  animation: jv-girar 800ms linear infinite;
+}
+
+/* ---------- Tabuleiro ---------- */
+.jv-tabuleiro {
+  width: min(100%, 440px, max(240px, calc(100vh - 300px)));
+  margin: 0 auto;
+  padding: 8px;
+  background: var(--jv-tabuleiro);
+  border-radius: 24px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+}
+@supports (height: 100svh) {
+  .jv-tabuleiro {
+    width: min(100%, 440px, max(240px, calc(100svh - 300px)));
+  }
+}
+.jv-grade {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  aspect-ratio: 1;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.jv-casa {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  padding: 0;
+  background: var(--jv-casa);
+  border: 0;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.jv-casa[aria-disabled="true"] {
+  cursor: default;
+}
+.jv-casa[aria-disabled="false"]:hover {
+  background: var(--jv-casa-hover);
+}
+.jv-casa:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.jv-casa.vencedora {
+  background: var(--jv-vencedora);
+}
+.jv-casa.apagada .jv-marca {
+  opacity: 0.35;
+}
+.jv-grade.travada .jv-casa {
+  cursor: progress;
+}
+
+.jv-marca {
+  width: 60%;
+  height: 60%;
+  fill: none;
+  stroke-linecap: round;
+  transition: opacity 200ms ease;
+}
+.jv-marca * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: jv-desenhar 280ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.jv-marca.jv-x {
+  stroke: var(--jv-x);
+  stroke-width: 12;
+}
+.jv-marca.jv-x line + line {
+  animation-delay: 120ms;
+}
+.jv-marca.jv-o {
+  stroke: var(--jv-o);
+  stroke-width: 11;
+}
+.jv-linha {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.jv-linha line {
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0.85;
+  animation: jv-desenhar 420ms ease-out 120ms forwards;
+}
+.jv-linha.jv-x line {
+  stroke: var(--jv-x);
+}
+.jv-linha.jv-o line {
+  stroke: var(--jv-o);
+}
+.jv-grade.sem-animacao .jv-marca *,
+.jv-grade.sem-animacao .jv-linha line {
+  stroke-dashoffset: 0;
+  animation: none;
+}
+
+/* ---------- Botões ---------- */
+.jv-botoes {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+.jv-botoes .button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 52px;
+  justify-content: center;
+}
+.jv-botoes .button[hidden] {
+  display: none;
+}
+.jv-botoes .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.jv-ajuda {
+  margin: 14px 0 0;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ---------- Placar e desempenho ---------- */
+.jv-cartao {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.jv-cartao[hidden] {
+  display: none;
+}
+.jv-cartao-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.jv-cartao h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.jv-numeros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+  text-align: center;
+}
+.jv-numero strong {
+  display: block;
+  font-size: 28px;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.jv-numero span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.jv-cor-x strong {
+  color: var(--jv-x);
+}
+.jv-cor-o strong {
+  color: var(--jv-o);
+}
+.jv-cor-empate strong {
+  color: var(--jv-empate);
+}
+.jv-cor-vitoria strong {
+  color: var(--jv-vitoria);
+}
+.jv-cor-derrota strong {
+  color: var(--jv-derrota);
+}
+.jv-link {
+  padding: 4px 0;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--violet-2);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.jv-link:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.jv-link[hidden] {
+  display: none;
+}
+
+.jv-historico {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.jv-historico summary {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.jv-historico ol {
+  margin: 10px 0 0;
+  padding-left: 22px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.jv-historico li + li {
+  margin-top: 4px;
+}
+.jv-historico li.jv-vitoria strong {
+  color: var(--jv-vitoria);
+}
+.jv-historico li.jv-derrota strong {
+  color: var(--jv-derrota);
+}
+.jv-historico li.jv-empate strong {
+  color: var(--jv-empate);
+}
+.jv-historico p {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.jv-historico .jv-link {
+  margin-top: 8px;
+}
+
+/* ---------- Diálogo ---------- */
+.jv-dialogo {
+  width: min(92vw, 380px);
+  padding: 24px;
+  color: var(--text);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.jv-dialogo::backdrop {
+  background: rgba(5, 10, 30, 0.6);
+}
+.jv-dialogo h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+.jv-dialogo p {
+  margin: 0 0 18px;
+  color: var(--text-2);
+}
+.jv-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.jv-dialogo.travado .jv-dialogo-botoes {
+  pointer-events: none;
+}
+
+@keyframes jv-desenhar {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes jv-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 400px) {
+  .jv-mensagem {
+    font-size: 18px;
+  }
+  .jv-tabuleiro {
+    padding: 6px;
+    border-radius: 20px;
+  }
+  .jv-grade {
+    gap: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jv-marca *,
+  .jv-linha line {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+  .jv-girando {
+    animation-duration: 2400ms;
+  }
+}

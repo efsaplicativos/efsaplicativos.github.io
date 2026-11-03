@@ -1,0 +1,220 @@
+<!--
+titulo: Calculadora de Estatística: Média, Mediana, Moda e Desvio — EFS Aplicativos
+descricao: Cole uma lista de números e veja média, mediana, moda, desvio padrão, variância, quartis, valores atípicos, histograma e tabela de frequência na hora.
+scripts: /assets/numeros.js /assets/ferramentas/matematica-comum.js /assets/ferramentas/estatistica-logica.js /assets/ferramentas/estatistica.js
+estilos: /assets/ferramentas/estatistica.css
+app: Calculadora de estatística | EducationalApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Estatística</li>
+  </ol>
+  <h1>Calculadora de estatística</h1>
+  <p>
+    Digite ou cole uma lista de números para ver na hora as medidas de tendência central, de
+    dispersão e de forma, os quartis, os valores atípicos, o histograma e a tabela de frequência.
+  </p>
+</header>
+
+<section class="tool est" id="estatistica" aria-label="Calculadora de estatística">
+  <div class="tool-grid">
+    <form class="fields" id="est-form" novalidate>
+      <div class="field">
+        <label for="est-dados">Dados</label>
+        <textarea class="input est-dados" id="est-dados" rows="6" autocomplete="off" spellcheck="false" placeholder="Ex.: 2; 4,5; 7; 7; 10" aria-describedby="est-dica"></textarea>
+        <span class="hint" id="est-dica">Separe os valores por espaço, ponto e vírgula ou quebra de linha; assim a vírgula vale como decimal (1,5). Sem espaços, a vírgula separa os valores (1,2,3).</span>
+      </div>
+      <div class="est-acoes">
+        <button type="button" class="button secondary" id="est-exemplo">Exemplo</button>
+        <button type="button" class="button secondary" id="est-limpar">Limpar</button>
+      </div>
+      <p class="est-lidos" id="est-lidos" hidden></p>
+      <p class="result-message error" id="est-ignorados" hidden></p>
+    </form>
+
+    <div class="result est-central" id="est-central">
+      <p class="result-label">Média</p>
+      <p class="result-value" id="est-media">—</p>
+      <dl class="result-list" id="est-central-lista"></dl>
+      <p class="result-message" id="est-vazio">Digite pelo menos um número para ver as estatísticas.</p>
+      <p class="sr-only" aria-live="polite" id="est-anuncio"></p>
+    </div>
+  </div>
+
+  <div class="est-resultados" id="est-resultados" hidden>
+    <div class="est-cartoes">
+      <section class="est-cartao" aria-labelledby="est-t-dispersao">
+        <h2 id="est-t-dispersao">Dispersão</h2>
+        <dl class="result-list" id="est-dispersao"></dl>
+      </section>
+      <section class="est-cartao" aria-labelledby="est-t-quartis">
+        <h2 id="est-t-quartis">Quartis e valores atípicos</h2>
+        <dl class="result-list" id="est-quartis"></dl>
+        <p class="hint" id="est-nota-quartis"></p>
+      </section>
+      <section class="est-cartao" aria-labelledby="est-t-forma">
+        <h2 id="est-t-forma">Outras médias e forma</h2>
+        <dl class="result-list" id="est-forma"></dl>
+        <p class="hint" id="est-nota-forma"></p>
+      </section>
+      <section class="est-cartao" aria-labelledby="est-t-ferramentas">
+        <h2 id="est-t-ferramentas">Percentil e escore-z</h2>
+        <div class="field">
+          <label for="est-percentil">Percentil (0 a 100)</label>
+          <div class="input-row est-sufixo">
+            <input class="input" id="est-percentil" inputmode="decimal" autocomplete="off" value="90" />
+            <span aria-hidden="true">%</span>
+          </div>
+          <span class="est-erro" id="est-percentil-erro" hidden></span>
+        </div>
+        <dl class="result-list" id="est-percentil-resultado"></dl>
+        <div class="field">
+          <label for="est-z">Valor x para o escore-z</label>
+          <input class="input" id="est-z" inputmode="decimal" autocomplete="off" placeholder="Ex.: 30" />
+        </div>
+        <dl class="result-list" id="est-z-resultado"></dl>
+        <p class="hint" id="est-z-aviso" hidden></p>
+        <p class="hint">z = (x − média) / desvio padrão amostral</p>
+      </section>
+    </div>
+
+    <div class="est-bloco" id="est-histograma-bloco">
+      <h2 class="table-title">Histograma</h2>
+      <div class="est-grafico" id="est-grafico"></div>
+      <p class="hint" id="est-histograma-nota"></p>
+      <div class="table-wrap">
+        <table class="data">
+          <caption class="sr-only">Classes do histograma</caption>
+          <thead>
+            <tr><th scope="col">Classe</th><th scope="col">Freq.</th></tr>
+          </thead>
+          <tbody id="est-classes"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="est-bloco">
+      <h2 class="table-title">Tabela de frequência</h2>
+      <div class="table-wrap">
+        <table class="data">
+          <caption class="sr-only">Frequência de cada valor</caption>
+          <thead>
+            <tr><th scope="col">Valor</th><th scope="col">Freq.</th><th scope="col">%</th><th scope="col">% acum.</th></tr>
+          </thead>
+          <tbody id="est-frequencias"></tbody>
+        </table>
+      </div>
+      <p class="hint" id="est-frequencias-nota" hidden></p>
+    </div>
+
+    <div class="est-bloco">
+      <div class="est-ordenados-topo">
+        <h2 class="table-title">Dados ordenados</h2>
+        <button type="button" class="button secondary est-pequeno" id="est-copiar">Copiar</button>
+      </div>
+      <p class="est-ordenados" id="est-ordenados"></p>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como usar</h2>
+  <p>
+    Digite os números no campo <strong>Dados</strong> ou cole uma coluna de uma planilha: cada linha
+    vira um valor. As medidas são recalculadas a cada tecla. Trechos que não são números, como
+    palavras ou unidades, são ignorados e aparecem listados logo abaixo do campo, para você conferir.
+  </p>
+  <p>
+    A vírgula tem dois papéis. Se os valores estiverem separados por espaço, ponto e vírgula ou
+    quebra de linha, ela é a vírgula decimal: <strong>1,5; 2,5</strong> são dois números. Se não houver
+    nenhum espaço, a vírgula separa os valores: <strong>1,2,3</strong> são três números. Ponto também
+    funciona como decimal (1.5).
+  </p>
+
+  <h2>O que cada medida mostra</h2>
+  <ul>
+    <li><strong>Média</strong>: a soma dividida pela quantidade. É sensível a valores extremos.</li>
+    <li><strong>Mediana</strong>: o valor do meio com os dados em ordem. Metade dos valores fica abaixo dela.</li>
+    <li><strong>Moda</strong>: o valor que mais se repete. Pode haver mais de uma, ou nenhuma, quando todos aparecem o mesmo número de vezes.</li>
+    <li><strong>Desvio padrão</strong>: o quanto os valores se afastam da média, na mesma unidade dos dados.</li>
+    <li><strong>Coeficiente de variação</strong>: o desvio padrão como porcentagem da média, útil para comparar a dispersão de grupos com médias diferentes.</li>
+    <li><strong>Quartis</strong>: Q1, Q2 (a mediana) e Q3 dividem os dados ordenados em quatro partes com a mesma quantidade de valores.</li>
+  </ul>
+
+  <h2>Fórmulas usadas</h2>
+  <p class="formula">média = Σx / n     s² = Σ(x − média)² / (n − 1)     σ² = Σ(x − média)² / n</p>
+  <p>
+    A variância <strong>amostral</strong> (s²) divide por n − 1 e é a indicada quando os dados são uma
+    amostra de um grupo maior, como 30 alunos de uma escola. A <strong>populacional</strong> (σ²)
+    divide por n e vale quando os dados são o grupo inteiro. O desvio padrão é a raiz quadrada da
+    variância, e o erro padrão da média é s / √n.
+  </p>
+  <p>
+    Os quartis e percentis usam interpolação linear entre as posições (método R-7): a posição do
+    percentil p é p/100 × (n − 1), contando a partir de zero. Valores abaixo de Q1 − 1,5 × IQR ou acima
+    de Q3 + 1,5 × IQR são marcados como atípicos, em que IQR = Q3 − Q1.
+  </p>
+
+  <h2>Exemplo</h2>
+  <p>
+    Com os dados do botão <strong>Exemplo</strong> (12; 15,5; 15,5; 18; 20; 21,5; 22; 25; 30; 45), a
+    soma é 224,5 e a média, 22,45. A mediana é a média dos dois valores centrais, 20 e 21,5, ou seja,
+    20,75, e a moda é 15,5, o único valor repetido. Q1 = 16,125 e Q3 = 24,25, então IQR = 8,125 e a
+    cerca superior fica em 24,25 + 1,5 × 8,125 = 36,4375. Por isso o 45 aparece como valor atípico:
+    ele puxa a média para cima, enquanto a mediana quase não muda.
+  </p>
+
+  <h2>Histograma e tabela de frequência</h2>
+  <p>
+    O histograma divide o intervalo entre o menor e o maior valor em classes de mesma largura. O
+    número de classes segue a regra de Sturges, k = ⌈log₂ n⌉ + 1: com 10 valores, são 5 classes.
+    Cada classe inclui o limite inferior e exclui o superior, menos a última, que inclui o máximo. A
+    tabela de frequência mostra cada valor distinto, quantas vezes ele aparece, a porcentagem e a
+    porcentagem acumulada (até 300 valores distintos).
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Devo usar o desvio padrão amostral ou o populacional?</h3>
+  <p>
+    Se os números são uma parte de um grupo maior (uma pesquisa, uma amostra de produção), use o
+    amostral. Se são todos os elementos que interessam (as notas de todos os alunos de uma turma),
+    use o populacional. Com muitos valores, a diferença entre os dois fica pequena.
+  </p>
+  <h3>Por que a média geométrica aparece como "Requer valores positivos"?</h3>
+  <p>
+    As médias geométrica e harmônica só são definidas para números maiores que zero. Basta um zero
+    ou um negativo na lista para que elas não sejam calculadas.
+  </p>
+  <h3>O que significam assimetria e curtose?</h3>
+  <p>
+    A assimetria indica para que lado a distribuição tem a cauda mais longa: positiva quando há
+    valores altos que se afastam da maioria, negativa no caso contrário. A curtose em excesso compara
+    o peso das caudas com o de uma distribuição normal, que tem curtose zero. São versões amostrais e
+    exigem pelo menos 3 e 4 valores.
+  </p>
+  <h3>O que é o escore-z?</h3>
+  <p>
+    É quantos desvios padrão um valor está acima ou abaixo da média. No exemplo, x = 30 tem escore-z
+    de aproximadamente 0,8: um pouco acima da média, dentro do comum.
+  </p>
+  <h3>Meus dados ficam salvos?</h3>
+  <p>
+    A lista fica guardada apenas neste navegador, para você continuar depois. Nada é enviado para a
+    EFS Aplicativos: todas as contas são feitas no seu aparelho.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Estatística, equações, matrizes, geometria e calculadora científica no mesmo app, a maioria funcionando sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

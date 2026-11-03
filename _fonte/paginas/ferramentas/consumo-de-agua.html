@@ -1,0 +1,166 @@
+<!--
+titulo: Quanta Água Beber por Dia? Calculadora de Consumo de Água — EFS Aplicativos
+descricao: Estime quanta água beber por dia pelo seu peso, atividade física e clima, em litros e copos, com horários sugeridos. Estimativa geral, não substitui o médico.
+scripts: /assets/numeros.js /assets/ferramentas/consumo-de-agua-logica.js /assets/ferramentas/consumo-de-agua.js
+estilos: /assets/ferramentas/consumo-de-agua.css
+app: Calculadora de Consumo de Água | HealthApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Consumo de água</li>
+  </ol>
+  <h1>Quanta água beber por dia</h1>
+  <p>
+    Uma estimativa de quanta água beber por dia a partir do seu peso, com acréscimos para
+    atividade física, calor, gestação e amamentação, convertida em copos e distribuída ao longo
+    do dia.
+  </p>
+</header>
+
+<section class="tool agua" aria-label="Calculadora de consumo de água">
+  <div class="tool-grid">
+    <form class="fields" id="form-agua" novalidate>
+      <fieldset class="field">
+        <legend>Unidade do peso</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-unidade="kg" aria-pressed="true">Quilos (kg)</button>
+          <button type="button" class="filter" data-unidade="lb" aria-pressed="false">Libras (lb)</button>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="peso">Peso (<span id="peso-unidade">kg</span>)</label>
+        <input class="input" id="peso" inputmode="decimal" autocomplete="off" placeholder="Ex.: 70" aria-describedby="peso-dica" />
+        <span class="hint" id="peso-dica">Entre 2 e 650 kg.</span>
+      </div>
+      <div class="field">
+        <label for="exercicio">Atividade física por dia (minutos)</label>
+        <input class="input" id="exercicio" inputmode="numeric" autocomplete="off" placeholder="Opcional, ex.: 30" />
+      </div>
+      <fieldset class="field">
+        <legend>Clima</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-clima="ameno" aria-pressed="true">Ameno</button>
+          <button type="button" class="filter" data-clima="quente" aria-pressed="false">Quente</button>
+          <button type="button" class="filter" data-clima="muito-quente" aria-pressed="false">Muito quente</button>
+        </div>
+      </fieldset>
+      <fieldset class="field">
+        <legend>Gestação ou amamentação</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-condicao="nenhuma" aria-pressed="true">Não se aplica</button>
+          <button type="button" class="filter" data-condicao="gestante" aria-pressed="false">Gestante</button>
+          <button type="button" class="filter" data-condicao="amamentando" aria-pressed="false">Amamentando</button>
+        </div>
+      </fieldset>
+      <fieldset class="field">
+        <legend>Tamanho do copo</legend>
+        <div class="segmented">
+          <button type="button" class="filter" data-copo="200" aria-pressed="false">200 ml</button>
+          <button type="button" class="filter active" data-copo="250" aria-pressed="true">250 ml</button>
+          <button type="button" class="filter" data-copo="300" aria-pressed="false">300 ml</button>
+          <button type="button" class="filter" data-copo="500" aria-pressed="false">500 ml</button>
+        </div>
+      </fieldset>
+      <div class="agua-horas">
+        <div class="field">
+          <label for="acordar">Acordo às</label>
+          <input class="input" type="time" id="acordar" value="07:00" step="300" />
+        </div>
+        <div class="field">
+          <label for="dormir">Durmo às</label>
+          <input class="input" type="time" id="dormir" value="23:00" step="300" />
+        </div>
+      </div>
+    </form>
+
+    <div class="agua-resultados" aria-live="polite">
+      <div class="result" id="resultado-agua">
+        <p class="result-message">Informe o seu peso.</p>
+      </div>
+      <div class="result" id="cronograma" hidden>
+        <h2 class="agua-titulo">Horários sugeridos</h2>
+        <p class="hint agua-dica">Distribuídos entre a hora de acordar e uma hora antes de dormir.</p>
+        <ol class="agua-copos" id="cronograma-lista"></ol>
+      </div>
+      <p class="note agua-aviso">
+        Estimativa geral para adultos saudáveis, não uma prescrição. A necessidade de água varia de
+        pessoa para pessoa e a orientação do seu médico ou nutricionista sempre prevalece,
+        principalmente para quem tem doença nos rins ou no coração ou precisa restringir líquidos.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>Como a estimativa é feita</h2>
+  <p>
+    A conta parte de uma regra prática muito usada: cerca de <strong>35 ml de água por quilo</strong>
+    de peso por dia, dentro de uma faixa de 30 a 40 ml por quilo. Depois entram os acréscimos:
+  </p>
+  <ul>
+    <li><strong>Atividade física:</strong> 12 ml por minuto de exercício, para repor o suor.</li>
+    <li><strong>Clima:</strong> + 500 ml em dias quentes e + 1 litro em dias muito quentes.</li>
+    <li><strong>Gestação:</strong> + 300 ml. <strong>Amamentação:</strong> + 700 ml.</li>
+  </ul>
+  <p class="formula">total = peso × 35 ml + minutos de exercício × 12 ml + clima + gestação ou amamentação</p>
+
+  <h2>Exemplo</h2>
+  <p>
+    Uma pessoa de 70 kg que caminha 30 minutos por dia num lugar de clima ameno: 70 × 35 = 2.450 ml,
+    mais 30 × 12 = 360 ml, somando <strong>2.810 ml, ou cerca de 2,8 litros</strong>. Com copos de
+    250 ml, são 12 copos ao longo do dia. A faixa de 30 a 40 ml por quilo, com o mesmo exercício,
+    vai de 2,46 a 3,16 litros.
+  </p>
+
+  <h2>Um valor de referência, não uma meta rígida</h2>
+  <p>
+    Não existe um número exato que sirva para todos. Idade, saúde, alimentação, remédios, altitude
+    e o quanto você transpira mudam a necessidade de cada um, e parte da água vem dos alimentos,
+    como frutas, legumes, sopas e leite. Referências internacionais, como a da Autoridade Europeia
+    para a Segurança dos Alimentos (EFSA), falam em cerca de 2 litros por dia para mulheres e 2,5
+    litros para homens adultos, somando a água das bebidas e da comida.
+  </p>
+  <p>
+    Use o resultado como ponto de partida. Beber ao longo do dia, sem esperar a sede apertar, costuma
+    ser mais confortável do que tomar muito de uma vez. Urina clara ou amarelo-clara é um sinal
+    comum de boa hidratação; urina escura e sede frequente indicam que vale beber mais.
+  </p>
+  <p class="note">
+    Esta página não faz diagnóstico nem substitui consulta. Crianças, idosos, gestantes, atletas e
+    pessoas com doenças nos rins, no coração ou no fígado, ou com orientação de restringir
+    líquidos, devem seguir o que o médico indicar. Beber muito mais do que o corpo precisa em pouco
+    tempo também pode fazer mal.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Café, chá e suco contam?</h3>
+  <p>
+    Contam como líquido, mas bebidas com açúcar ou álcool não são a melhor forma de se hidratar.
+    A água pura continua sendo a referência.
+  </p>
+  <h3>Por que os horários terminam antes da hora de dormir?</h3>
+  <p>
+    O último copo fica uma hora antes de deitar, para não atrapalhar o sono. Se você dorme depois
+    da meia-noite, é só informar o horário: a calculadora entende que o dia passa da meia-noite.
+  </p>
+  <h3>Os dados que eu informo ficam salvos?</h3>
+  <p>
+    O peso não é guardado. Só a unidade, o tamanho do copo e os horários ficam no seu navegador,
+    para a próxima visita. Nada é enviado para a internet.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Consumo de água, IMC, conversor de medidas e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

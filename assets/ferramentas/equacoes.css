@@ -1,0 +1,286 @@
+/* ==========================================================================
+   Equações — abas, campos de coeficientes, resultado, gráfico e passo a passo.
+   Cores das séries validadas para leitura com daltonismo nos dois temas.
+   ========================================================================== */
+
+.eq {
+  --eq-serie-1: #3b82f6;
+  --eq-serie-2: #d9730f;
+  --eq-erro: #ffb4a8;
+}
+:root[data-theme="light"] .eq {
+  --eq-serie-1: #2563eb;
+  --eq-serie-2: #c2410c;
+  --eq-erro: #b42318;
+}
+
+.eq-abas {
+  margin-bottom: 20px;
+}
+.eq-painel {
+  display: grid;
+  gap: 14px;
+}
+.eq-painel[hidden] {
+  display: none;
+}
+.eq-modelo {
+  margin: 0;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: clamp(18px, 2.4vw, 22px);
+  font-weight: 650;
+  text-align: center;
+  color: var(--text);
+}
+.eq-coeficientes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  gap: 10px;
+}
+.eq-coeficientes .field > label,
+.eq-linha .field > label {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 15px;
+}
+.eq .input {
+  min-width: 0;
+  padding-inline: 10px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.eq-erro {
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--eq-erro);
+}
+.eq-erro[hidden] {
+  display: none;
+}
+
+/* Sistema: uma linha por equação */
+.eq-linha {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.eq-linha[hidden] {
+  display: none;
+}
+.eq-linha legend {
+  margin-bottom: 6px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+}
+.eq-linha-campos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.eq-painel[data-tamanho="2"] .eq-linha-campos {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.eq-linha .field[data-coluna="3"] {
+  padding-left: 8px;
+  border-left: 1px dashed var(--border-2);
+}
+
+.eq-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ---------- Resultado ---------- */
+.eq-equacao {
+  margin: 4px 0 12px;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 17px;
+  font-weight: 650;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.eq-aviso {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text-2);
+  background: var(--surface-3);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--r-sm);
+}
+.eq-natureza {
+  margin: 0 0 10px;
+  font-weight: 650;
+  color: var(--text);
+}
+.eq .result-value {
+  margin-bottom: 10px;
+}
+.eq-raizes {
+  margin-bottom: 14px;
+}
+.eq-raizes div {
+  font-size: 16px;
+}
+.eq-raizes dt {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  color: var(--text-2);
+}
+.eq-raizes dd {
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.eq-detalhes dd {
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Gráfico ---------- */
+.eq-grafico {
+  margin: 26px 0 0;
+}
+.eq-grafico[hidden],
+.eq-passos-bloco[hidden] {
+  display: none;
+}
+.eq-grafico-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 18px;
+  margin-bottom: 10px;
+}
+.eq-grafico-titulo {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+.eq-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+.eq-legenda-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.eq-amostra {
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--eq-serie-1);
+}
+.eq-amostra.eq-serie-2 {
+  background: var(--eq-serie-2);
+}
+.eq-grafico-area {
+  min-width: 0;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.eq-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+.eq-svg:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: -3px;
+}
+.eq-grade line {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+.eq-eixos line {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+.eq-marcas text {
+  font-size: 11px;
+  fill: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.eq-curva {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.eq-curva.eq-serie-1 {
+  stroke: var(--eq-serie-1);
+}
+.eq-curva.eq-serie-2 {
+  stroke: var(--eq-serie-2);
+}
+.eq-ponto {
+  fill: var(--text);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+.eq-ponto-rotulo {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--text);
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.eq-cursor line {
+  stroke: var(--text-2);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+.eq-cursor circle {
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+.eq-cursor circle.eq-serie-1 {
+  fill: var(--eq-serie-1);
+}
+.eq-cursor circle.eq-serie-2 {
+  fill: var(--eq-serie-2);
+}
+#eq-leitura {
+  min-height: 1.5em;
+  margin: 8px 0 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Passo a passo ---------- */
+.eq-passos {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--text-2);
+}
+.eq-passos li {
+  margin-bottom: 8px;
+  overflow-wrap: anywhere;
+}
+.eq-passos li::marker {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+@media (max-width: 400px) {
+  .eq-linha-campos {
+    gap: 6px;
+  }
+  .eq .input {
+    padding-inline: 6px;
+  }
+  .eq-linha .field[data-coluna="3"] {
+    padding-left: 6px;
+  }
+}

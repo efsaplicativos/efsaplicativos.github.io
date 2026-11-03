@@ -1,0 +1,198 @@
+/* Fuso horário — complementos de assets/web.css, só dentro de .fuso */
+
+.fuso {
+  --fuso-verao: #fcd34d;
+  --fuso-verao-fundo: rgba(245, 158, 11, 0.16);
+}
+:root[data-theme="light"] .fuso {
+  --fuso-verao: #92400e;
+  --fuso-verao-fundo: rgba(217, 119, 6, 0.12);
+}
+
+/* ---------- Escolha dos fusos ---------- */
+.fuso-escolha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: end;
+  gap: 12px;
+  margin: 0 0 18px;
+}
+.fuso .fuso-select {
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
+  text-overflow: ellipsis;
+}
+.fuso .fuso-inverter {
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0 12px;
+  font-size: 20px;
+}
+
+/* ---------- Relógios ---------- */
+.fuso-agora {
+  margin-bottom: 22px;
+}
+.fuso-relogios {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 8px 0 14px;
+}
+.fuso-relogio {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  min-width: 0;
+}
+.fuso-cidade {
+  font-size: 15px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.fuso-hora {
+  font-size: clamp(30px, 5vw, 44px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.fuso-data,
+.fuso-offset {
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.fuso-verao {
+  justify-self: start;
+  margin-top: 4px;
+  padding: 2px 10px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--fuso-verao);
+  background: var(--fuso-verao-fundo);
+  border-radius: var(--r-pill);
+}
+.fuso-diferenca {
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.fuso .fuso-frase {
+  margin: 4px 0 0;
+  font-size: 17px;
+  font-weight: 750;
+}
+
+/* ---------- Conversão e relógio mundial ---------- */
+.fuso-bloco {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
+}
+.fuso-titulo {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 750;
+}
+.fuso .fuso-origem {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.fuso-par {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.fuso .fuso-conversao-data {
+  margin: 0 0 12px;
+}
+.fuso .fuso-nota,
+.fuso .fuso-dica {
+  margin: 0;
+}
+.fuso-conversao .fuso-nota {
+  margin-top: 12px;
+}
+
+.fuso-mundo {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fuso-mundo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.fuso-mundo-info {
+  display: grid;
+  gap: 1px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.fuso-mundo-cidade {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.fuso-mundo-relativo,
+.fuso-mundo-data {
+  font-size: 13px;
+  color: var(--muted);
+}
+.fuso-mundo-hora {
+  flex: 0 0 auto;
+  font-size: 22px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.fuso .fuso-remover {
+  flex: 0 0 auto;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1;
+}
+.fuso-adicionar {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+}
+.fuso-adicionar .button {
+  flex: 0 0 auto;
+}
+.fuso .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+@media (max-width: 560px) {
+  .fuso-escolha {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fuso .fuso-inverter {
+    justify-self: center;
+  }
+  .fuso .fuso-inverter span {
+    display: inline-block;
+    transform: rotate(90deg);
+  }
+}
+@media (max-width: 380px) {
+  .fuso-par {
+    grid-template-columns: 1fr;
+  }
+  .fuso-relogios {
+    gap: 10px;
+  }
+}

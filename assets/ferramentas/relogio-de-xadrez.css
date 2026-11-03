@@ -1,0 +1,478 @@
+/* ==========================================================================
+   Relógio de xadrez — cores das metades iguais às do app Relógio Xadrez
+   (ui/tema, CoresRelogio). Todas as cores fixas definem também a cor do texto.
+   ========================================================================== */
+
+.xadrez {
+  --xz-inativa: #141b2c;
+  --xz-texto-inativa: #c9d3ee;
+  --xz-borda-inativa: #26324b;
+  --xz-ativa: #2350c2;
+  --xz-pausada: #1e2c52;
+  --xz-texto-pausada: #ffffff;
+  --xz-critica: #c62828;
+  --xz-critica-inativa: #3a1a22;
+  --xz-texto-critica-inativa: #ff8a80;
+  --xz-derrota: #8e1b24;
+  --xz-vitoria: #3b2f0e;
+  --xz-texto-vitoria: #f2c25b;
+}
+:root[data-theme="light"] .xadrez {
+  --xz-inativa: #e2e9fd;
+  --xz-texto-inativa: #0f1533;
+  --xz-borda-inativa: #c3cff5;
+  --xz-pausada: #d4defc;
+  --xz-texto-pausada: #10204f;
+  --xz-critica-inativa: #fde2e2;
+  --xz-texto-critica-inativa: #b42318;
+  --xz-vitoria: #fbf0d0;
+  --xz-texto-vitoria: #7a4d00;
+}
+
+.tool.xadrez {
+  padding: clamp(8px, 2.4vw, 24px);
+}
+
+.xadrez .xadrez-ritmo {
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--text-2);
+}
+.xadrez .xadrez-ritmo strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.xadrez .xadrez-palco {
+  border-radius: var(--r);
+}
+
+/* Retrato: uma metade em cima da outra, a de cima virada para quem está do outro lado */
+.xadrez .xadrez-relogio {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: clamp(440px, 82vh, 760px);
+  height: clamp(440px, 82svh, 760px);
+}
+
+.xadrez .xadrez-metade {
+  --fundo: var(--xz-inativa);
+  --texto: var(--xz-texto-inativa);
+  --borda: var(--xz-borda-inativa);
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  text-align: center;
+  color: var(--texto);
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-radius: var(--r);
+  cursor: pointer;
+  /* Toque rápido sem zoom de duplo toque, sem seleção de texto nem menu de toque longo */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 0.18s,
+    color 0.18s,
+    border-color 0.18s;
+}
+.xadrez .xadrez-metade:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.xadrez .xadrez-metade[data-aparencia="ativa"] {
+  --fundo: var(--xz-ativa);
+  --texto: #ffffff;
+  --borda: var(--xz-ativa);
+}
+.xadrez .xadrez-metade[data-aparencia="pausada"] {
+  --fundo: var(--xz-pausada);
+  --texto: var(--xz-texto-pausada);
+  --borda: var(--xz-ativa);
+}
+.xadrez .xadrez-metade[data-aparencia="critica"] {
+  --fundo: var(--xz-critica);
+  --texto: #ffffff;
+  --borda: var(--xz-critica);
+}
+.xadrez .xadrez-metade[data-aparencia="critica-inativa"] {
+  --fundo: var(--xz-critica-inativa);
+  --texto: var(--xz-texto-critica-inativa);
+  --borda: var(--xz-critica-inativa);
+}
+.xadrez .xadrez-metade[data-aparencia="derrota"] {
+  --fundo: var(--xz-derrota);
+  --texto: #ffffff;
+  --borda: var(--xz-derrota);
+}
+.xadrez .xadrez-metade[data-aparencia="vitoria"] {
+  --fundo: var(--xz-vitoria);
+  --texto: var(--xz-texto-vitoria);
+  --borda: var(--xz-texto-vitoria);
+}
+
+.xadrez .xadrez-conteudo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 6px;
+  padding: 14px 18px;
+  container-type: size;
+}
+
+.xadrez .xadrez-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.xadrez .xadrez-disco {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f5f1e6;
+  border: 1px solid #bdb6a4;
+}
+.xadrez .xadrez-metade[data-jogador="pretas"] .xadrez-disco {
+  background: #121212;
+  border-color: #8a93a8;
+}
+.xadrez .xadrez-nome {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.xadrez .xadrez-lances {
+  font-weight: 600;
+  opacity: 0.85;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.xadrez .xadrez-centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 0;
+}
+/* Tamanho pela largura estimada do texto (--largura-tempo, em "em") e pela altura da metade */
+.xadrez .xadrez-tempo {
+  display: block;
+  font-size: clamp(28px, 13vw, 112px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+/* Com var(), uma unidade sem suporte anularia a regra em vez de cair no valor acima */
+@supports (width: 1cqw) {
+  .xadrez .xadrez-tempo {
+    font-size: clamp(28px, min(100cqw / var(--largura-tempo, 3.2), (100cqh - 72px) * 0.75), 180px);
+  }
+}
+.xadrez .xadrez-status {
+  font-size: 17px;
+  font-weight: 600;
+  opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Atraso que ainda resta no lance (sistema "Atraso") */
+.xadrez .xadrez-atraso {
+  display: block;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.25);
+}
+.xadrez .xadrez-atraso-barra {
+  display: block;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 3px;
+  transform-origin: left center;
+}
+
+/* ---------- Barra de controles ---------- */
+.xadrez .xadrez-controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, 1.6vw, 12px);
+  padding: 2px 0;
+}
+.xadrez .xadrez-botao {
+  --tamanho: clamp(40px, 11vw, 52px);
+  display: inline-grid;
+  place-items: center;
+  width: var(--tamanho);
+  height: var(--tamanho);
+  padding: 0;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: 50%;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+.xadrez .xadrez-botao:hover:not(:disabled) {
+  background: var(--surface-3);
+  border-color: var(--violet-2);
+}
+.xadrez .xadrez-botao:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.xadrez .xadrez-botao:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.xadrez .xadrez-botao svg {
+  width: 52%;
+  height: 52%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.xadrez .xadrez-botao svg .cheio {
+  fill: currentColor;
+  stroke: none;
+}
+.xadrez .xadrez-principal {
+  --tamanho: clamp(52px, 14vw, 68px);
+  color: #ffffff;
+  background: var(--grad);
+  border-color: transparent;
+  box-shadow: var(--glow-violet);
+}
+.xadrez .xadrez-principal:hover:not(:disabled) {
+  background: var(--grad);
+  border-color: transparent;
+  filter: brightness(1.08);
+}
+.xadrez .xadrez-principal .icone-pausar,
+.xadrez .xadrez-principal.pausar .icone-iniciar {
+  display: none;
+}
+.xadrez .xadrez-principal.pausar .icone-pausar {
+  display: block;
+}
+.xadrez #alternar-som[aria-pressed="true"] .icone-mudo,
+.xadrez #alternar-som[aria-pressed="false"] .icone-som {
+  display: none;
+}
+.xadrez #alternar-som[aria-pressed="false"] {
+  color: var(--muted);
+}
+
+/* Celular de pé: a metade de cima é lida por quem está do outro lado da mesa */
+@media (orientation: portrait) {
+  .xadrez #metade-distante .xadrez-conteudo {
+    transform: rotate(180deg);
+  }
+}
+
+/* Celular deitado ou computador: metades lado a lado e controles no meio */
+@media (orientation: landscape) {
+  .xadrez .xadrez-relogio {
+    flex-direction: row;
+    height: clamp(280px, 80vh, 560px);
+    height: clamp(280px, 80svh, 560px);
+  }
+  .xadrez .xadrez-controles {
+    flex-direction: column;
+    gap: clamp(4px, 1.6vh, 12px);
+    padding: 0 2px;
+  }
+  .xadrez .xadrez-botao {
+    --tamanho: clamp(36px, 10.5vh, 52px);
+  }
+  .xadrez .xadrez-principal {
+    --tamanho: clamp(48px, 14vh, 68px);
+  }
+}
+
+/* ---------- Tela cheia ---------- */
+.xadrez .xadrez-palco:fullscreen {
+  display: flex;
+  padding: 8px;
+  background: var(--bg);
+  border-radius: 0;
+}
+.xadrez .xadrez-palco:fullscreen .xadrez-relogio {
+  flex: 1;
+  height: auto;
+}
+.xadrez .xadrez-palco:-webkit-full-screen {
+  display: flex;
+  padding: 8px;
+  background: var(--bg);
+  border-radius: 0;
+}
+.xadrez .xadrez-palco:-webkit-full-screen .xadrez-relogio {
+  flex: 1;
+  height: auto;
+}
+
+.xadrez .xadrez-ajuda {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+/* ---------- Diálogos ---------- */
+.xadrez .xadrez-dialogo {
+  width: min(560px, calc(100% - 24px));
+  max-height: calc(100% - 24px);
+  padding: 0;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.xadrez .xadrez-dialogo-curto {
+  width: min(420px, calc(100% - 24px));
+}
+.xadrez .xadrez-dialogo::backdrop {
+  background: rgba(2, 6, 23, 0.72);
+}
+.xadrez .xadrez-dialogo-corpo {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: clamp(18px, 4vw, 26px);
+}
+.xadrez .xadrez-dialogo-corpo p {
+  margin: 0;
+  color: var(--text-2);
+}
+/* O site pinta h2 com gradiente; aqui o título fica com a cor do texto */
+.xadrez .xadrez-dialogo-titulo {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.25;
+  color: var(--text);
+  background: none;
+}
+.xadrez .xadrez-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.xadrez .xadrez-dialogo-botoes .button {
+  min-width: 120px;
+}
+.xadrez .button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+.xadrez .xadrez-grupo {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.xadrez .xadrez-grupo legend {
+  padding: 0;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 750;
+  color: var(--text);
+}
+.xadrez .xadrez-categoria {
+  display: grid;
+  gap: 6px;
+}
+.xadrez .xadrez-categoria + .xadrez-categoria {
+  margin-top: 10px;
+}
+.xadrez .xadrez-categoria-nome {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.xadrez .xadrez-categoria .filter,
+.xadrez .xadrez-grupo .segmented .filter {
+  min-height: 40px;
+  font-variant-numeric: tabular-nums;
+}
+.xadrez .xadrez-campos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.xadrez .field > .hint {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.xadrez .input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.xadrez .xadrez-opcao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 15px;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.xadrez .xadrez-opcao input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--violet);
+}
+.xadrez .xadrez-aviso {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--text);
+  background: rgba(255, 176, 32, 0.12);
+  border: 1px solid rgba(255, 176, 32, 0.45);
+  border-radius: var(--r-sm);
+}

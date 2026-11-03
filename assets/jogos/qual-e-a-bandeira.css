@@ -1,0 +1,498 @@
+/* ==========================================================================
+   Qual a Bandeira — cores do app (ui/tema/Cores.kt): índigo, dourado, coração
+   vermelho-rosado, verde de acerto e vermelho de erro
+   ========================================================================== */
+
+.qbandeira {
+  --qb-ouro: #f59e0b;
+  --qb-ouro-texto: #fbbf24;
+  --qb-coracao: #ff6b6b;
+  --qb-coracao-vazio: #374151;
+  --qb-destaque: #4f46e5;
+  --qb-rosa: #e94560;
+  --qb-acerto: #4ade80;
+  --qb-acerto-fundo: #14532d;
+  --qb-erro: #fca5a5;
+  --qb-erro-fundo: #7f1d1d;
+  --qb-overlay: rgba(5, 10, 30, 0.82);
+  max-width: 600px;
+  margin: 0 auto;
+}
+:root[data-theme="light"] .qbandeira {
+  --qb-ouro-texto: #a15c07;
+  --qb-coracao: #e11d48;
+  --qb-coracao-vazio: #cbd5e1;
+  --qb-acerto: #166534;
+  --qb-acerto-fundo: #dcfce7;
+  --qb-erro: #991b1b;
+  --qb-erro-fundo: #fee2e2;
+  --qb-overlay: rgba(243, 246, 255, 0.86);
+}
+
+.qb-painel {
+  position: relative;
+  min-height: 420px;
+  padding: clamp(16px, 4vw, 26px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* ---------- Início ---------- */
+.qb-inicio {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+}
+.qb-titulo {
+  margin: 6px 0 0;
+  font-size: clamp(26px, 6vw, 34px);
+  font-weight: 800;
+  color: var(--text);
+}
+.qb-subtitulo {
+  margin: 0;
+  color: var(--text-2);
+}
+.qb-selo-recorde {
+  margin: 0;
+  padding: 6px 16px;
+  font-weight: 700;
+  color: var(--qb-ouro-texto);
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.6);
+  border-radius: var(--r-pill);
+}
+.qb-regras {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+  margin: 4px 0;
+  padding: 14px 18px;
+  list-style: none;
+  text-align: left;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.qb-regras li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--text);
+}
+.qb-regra-icone {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  font-size: 15px;
+  font-weight: 800;
+  border-radius: 50%;
+}
+.qb-coracao {
+  color: var(--qb-coracao);
+  background: rgba(255, 107, 107, 0.15);
+}
+.qb-ouro {
+  color: var(--qb-ouro-texto);
+  background: rgba(245, 158, 11, 0.15);
+}
+.qb-rosa {
+  color: var(--qb-rosa);
+  background: rgba(233, 69, 96, 0.15);
+}
+.qb-acoes-inicio {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+}
+.qb-continuar {
+  flex-direction: column;
+  gap: 2px;
+  background: #15803d;
+  box-shadow: none;
+}
+.qb-continuar small {
+  font-size: 12.5px;
+  font-weight: 600;
+  opacity: 0.92;
+}
+
+/* ---------- Placar ---------- */
+.qb-placar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.qb-icone {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--text-2);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.qb-icone:hover {
+  color: var(--text);
+  background: var(--surface-2);
+  border-color: var(--border-2);
+}
+.qb-icone svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+.qb-numero {
+  padding: 6px 12px;
+  font-weight: 750;
+  color: #fff;
+  background: var(--qb-destaque);
+  border-radius: var(--r-pill);
+  font-variant-numeric: tabular-nums;
+}
+.qb-estat {
+  display: grid;
+  justify-items: center;
+  min-width: 64px;
+}
+.qb-estat span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.qb-estat strong {
+  font-size: 22px;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.qb-estat-recorde span,
+.qb-estat-recorde strong {
+  color: var(--qb-ouro-texto);
+}
+
+/* ---------- Vidas, sequência e dificuldade ---------- */
+.qb-status {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 32px;
+}
+.qb-vidas {
+  display: flex;
+  gap: 4px;
+}
+.qb-vidas i {
+  width: 24px;
+  height: 22px;
+  background: var(--qb-coracao-vazio);
+  /* Coração desenhado com máscara SVG: a mesma forma cheia ou vazia, só muda a cor */
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3E%3Cpath d='M12 21.4 10.3 20C4.2 14.5 0 10.8 0 6.3 0 2.7 2.8 0 6.4 0c2 0 4 .9 5.6 2.4C13.6.9 15.6 0 17.6 0 21.2 0 24 2.7 24 6.3c0 4.5-4.2 8.2-10.3 13.7Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3E%3Cpath d='M12 21.4 10.3 20C4.2 14.5 0 10.8 0 6.3 0 2.7 2.8 0 6.4 0c2 0 4 .9 5.6 2.4C13.6.9 15.6 0 17.6 0 21.2 0 24 2.7 24 6.3c0 4.5-4.2 8.2-10.3 13.7Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.qb-vidas i.cheio {
+  background: var(--qb-coracao);
+}
+.qb-vidas i.perdeu {
+  animation: qb-pulo 420ms ease-out;
+}
+@keyframes qb-pulo {
+  30% {
+    scale: 1.5;
+  }
+}
+.qb-sequencia {
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  padding: 3px 12px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--qb-ouro-texto);
+  background: rgba(245, 158, 11, 0.16);
+  border: 1px solid var(--qb-ouro);
+  border-radius: var(--r-pill);
+}
+.qb-sequencia::before {
+  content: "🔥 ";
+}
+.qb-dificuldade {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--text-2);
+}
+.qb-dificuldade i {
+  width: 10px;
+  height: 10px;
+  background: var(--border-2);
+  border-radius: 50%;
+}
+.qb-dificuldade[data-nivel="1"] i:nth-child(-n + 1),
+.qb-dificuldade[data-nivel="2"] i:nth-child(-n + 2),
+.qb-dificuldade[data-nivel="3"] i:nth-child(-n + 3) {
+  background: var(--qb-ouro);
+}
+.qb-dificuldade span {
+  margin-left: 2px;
+}
+
+/* ---------- Bandeira ---------- */
+.qb-pergunta {
+  margin: 14px 0 12px;
+  font-size: 17px;
+  font-weight: 650;
+  text-align: center;
+  color: var(--text-2);
+}
+.qb-cartao {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(100%, 380px);
+  aspect-ratio: 3 / 2;
+  margin: 0 auto 18px;
+  padding: clamp(12px, 4%, 22px);
+  background: var(--surface-2);
+  border: 2px solid var(--border-2);
+  border-radius: 20px;
+  box-shadow: 0 0 0 10px rgba(79, 70, 229, 0.1), var(--shadow-sm);
+}
+.qb-cartao img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}
+.qb-cartao img.qb-entrar {
+  animation: qb-entrar 320ms ease-out;
+}
+@keyframes qb-entrar {
+  from {
+    opacity: 0;
+    translate: 12% 0;
+    scale: 0.88;
+  }
+}
+
+/* ---------- Respostas ---------- */
+.qb-opcoes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.qb-opcao {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 64px;
+  padding: 10px 12px 10px 30px;
+  font: inherit;
+  font-size: clamp(14px, 3.6vw, 16px);
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  color: var(--text);
+  background: var(--surface-3);
+  border: 1.5px solid var(--border-2);
+  border-radius: 16px;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    opacity 0.2s;
+}
+.qb-opcao:hover:not([aria-disabled="true"]) {
+  border-color: var(--violet-2);
+}
+.qb-opcao:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.qb-opcao[aria-disabled="true"] {
+  cursor: default;
+}
+.qb-opcao kbd {
+  position: absolute;
+  top: 6px;
+  left: 9px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.qb-opcao .qb-marca:empty {
+  display: none;
+}
+.qb-opcao.acertou,
+.qb-opcao.era-certa {
+  color: var(--qb-acerto);
+  background: var(--qb-acerto-fundo);
+  border-color: var(--qb-acerto);
+}
+.qb-opcao.acertou {
+  animation: qb-acerto 300ms ease-out;
+}
+.qb-opcao.errou {
+  color: var(--qb-erro);
+  background: var(--qb-erro-fundo);
+  border-color: var(--qb-erro);
+  animation: qb-tremer 320ms ease-in-out;
+}
+.qb-opcao.apagada {
+  opacity: 0.45;
+}
+@keyframes qb-acerto {
+  40% {
+    scale: 1.06;
+  }
+}
+@keyframes qb-tremer {
+  20% {
+    translate: -8px 0;
+  }
+  40% {
+    translate: 8px 0;
+  }
+  60% {
+    translate: -5px 0;
+  }
+  80% {
+    translate: 3px 0;
+  }
+}
+.qb-ajuda {
+  margin: 14px 0 0;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ---------- Avisos ---------- */
+.qb-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: var(--qb-overlay);
+  border-radius: var(--r-lg);
+  animation: qb-aparecer 250ms ease-out;
+}
+.qb-dialogo {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  width: min(100%, 400px);
+  padding: 24px 20px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+}
+.qb-dialogo p {
+  margin: 0;
+}
+.qb-aviso-icone {
+  font-size: 44px;
+  line-height: 1;
+}
+.qb-aviso-titulo {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+}
+.qb-aviso-corpo {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  color: var(--text-2);
+}
+.qb-novo-recorde {
+  padding: 5px 16px;
+  font-weight: 750;
+  color: var(--qb-ouro-texto);
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid var(--qb-ouro);
+  border-radius: var(--r-pill);
+}
+.qb-fim-rotulo {
+  margin-top: 6px !important;
+  font-size: 14px;
+  font-weight: 650;
+}
+.qb-fim-pontos {
+  font-size: clamp(40px, 12vw, 54px);
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.qb-fim-recorde {
+  font-weight: 700;
+  color: var(--qb-ouro-texto);
+}
+.qb-aviso-botoes {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  margin-top: 12px;
+}
+/* Logo depois de abrir, um toque que vinha da resposta não aperta um botão */
+.qb-overlay.travado .qb-aviso-botoes {
+  pointer-events: none;
+}
+@keyframes qb-aparecer {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .qb-estat {
+    min-width: 0;
+  }
+  .qb-estat strong {
+    font-size: 19px;
+  }
+  .qb-opcao {
+    min-height: 58px;
+    padding-left: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qb-cartao img.qb-entrar,
+  .qb-opcao.acertou,
+  .qb-opcao.errou,
+  .qb-vidas i.perdeu,
+  .qb-overlay {
+    animation: none;
+  }
+}

@@ -1,0 +1,134 @@
+/* ==========================================================================
+   Geometria — controles, campos com unidade, desenho esquemático e fórmulas.
+   Cores do desenho como em ui/tools/geometria/ShapeDrawing.kt (traço, preenchimento
+   translúcido e linhas ocultas tracejadas).
+   ========================================================================== */
+
+.geo {
+  --geo-traco: #60a5fa;
+  --geo-fundo: rgba(96, 165, 250, 0.16);
+  --geo-oculto: #8b98bf;
+}
+:root[data-theme="light"] .geo {
+  --geo-traco: #2563eb;
+  --geo-fundo: rgba(37, 99, 235, 0.12);
+  --geo-oculto: #6b7697;
+}
+
+.geo .select {
+  width: 100%;
+}
+.geo-unidades .filter {
+  min-width: 52px;
+}
+.geo fieldset[hidden] {
+  display: none;
+}
+.geo-campos {
+  display: grid;
+  gap: 16px;
+}
+.geo-campos:empty {
+  display: none;
+}
+.geo-sufixo {
+  align-items: center;
+}
+.geo-sufixo span {
+  min-width: 2.2em;
+  font-weight: 700;
+  color: var(--text-2);
+}
+
+.geo-lado {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.geo-desenho {
+  margin: 0;
+}
+.geo-desenho-area {
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.geo-desenho .hint {
+  display: block;
+  margin-top: 6px;
+}
+.geo-svg {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+}
+.geo-figura {
+  fill: var(--geo-fundo);
+  stroke: var(--geo-traco);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+.geo-fundo {
+  fill: var(--geo-fundo);
+  stroke: none;
+}
+.geo-traco {
+  fill: none;
+  stroke: var(--geo-traco);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.geo-traco-fino {
+  fill: none;
+  stroke: var(--geo-traco);
+  stroke-width: 1.8;
+}
+.geo-oculto {
+  fill: none;
+  stroke: var(--geo-oculto);
+  stroke-width: 1.8;
+  stroke-dasharray: 6 5;
+}
+.geo-ponto {
+  fill: var(--geo-traco);
+}
+.geo-rotulo {
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 650;
+  fill: var(--text);
+}
+
+.geo .result-message[hidden],
+.geo-formulas-bloco[hidden] {
+  display: none;
+}
+.geo .result-list:empty {
+  display: none;
+}
+.geo .result-list dd {
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+.geo-formulas-bloco .table-title {
+  margin-top: 0;
+}
+.geo-formulas {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 14px 16px;
+  list-style: none;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  overflow-x: auto;
+}

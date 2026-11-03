@@ -1,0 +1,157 @@
+<!--
+titulo: Cores da Memória Online: Repita a Sequência — EFS Aplicativos
+descricao: Jogue Cores da Memória online e grátis: observe a sequência de cores, repita na mesma ordem e veja até onde vai em 4 níveis. Recordes salvos no navegador.
+estilos: /assets/jogos/cores-da-memoria.css
+scripts: /assets/jogos/cores-da-memoria-logica.js /assets/jogos/cores-da-memoria.js
+app: Cores da Memória | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Cores da Memória</li>
+  </ol>
+  <h1>Cores da Memória: repita a sequência</h1>
+  <p>
+    As cores acendem uma de cada vez. Repita a sequência na mesma ordem: a cada rodada ela ganha
+    mais uma cor. Até onde a sua memória vai?
+  </p>
+</header>
+
+<section class="jogo-cores" aria-label="Cores da Memória">
+  <div class="segmented cr-niveis" role="group" aria-label="Nível">
+    <button type="button" class="filter" data-nivel="facil" aria-pressed="false">Fácil</button>
+    <button type="button" class="filter active" data-nivel="normal" aria-pressed="true">Normal</button>
+    <button type="button" class="filter" data-nivel="dificil" aria-pressed="false">Difícil</button>
+    <button type="button" class="filter" data-nivel="expert" aria-pressed="false">Expert</button>
+  </div>
+
+  <div class="cr-placar">
+    <div class="cr-valores">
+      <div class="cr-dado"><span>Pontos</span><strong id="cr-pontos">0</strong></div>
+      <div class="cr-dado cr-dado-rodada"><span>Rodada</span><strong id="cr-rodada">0</strong></div>
+      <div class="cr-dado"><span>Recorde</span><strong id="cr-recorde">0</strong></div>
+    </div>
+    <div class="cr-linha">
+      <span class="cr-vidas" id="cr-vidas" role="img" aria-label="2 vidas"></span>
+      <span class="cr-combo" id="cr-combo" hidden></span>
+      <button type="button" class="cr-som" id="cr-som" aria-pressed="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" />
+          <path class="cr-som-ondas" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <path class="cr-som-mudo" d="M16.5 9.5l5 5m0-5l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        Som
+      </button>
+    </div>
+  </div>
+
+  <div class="cr-tabuleiro" id="cr-tabuleiro" role="group" aria-label="Cores" aria-describedby="cr-ajuda">
+    <button type="button" class="cr-pad" data-cor="vermelho" aria-label="Vermelho" aria-disabled="true"></button>
+    <button type="button" class="cr-pad" data-cor="verde" aria-label="Verde" aria-disabled="true" tabindex="-1"></button>
+    <button type="button" class="cr-pad" data-cor="amarelo" aria-label="Amarelo" aria-disabled="true" tabindex="-1"></button>
+    <button type="button" class="cr-pad" data-cor="azul" aria-label="Azul" aria-disabled="true" tabindex="-1"></button>
+  </div>
+
+  <div class="cr-area">
+    <p class="cr-mensagem" id="cr-mensagem"></p>
+    <div class="cr-barra" id="cr-barra" aria-hidden="true"><span></span></div>
+    <div class="cr-botoes">
+      <button type="button" class="button" id="cr-iniciar">Iniciar jogo</button>
+      <button type="button" class="button" id="cr-continuar" hidden>Continuar</button>
+      <button type="button" class="button secondary" id="cr-pausar" hidden>Pausar</button>
+    </div>
+  </div>
+
+  <p class="cr-ajuda" id="cr-ajuda">
+    Clique ou toque nas cores quando aparecer “Sua vez”. No teclado, use as teclas 1 a 4 ou Q, W, A
+    e S (na mesma posição das cores), ou as setas e Enter. P pausa e continua.
+  </p>
+  <p class="sr-only" aria-live="polite" id="cr-status"></p>
+
+  <details class="cr-recordes">
+    <summary>Seus 10 melhores resultados no nível <span id="cr-recordes-nivel">Normal</span></summary>
+    <ol id="cr-recordes-lista"></ol>
+    <p id="cr-recordes-vazio">Termine uma partida com pontos neste nível para ver seus resultados aqui.</p>
+  </details>
+
+  <dialog class="cr-dialogo" id="cr-dialogo" aria-labelledby="cr-dialogo-titulo">
+    <h2 id="cr-dialogo-titulo"></h2>
+    <p id="cr-dialogo-texto"></p>
+    <dl class="cr-dialogo-dados" id="cr-dialogo-dados"></dl>
+    <div class="cr-dialogo-botoes" id="cr-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<article class="texto">
+  <h2>Como jogar Cores da Memória</h2>
+  <p>
+    Aperte <strong>Iniciar jogo</strong> e preste atenção: uma cor acende com o seu som. Quando
+    aparecer “Sua vez”, toque na mesma cor. Na rodada seguinte, a sequência repete a cor anterior
+    e ganha mais uma no fim. Vá repetindo, sempre na mesma ordem, enquanto a sequência cresce.
+  </p>
+  <p>
+    Tocar a cor errada ou deixar a barra de tempo acabar custa uma vida, e a mesma sequência é
+    mostrada de novo para você tentar outra vez. Sem vidas, a partida termina.
+  </p>
+
+  <h2>Níveis</h2>
+  <ul>
+    <li><strong>Fácil:</strong> 3 vidas, 8 segundos para cada toque e pontos normais.</li>
+    <li><strong>Normal:</strong> 2 vidas, 6 segundos e 1,5 vez os pontos.</li>
+    <li><strong>Difícil:</strong> 1 vida, 4 segundos e o dobro de pontos.</li>
+    <li><strong>Expert:</strong> 1 vida, 3 segundos e o triplo de pontos. A sequência já começa rápida.</li>
+  </ul>
+  <p>
+    Em todos os níveis a sequência fica mais rápida a cada 5 rodadas, até um limite. O prazo vale
+    para cada toque: ele recomeça a cada cor certa.
+  </p>
+
+  <h2>Pontuação e combo</h2>
+  <p>
+    Cada rodada completa vale 10 pontos multiplicados pelo nível. Rodadas seguidas sem errar formam
+    um <strong>combo</strong>: da 4ª à 5ª rodada certa seguida, cada rodada vale 1,5 vez; da 6ª à
+    8ª, 3 vezes; da 9ª à 11ª, 4,5 vezes, e assim por diante. Um erro zera o combo, mas não os pontos
+    já ganhos. Os 10 melhores resultados de cada nível ficam guardados.
+  </p>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para lembrar sequências longas</h2>
+  <ol>
+    <li><strong>Divida em blocos.</strong> Em vez de 9 cores soltas, guarde três grupos de três, como um número de telefone.</li>
+    <li><strong>Use a posição.</strong> Pense em “cima, cima, baixo” ou desenhe o caminho com os olhos, além das cores.</li>
+    <li><strong>Escute.</strong> Cada cor tem uma nota diferente; com o som ligado, a sequência vira uma pequena melodia.</li>
+    <li><strong>Repita só a cor nova.</strong> O começo da sequência é sempre o mesmo da rodada anterior; concentre a atenção no fim.</li>
+    <li><strong>Não tenha pressa.</strong> O prazo recomeça a cada toque certo, então dá para respirar entre as cores.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Posso pausar a partida?</h3>
+  <p>
+    Pode. Use o botão Pausar ou a tecla P. A partida também pausa sozinha quando você troca de aba.
+    Ao continuar, a sequência é mostrada de novo, ou você segue do ponto em que parou se estava
+    respondendo.
+  </p>
+  <h3>Se eu fechar a página, perco a partida?</h3>
+  <p>
+    Não. A rodada, os pontos, as vidas e a sequência ficam salvos no navegador, e a partida volta
+    pausada quando você abre a página de novo.
+  </p>
+  <h3>Dá para jogar sem som?</h3>
+  <p>
+    Dá. O botão Som liga e desliga os efeitos, e a escolha fica guardada. Os sons só começam
+    depois que você interage com a página.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/coresmemoria.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Cores da Memória no celular</h2>
+    <p>O mesmo jogo no Android, com vibração, recordes por nível, tema claro ou escuro e partidas também sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.coresmemoria&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

@@ -1,0 +1,159 @@
+<!--
+titulo: Sudoku Online Grátis: Fácil, Médio e Difícil — EFS Aplicativos
+descricao: Jogue Sudoku online e grátis, com jogos novos de solução única em três níveis. Use notas, desfazer e dicas, no computador ou no celular, com a partida salva.
+estilos: /assets/jogos/sudoku.css
+scripts: /assets/jogos/sudoku-logica.js /assets/jogos/sudoku.js
+app: Sudoku Master | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Sudoku Master</li>
+  </ol>
+  <h1>Sudoku online</h1>
+  <p>
+    A versão web do Sudoku Master: preencha a grade de 9 × 9 sem repetir números em nenhuma linha,
+    coluna ou quadrado. Cada jogo é gerado na hora, tem uma única solução e fica salvo no navegador
+    até você terminar.
+  </p>
+</header>
+
+<section class="sudoku" aria-label="Jogo de Sudoku">
+  <div class="sd-topo">
+    <div class="segmented" role="group" aria-label="Nível de dificuldade">
+      <button type="button" class="filter" data-nivel="facil" aria-pressed="false">Fácil</button>
+      <button type="button" class="filter active" data-nivel="medio" aria-pressed="true">Médio</button>
+      <button type="button" class="filter" data-nivel="dificil" aria-pressed="false">Difícil</button>
+    </div>
+    <button type="button" class="button secondary" id="sd-novo">Novo jogo</button>
+  </div>
+
+  <div class="sd-info">
+    <div class="sd-dado"><span>Erros</span><strong id="sd-erros">0</strong></div>
+    <div class="sd-dado"><span>Tempo</span><strong id="sd-tempo">00:00</strong></div>
+    <div class="sd-dado"><span>Recorde</span><strong id="sd-recorde">--:--</strong></div>
+    <button type="button" class="sd-pausa" id="sd-pausa" aria-pressed="false">Pausar</button>
+  </div>
+
+  <div class="sd-area">
+    <div
+      class="sd-grade"
+      id="sd-grade"
+      role="group"
+      aria-label="Grade do Sudoku"
+      aria-describedby="sd-ajuda"
+    ></div>
+    <div class="sd-pausado" id="sd-pausado" hidden>
+      <p>Jogo pausado</p>
+      <button type="button" class="button" id="sd-continuar">Continuar</button>
+    </div>
+  </div>
+
+  <div class="sd-acoes">
+    <button type="button" class="sd-acao" id="sd-desfazer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" /></svg>
+      Desfazer
+    </button>
+    <button type="button" class="sd-acao" id="sd-apagar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z" /><path d="m18 9-6 6M12 9l6 6" /></svg>
+      Apagar
+    </button>
+    <button type="button" class="sd-acao" id="sd-notas" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>
+      Notas
+    </button>
+    <button type="button" class="sd-acao" id="sd-dica">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4" /><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z" /></svg>
+      Dica <span class="sd-contagem" id="sd-dicas">3</span>
+    </button>
+  </div>
+
+  <div class="sd-teclado" id="sd-teclado" role="group" aria-label="Números">
+    <button type="button" data-numero="1">1</button>
+    <button type="button" data-numero="2">2</button>
+    <button type="button" data-numero="3">3</button>
+    <button type="button" data-numero="4">4</button>
+    <button type="button" data-numero="5">5</button>
+    <button type="button" data-numero="6">6</button>
+    <button type="button" data-numero="7">7</button>
+    <button type="button" data-numero="8">8</button>
+    <button type="button" data-numero="9">9</button>
+  </div>
+
+  <p class="sd-ajuda" id="sd-ajuda">
+    Escolha uma casa e toque num número. No computador, use as setas, os números do teclado,
+    Backspace para apagar, N para as notas e Ctrl+Z para desfazer.
+  </p>
+  <p class="sr-only" aria-live="polite" id="sd-status"></p>
+
+  <dialog class="sd-dialogo" id="sd-dialogo" aria-labelledby="sd-dialogo-titulo">
+    <h2 id="sd-dialogo-titulo"></h2>
+    <p id="sd-dialogo-texto"></p>
+    <dl class="sd-dialogo-dados" id="sd-dialogo-dados"></dl>
+    <div class="sd-dialogo-botoes" id="sd-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<article class="texto">
+  <h2>Como jogar Sudoku</h2>
+  <p>
+    A grade tem 81 casas, divididas em 9 linhas, 9 colunas e 9 quadrados de 3 × 3. Algumas casas
+    já vêm preenchidas: são as pistas, que não podem ser mudadas. O objetivo é completar as
+    outras de modo que <strong>cada linha, cada coluna e cada quadrado tenham os números de 1 a 9,
+    sem repetir nenhum</strong>.
+  </p>
+  <p>
+    Não é preciso fazer contas: os números funcionam como símbolos. Todo jogo desta página tem
+    uma única solução, então sempre dá para chegar ao fim só com raciocínio, sem chutar.
+  </p>
+
+  <h2>Recursos e regras desta versão</h2>
+  <ul>
+    <li><strong>Níveis:</strong> o Fácil começa com 40 casas vazias, o Médio com 50 e o Difícil com 55 (26 pistas).</li>
+    <li><strong>Erros:</strong> um número diferente da solução fica vermelho e conta como erro. Número certo fica travado na casa.</li>
+    <li><strong>Conflitos:</strong> quando um número se repete na linha, na coluna ou no quadrado, as casas repetidas ficam destacadas.</li>
+    <li><strong>Notas:</strong> com o modo Notas ligado, os números viram anotações pequenas na casa. Ao acertar um número, a mesma nota some das casas vizinhas.</li>
+    <li><strong>Dicas:</strong> são 3 por jogo. A dica preenche a casa escolhida (ou uma casa vazia ao acaso) com o número certo.</li>
+    <li><strong>Desfazer:</strong> volta números e notas, mas os erros e as dicas usadas continuam contando.</li>
+  </ul>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para resolver mais rápido</h2>
+  <ol>
+    <li><strong>Procure a casa com um só candidato.</strong> Se oito números já aparecem na linha, coluna e quadrado de uma casa, só sobra um.</li>
+    <li><strong>Varra os números um por vez.</strong> Escolha o 1, veja em quais quadrados ele falta e onde ele ainda cabe; depois passe para o 2.</li>
+    <li><strong>Use as notas no Difícil.</strong> Anote os candidatos das casas mais vazias e procure pares iguais: dois números presos em duas casas saem das outras casas da linha.</li>
+    <li><strong>Toque num número preenchido</strong> para ver onde ele já aparece na grade; o destaque mostra as linhas e colunas ainda livres.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Os jogos têm mesmo uma única solução?</h3>
+  <p>
+    Sim. O gerador monta uma grade completa ao acaso e tira as casas uma a uma, conferindo com um
+    resolvedor a cada retirada. Se tirar uma casa abrir espaço para uma segunda solução, ela volta
+    para o lugar.
+  </p>
+  <h3>O tempo conta com a página fechada?</h3>
+  <p>
+    Não. O cronômetro para quando você pausa, troca de aba ou fecha a página. A partida fica salva
+    e volta pausada na próxima visita.
+  </p>
+  <h3>Onde ficam os meus recordes?</h3>
+  <p>
+    Os 10 melhores tempos de cada nível ficam no próprio navegador. Eles não passam para outro
+    aparelho e se perdem se você limpar os dados do site.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/sudoko.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Sudoku Master no celular</h2>
+    <p>O mesmo Sudoku no Android, com notas, dicas, recordes e tema escuro, também sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.sudoko&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
