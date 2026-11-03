@@ -17,6 +17,8 @@
   const CHAVE_RECORDE = "efs-qual-e-a-bandeira-recorde";
   const PASTA_BANDEIRAS = "/assets/jogos/qual-e-a-bandeira/bandeiras/";
   const NOMES_DIFICULDADE = { 1: "Fácil", 2: "Médio", 3: "Difícil" };
+  /** Acertos seguidos para o selo de sequência aparecer. */
+  const SELO_A_PARTIR = 2;
 
   const $ = (seletor) => raiz.querySelector(seletor);
   const painel = $("#qb-painel");
@@ -44,6 +46,11 @@
   const avisoCorpo = $("#qb-aviso-corpo");
   const avisoBotoes = $("#qb-aviso-botoes");
   const status = $("#qb-status");
+  // Se sons.js não carregar, o jogo segue mudo e o botão some
+  const som =
+    typeof Sons === "object"
+      ? Sons.criar("qual-e-a-bandeira", raiz)
+      : { tocar() {}, ligarBotao: (b) => b && (b.hidden = true) };
 
   let recorde = 0;
   /**
@@ -171,7 +178,7 @@
     vidas.setAttribute("aria-label", `Vidas: ${partida.vidas}`);
 
     // O selo mostra o multiplicador do próximo acerto, a partir de 2 acertos seguidos
-    const mostrarSelo = partida.sequencia >= 2;
+    const mostrarSelo = partida.sequencia >= SELO_A_PARTIR;
     selo.hidden = !mostrarSelo;
     if (mostrarSelo) {
       const mult = L.multiplicador(partida.sequencia).toFixed(1).replace(".", ",");
@@ -211,6 +218,20 @@
 
   // ---------- Partida ----------
 
+  /** Acerto que é marco da sequência: o selo aparece ou o multiplicador chega ao teto (×3). */
+  function marcoDaSequencia(sequencia) {
+    const mult = L.multiplicador;
+    const noTeto = mult(sequencia) > mult(sequencia - 1) && mult(sequencia) === mult(sequencia + 1);
+    return sequencia === SELO_A_PARTIR || noTeto;
+  }
+
+  /** Um som por resposta: a que tira a última vida toca o fim de jogo no lugar do erro. */
+  function somDaResposta(acertou, partida, novoRecorde) {
+    if (L.terminou(partida)) som.tocar(novoRecorde ? "vitoria" : "derrota");
+    else if (!acertou) som.tocar("erro");
+    else som.tocar(marcoDaSequencia(partida.sequencia) ? "nivel" : "acerto");
+  }
+
   function responder(codigo) {
     if (!estado || estado.fase !== "jogando" || !aviso.hidden) return;
     const { acertou, pontosGanhos, partida } = L.responder(estado.partida, estado.pergunta, codigo);
@@ -225,6 +246,7 @@
 
     estado = { ...estado, partida, fase: "respondida", escolhida: codigo, novoRecorde: estado.novoRecorde || bateuRecorde };
     desenhar();
+    somDaResposta(acertou, partida, estado.novoRecorde);
     const certa = estado.pergunta.correta.nome;
     if (acertou) {
       status.textContent = `Certo, é ${certa}! Mais ${pontosGanhos} pontos.`;
@@ -354,6 +376,7 @@
   // ---------- Controles ----------
 
   opcoes.forEach((b) => b.addEventListener("click", () => responder(b.dataset.codigo)));
+  som.ligarBotao($("#qb-som"));
 
   botaoNovo.addEventListener("click", () => {
     if (carregarPartida()) pedirReinicio(reiniciar, "Cancelar");

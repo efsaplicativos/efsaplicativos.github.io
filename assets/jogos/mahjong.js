@@ -55,6 +55,11 @@
   const botaoApagarRecordes = raiz.querySelector("#mj-apagar-recordes");
   const status = raiz.querySelector("#mj-status");
   const reduzirMovimento = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  // Se sons.js não carregar, o jogo segue mudo e o botão some
+  const som =
+    typeof Sons === "object"
+      ? Sons.criar("mahjong", raiz)
+      : { tocar() {}, ligarBotao: (b) => b && (b.hidden = true) };
 
   let partida;
   let selecionada = null;
@@ -510,13 +515,15 @@
     anunciar("Partida recomeçada com a mesma distribuição.");
   }
 
-  function atualizar(nova) {
+  /** Jogada que muda a mesa (par, embaralhar, desfazer); se ela deixou a mesa sem pares, o som é o de derrota. */
+  function atualizar(nova, efeito) {
     partida = nova;
     selecionada = null;
     dica = null;
     avisoOculto = false;
     if (avisoAtual?.tipo === "sem-jogadas") esconderAviso();
     desenhar();
+    som.tocar(avisoAtual?.tipo === "sem-jogadas" ? "derrota" : efeito);
     salvar();
   }
 
@@ -534,22 +541,26 @@
     const nome = M.FACES[p.faces[i]].nome;
     if (!M.pecaLivre(p, i)) {
       tremer(i);
+      som.tocar("erro");
       anunciar(`${nome}: peça presa.`);
       return;
     }
     foco = i;
     if (selecionada === null) {
       selecionada = i;
+      som.tocar("selecionar");
       anunciar(`${nome} escolhida.`);
     } else if (selecionada === i) {
       selecionada = null;
+      som.tocar("toque");
       anunciar("Escolha desfeita.");
     } else if (M.formamPar(p, selecionada, i)) {
       remover(selecionada, i);
       return;
     } else {
-      // Peças diferentes: a seleção passa para a peça tocada
+      // Peças diferentes: a seleção passa para a peça tocada (como no app, não é erro)
       selecionada = i;
+      som.tocar("selecionar");
       anunciar(`${nome} escolhida.`);
     }
     desenhar();
@@ -561,7 +572,7 @@
       vencer(nova);
       return;
     }
-    atualizar(nova);
+    atualizar(nova, "acerto");
     anunciar(`Par removido. Restam ${M.restantes(nova)} peças e ${paresAgora} ${paresAgora === 1 ? "par livre" : "pares livres"}.`);
   }
 
@@ -585,6 +596,8 @@
     desenhar();
     salvar();
     atualizarPainel();
+    // Aqui, e não em mostrarVitoria, que também reabre o aviso depois de uma pergunta
+    som.tocar("vitoria");
     mostrarVitoria();
   }
 
@@ -592,11 +605,13 @@
     if (vitoria) return;
     relogioLigado = true;
     if (M.dicasRestantes(partida) === 0) {
+      som.tocar("erro");
       mensagem(`Você já usou as ${M.DICAS_POR_PARTIDA} dicas desta partida`);
       return;
     }
     const resultado = M.usarDica(partida);
     if (!resultado) {
+      som.tocar("erro");
       mensagem("Não há pares livres agora: embaralhe ou desfaça a última jogada");
       return;
     }
@@ -605,6 +620,7 @@
     selecionada = null;
     foco = dica[0];
     desenhar();
+    som.tocar("dica");
     salvar();
     const [a, b] = dica.map((i) => M.FACES[partida.faces[i]].nome);
     anunciar(`Dica: ${a} e ${b}.`);
@@ -614,15 +630,17 @@
     if (vitoria) return;
     relogioLigado = true;
     if (M.embaralhadasRestantes(partida) === 0) {
+      som.tocar("erro");
       mensagem("Não há mais embaralhadas nesta partida");
       return;
     }
     const nova = M.embaralhar(partida);
     if (!nova) {
+      som.tocar("erro");
       mensagem("Não há como embaralhar: desfaça algumas jogadas");
       return;
     }
-    atualizar(nova);
+    atualizar(nova, "embaralhar");
     anunciar(`Peças embaralhadas. ${paresAgora} ${paresAgora === 1 ? "par livre" : "pares livres"}.`);
   }
 
@@ -631,7 +649,7 @@
     const nova = M.desfazer(partida);
     if (!nova) return;
     relogioLigado = true;
-    atualizar(nova);
+    atualizar(nova, "desfazer");
     anunciar("Jogada desfeita: o par voltou à mesa.");
   }
 
@@ -725,6 +743,7 @@
     if (evento.key === "Escape" && selecionada !== null) {
       evento.preventDefault();
       selecionada = null;
+      som.tocar("toque");
       desenhar();
       anunciar("Escolha desfeita.");
       return;
@@ -747,6 +766,7 @@
     }
   });
 
+  som.ligarBotao(raiz.querySelector("#mj-som"));
   botaoDesfazer.addEventListener("click", desfazer);
   botaoDica.addEventListener("click", pedirDica);
   botaoEmbaralhar.addEventListener("click", embaralhar);

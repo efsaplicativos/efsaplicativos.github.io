@@ -2,7 +2,7 @@
 titulo: Puzzles de Xadrez Online Grátis: Treino Tático por Tema — EFS Aplicativos
 descricao: Resolva puzzles de xadrez online e grátis: quase 10 mil posições do Lichess, por tema e dificuldade, com dica, solução e rating salvos no seu navegador.
 estilos: /assets/jogos/puzzles-de-xadrez.css
-scripts: /assets/jogos/puzzles-de-xadrez-logica.js /assets/jogos/puzzles-de-xadrez.js
+scripts: /assets/jogos/puzzles-de-xadrez-logica.js /assets/jogos/sons.js /assets/jogos/puzzles-de-xadrez.js
 app: Puzzles de Xadrez | GameApplication
 -->
 <header class="page-head">
@@ -54,6 +54,7 @@ app: Puzzles de Xadrez | GameApplication
           <button type="button" class="button secondary" id="pzx-dica" disabled>Dica</button>
           <button type="button" class="button secondary" id="pzx-solucao" disabled>Ver solução</button>
           <button type="button" class="button" id="pzx-proximo">Próximo puzzle</button>
+          <button type="button" class="som-botao" id="pzx-som"></button>
         </div>
         <div class="pzx-navegacao" id="pzx-navegacao" hidden>
           <button type="button" class="button secondary" id="pzx-inicio" aria-label="Ir para o início" title="Ir para o início"><span aria-hidden="true">⏮</span></button>
@@ -246,6 +247,14 @@ app: Puzzles de Xadrez | GameApplication
     Os puzzles são baixados em pequenos blocos conforme a faixa de rating, então é preciso estar
     conectado para abrir puzzles novos. Para treinar sem internet, os apps para Android já trazem os
     50 mil puzzles no celular.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. Cada lance bate no tabuleiro como uma peça de madeira, a captura soa mais cheia e o xeque
+    dá dois bipes curtos, também nas respostas do adversário. O lance errado faz um tom grave, a
+    dica um brilho suave e o puzzle resolvido toca um sinal de acerto; a solução mostrada passa em
+    silêncio. Nada é baixado: os sons são gerados pelo próprio navegador, e o botão Som, perto de
+    "Próximo puzzle", liga e desliga, com a escolha guardada neste aparelho.
   </p>
 
   <h2>Créditos</h2>

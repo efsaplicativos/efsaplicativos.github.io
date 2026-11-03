@@ -2,7 +2,7 @@
 titulo: Sudoku Online Grátis: Fácil, Médio e Difícil — EFS Aplicativos
 descricao: Jogue Sudoku online e grátis, com jogos novos de solução única em três níveis. Use notas, desfazer e dicas, no computador ou no celular, com a partida salva.
 estilos: /assets/jogos/sudoku.css
-scripts: /assets/jogos/sudoku-logica.js /assets/jogos/sudoku.js
+scripts: /assets/jogos/sudoku-logica.js /assets/jogos/sons.js /assets/jogos/sudoku.js
 app: Sudoku Master | GameApplication
 -->
 <header class="page-head">
@@ -26,7 +26,10 @@ app: Sudoku Master | GameApplication
       <button type="button" class="filter active" data-nivel="medio" aria-pressed="true">Médio</button>
       <button type="button" class="filter" data-nivel="dificil" aria-pressed="false">Difícil</button>
     </div>
-    <button type="button" class="button secondary" id="sd-novo">Novo jogo</button>
+    <div class="sd-botoes-topo">
+      <button type="button" class="som-botao" id="sd-som"></button>
+      <button type="button" class="button secondary" id="sd-novo">Novo jogo</button>
+    </div>
   </div>
 
   <div class="sd-info">
@@ -144,6 +147,15 @@ app: Sudoku Master | GameApplication
   <p>
     Os 10 melhores tempos de cada nível ficam no próprio navegador. Eles não passam para outro
     aparelho e se perdem se você limpar os dados do site.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. Escrever um número dá um clique, a nota a lápis soa como um risco curto e apagar, como
+    uma borracha. Número errado faz um tom grave; fechar certinho uma linha, coluna ou quadrado
+    faz um brilho; dica, desfazer e grade resolvida também têm sons próprios. Os efeitos são
+    criados pelo próprio navegador, sem baixar arquivo nenhum, e ficam mudos com o jogo pausado. O
+    botão <strong>Som</strong>, ao lado de Novo jogo, liga e desliga tudo, e a escolha fica
+    guardada neste aparelho.
   </p>
 </article>
 

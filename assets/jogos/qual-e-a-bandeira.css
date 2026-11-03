@@ -474,6 +474,14 @@
   }
 }
 
+/* ---------- Som ---------- */
+/* Fora do painel: vale na tela inicial e na partida, e os avisos não cobrem o botão */
+.qb-rodape {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
 @media (max-width: 380px) {
   .qb-estat {
     min-width: 0;

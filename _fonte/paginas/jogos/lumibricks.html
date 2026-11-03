@@ -2,7 +2,7 @@
 titulo: Lumibricks: Jogo de Blocos que Caem Online — EFS Aplicativos
 descricao: Jogue Lumibricks online e grátis: encaixe os blocos que caem, complete linhas e suba de nível. Tem peça-guia, Segurar e bloco dourado, no teclado ou no celular.
 estilos: /assets/jogos/lumibricks.css
-scripts: /assets/jogos/lumibricks-logica.js /assets/jogos/lumibricks.js
+scripts: /assets/jogos/lumibricks-logica.js /assets/jogos/sons.js /assets/jogos/lumibricks.js
 app: Lumibricks | GameApplication
 -->
 <header class="page-head">
@@ -82,6 +82,10 @@ app: Lumibricks | GameApplication
     <div class="lb-sobreposicao" id="lb-sobreposicao" hidden>
       <div class="lb-aviso" id="lb-aviso" role="dialog" aria-labelledby="lb-aviso-titulo"></div>
     </div>
+  </div>
+
+  <div class="lb-opcoes">
+    <button type="button" class="som-botao" id="lb-som"></button>
   </div>
 
   <p class="lb-ajuda" id="lb-ajuda">
@@ -183,6 +187,15 @@ app: Lumibricks | GameApplication
     Setas ou W, A, S e D para girar, mover e descer; Q gira no sentido anti-horário; espaço faz a
     queda instantânea; C segura a peça; P ou Esc pausa. Segurar uma seta para os lados ou para baixo
     repete o movimento.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. Girar e Segurar dão cliques curtos, a peça que encaixa bate com um som grave e a queda
+    instantânea, com um baque mais forte. Cada linha apagada soma um brilho à subida, o nível novo
+    toca uma pequena fanfarra e o bloco dourado tem um tilintar próprio. O fim de jogo desce em
+    tom triste, ou comemora quando você bate o recorde. Tudo é gerado pelo próprio navegador, sem
+    baixar arquivo nenhum, e o botão Som, abaixo dos controles, liga e desliga; a escolha fica
+    guardada neste aparelho.
   </p>
   <h3>Como as peças são sorteadas?</h3>
   <p>

@@ -34,12 +34,13 @@
     <meta property="og:locale" content="pt_BR" />
     <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
     <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
-    <link rel="stylesheet" href="/assets/web.css?v=8aa4a1ab9334" />
-    <link rel="stylesheet" href="/assets/jogos/campo-minado.css?v=94f055c91926" />
+    <link rel="stylesheet" href="/assets/web.css?v=9335b7c5c72f" />
+    <link rel="stylesheet" href="/assets/jogos/campo-minado.css?v=70144513713c" />
     <script src="/site.js?v=b4f7be01c332" defer></script>
     <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
     <script src="/assets/jogos/campo-minado-logica.js?v=cefdd4d49642" defer></script>
-    <script src="/assets/jogos/campo-minado.js?v=ec94a86c73b7" defer></script>
+    <script src="/assets/jogos/sons.js?v=21d1381b6bd0" defer></script>
+    <script src="/assets/jogos/campo-minado.js?v=f76a96244b94" defer></script>
     <link
       rel="icon"
       type="image/png"
@@ -141,7 +142,10 @@
       <button type="button" class="filter active" data-modo="revelar" aria-pressed="true">Revelar</button>
       <button type="button" class="filter" data-modo="bandeira" aria-pressed="false">Bandeira</button>
     </div>
-    <button type="button" class="button secondary" id="cm-novo">Novo jogo</button>
+    <div class="cm-botoes">
+      <button type="button" class="som-botao" id="cm-som"></button>
+      <button type="button" class="button secondary" id="cm-novo">Novo jogo</button>
+    </div>
   </div>
 
   <div class="cm-area">
@@ -226,6 +230,14 @@
     Sim, no próprio navegador. A partida em andamento continua de onde parou se você fechar a
     página, e os 50 melhores tempos de cada nível ficam guardados. Em outro aparelho ou depois de
     limpar os dados do navegador, eles não aparecem.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. Abrir uma casa dá um clique curto, e uma abertura em cascata soa como uma escadinha de
+    notas; pôr e tirar bandeira têm bipes próprios, a mina estoura com um estrondo grave e a vitória
+    toca uma fanfarra curta. Os sons são criados na hora pelo próprio navegador, sem baixar nenhum
+    arquivo de áudio. O botão <strong>Som</strong>, ao lado de Novo jogo, liga e desliga os
+    efeitos, e a escolha fica guardada neste aparelho.
   </p>
 </article>
 

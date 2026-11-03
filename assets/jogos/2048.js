@@ -25,6 +25,12 @@
   const textoRecorde = document.querySelector("#recorde");
   const status = document.querySelector("#status-jogo");
   const botaoNovo = document.querySelector("#novo-jogo");
+  // Sem sons.js o jogo funciona igual, só que mudo e sem o botão
+  const som =
+    typeof Sons === "object"
+      ? Sons.criar("2048", tabuleiro.closest(".game2048"))
+      : { tocar() {}, ligarBotao: (botao) => botao && (botao.hidden = true) };
+  som.ligarBotao(document.querySelector("#som-jogo"));
 
   /** { pecas: [{ id, valor, linha, coluna }], proximoId, pontos, venceu, fim } */
   let estado;
@@ -239,6 +245,8 @@
     esconderAviso();
     desenhar();
     salvar();
+    // Só chega aqui por clique; a partida do carregamento da página começa muda
+    som.tocar("inicio");
   }
 
   function jogar(direcao) {
@@ -260,6 +268,19 @@
     recorde = Math.max(recorde, estado.pontos);
     desenhar(deslize.absorvidas, deslize.unidas);
     salvar();
+
+    // Um som por jogada, o do acontecimento mais importante; formar o 2048 vale mais que travar o tabuleiro
+    if (venceuAgora) {
+      som.tocar("vitoria");
+    } else if (estado.fim) {
+      som.tocar("derrota");
+    } else if (deslize.unidas.size) {
+      // A nota sobe com o maior bloco formado: 4 é o nível 2, 2048 é o 11
+      const maior = Math.max(...deslize.pecas.filter((p) => deslize.unidas.has(p.id)).map((p) => p.valor));
+      som.tocar("juntar", Math.log2(maior));
+    } else {
+      som.tocar("deslizar");
+    }
 
     if (venceuAgora && !estado.fim) {
       mostrarAviso("Você chegou a 2048!", [

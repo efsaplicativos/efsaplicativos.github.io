@@ -2,7 +2,7 @@
 titulo: Qual a Bandeira? Quiz de Bandeiras Online Grátis — EFS Aplicativos
 descricao: Quiz de bandeiras online e grátis: veja a bandeira e escolha o país entre quatro opções. São 193 países, 3 vidas, bônus por sequência e recorde salvo no navegador.
 estilos: /assets/jogos/qual-e-a-bandeira.css
-scripts: /assets/jogos/qual-e-a-bandeira-logica.js /assets/jogos/qual-e-a-bandeira.js
+scripts: /assets/jogos/qual-e-a-bandeira-logica.js /assets/jogos/sons.js /assets/jogos/qual-e-a-bandeira.js
 app: Qual a Bandeira | GameApplication
 -->
 <header class="page-head">
@@ -95,6 +95,9 @@ app: Qual a Bandeira | GameApplication
       </div>
     </div>
   </div>
+  <div class="qb-rodape">
+    <button type="button" class="som-botao" id="qb-som"></button>
+  </div>
   <p class="sr-only" aria-live="polite" id="qb-status"></p>
 </section>
 
@@ -156,6 +159,14 @@ app: Qual a Bandeira | GameApplication
   <p>
     Aqui no site, em português. O app para Android também tem inglês, espanhol, francês,
     italiano, alemão, chinês, híndi e russo.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. A resposta certa toca um sinal agudo e a errada, um som grave. Quando a sequência chega a
+    ×2 e quando alcança o bônus máximo de ×3, toca uma pequena subida. A resposta que tira a última
+    vida encerra com uma melodia de fim de jogo, ou de comemoração se a partida bateu o seu recorde.
+    Os sons são gerados pelo próprio navegador, sem baixar nenhum arquivo. O botão Som, logo abaixo
+    do jogo, liga e desliga os efeitos, e a escolha fica guardada neste aparelho.
   </p>
 </article>
 

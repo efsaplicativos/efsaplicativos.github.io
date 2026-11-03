@@ -2,7 +2,7 @@
 titulo: Jogo da Memória Online Grátis: 3 Níveis — EFS Aplicativos
 descricao: Jogue o jogo da memória online e grátis: vire as cartas e encontre os pares de bichinhos em 3 níveis, de 8 a 32 pares. Tempo, movimentos e recordes salvos.
 estilos: /assets/jogos/jogo-da-memoria.css
-scripts: /assets/jogos/jogo-da-memoria-logica.js /assets/jogos/jogo-da-memoria.js
+scripts: /assets/jogos/jogo-da-memoria-logica.js /assets/jogos/sons.js /assets/jogos/jogo-da-memoria.js
 app: Jogo da Memória | GameApplication
 -->
 <header class="page-head">
@@ -36,6 +36,7 @@ app: Jogo da Memória | GameApplication
 
   <div class="jm-botoes">
     <button type="button" class="button secondary" id="jm-reiniciar">Reiniciar jogo</button>
+    <button type="button" class="som-botao" id="jm-som"></button>
   </div>
 
   <p class="jm-ajuda" id="jm-ajuda">
@@ -104,6 +105,13 @@ app: Jogo da Memória | GameApplication
   <h3>Posso jogar com crianças?</h3>
   <p>
     Pode. O nível Fácil, com 8 pares, é bom para começar, e as cartas mostram bichos conhecidos, como cachorro, gato, leão e tartaruga.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. Cada carta faz um ruído curto ao virar, o par encontrado toca um sinal de acerto, o par
+    errado faz um som discreto quando volta para baixo e o último par toca uma pequena fanfarra.
+    Tudo é gerado pelo próprio navegador, sem baixar arquivo de áudio. O botão Som, ao lado de
+    Reiniciar jogo, liga e desliga os efeitos, e a escolha fica guardada neste aparelho.
   </p>
 </article>
 

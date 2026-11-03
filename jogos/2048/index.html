@@ -34,11 +34,12 @@
     <meta property="og:locale" content="pt_BR" />
     <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
     <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
-    <link rel="stylesheet" href="/assets/web.css?v=8aa4a1ab9334" />
-    <link rel="stylesheet" href="/assets/jogos/2048.css?v=4557a833d1b1" />
+    <link rel="stylesheet" href="/assets/web.css?v=9335b7c5c72f" />
+    <link rel="stylesheet" href="/assets/jogos/2048.css?v=6aa4176da5b4" />
     <script src="/site.js?v=b4f7be01c332" defer></script>
     <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
-    <script src="/assets/jogos/2048.js?v=b8b127cf2728" defer></script>
+    <script src="/assets/jogos/sons.js?v=21d1381b6bd0" defer></script>
+    <script src="/assets/jogos/2048.js?v=601c0dd9cfb2" defer></script>
     <link
       rel="icon"
       type="image/png"
@@ -128,7 +129,10 @@
       <div class="score"><span>Pontos</span><strong id="pontos">0</strong></div>
       <div class="score"><span>Recorde</span><strong id="recorde">0</strong></div>
     </div>
-    <button type="button" class="button secondary" id="novo-jogo">Novo jogo</button>
+    <div class="game-acoes">
+      <button type="button" class="button secondary" id="novo-jogo">Novo jogo</button>
+      <button type="button" class="som-botao" id="som-jogo"></button>
+    </div>
   </div>
   <div
     class="board"
@@ -202,6 +206,14 @@
   <h3>Preciso de internet para jogar?</h3>
   <p>
     Só para abrir a página. Para jogar sem internet, instale o app 2048: Block Merge no celular.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. Cada jogada faz um som curto de deslize, e cada junção toca uma nota que fica mais aguda
+    conforme o bloco formado cresce. Começar um jogo, chegar ao 2048 e ficar sem jogadas também
+    têm som próprio. Os sons são criados pelo próprio navegador na hora, sem baixar nenhum
+    arquivo. O botão <strong>Som</strong>, ao lado de Novo jogo, liga e desliga os efeitos, e a
+    escolha fica guardada neste aparelho.
   </p>
 </article>
 

@@ -54,6 +54,12 @@
   const dialogoTexto = raiz.querySelector("#qc-dialogo-texto");
   const dialogoDados = raiz.querySelector("#qc-dialogo-dados");
   const dialogoBotoes = raiz.querySelector("#qc-dialogo-botoes");
+  // Sem sons.js o jogo funciona igual, só que mudo e sem o botão
+  const som =
+    typeof Sons === "object"
+      ? Sons.criar("quebra-cabeca", raiz)
+      : { tocar() {}, ligarBotao: (botao) => botao && (botao.hidden = true) };
+  som.ligarBotao(raiz.querySelector("#qc-som"));
 
   /** { imagem, tamanho, pecas, movimentos, tempoMs } */
   let partida;
@@ -319,6 +325,8 @@
     else desenhar();
     salvar();
     status.textContent = `Peças embaralhadas: ${imagemDe(imagem).nome}, ${tamanho} × ${tamanho}.`;
+    // Só chega aqui por clique; a partida do carregamento da página sai de carregar(), muda
+    som.tocar("embaralhar");
   }
 
   const emAndamento = () => !vitoria && partida.movimentos > 0;
@@ -358,10 +366,12 @@
     if (!pecas || vitoria || pausado) return;
     partida = { ...partida, pecas, movimentos: partida.movimentos + 1 };
     aguardandoMovimento = false;
+    // A última peça toca a vitória (em concluir) no lugar do deslize
     if (Q.estaResolvido(pecas)) {
       concluir();
       return;
     }
+    som.tocar("deslizar");
     desenhar();
     salvar();
   }
@@ -379,6 +389,7 @@
     gravar(CHAVE_PARTIDA, null);
     desenhar();
     status.textContent = "Quebra-cabeça montado!";
+    som.tocar("vitoria");
     // Dá tempo de ver a última peça deslizar e a imagem se completar antes do aviso
     setTimeout(() => {
       if (!vitoria) return;

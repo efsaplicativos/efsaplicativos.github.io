@@ -93,6 +93,14 @@
   min-height: 44px;
   padding: 10px 18px;
 }
+/* Som e Novo jogo ficam juntos quando a linha quebra no celular */
+.cm-botoes {
+  display: flex;
+  gap: 8px;
+}
+.cm-acoes .som-botao {
+  min-height: 44px;
+}
 
 /* A área rola na horizontal quando o tabuleiro não cabe (nível Difícil em celular estreito) */
 .cm-area {

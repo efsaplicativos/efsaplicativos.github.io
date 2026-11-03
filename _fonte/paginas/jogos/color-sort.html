@@ -2,7 +2,7 @@
 titulo: Color Sort Online Grátis: Organize as Cores nos Tubos — EFS Aplicativos
 descricao: Jogue Color Sort online e grátis: despeje as bolas de um tubo para outro até cada tubo ter uma cor só. Três níveis, desfazer, recordes e símbolos para daltonismo.
 estilos: /assets/jogos/color-sort.css
-scripts: /assets/jogos/color-sort-logica.js /assets/jogos/color-sort.js
+scripts: /assets/jogos/color-sort-logica.js /assets/jogos/sons.js /assets/jogos/color-sort.js
 app: Color Sort | GameApplication
 -->
 <header class="page-head">
@@ -47,6 +47,7 @@ app: Color Sort | GameApplication
     <button type="button" class="button secondary" id="cs-desfazer"><span aria-hidden="true">↶</span> Desfazer</button>
     <button type="button" class="button secondary" id="cs-reiniciar"><span aria-hidden="true">↻</span> Reiniciar nível</button>
     <button type="button" class="button" id="cs-novo">Novo nível</button>
+    <button type="button" class="som-botao" id="cs-som"></button>
   </div>
   <p class="cs-ajuda" id="cs-ajuda">
     No teclado: Tab ou as setas escolhem o tubo e Enter pega ou despeja as bolas. As teclas 1 a 9
@@ -154,6 +155,15 @@ app: Color Sort | GameApplication
   <p>
     Não: no app Multi-Game Strategy o Color Sort tem só o reinício. O desfazer e os símbolos nas
     bolas são da versão do site.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. Escolher um tubo faz um clique leve; as bolas descem com uma escadinha de notas, mais
+    longa quando vão várias de uma vez; um tubo que fica com uma cor só ganha um brilho, e uma
+    jogada que não vale faz um som grave. Desfazer, começar um nível e resolver tudo também têm
+    som próprio. Os efeitos são gerados pelo próprio navegador, sem baixar nenhum arquivo. O
+    botão <strong>Som</strong>, ao lado de Novo nível, liga e desliga, e a escolha fica guardada
+    neste aparelho.
   </p>
 </article>
 

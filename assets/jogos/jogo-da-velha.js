@@ -42,6 +42,9 @@
   const dialogoTitulo = raiz.querySelector("#jv-dialogo-titulo");
   const dialogoTexto = raiz.querySelector("#jv-dialogo-texto");
   const dialogoBotoes = raiz.querySelector("#jv-dialogo-botoes");
+  // Sem a biblioteca de sons (script que não carregou), o jogo continua, só que mudo
+  const som = typeof Sons === "object" ? Sons.criar("jogo-da-velha", raiz) : { tocar() {}, ligarBotao() {} };
+  som.ligarBotao(raiz.querySelector("#jv-som"));
 
   /** Mesmo padrão do app: modo 2 jogadores e nível Médio. */
   let estado = { modo: "dois", nivel: "medio", partida: V.NOVA, placar: { ...V.PLACAR_ZERO } };
@@ -316,9 +319,18 @@
     agendarJogadaComputador();
   }
 
-  function aplicarJogada(casa) {
+  /** Um som por jogada: o do desfecho quando ela encerra a partida, senão o da peça (X e O soam diferente). */
+  function somDaJogada(partida, casa) {
+    const vencedor = partida.vitoria?.jogador;
+    if (vencedor) return !contraComputador() || vencedor === V.HUMANO ? "vitoria" : "derrota";
+    if (partida.empate) return "desfazer";
+    return partida.casas[casa] === V.X ? "peca" : "peca2";
+  }
+
+  function aplicarJogada(casa, { silenciosa = false } = {}) {
     const partida = V.jogar(estado.partida, casa);
     if (partida === estado.partida) return;
+    if (!silenciosa) som.tocar(somDaJogada(partida, casa));
     let placar = estado.placar;
     if (partida.terminada) {
       const vencedor = partida.vitoria ? partida.vitoria.jogador : null;
@@ -334,7 +346,8 @@
     atualizar({ ...estado, partida, placar });
   }
 
-  function agendarJogadaComputador() {
+  /** `silenciosa`: a jogada não responde a nada que a pessoa fez agora (partida restaurada). */
+  function agendarJogadaComputador({ silenciosa = false } = {}) {
     clearTimeout(jogadaComputador);
     jogadaComputador = null;
     if (!vezDoComputador()) return;
@@ -342,7 +355,7 @@
     jogadaComputador = setTimeout(() => {
       jogadaComputador = null;
       if (estado !== antes) return;
-      aplicarJogada(V.escolherJogada(estado.partida.casas, V.COMPUTADOR, V.NIVEIS[estado.nivel]));
+      aplicarJogada(V.escolherJogada(estado.partida.casas, V.COMPUTADOR, V.NIVEIS[estado.nivel]), { silenciosa });
     }, V.ATRASO_COMPUTADOR_MS);
   }
 
@@ -355,6 +368,7 @@
   function novaPartida() {
     atualizar({ ...estado, partida: V.NOVA });
     focar(4, false);
+    som.tocar("inicio");
   }
 
   function desfazer() {
@@ -362,6 +376,7 @@
     const { partida } = estado;
     const placar = partida.terminada ? V.subtrair(estado.placar, partida.vitoria ? partida.vitoria.jogador : null) : estado.placar;
     atualizar({ ...estado, partida: V.desfazer(partida), placar });
+    som.tocar("desfazer");
   }
 
   /** Trocar de modo começa outra partida e zera o placar; trocar de nível só começa outra partida. */
@@ -473,6 +488,6 @@
   grade.classList.add("sem-animacao");
   desenhar();
   requestAnimationFrame(() => requestAnimationFrame(() => grade.classList.remove("sem-animacao")));
-  // Se a página fechou na vez do computador, ele joga agora
-  agendarJogadaComputador();
+  // Se a página fechou na vez do computador, ele joga agora, sem som (ninguém tocou em nada ainda)
+  agendarJogadaComputador({ silenciosa: true });
 })();

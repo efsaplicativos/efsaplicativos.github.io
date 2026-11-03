@@ -24,10 +24,18 @@
 
 .game-bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 14px;
+}
+/* Novo jogo e Som: no celular estreito descem para a linha de baixo, ainda à direita */
+.game-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
 }
 .scores {
   display: flex;

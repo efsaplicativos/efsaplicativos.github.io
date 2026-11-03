@@ -320,6 +320,14 @@
   }
 }
 
+/* ---------- Som ---------- */
+/* Fora da área do jogo, para a sobreposição de início e pausa não cobrir o botão */
+.lb-opcoes {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
 /* ---------- Ajuda e pontuações ---------- */
 .lb-ajuda {
   margin: 14px 0 0;

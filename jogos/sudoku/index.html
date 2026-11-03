@@ -34,12 +34,13 @@
     <meta property="og:locale" content="pt_BR" />
     <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
     <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
-    <link rel="stylesheet" href="/assets/web.css?v=8aa4a1ab9334" />
-    <link rel="stylesheet" href="/assets/jogos/sudoku.css?v=fe1eb941e3e1" />
+    <link rel="stylesheet" href="/assets/web.css?v=9335b7c5c72f" />
+    <link rel="stylesheet" href="/assets/jogos/sudoku.css?v=d2743f24258d" />
     <script src="/site.js?v=b4f7be01c332" defer></script>
     <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
     <script src="/assets/jogos/sudoku-logica.js?v=b73de0678093" defer></script>
-    <script src="/assets/jogos/sudoku.js?v=342a11070721" defer></script>
+    <script src="/assets/jogos/sons.js?v=21d1381b6bd0" defer></script>
+    <script src="/assets/jogos/sudoku.js?v=3eb0d8826b78" defer></script>
     <link
       rel="icon"
       type="image/png"
@@ -131,7 +132,10 @@
       <button type="button" class="filter active" data-nivel="medio" aria-pressed="true">Médio</button>
       <button type="button" class="filter" data-nivel="dificil" aria-pressed="false">Difícil</button>
     </div>
-    <button type="button" class="button secondary" id="sd-novo">Novo jogo</button>
+    <div class="sd-botoes-topo">
+      <button type="button" class="som-botao" id="sd-som"></button>
+      <button type="button" class="button secondary" id="sd-novo">Novo jogo</button>
+    </div>
   </div>
 
   <div class="sd-info">
@@ -249,6 +253,15 @@
   <p>
     Os 10 melhores tempos de cada nível ficam no próprio navegador. Eles não passam para outro
     aparelho e se perdem se você limpar os dados do site.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. Escrever um número dá um clique, a nota a lápis soa como um risco curto e apagar, como
+    uma borracha. Número errado faz um tom grave; fechar certinho uma linha, coluna ou quadrado
+    faz um brilho; dica, desfazer e grade resolvida também têm sons próprios. Os efeitos são
+    criados pelo próprio navegador, sem baixar arquivo nenhum, e ficam mudos com o jogo pausado. O
+    botão <strong>Som</strong>, ao lado de Novo jogo, liga e desliga tudo, e a escolha fica
+    guardada neste aparelho.
   </p>
 </article>
 

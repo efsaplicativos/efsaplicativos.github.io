@@ -30,6 +30,11 @@
   const dialogoTexto = raiz.querySelector("#jm-dialogo-texto");
   const dialogoDados = raiz.querySelector("#jm-dialogo-dados");
   const dialogoBotoes = raiz.querySelector("#jm-dialogo-botoes");
+  // Se sons.js não carregar, o jogo segue mudo e o botão some
+  const som =
+    typeof Sons === "object"
+      ? Sons.criar("jogo-da-memoria", raiz)
+      : { tocar() {}, ligarBotao: (b) => b && (b.hidden = true) };
 
   let estado;
   let recordes = { facil: [], medio: [], dificil: [] };
@@ -251,6 +256,9 @@
     estado = novo;
     retomada = false;
     desenhar();
+    // Um som por carta: a que fecha um par toca acerto, e a que fecha o último, vitória
+    const achouPar = M.paresEncontrados(estado) > M.paresEncontrados(antes);
+    som.tocar(M.concluido(estado) ? "vitoria" : achouPar ? "acerto" : "virar");
     if (M.concluido(estado)) {
       concluir();
       return;
@@ -264,8 +272,9 @@
         estado = M.desvirar(estado);
         desenhar();
         salvar();
+        som.tocar("desfazer");
       }, M.ESPERA_DESVIRAR_MS);
-    } else if (M.paresEncontrados(estado) > M.paresEncontrados(antes)) {
+    } else if (achouPar) {
       status.textContent = `Par encontrado: ${carta.emoji}. ${M.paresEncontrados(estado)} de ${M.pares(nivel())} pares.`;
     } else {
       status.textContent = carta.emoji;
@@ -340,6 +349,7 @@
     });
   }
   botaoReiniciar.addEventListener("click", () => confirmarNovaPartida());
+  som.ligarBotao(raiz.querySelector("#jm-som"));
 
   document.addEventListener("visibilitychange", () => {
     atualizarCronometro();

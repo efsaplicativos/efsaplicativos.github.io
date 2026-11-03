@@ -221,6 +221,11 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+/* O Som fica do tamanho do conteúdo; Reiniciar e Desfazer dividem o resto */
+.jv-botoes .som-botao {
+  flex: none;
+  min-height: 52px;
+}
 
 .jv-ajuda {
   margin: 14px 0 0;
@@ -397,6 +402,13 @@
   }
   .jv-grade {
     gap: 6px;
+  }
+  /* Três botões numa linha de 360 px: menos folga para os textos caberem */
+  .jv-botoes {
+    gap: 8px;
+  }
+  .jv-botoes .button {
+    padding-inline: 12px;
   }
 }
 

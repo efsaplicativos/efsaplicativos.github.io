@@ -72,6 +72,11 @@
   const botaoLimparNao = raiz.querySelector("#lb-limpar-nao");
   const status = raiz.querySelector("#lb-status");
   const reduzirMovimento = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  const som =
+    typeof Sons === "object"
+      ? Sons.criar("lumibricks", raiz)
+      : { tocar() {}, ligarBotao: (b) => b && (b.hidden = true) };
+  som.ligarBotao(raiz.querySelector("#lb-som"));
 
   const motor = new L.Motor();
   let recordes = [];
@@ -311,11 +316,15 @@
     laco = requestAnimationFrame(passo);
   }
 
-  /** Confere o que mudou na partida: linhas apagadas, nível e fim de jogo. */
-  function depoisDaAcao() {
+  /**
+   * Confere o que mudou na partida: linhas apagadas, nível e fim de jogo. [acao] é o comando que
+   * a pessoa deu (sem ele, quem agiu foi a gravidade) e [feito] diz se o motor aceitou o comando.
+   */
+  function depoisDaAcao(acao = null, feito = false) {
     const antes = ultimoEstado;
     if (!antes) return;
-    if (motor.contadorLimpezas !== antes.contadorLimpezas && motor.ultimaLimpeza.length) {
+    const limpou = motor.contadorLimpezas !== antes.contadorLimpezas && motor.ultimaLimpeza.length > 0;
+    if (limpou) {
       claraoInicio = performance.now();
       const n = motor.ultimaLimpeza.length;
       let texto = `${n} ${n === 1 ? "linha apagada" : "linhas apagadas"}.`;
@@ -323,13 +332,34 @@
       anunciar(texto);
     }
     if (motor.status === "fim" && antes.status !== "fim") terminar();
+    else tocarSom(antes, acao, feito, limpou);
     if (motor.versao !== versaoDesenhada) desenharTudo();
   }
 
-  function executar(acao) {
+  /** Blocos ocupados na grade: o número muda quando uma peça trava sem apagar linha. */
+  const ocupadas = (celulas) => celulas.reduce((n, c) => (c ? n + 1 : n), 0);
+
+  /** Um som só por ação, o do acontecimento mais importante. Mover e descer ficam mudos (repetiriam demais). */
+  function tocarSom(antes, acao, feito, limpou) {
+    if (limpou) {
+      // O nível só sobe apagando linhas, então a fanfarra do nível já avisa que houve linha
+      if (motor.nivel !== antes.nivel) som.tocar("nivel");
+      else som.tocar("linha", motor.ultimaLimpeza.length);
+    } else if (motor.versao !== versaoDesenhada && ocupadas(motor.tabuleiro.grade) !== ocupadas(antes.celulas)) {
+      // Peça travada sem linha; o bloco dourado tem som próprio, porque tapa um buraco
+      if (antes.atual?.tipo === "DOURADO") som.tocar("completo");
+      else som.tocar(acao === "queda" ? "queda" : "pousar");
+    } else if (feito && (acao === "girar" || acao === "girar-anti")) {
+      som.tocar("girar");
+    } else if (feito && acao === "segurar") {
+      som.tocar("toque");
+    }
+  }
+
+  function executar(nome) {
     if (motor.status !== "jogando") return;
-    acao();
-    depoisDaAcao();
+    const feito = ACOES[nome]();
+    depoisDaAcao(nome, feito);
     ligarLaco();
   }
 
@@ -348,7 +378,7 @@
       pausar();
       return;
     }
-    if (ACOES[nome]) executar(ACOES[nome]);
+    if (ACOES[nome]) executar(nome);
   }
 
   // ---------- Partida ----------
@@ -370,6 +400,7 @@
     salvarPartida();
     ligarLaco();
     anunciar("Partida iniciada.");
+    som.tocar("inicio");
     focarJogo();
   }
 
@@ -408,6 +439,8 @@
       gravar(CHAVE_RECORDES, L.recordesParaJson(recordes));
       mostrarRecordes();
     }
+    // A partida sempre acaba com a pilha no topo, mas bater o recorde merece comemoração
+    som.tocar(novoRecorde ? "vitoria" : "derrota");
     mostrar("fim");
   }
 

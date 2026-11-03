@@ -78,6 +78,22 @@
   /** O que o tabuleiro mostra antes do primeiro puzzle chegar. */
   const POSICAO_DE_ESPERA = X.lerFen(X.FEN_INICIAL);
   const reduzirMovimento = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+  const som =
+    typeof Sons === "object"
+      ? Sons.criar("puzzles-de-xadrez", raiz)
+      : { tocar() {}, ligarBotao: (b) => b && (b.hidden = true) };
+  som.ligarBotao($("#pzx-som"));
+  // O puzzle que abre junto com a página joga o lance do adversário sem som: só depois de a pessoa mexer no jogo
+  let interagiu = false;
+  for (const tipo of ["pointerdown", "keydown"]) {
+    raiz.addEventListener(tipo, () => (interagiu = true), { capture: true });
+  }
+
+  /** Um som por lance: o xeque (e o mate) vale mais que a captura, que vale mais que o lance simples. */
+  function somDoLance(jogado) {
+    if (/[+#]$/.test(jogado.san)) som.tocar("xeque");
+    else som.tocar(jogado.lance.captura ? "captura" : "peca");
+  }
 
   // ---------- Armazenamento ----------
 
@@ -552,7 +568,7 @@
   function jogar(l) {
     if (linha) {
       // Depois do fim, qualquer lado pode mexer: o lance novo corta o que vinha depois
-      linha.jogar(l);
+      somDoLance(linha.jogar(l));
       explorou = true;
       desenhar(deslizes(l, false));
       atualizarTextos();
@@ -562,18 +578,24 @@
     const r = sessao.enviar(l);
     if (r.tipo === "certo") {
       fase = "certo";
+      somDoLance(r.jogado);
       desenhar(deslizes(r.jogado.lance, false));
       atualizarTextos();
       depois(ATRASO_ADVERSARIO_MS, () => {
         const resposta = sessao.jogarAdversario();
         fase = "sua-vez";
         ultimoAnimado = resposta;
+        somDoLance(resposta);
         desenhar(deslizes(resposta.lance, false));
         atualizarTextos();
       });
     } else if (r.tipo === "resolvido") {
+      // Depois de erro ou dica o puzzle não conta como resolvido: o último lance soa como lance comum
+      if (sessao.falhou) somDoLance(r.jogado);
+      else som.tocar("acerto");
       terminar(deslizes(r.jogado.lance, false));
     } else {
+      som.tocar("erro");
       registrar(false);
       lanceErrado = r.lance;
       posicaoErrada = sessao.posicaoApos(r.lance);
@@ -604,6 +626,7 @@
   function mostrarDica() {
     if (!sessao || !emSolucao() || linha) return;
     sessao.mostrarDica();
+    som.tocar("dica");
     registrar(false);
     desenhar();
     atualizarTextos();
@@ -620,6 +643,7 @@
     selecionada = null;
     desenhar(estavaErrado ? deslizes(estavaErrado, true) : null);
     atualizarTextos();
+    // A solução passa sem som: é uma demonstração, ninguém está jogando, e quem desistiu só quer ver os lances
     const passo = () => {
       const jogado = sessao.jogarSolucao();
       if (sessao.terminou) {
@@ -690,6 +714,7 @@
       const jogado = sessao.jogarAdversario();
       ultimoAnimado = jogado;
       fase = "sua-vez";
+      if (interagiu) somDoLance(jogado);
       desenhar(deslizes(jogado.lance, false));
       atualizarTextos();
     });
@@ -1127,6 +1152,9 @@
     const ultimoAntes = linha.ultimo;
     acao(linha);
     selecionada = null;
+    // Para a frente soa o lance que aparece; para trás, o de desfazer
+    if (linha.cursor > antes) somDoLance(linha.ultimo);
+    else if (linha.cursor < antes) som.tocar("desfazer");
     // Um passo para a frente ou para trás desliza a peça; pulos maiores só redesenham
     if (linha.cursor === antes + 1) desenhar(deslizes(linha.ultimo.lance, false));
     else if (linha.cursor === antes - 1 && ultimoAntes) desenhar(deslizes(ultimoAntes.lance, true));

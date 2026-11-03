@@ -34,12 +34,13 @@
     <meta property="og:locale" content="pt_BR" />
     <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
     <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
-    <link rel="stylesheet" href="/assets/web.css?v=8aa4a1ab9334" />
-    <link rel="stylesheet" href="/assets/jogos/mahjong.css?v=1675796c5f8f" />
+    <link rel="stylesheet" href="/assets/web.css?v=9335b7c5c72f" />
+    <link rel="stylesheet" href="/assets/jogos/mahjong.css?v=453a375b0db0" />
     <script src="/site.js?v=b4f7be01c332" defer></script>
     <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
     <script src="/assets/jogos/mahjong-logica.js?v=c2802600d5b8" defer></script>
-    <script src="/assets/jogos/mahjong.js?v=1add39cec286" defer></script>
+    <script src="/assets/jogos/sons.js?v=21d1381b6bd0" defer></script>
+    <script src="/assets/jogos/mahjong.js?v=2e5676ffd005" defer></script>
     <link
       rel="icon"
       type="image/png"
@@ -129,7 +130,10 @@
       <label for="mj-tabuleiro">Tabuleiro</label>
       <select class="select" id="mj-tabuleiro"></select>
     </div>
-    <button type="button" class="button secondary" id="mj-nova">Nova distribuição</button>
+    <div class="mj-barra-botoes">
+      <button type="button" class="button secondary" id="mj-nova">Nova distribuição</button>
+      <button type="button" class="som-botao" id="mj-som"></button>
+    </div>
   </div>
   <p class="mj-info" id="mj-info"></p>
   <p class="mj-info mj-recorde" id="mj-recorde"></p>
@@ -339,6 +343,14 @@
   <p>
     Porque só os lados esquerdo e direito prendem uma peça na mesma camada. O que importa é ela
     poder "deslizar" para um dos lados e não ter nada por cima.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem: um clique de madeira ao escolher uma peça, um sinal claro quando o par sai, um som grave
+    ao tocar numa peça presa e efeitos próprios para dica, embaralhar, desfazer, mesa limpa e mesa
+    sem jogadas. Eles são gerados na hora pelo próprio navegador, sem baixar nenhum arquivo. O botão
+    Som, ao lado de Nova distribuição, liga e desliga os efeitos, e a escolha fica guardada neste
+    aparelho.
   </p>
 </article>
 

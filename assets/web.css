@@ -436,3 +436,38 @@
     margin-left: 0;
   }
 }
+
+/* Botão de som dos jogos (assets/jogos/sons.js) */
+.som-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.som-botao:hover {
+  background: var(--surface-3);
+}
+.som-botao:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.som-botao .som-mudo,
+.som-botao[aria-pressed="false"] .som-ondas {
+  display: none;
+}
+.som-botao[aria-pressed="false"] {
+  color: var(--muted);
+}
+.som-botao[aria-pressed="false"] .som-mudo {
+  display: inline;
+}

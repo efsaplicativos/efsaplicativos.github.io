@@ -2,7 +2,7 @@
 titulo: Campo Minado Online Grátis: Jogue no Navegador — EFS Aplicativos
 descricao: Jogue Campo Minado online e grátis, no computador ou no celular. Três níveis, primeira jogada segura, bandeiras, cronômetro e recordes salvos no navegador.
 estilos: /assets/jogos/campo-minado.css
-scripts: /assets/jogos/campo-minado-logica.js /assets/jogos/campo-minado.js
+scripts: /assets/jogos/campo-minado-logica.js /assets/jogos/sons.js /assets/jogos/campo-minado.js
 app: Campo Minado | GameApplication
 -->
 <header class="page-head">
@@ -36,7 +36,10 @@ app: Campo Minado | GameApplication
       <button type="button" class="filter active" data-modo="revelar" aria-pressed="true">Revelar</button>
       <button type="button" class="filter" data-modo="bandeira" aria-pressed="false">Bandeira</button>
     </div>
-    <button type="button" class="button secondary" id="cm-novo">Novo jogo</button>
+    <div class="cm-botoes">
+      <button type="button" class="som-botao" id="cm-som"></button>
+      <button type="button" class="button secondary" id="cm-novo">Novo jogo</button>
+    </div>
   </div>
 
   <div class="cm-area">
@@ -121,6 +124,14 @@ app: Campo Minado | GameApplication
     Sim, no próprio navegador. A partida em andamento continua de onde parou se você fechar a
     página, e os 50 melhores tempos de cada nível ficam guardados. Em outro aparelho ou depois de
     limpar os dados do navegador, eles não aparecem.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. Abrir uma casa dá um clique curto, e uma abertura em cascata soa como uma escadinha de
+    notas; pôr e tirar bandeira têm bipes próprios, a mina estoura com um estrondo grave e a vitória
+    toca uma fanfarra curta. Os sons são criados na hora pelo próprio navegador, sem baixar nenhum
+    arquivo de áudio. O botão <strong>Som</strong>, ao lado de Novo jogo, liga e desliga os
+    efeitos, e a escolha fica guardada neste aparelho.
   </p>
 </article>
 

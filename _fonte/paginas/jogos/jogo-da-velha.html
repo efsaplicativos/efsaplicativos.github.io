@@ -2,7 +2,7 @@
 titulo: Jogo da Velha Online: Computador ou 2 Jogadores — EFS Aplicativos
 descricao: Jogue jogo da velha online e grátis contra o computador em 3 níveis, do Fácil ao Difícil que nunca perde, ou a dois no mesmo aparelho. Placar fica salvo.
 estilos: /assets/jogos/jogo-da-velha.css
-scripts: /assets/jogos/jogo-da-velha-logica.js /assets/jogos/jogo-da-velha.js
+scripts: /assets/jogos/jogo-da-velha-logica.js /assets/jogos/sons.js /assets/jogos/jogo-da-velha.js
 app: Tic Tac Toe | GameApplication
 -->
 <header class="page-head">
@@ -42,6 +42,7 @@ app: Tic Tac Toe | GameApplication
   <div class="jv-botoes">
     <button type="button" class="button" id="jv-nova">Reiniciar</button>
     <button type="button" class="button secondary" id="jv-desfazer">Desfazer</button>
+    <button type="button" class="som-botao" id="jv-som"></button>
   </div>
 
   <p class="jv-ajuda" id="jv-ajuda">
@@ -130,6 +131,14 @@ app: Tic Tac Toe | GameApplication
     Um pouco: quem começa termina com 5 marcas contra 4 e tem mais chances de montar um garfo. Com
     jogo perfeito dos dois lados, porém, o resultado é sempre empate. Aqui o X sempre começa; no
     modo 2 jogadores, revezem quem fica com o X.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. O X e o O batem no tabuleiro com timbres diferentes, então dá para saber de ouvido quem
+    jogou, inclusive quando é o computador. A vitória toca uma fanfarra curta, perder para o
+    computador dá um tom descendente e a velha, um som breve e neutro. Nada é baixado: o próprio
+    navegador cria os sons na hora. O botão <strong>Som</strong>, embaixo do tabuleiro, liga e
+    desliga os efeitos, e a escolha fica guardada neste aparelho.
   </p>
 </article>
 

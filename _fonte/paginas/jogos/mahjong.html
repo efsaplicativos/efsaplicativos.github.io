@@ -2,7 +2,7 @@
 titulo: Mahjong Solitário Online Grátis: 15 Tabuleiros — EFS Aplicativos
 descricao: Jogue Mahjong solitário online e grátis: forme pares de peças livres em 15 tabuleiros, do fácil ao difícil. Toda partida tem solução, com dica e desfazer.
 estilos: /assets/jogos/mahjong.css
-scripts: /assets/jogos/mahjong-logica.js /assets/jogos/mahjong.js
+scripts: /assets/jogos/mahjong-logica.js /assets/jogos/sons.js /assets/jogos/mahjong.js
 app: Mahjong Solitário Clássico | GameApplication
 -->
 <header class="page-head">
@@ -24,7 +24,10 @@ app: Mahjong Solitário Clássico | GameApplication
       <label for="mj-tabuleiro">Tabuleiro</label>
       <select class="select" id="mj-tabuleiro"></select>
     </div>
-    <button type="button" class="button secondary" id="mj-nova">Nova distribuição</button>
+    <div class="mj-barra-botoes">
+      <button type="button" class="button secondary" id="mj-nova">Nova distribuição</button>
+      <button type="button" class="som-botao" id="mj-som"></button>
+    </div>
   </div>
   <p class="mj-info" id="mj-info"></p>
   <p class="mj-info mj-recorde" id="mj-recorde"></p>
@@ -234,6 +237,14 @@ app: Mahjong Solitário Clássico | GameApplication
   <p>
     Porque só os lados esquerdo e direito prendem uma peça na mesma camada. O que importa é ela
     poder "deslizar" para um dos lados e não ter nada por cima.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem: um clique de madeira ao escolher uma peça, um sinal claro quando o par sai, um som grave
+    ao tocar numa peça presa e efeitos próprios para dica, embaralhar, desfazer, mesa limpa e mesa
+    sem jogadas. Eles são gerados na hora pelo próprio navegador, sem baixar nenhum arquivo. O botão
+    Som, ao lado de Nova distribuição, liga e desliga os efeitos, e a escolha fica guardada neste
+    aparelho.
   </p>
 </article>
 

@@ -2,7 +2,7 @@
 titulo: Quebra-Cabeça Deslizante Online Grátis — EFS Aplicativos
 descricao: Jogue quebra-cabeça deslizante online e grátis: escolha uma imagem ou o modo numérico, grades de 3 × 3 a 5 × 5, e monte com o menor tempo e menos movimentos.
 estilos: /assets/jogos/quebra-cabeca.css
-scripts: /assets/jogos/quebra-cabeca-logica.js /assets/jogos/quebra-cabeca.js
+scripts: /assets/jogos/quebra-cabeca-logica.js /assets/jogos/sons.js /assets/jogos/quebra-cabeca.js
 app: Quebra-Cabeça Deslizante | GameApplication
 -->
 <header class="page-head">
@@ -60,6 +60,7 @@ app: Quebra-Cabeça Deslizante | GameApplication
     <button type="button" class="button secondary" id="qc-pausa" aria-pressed="false">Pausar</button>
     <button type="button" class="button secondary" id="qc-ver" aria-pressed="false">Ver imagem</button>
     <button type="button" class="button secondary" id="qc-reiniciar">Reiniciar</button>
+    <button type="button" class="som-botao" id="qc-som"></button>
   </div>
 
   <p class="qc-ajuda" id="qc-ajuda">
@@ -124,6 +125,13 @@ app: Quebra-Cabeça Deslizante | GameApplication
   <p>
     São ilustrações do próprio app Quebra-Cabeça Deslizante. A versão para Android tem 25 imagens
     para escolher.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem: um deslize curto a cada peça movida, um chacoalhar de peças quando o tabuleiro é
+    embaralhado e uma pequena fanfarra quando a imagem fica montada. Nada é baixado: o próprio
+    navegador gera os sons na hora. O botão <strong>Som</strong>, ao lado de Reiniciar, liga e
+    desliga os efeitos, e a escolha fica guardada neste aparelho.
   </p>
 </article>
 

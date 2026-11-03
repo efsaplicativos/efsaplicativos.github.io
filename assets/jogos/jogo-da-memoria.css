@@ -172,11 +172,16 @@
 
 .jm-botoes {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 10px;
   margin-top: 16px;
 }
-.jm-botoes .button {
+.jm-botoes .button,
+.jm-botoes .som-botao {
   min-height: 44px;
+}
+.jm-botoes .button {
   padding: 10px 18px;
 }
 

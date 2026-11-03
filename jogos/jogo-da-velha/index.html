@@ -34,12 +34,13 @@
     <meta property="og:locale" content="pt_BR" />
     <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
     <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
-    <link rel="stylesheet" href="/assets/web.css?v=8aa4a1ab9334" />
-    <link rel="stylesheet" href="/assets/jogos/jogo-da-velha.css?v=d434c97d89da" />
+    <link rel="stylesheet" href="/assets/web.css?v=9335b7c5c72f" />
+    <link rel="stylesheet" href="/assets/jogos/jogo-da-velha.css?v=363d8117e79a" />
     <script src="/site.js?v=b4f7be01c332" defer></script>
     <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
     <script src="/assets/jogos/jogo-da-velha-logica.js?v=661d1a458221" defer></script>
-    <script src="/assets/jogos/jogo-da-velha.js?v=7fd2b0194826" defer></script>
+    <script src="/assets/jogos/sons.js?v=21d1381b6bd0" defer></script>
+    <script src="/assets/jogos/jogo-da-velha.js?v=413fd90a21ba" defer></script>
     <link
       rel="icon"
       type="image/png"
@@ -147,6 +148,7 @@
   <div class="jv-botoes">
     <button type="button" class="button" id="jv-nova">Reiniciar</button>
     <button type="button" class="button secondary" id="jv-desfazer">Desfazer</button>
+    <button type="button" class="som-botao" id="jv-som"></button>
   </div>
 
   <p class="jv-ajuda" id="jv-ajuda">
@@ -235,6 +237,14 @@
     Um pouco: quem começa termina com 5 marcas contra 4 e tem mais chances de montar um garfo. Com
     jogo perfeito dos dois lados, porém, o resultado é sempre empate. Aqui o X sempre começa; no
     modo 2 jogadores, revezem quem fica com o X.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. O X e o O batem no tabuleiro com timbres diferentes, então dá para saber de ouvido quem
+    jogou, inclusive quando é o computador. A vitória toca uma fanfarra curta, perder para o
+    computador dá um tom descendente e a velha, um som breve e neutro. Nada é baixado: o próprio
+    navegador cria os sons na hora. O botão <strong>Som</strong>, embaixo do tabuleiro, liga e
+    desliga os efeitos, e a escolha fica guardada neste aparelho.
   </p>
 </article>
 

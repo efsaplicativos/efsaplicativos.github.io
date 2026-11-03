@@ -45,6 +45,14 @@
   min-height: 44px;
   padding: 10px 18px;
 }
+/* Som e Novo jogo ficam juntos quando a linha quebra no celular */
+.sd-botoes-topo {
+  display: flex;
+  gap: 8px;
+}
+.sd-topo .som-botao {
+  min-height: 44px;
+}
 
 .sd-info {
   display: grid;

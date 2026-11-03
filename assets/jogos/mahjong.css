@@ -44,6 +44,14 @@
 .mj-campo .select {
   width: 100%;
 }
+/* Nova distribuição e Som quebram de linha juntos no celular */
+.mj-barra-botoes {
+  display: flex;
+  gap: 8px;
+}
+.mj-barra-botoes .som-botao {
+  min-height: 50px;
+}
 .mj-info {
   margin: 10px 0 0;
   font-size: 14px;

@@ -34,6 +34,9 @@
   const dialogoTexto = raiz.querySelector("#cm-dialogo-texto");
   const dialogoDados = raiz.querySelector("#cm-dialogo-dados");
   const dialogoBotoes = raiz.querySelector("#cm-dialogo-botoes");
+  // Sem a biblioteca de sons (script que não carregou), o jogo continua, só que mudo
+  const som = typeof Sons === "object" ? Sons.criar("campo-minado", raiz) : { tocar() {}, ligarBotao() {} };
+  som.ligarBotao(raiz.querySelector("#cm-som"));
 
   const SVG_BANDEIRA =
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path class="cm-pano" d="M8 4h10l-2.6 3.8L18 11.6H8z"/></svg>';
@@ -289,6 +292,8 @@
     }
     desenharTudo();
     status.textContent = `Nova partida no nível ${nivel.nome}: ${nivel.minas} minas.`;
+    // Só chega aqui por um botão (Novo jogo, nível ou diálogo): ao abrir a página não toca
+    som.tocar("inicio");
   }
 
   function confirmarNovaPartida(novoNivel = nivel) {
@@ -309,6 +314,7 @@
   function aplicar(novo, { bandeira = false } = {}) {
     if (novo === tabuleiro) return;
     const antes = L.minasRestantes(tabuleiro);
+    const abertasAntes = L.reveladas(tabuleiro);
     tabuleiro = novo;
     iniciada = true;
     retomada = false;
@@ -317,14 +323,21 @@
       salvarPartida();
       if (bandeira) {
         const agora = L.minasRestantes(tabuleiro);
-        status.textContent = `${agora < antes ? "Bandeira marcada" : "Bandeira retirada"}. Minas restantes: ${agora}.`;
+        const marcou = agora < antes;
+        som.tocar(marcou ? "bandeira" : "tirarBandeira");
+        status.textContent = `${marcou ? "Bandeira marcada" : "Bandeira retirada"}. Minas restantes: ${agora}.`;
+      } else {
+        // Casa vazia ou vizinhas de um número abrem várias de uma vez: soa como cascata
+        som.tocar(L.reveladas(tabuleiro) - abertasAntes > 1 ? "cascata" : "abrir");
       }
       return;
     }
+    // A jogada que encerra toca só o som do desfecho
     terminar(tabuleiro.status === L.VENCEU);
   }
 
   function terminar(venceu) {
+    som.tocar(venceu ? "vitoria" : "explosao");
     atualizarCronometro();
     const tempo = segundos();
     textoTempo.textContent = L.formatarTempo(tempo);

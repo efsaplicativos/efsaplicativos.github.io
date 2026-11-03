@@ -51,6 +51,12 @@
   const dialogoTitulo = $("#cs-dialogo-titulo");
   const dialogoCorpo = $("#cs-dialogo-corpo");
   const dialogoBotoes = $("#cs-dialogo-botoes");
+  // Sem sons.js o jogo funciona igual, só que mudo e sem o botão
+  const som =
+    typeof Sons === "object"
+      ? Sons.criar("color-sort", raiz)
+      : { tocar() {}, ligarBotao: (botao) => botao && (botao.hidden = true) };
+  som.ligarBotao($("#cs-som"));
 
   let dificuldade = C.dificuldade("easy");
   let partida = null;
@@ -294,9 +300,11 @@
       iniciarRelogio();
       selecionado = i;
       status.textContent = `Tubo ${i + 1} escolhido.`;
+      som.tocar("toque");
     } else if (origem === i) {
       selecionado = null;
       status.textContent = "Escolha cancelada.";
+      som.tocar("toque");
     } else {
       const nova = C.jogar(partida, origem, i);
       if (!nova) {
@@ -306,14 +314,19 @@
         void tubos[origem].offsetWidth;
         tubos[origem].classList.add("cs-recusado");
         status.textContent = `Não dá para despejar do tubo ${origem + 1} no tubo ${i + 1}.${selecionado !== null ? ` Tubo ${i + 1} escolhido.` : ""}`;
+        som.tocar("erro");
       } else {
+        const quantidade = nova.tabuleiro.tubos[i].length - t.tubos[i].length;
         partida = nova;
         selecionado = null;
         status.textContent = `Despejado no tubo ${i + 1}. ${descreverTubo(i)}.`;
+        // Um som por jogada: resolver o nível (em terminar) vale mais que fechar um tubo, que vale mais que o despejo
         if (C.completo(partida.tabuleiro)) {
           terminar();
           return;
         }
+        if (C.tuboCompleto(partida.tabuleiro, i)) som.tocar("completo");
+        else som.tocar("despejar", quantidade);
         salvar();
       }
     }
@@ -327,6 +340,7 @@
     partida = anterior;
     selecionado = null;
     status.textContent = "Jogada desfeita.";
+    som.tocar("desfazer");
     salvar();
     desenhar();
   }
@@ -343,12 +357,13 @@
     abaRecordes = dificuldade.chave;
     salvar();
     desenhar();
+    som.tocar("vitoria");
     status.textContent = `Você organizou todas as cores em ${C.formatarTempo(tempo)} e ${partida.movimentos} movimentos.`;
     mostrarVitoria(tempo, registro);
   }
 
-  /** Começa um nível: novo (gerado) ou o mesmo do começo. */
-  function comecar(nivel, mesmo = false) {
+  /** Começa um nível: novo (gerado) ou o mesmo do começo; [silencioso] no nível que abre com a página. */
+  function comecar(nivel, mesmo = false, silencioso = false) {
     fecharDialogo();
     pararRelogio();
     dificuldade = nivel;
@@ -364,6 +379,8 @@
     // Os tubos antigos saíram da página: o foco do teclado vai para o primeiro tubo novo
     if (focoNoJogo) tubos[0].focus({ preventScroll: true });
     status.textContent = mesmo ? "Nível reiniciado." : `Novo nível ${nivel.nome.toLowerCase()} com ${nivel.cores} cores.`;
+    // Nível sorteado embaralha; o mesmo nível desde o começo só recomeça
+    if (!silencioso) som.tocar(mesmo ? "inicio" : "embaralhar");
   }
 
   /** Há progresso a perder: movimentos feitos num nível ainda não resolvido. */
@@ -513,6 +530,7 @@
     if (evento.key === "Escape" && selecionado !== null) {
       selecionado = null;
       status.textContent = "Escolha cancelada.";
+      som.tocar("toque");
       desenhar();
       return;
     }
@@ -540,7 +558,7 @@
     desenhar(false);
   } else {
     abaRecordes = dificuldade.chave;
-    comecar(dificuldade);
+    comecar(dificuldade, false, true);
     status.textContent = "";
   }
 })();

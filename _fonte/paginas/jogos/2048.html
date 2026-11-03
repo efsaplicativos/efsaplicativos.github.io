@@ -2,7 +2,7 @@
 titulo: 2048 Online Grátis: Jogue no Navegador — EFS Aplicativos
 descricao: Jogue 2048 online, grátis e sem instalar nada. Junte os blocos iguais até chegar ao 2048, no computador ou no celular. Sua partida e seu recorde ficam salvos no navegador.
 estilos: /assets/jogos/2048.css
-scripts: /assets/jogos/2048.js
+scripts: /assets/jogos/sons.js /assets/jogos/2048.js
 app: 2048 | GameApplication
 -->
 <header class="page-head">
@@ -24,7 +24,10 @@ app: 2048 | GameApplication
       <div class="score"><span>Pontos</span><strong id="pontos">0</strong></div>
       <div class="score"><span>Recorde</span><strong id="recorde">0</strong></div>
     </div>
-    <button type="button" class="button secondary" id="novo-jogo">Novo jogo</button>
+    <div class="game-acoes">
+      <button type="button" class="button secondary" id="novo-jogo">Novo jogo</button>
+      <button type="button" class="som-botao" id="som-jogo"></button>
+    </div>
   </div>
   <div
     class="board"
@@ -98,6 +101,14 @@ app: 2048 | GameApplication
   <h3>Preciso de internet para jogar?</h3>
   <p>
     Só para abrir a página. Para jogar sem internet, instale o app 2048: Block Merge no celular.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem. Cada jogada faz um som curto de deslize, e cada junção toca uma nota que fica mais aguda
+    conforme o bloco formado cresce. Começar um jogo, chegar ao 2048 e ficar sem jogadas também
+    têm som próprio. Os sons são criados pelo próprio navegador na hora, sem baixar nenhum
+    arquivo. O botão <strong>Som</strong>, ao lado de Novo jogo, liga e desliga os efeitos, e a
+    escolha fica guardada neste aparelho.
   </p>
 </article>
 

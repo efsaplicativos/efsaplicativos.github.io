@@ -36,6 +36,9 @@
   const dialogoTexto = raiz.querySelector("#sd-dialogo-texto");
   const dialogoDados = raiz.querySelector("#sd-dialogo-dados");
   const dialogoBotoes = raiz.querySelector("#sd-dialogo-botoes");
+  // Sem a biblioteca de sons (script que não carregou), o jogo continua, só que mudo
+  const som = typeof Sons === "object" ? Sons.criar("sudoku", raiz) : { tocar() {}, ligarBotao() {} };
+  som.ligarBotao(raiz.querySelector("#sd-som"));
 
   let jogo = null;
   let selecionada = null;
@@ -257,7 +260,8 @@
 
   // ---------- Partida ----------
 
-  function novoJogo(nivelId) {
+  /** `silencioso`: o jogo criado ao abrir a página, sem nenhuma ação da pessoa. */
+  function novoJogo(nivelId, { silencioso = false } = {}) {
     fecharDialogo();
     const nivel = S.NIVEIS[nivelId];
     jogo = S.novoJogo(nivel, S.gerar(nivel));
@@ -272,6 +276,7 @@
     salvar();
     desenhar();
     status.textContent = `Novo jogo no nível ${nivel.nome}, com ${nivel.casasVazias} casas vazias.`;
+    if (!silencioso) som.tocar("inicio");
   }
 
   /** Um jogo com alguma jogada feita pede confirmação antes de ser trocado. */
@@ -311,6 +316,8 @@
   }
 
   function concluir() {
+    // Só uma jogada (número ou dica) completa a grade: a vitória substitui o som dela
+    som.tocar("vitoria");
     acumuladoMs = decorridoMs();
     inicioTrecho = null;
     clearInterval(tique);
@@ -347,19 +354,35 @@
     if (focar) casas[i].focus({ preventScroll: true });
   }
 
+  /** A casa acabou de fechar uma linha, coluna ou quadrado inteiro com os números certos? */
+  function fechouGrupo(i) {
+    return [S.linha, S.coluna, S.bloco].some((grupo) => {
+      for (let j = 0; j < S.CASAS; j++) if (grupo(j) === grupo(i) && !S.correta(jogo, j)) return false;
+      return true;
+    });
+  }
+
   function digitar(numero) {
     if (!interativo() || selecionada === null) return;
     const i = selecionada;
     const antes = jogo;
     aplicar(modoNotas ? S.alternarNota(jogo, i, numero) : S.colocar(jogo, i, numero));
-    if (!modoNotas && jogo !== antes && !venceu) {
-      status.textContent = S.errada(jogo, i) ? `${numero} não é o número desta casa.` : `${numero} colocado.`;
+    // Jogada sem efeito fica muda; a que resolve a grade já tocou a vitória em concluir()
+    if (jogo === antes || venceu) return;
+    if (modoNotas) {
+      som.tocar("anotar");
+      return;
     }
+    const errado = S.errada(jogo, i);
+    status.textContent = errado ? `${numero} não é o número desta casa.` : `${numero} colocado.`;
+    som.tocar(errado ? "erro" : fechouGrupo(i) ? "completo" : "numero");
   }
 
   function apagar() {
     if (!interativo() || selecionada === null) return;
+    const antes = jogo;
     aplicar(S.apagar(jogo, selecionada));
+    if (jogo !== antes) som.tocar("apagar");
   }
 
   function dica() {
@@ -373,6 +396,7 @@
     if (!venceu) {
       status.textContent = `Dica: ${jogo.valores[alvo]} na linha ${S.linha(alvo) + 1}, coluna ${S.coluna(alvo) + 1}.`;
       casas[alvo].focus({ preventScroll: true });
+      som.tocar("dica");
     }
   }
 
@@ -382,6 +406,7 @@
     // Volta números e notas; erros e dicas usadas continuam contando
     aplicar({ ...jogo, valores: anterior.valores, notas: anterior.notas }, { registrar: false });
     status.textContent = "Jogada desfeita.";
+    som.tocar("desfazer");
   }
 
   function alternarNotas() {
@@ -484,6 +509,6 @@
     pausado = true;
     desenhar();
   } else {
-    novoJogo("medio");
+    novoJogo("medio", { silencioso: true });
   }
 })();
