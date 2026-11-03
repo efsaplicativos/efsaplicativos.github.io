@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,7 +13,7 @@
       rel="canonical"
       href="https://efsaplicativos.com.br/politica-privacidade.html"
     />
-    <meta name="theme-color" content="#050a1e" />
+    <meta name="theme-color" content="#f0faf5" />
     <script>
       (function () {
         var root = document.documentElement;
@@ -24,17 +24,22 @@
         } catch (error) {
           theme = null;
         }
-        if (theme === "light" || theme === "dark") {
-          root.setAttribute("data-theme", theme);
-        }
-        if (theme === "light") {
+        // O verde (claro) é o padrão; o escuro vale para quem ligou o modo noturno
+        if (theme === "dark") {
+          root.setAttribute("data-theme", "dark");
           var meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.setAttribute("content", "#f3f6ff");
+          if (meta) meta.setAttribute("content", "#0f1115");
         }
       })();
     </script>
-        <link rel="stylesheet" href="site.css?v=10791e83acb7" />
-    <script src="site.js?v=b4f7be01c332" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600..800&amp;family=Nunito:wght@400..800&amp;display=swap"
+    />
+    <link rel="stylesheet" href="site.css?v=4c564150c14a" />
+    <script src="site.js?v=69a6a981d35b" defer></script>
     <link rel="icon" type="image/png" sizes="512x512" href="images/EfsAplicativos_4.png">
 </head>
     <body>
@@ -64,8 +69,8 @@
             type="button"
             data-theme-toggle
             aria-pressed="false"
-            aria-label="Ativar tema claro"
-            title="Alternar tema claro/escuro"
+            aria-label="Modo noturno"
+            title="Modo noturno"
           >
             <svg
               class="icon-sun"
@@ -386,6 +391,7 @@
           >Como o AdMob usa os dados de aplicativos</a
         >
       </p>
+    </div>
             </article>
       </div>
     </main>

@@ -229,7 +229,7 @@
   box-shadow: var(--shadow-lg);
 }
 .jm-dialogo::backdrop {
-  background: rgba(5, 10, 30, 0.6);
+  background: rgba(10, 12, 16, 0.6);
 }
 .jm-dialogo h2 {
   margin: 0 0 8px;

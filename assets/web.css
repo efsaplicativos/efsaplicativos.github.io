@@ -4,8 +4,10 @@
    ========================================================================== */
 
 .nav a[aria-current="page"] {
-  color: var(--text);
-  background: var(--surface-3);
+  background: var(--mint);
+}
+.nav .contact-link[aria-current="page"] {
+  background: var(--pill-strong);
 }
 
 /* ---------- Cabeçalho da página ---------- */
@@ -14,7 +16,8 @@
   padding: clamp(28px, 4vw, 48px) 0 clamp(20px, 3vw, 30px);
 }
 .page-head h1 {
-  font-size: clamp(30px, 4vw, 46px);
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.05;
   margin: 14px 0 12px;
 }
 .page-head p {
@@ -41,7 +44,7 @@
   text-decoration: none;
 }
 .breadcrumb a:hover {
-  color: var(--violet-2);
+  color: var(--primary);
 }
 
 /* ---------- Ferramenta ---------- */
@@ -50,7 +53,7 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-sm);
 }
 .tool-grid {
   display: grid;
@@ -75,8 +78,8 @@
 .field > label,
 .field > legend {
   padding: 0;
-  font-size: 14px;
-  font-weight: 650;
+  font-size: 14.5px;
+  font-weight: 700;
   color: var(--text-2);
 }
 .field[hidden] {
@@ -133,7 +136,7 @@
 .result {
   padding: 20px 22px;
   background: var(--surface-2);
-  border: 1px solid var(--border-2);
+  border: 1px solid var(--border);
   border-radius: var(--r);
 }
 .result-label {
@@ -143,6 +146,7 @@
 }
 .result-value {
   margin: 4px 0 14px;
+  font-family: var(--font-title);
   font-size: clamp(28px, 3.4vw, 40px);
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -238,7 +242,7 @@
 .data .current td {
   font-weight: 700;
   color: var(--text);
-  background: rgba(59, 130, 246, 0.16);
+  background: var(--tint);
 }
 
 /* ---------- Texto explicativo ---------- */
@@ -277,6 +281,9 @@
 .texto a {
   color: var(--blue-2);
 }
+.texto a:hover {
+  color: var(--primary);
+}
 .texto .table-wrap {
   max-height: none;
   margin: 0 0 18px;
@@ -299,7 +306,7 @@
   color: var(--text-2);
   background: var(--surface-2);
   border: 1px solid var(--border);
-  border-left: 4px solid var(--accent);
+  border-left: 4px solid var(--sun);
   border-radius: var(--r-sm);
 }
 
@@ -310,11 +317,10 @@
   gap: 20px;
   margin: 44px 0;
   padding: clamp(20px, 3vw, 28px);
-  background: linear-gradient(135deg, #101a3d, #1b2a58);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  --text: #eef3ff;
-  --text-2: #c3cdec;
+  background: var(--contact-bg);
+  border-radius: 30px;
+  --text: var(--contact-text);
+  --text-2: var(--contact-muted);
 }
 .cta-app img {
   flex: 0 0 auto;
@@ -325,9 +331,9 @@
 }
 .cta-app h2 {
   margin: 0 0 4px;
-  font-size: 19px;
+  font-size: 22px;
+  line-height: 1.2;
   color: var(--text);
-  background: none;
 }
 .cta-app p {
   margin: 0;
@@ -337,23 +343,27 @@
 .cta-app .button {
   margin-left: auto;
   white-space: nowrap;
+  background: var(--sun);
+  color: var(--on-sun);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+}
+.cta-app .button:hover {
+  filter: brightness(1.06);
 }
 
 /* ---------- Grade das páginas de índice ---------- */
 .app-body .card-title {
-  margin: 12px 0 8px;
-  font-size: 19px;
-  font-weight: 750;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
+  margin: 12px 0 6px;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.2;
   color: var(--text);
-  background: none;
 }
 .card-title a {
   text-decoration: none;
 }
 .card-title a:hover {
-  color: var(--violet-2);
+  color: var(--primary);
 }
 .indice-atalhos {
   margin-top: 20px;
@@ -413,12 +423,6 @@
 }
 :root[data-theme="light"] .level-alert {
   color: #991b1b;
-}
-:root[data-theme="light"] .texto a {
-  color: #2563eb;
-}
-:root[data-theme="light"] .data .current td {
-  background: rgba(37, 99, 235, 0.12);
 }
 
 /* ---------- Responsivo ---------- */

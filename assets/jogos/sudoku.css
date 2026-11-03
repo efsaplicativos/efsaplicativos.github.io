@@ -252,7 +252,7 @@
   border-color: var(--violet-2);
 }
 .sd-acao.ativo {
-  color: #fff;
+  color: var(--on-primary);
   background: var(--grad);
   border-color: transparent;
 }
@@ -332,7 +332,7 @@
   box-shadow: var(--shadow-lg);
 }
 .sd-dialogo::backdrop {
-  background: rgba(5, 10, 30, 0.6);
+  background: rgba(10, 12, 16, 0.6);
 }
 .sd-dialogo h2 {
   margin: 0 0 8px;

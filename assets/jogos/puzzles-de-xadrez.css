@@ -16,7 +16,7 @@
   /* Texto de acerto e erro sobre as superfícies do site */
   --pzx-ok: #9ccc65;
   --pzx-erro: #ff8a80;
-  --pzx-veu: rgba(5, 10, 30, 0.86);
+  --pzx-veu: rgba(10, 12, 16, 0.86);
   max-width: 1080px;
   margin: 0 auto;
 }

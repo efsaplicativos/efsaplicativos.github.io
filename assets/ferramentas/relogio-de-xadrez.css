@@ -271,7 +271,7 @@
 }
 .xadrez .xadrez-principal {
   --tamanho: clamp(52px, 14vw, 68px);
-  color: #ffffff;
+  color: var(--on-primary);
   background: var(--grad);
   border-color: transparent;
   box-shadow: var(--glow-violet);

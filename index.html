@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#050a1e" />
+    <meta name="theme-color" content="#f0faf5" />
     <script>
       (function () {
         var root = document.documentElement;
@@ -14,12 +14,11 @@
         } catch (error) {
           theme = null;
         }
-        if (theme === "light" || theme === "dark") {
-          root.setAttribute("data-theme", theme);
-        }
-        if (theme === "light") {
+        // O verde (claro) é o padrão; o escuro vale para quem ligou o modo noturno
+        if (theme === "dark") {
+          root.setAttribute("data-theme", "dark");
           var meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.setAttribute("content", "#f3f6ff");
+          if (meta) meta.setAttribute("content", "#0f1115");
         }
       })();
     </script>
@@ -40,8 +39,14 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://efsaplicativos.com.br/" />
     <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
-    <link rel="stylesheet" href="site.css?v=10791e83acb7" />
-    <script src="site.js?v=b4f7be01c332" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600..800&amp;family=Nunito:wght@400..800&amp;display=swap"
+    />
+    <link rel="stylesheet" href="site.css?v=4c564150c14a" />
+    <script src="site.js?v=69a6a981d35b" defer></script>
     <link
       rel="icon"
       type="image/png"
@@ -76,8 +81,8 @@
             type="button"
             data-theme-toggle
             aria-pressed="false"
-            aria-label="Ativar tema claro"
-            title="Alternar tema claro/escuro"
+            aria-label="Modo noturno"
+            title="Modo noturno"
           >
             <svg
               class="icon-sun"
@@ -113,336 +118,214 @@
       <div class="container">
         <section class="hero" aria-labelledby="titulo">
           <div>
-            <div class="eyebrow">Jogos e aplicativos para Android</div>
+            <p class="chip">Novidade: os jogos agora têm som</p>
             <h1 id="titulo">
-              Mais diversão.<br />Mais praticidade.<br /><span
-                >No seu dia.</span
-              >
+              Diversão e praticidade, <span>a um toque.</span>
             </h1>
-            <p>
-              Um desafio para a mente, uma partida para relaxar ou uma
-              ferramenta para organizar a rotina. Encontre seu próximo app da
-              EFS.
+            <p class="hero-texto">
+              Jogos para relaxar, desafios para a mente e ferramentas que
+              facilitam o dia. Tudo grátis, no navegador ou no seu Android.
             </p>
             <div class="actions">
-              <a class="button" href="#aplicativos"
-                >Conhecer os aplicativos <span aria-hidden="true">↗</span></a
-              ><a class="button secondary" href="#tower-defence-war"
-                >Ver jogos em destaque</a
+              <a class="button" href="/jogos/">Começar a jogar</a
+              ><a class="button secondary" href="/ferramentas/"
+                >Explorar ferramentas</a
               >
             </div>
           </div>
-          <div class="hero-art" aria-label="Aplicativos em destaque">
+          <div class="hero-art">
+            <img
+              class="hero-mascote"
+              src="images/EfsAplicativos_4.png"
+              alt="O mascote da EFS, um gato laranja segurando um celular"
+              width="512"
+              height="512"
+              fetchpriority="high"
+            />
+            <a class="adesivo adesivo-1" href="/jogos/sudoku/" aria-label="Jogar Sudoku"
+              ><img src="images/jogos/sudoku.webp" alt="" width="84" height="84"
+            /></a>
             <a
-              class="preview"
-              href="https://play.google.com/store/apps/details?id=com.emerson1981.coresmemoria&amp;hl=pt_BR"
-              ><div class="icon memory-icon" aria-hidden="true">
-                <i></i><i></i><i></i><i></i>
-              </div>
-              <div>
-                <strong>Cores da Memória</strong
-                ><small>Uma sequência. Um novo desafio.</small>
-              </div>
-              <span class="arrow" aria-hidden="true">↗</span></a
-            >
-            <a
-              class="preview"
-              href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadorajuros&amp;hl=pt_BR"
-              ><div class="icon calc-icon" aria-hidden="true">%</div>
-              <div>
-                <strong>Calculadora de Juros</strong
-                ><small>Seus cálculos, com clareza.</small>
-              </div>
-              <span class="arrow" aria-hidden="true">↗</span></a
-            >
-            <a class="preview" href="#batalha-naval"
-              ><div class="icon icon-naval">
-                <img
-                  src="images/batalha-naval-icone.png"
-                  alt=""
-                  width="56"
-                  height="56"
-                />
-              </div>
-              <div>
-                <strong>Batalha Naval</strong
-                ><small>Estratégia em cada disparo.</small>
-              </div>
-              <span class="arrow" aria-hidden="true">↗</span></a
-            >
-          </div>
-        </section>
-        <section class="stats reveal" aria-label="Destaques da EFS Aplicativos">
-          <div class="stat"><b>22</b><span>apps publicados</span></div>
-          <div class="stat">
-            <b>Jogos &amp; utilidades</b><span>para todos os momentos</span>
-          </div>
-          <div class="stat">
-            <b>Grátis</b><span>com atualizações constantes</span>
+              class="adesivo adesivo-2"
+              href="/ferramentas/conversor-de-moedas/"
+              aria-label="Abrir o conversor de moedas"
+              ><img
+                src="images/ferramentas/conversor-de-moedas.webp"
+                alt=""
+                width="78"
+                height="78"
+            /></a>
+            <a class="adesivo adesivo-3" href="/jogos/2048/" aria-label="Jogar 2048"
+              ><img src="images/jogos/2048.webp" alt="" width="88" height="88"
+            /></a>
           </div>
         </section>
         <section class="section" id="online" aria-labelledby="online-titulo">
           <div class="section-head reveal">
             <div>
-              <div class="eyebrow">Sem instalar nada</div>
-              <h2 id="online-titulo">Use direto no navegador</h2>
+              <h2 id="online-titulo">Escolha o seu momento</h2>
               <p>
-                As 32 ferramentas e os 13 jogos dos apps também funcionam aqui no site, no
-                computador ou no celular. Veja alguns:
+                13 jogos e 32 ferramentas para usar direto no navegador, sem
+                instalar nada, separados pelo que você quer agora.
               </p>
             </div>
-            <div class="actions online-actions">
-              <a class="button secondary" href="/ferramentas/">Todas as ferramentas</a
-              ><a class="button secondary" href="/jogos/">Todos os jogos</a>
-            </div>
           </div>
-          <div class="app-grid reveal">
-            <article class="app-card" data-category="utilidades">
-              <div class="app-visual" aria-hidden="true">
-                <img
-                  class="official-icon"
-                  src="images/ferramentas/juros-compostos.webp"
-                  alt=""
-                  width="86"
-                  height="86"
-                  loading="lazy"
-                />
-              </div>
-              <div class="app-body">
-                <span class="category">Finanças</span>
-                <h3>Juros compostos</h3>
-                <p>Valor final, capital, taxa ou prazo, com tabela de evolução.</p>
-                <a class="store-link" href="/ferramentas/juros-compostos/">Usar online</a>
-              </div>
-            </article>
-            <article class="app-card" data-category="utilidades">
-              <div class="app-visual" aria-hidden="true">
-                <img
-                  class="official-icon"
-                  src="images/ferramentas/financiamento.webp"
-                  alt=""
-                  width="86"
-                  height="86"
-                  loading="lazy"
-                />
-              </div>
-              <div class="app-body">
-                <span class="category">Finanças</span>
-                <h3>Financiamento</h3>
-                <p>Parcelas e tabela de amortização nos sistemas Price, SAC e SAM.</p>
-                <a class="store-link" href="/ferramentas/financiamento/">Usar online</a>
-              </div>
-            </article>
-            <article class="app-card" data-category="utilidades">
-              <div class="app-visual" aria-hidden="true">
-                <img
-                  class="official-icon"
-                  src="images/ferramentas/conversor-de-moedas.webp"
-                  alt=""
-                  width="86"
-                  height="86"
-                  loading="lazy"
-                />
-              </div>
-              <div class="app-body">
-                <span class="category">Finanças</span>
-                <h3>Conversor de moedas</h3>
-                <p>Cotação de dólar, euro e mais de 150 moedas, com histórico.</p>
-                <a class="store-link" href="/ferramentas/conversor-de-moedas/">Usar online</a>
-              </div>
-            </article>
-            <article class="app-card" data-category="utilidades">
-              <div class="app-visual" aria-hidden="true">
-                <img
-                  class="official-icon"
-                  src="images/ferramentas/calculadora-cientifica.webp"
-                  alt=""
-                  width="86"
-                  height="86"
-                  loading="lazy"
-                />
-              </div>
-              <div class="app-body">
-                <span class="category">Matemática</span>
-                <h3>Calculadora científica</h3>
-                <p>Trigonometria, logaritmos, potências e fatorial, em graus ou radianos.</p>
-                <a class="store-link" href="/ferramentas/calculadora-cientifica/">Usar online</a>
-              </div>
-            </article>
-            <article class="app-card" data-category="jogos">
-              <div class="app-visual" aria-hidden="true">
-                <img
-                  class="official-icon"
-                  src="images/jogos/sudoku.webp"
-                  alt=""
-                  width="86"
-                  height="86"
-                  loading="lazy"
-                />
-              </div>
-              <div class="app-body">
-                <span class="category">Lógica</span>
-                <h3>Sudoku</h3>
-                <p>Grades com solução única em três níveis, com notas e dicas.</p>
-                <a class="store-link" href="/jogos/sudoku/">Jogar online</a>
-              </div>
-            </article>
-            <article class="app-card" data-category="jogos">
-              <div class="app-visual" aria-hidden="true">
-                <img
-                  class="official-icon"
-                  src="images/jogos/mahjong.webp"
-                  alt=""
-                  width="86"
-                  height="86"
-                  loading="lazy"
-                />
-              </div>
-              <div class="app-body">
-                <span class="category">Lógica</span>
-                <h3>Mahjong solitário</h3>
-                <p>Forme pares de peças livres e limpe a mesa em 15 tabuleiros.</p>
-                <a class="store-link" href="/jogos/mahjong/">Jogar online</a>
-              </div>
-            </article>
-            <article class="app-card" data-category="jogos">
-              <div class="app-visual" aria-hidden="true">
-                <img
-                  class="official-icon"
-                  src="images/jogos/puzzles-de-xadrez.webp"
-                  alt=""
-                  width="86"
-                  height="86"
-                  loading="lazy"
-                />
-              </div>
-              <div class="app-body">
-                <span class="category">Estratégia</span>
-                <h3>Puzzles de xadrez</h3>
-                <p>Quase 10 mil posições por tema e dificuldade, com dicas.</p>
-                <a class="store-link" href="/jogos/puzzles-de-xadrez/">Jogar online</a>
-              </div>
-            </article>
-            <article class="app-card" data-category="jogos">
-              <div class="app-visual" aria-hidden="true">
-                <img
-                  class="official-icon"
-                  src="images/jogos/campo-minado.webp"
-                  alt=""
-                  width="86"
-                  height="86"
-                  loading="lazy"
-                />
-              </div>
-              <div class="app-body">
-                <span class="category">Lógica</span>
-                <h3>Campo minado</h3>
-                <p>Abra as casas sem achar as minas, em três tamanhos.</p>
-                <a class="store-link" href="/jogos/campo-minado/">Jogar online</a>
-              </div>
-            </article>
+          <div class="momentos reveal">
+            <div class="momento">
+              <h3>Para relaxar</h3>
+              <p>Partidas tranquilas, no seu ritmo.</p>
+              <a class="momento-item" href="/jogos/mahjong/"
+                ><img src="images/jogos/mahjong.webp" alt="" width="56" height="56" loading="lazy" />Mahjong solitário</a
+              >
+              <a class="momento-item" href="/jogos/2048/"
+                ><img src="images/jogos/2048.webp" alt="" width="56" height="56" loading="lazy" />2048</a
+              >
+              <a class="momento-item" href="/jogos/cores-da-memoria/"
+                ><img src="images/jogos/cores-da-memoria.webp" alt="" width="56" height="56" loading="lazy" />Cores da Memória</a
+              >
+              <a class="momento-mais" href="/jogos/">Ver todos os jogos</a>
+            </div>
+            <div class="momento momento-mente">
+              <h3>Para desafiar a mente</h3>
+              <p>Lógica, atenção e um pouco de estratégia.</p>
+              <a class="momento-item" href="/jogos/sudoku/"
+                ><img src="images/jogos/sudoku.webp" alt="" width="56" height="56" loading="lazy" />Sudoku</a
+              >
+              <a class="momento-item" href="/jogos/puzzles-de-xadrez/"
+                ><img src="images/jogos/puzzles-de-xadrez.webp" alt="" width="56" height="56" loading="lazy" />Puzzles de xadrez</a
+              >
+              <a class="momento-item" href="/jogos/campo-minado/"
+                ><img src="images/jogos/campo-minado.webp" alt="" width="56" height="56" loading="lazy" />Campo minado</a
+              >
+              <a class="momento-mais" href="/jogos/">Ver todos os jogos</a>
+            </div>
+            <div class="momento momento-resolver">
+              <h3>Para resolver</h3>
+              <p>Contas e consultas do dia, sem complicação.</p>
+              <a class="momento-item" href="/ferramentas/juros-compostos/"
+                ><img src="images/ferramentas/juros-compostos.webp" alt="" width="56" height="56" loading="lazy" />Juros compostos</a
+              >
+              <a class="momento-item" href="/ferramentas/conversor-de-moedas/"
+                ><img src="images/ferramentas/conversor-de-moedas.webp" alt="" width="56" height="56" loading="lazy" />Conversor de moedas</a
+              >
+              <a class="momento-item" href="/ferramentas/consulta-cep/"
+                ><img src="images/ferramentas/consulta-cep.webp" alt="" width="56" height="56" loading="lazy" />Consulta CEP</a
+              >
+              <a class="momento-mais" href="/ferramentas/">Ver todas as ferramentas</a>
+            </div>
           </div>
         </section>
-        <section
-          class="section"
-          id="tower-defence-war"
-          aria-labelledby="tower-defence-war-titulo"
-        >
-          <div class="section-head reveal">
-            <div>
-              <div class="eyebrow">Jogue agora</div>
-              <h2 id="tower-defence-war-titulo">Tower Defence War</h2>
-            </div>
-          </div>
-          <article class="featured reveal">
-            <img
-              src="images/tower-defence-war.png"
-              alt="Arte de Tower Defence War: um tanque protege uma fortaleza, com apoio de um helicóptero"
-              width="1024"
-              height="500"
-              loading="lazy"
-            />
-            <div class="feature-content">
-              <span class="status">Disponível no Google Play</span>
-              <h3>Assuma o comando.<br />Defenda sua base.</h3>
-              <p>
-                Posicione seus tanques e conte com apoio aéreo para proteger
-                sua base. Enfrente 30 fases e coloque sua estratégia à prova
-                em Tower Defence War.
-              </p>
-              <div class="actions feature-actions">
-                <a
-                  class="button"
-                  href="https://play.google.com/store/apps/details?id=com.efsAplicativos.towerdefencewar&amp;hl=pt_BR"
-                  aria-label="Baixar Tower Defence War no Google Play"
-                  >Baixar no Google Play <span aria-hidden="true">↗</span></a
-                >
-                <a
-                  class="button trailer-button"
-                  href="https://www.youtube.com/watch?v=ZhswBl9Fxfg"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Assistir ao trailer de Tower Defence War no YouTube (abre em nova aba)"
-                  ><span aria-hidden="true">▶</span> Assistir ao trailer</a
-                >
+      </div>
+      <div class="faixa">
+        <div class="container">
+          <section class="section" id="celular" aria-labelledby="celular-titulo">
+            <div class="section-head reveal">
+              <div>
+                <h2 id="celular-titulo">Também no seu celular</h2>
+                <p>22 apps para Android, e alguns só existem por lá.</p>
               </div>
+              <a
+                class="link-forte"
+                href="https://play.google.com/store/apps/developer?id=Efs+Aplicativos"
+                >Ver todos no Google Play ↗</a
+              >
             </div>
-          </article>
-        </section>
-        <section class="section" id="batalha-naval" aria-labelledby="novidade">
-          <div class="section-head reveal">
-            <div>
-              <div class="eyebrow">Jogue agora</div>
-              <h2 id="novidade">Batalha Naval</h2>
+            <div class="destaques">
+              <article
+                class="featured reveal"
+                id="tower-defence-war"
+                aria-labelledby="tower-defence-war-titulo"
+              >
+                <img
+                  src="images/tower-defence-war.png"
+                  alt="Arte de Tower Defence War: um tanque protege uma fortaleza, com apoio de um helicóptero"
+                  width="1024"
+                  height="500"
+                  loading="lazy"
+                />
+                <div class="feature-content">
+                  <span class="status">Disponível no Google Play</span>
+                  <h3 id="tower-defence-war-titulo">Tower Defence War</h3>
+                  <p>
+                    Posicione seus tanques e conte com apoio aéreo para
+                    proteger sua base. Enfrente 30 fases e coloque sua
+                    estratégia à prova.
+                  </p>
+                  <div class="actions feature-actions">
+                    <a
+                      class="button"
+                      href="https://play.google.com/store/apps/details?id=com.efsAplicativos.towerdefencewar&amp;hl=pt_BR"
+                      aria-label="Baixar Tower Defence War no Google Play"
+                      >Baixar no Google Play <span aria-hidden="true">↗</span></a
+                    >
+                    <a
+                      class="button secondary"
+                      href="https://www.youtube.com/watch?v=ZhswBl9Fxfg"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Assistir ao trailer de Tower Defence War no YouTube (abre em nova aba)"
+                      ><span aria-hidden="true">▶</span> Assistir ao trailer</a
+                    >
+                  </div>
+                </div>
+              </article>
+              <article
+                class="featured reveal"
+                id="batalha-naval"
+                aria-labelledby="novidade"
+              >
+                <img
+                  src="images/batalha-naval.jpg"
+                  alt="Arte do Batalha Naval: navios em um tabuleiro no mar e um lançador disparando um míssil"
+                  width="1024"
+                  height="500"
+                  loading="lazy"
+                />
+                <div class="feature-content">
+                  <span class="status">Disponível no Google Play</span>
+                  <h3 id="novidade">Batalha Naval</h3>
+                  <p>
+                    Treine contra o computador e dispute partidas online em um
+                    tabuleiro 3D, com conquistas e visuais para dar seu estilo
+                    à frota.
+                  </p>
+                  <div class="actions feature-actions">
+                    <a
+                      class="button"
+                      href="https://play.google.com/store/apps/details?id=com.emerson1981.batalhanaval&amp;hl=pt_BR"
+                      aria-label="Baixar Batalha Naval no Google Play"
+                      >Baixar no Google Play <span aria-hidden="true">↗</span></a
+                    >
+                    <a
+                      class="button secondary"
+                      href="https://www.youtube.com/watch?v=BNB9euznghw"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Assistir ao trailer de Batalha Naval no YouTube (abre em nova aba)"
+                      ><span aria-hidden="true">▶</span> Assistir ao trailer</a
+                    >
+                  </div>
+                  <div class="feature-links">
+                    <a href="batalha-naval/privacidade.html">Privacidade do jogo</a
+                    ><a href="batalha-naval/excluir-conta.html"
+                      >Excluir conta e dados</a
+                    >
+                  </div>
+                </div>
+              </article>
             </div>
-          </div>
-          <article class="featured reveal">
-            <img
-              src="images/batalha-naval.jpg"
-              alt="Arte do Batalha Naval: navios em um tabuleiro no mar e um lançador disparando um míssil"
-              width="1024"
-              height="500"
-              fetchpriority="high"
-            />
-            <div class="feature-content">
-              <span class="status">Disponível no Google Play</span>
-              <h3>Prepare sua frota.<br />Escolha seu alvo.</h3>
-              <p>
-                Treine contra o computador e dispute partidas online em um
-                tabuleiro 3D. Estratégia, conquistas e cosméticos para dar seu
-                estilo à frota.
-              </p>
-              <div class="actions feature-actions">
-                <a
-                  class="button"
-                  href="https://play.google.com/store/apps/details?id=com.emerson1981.batalhanaval&amp;hl=pt_BR"
-                  aria-label="Baixar Batalha Naval no Google Play"
-                  >Baixar no Google Play <span aria-hidden="true">↗</span></a
-                >
-                <a
-                  class="button trailer-button"
-                  href="https://www.youtube.com/watch?v=BNB9euznghw"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Assistir ao trailer de Batalha Naval no YouTube (abre em nova aba)"
-                  ><span aria-hidden="true">▶</span> Assistir ao trailer</a
-                >
-              </div>
-              <div class="feature-links">
-                <a href="batalha-naval/privacidade.html">Privacidade do jogo</a
-                ><a href="batalha-naval/excluir-conta.html"
-                  >Excluir conta e dados</a
-                >
-              </div>
-            </div>
-          </article>
-        </section>
+          </section>
+        </div>
+      </div>
+      <div class="container">
         <section class="section" id="aplicativos" aria-labelledby="catalogo">
           <div class="section-head reveal">
             <div>
-              <div class="eyebrow">Feitos pela EFS</div>
-              <h2 id="catalogo">Escolha o seu próximo app</h2>
-              <p>Para jogar, calcular e deixar a rotina em ordem.</p>
+              <h2 id="catalogo">Todos os aplicativos</h2>
+              <p>
+                Os 22 apps da EFS para Android: para jogar, calcular e deixar a
+                rotina em ordem.
+              </p>
             </div>
             <div
               class="filters"
@@ -1270,12 +1153,19 @@
         </section>
         <section class="section" id="contato" aria-labelledby="suporte">
           <div class="support reveal">
+            <img
+              class="support-mascote"
+              src="images/EfsAplicativos_4.png"
+              alt=""
+              width="120"
+              height="120"
+              loading="lazy"
+            />
             <div>
-              <div class="eyebrow">Estamos por aqui</div>
-              <h2 id="suporte">Vamos conversar?</h2>
+              <h2 id="suporte">Fala com a gente!</h2>
               <p>
-                Precisa de ajuda com um aplicativo ou quer enviar uma sugestão?
-                Fale com a EFS pelo e-mail efsaplicativos@hotmail.com.
+                Dúvida, sugestão de jogo ou um erro para avisar? Escreva para
+                efsaplicativos@hotmail.com.
               </p>
               <nav
                 class="actions"

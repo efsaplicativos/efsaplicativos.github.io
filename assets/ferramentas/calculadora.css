@@ -5,21 +5,21 @@
    ========================================================================== */
 
 .calc {
-  --tecla-operador-fundo: rgba(96, 165, 250, 0.18);
-  --tecla-operador-texto: #bfdbfe;
-  --tecla-destaque-fundo: rgba(255, 176, 32, 0.16);
-  --tecla-destaque-texto: #ffc65c;
-  --tecla-ativa-fundo: rgba(167, 139, 250, 0.28);
-  --tecla-ativa-texto: #ddd6fe;
+  --tecla-operador-fundo: rgba(69, 212, 192, 0.16);
+  --tecla-operador-texto: #8ee8db;
+  --tecla-destaque-fundo: rgba(255, 200, 61, 0.16);
+  --tecla-destaque-texto: #ffd466;
+  --tecla-ativa-fundo: rgba(255, 120, 110, 0.24);
+  --tecla-ativa-texto: #ffc9c4;
   --visor-erro: #ffb4a8;
 }
 :root[data-theme="light"] .calc {
-  --tecla-operador-fundo: rgba(37, 99, 235, 0.12);
-  --tecla-operador-texto: #1d4ed8;
-  --tecla-destaque-fundo: rgba(245, 158, 11, 0.2);
-  --tecla-destaque-texto: #92400e;
-  --tecla-ativa-fundo: rgba(109, 40, 217, 0.14);
-  --tecla-ativa-texto: #5b21b6;
+  --tecla-operador-fundo: rgba(14, 124, 107, 0.12);
+  --tecla-operador-texto: #0b5e52;
+  --tecla-destaque-fundo: rgba(255, 210, 63, 0.38);
+  --tecla-destaque-texto: #6b4e00;
+  --tecla-ativa-fundo: rgba(209, 52, 56, 0.12);
+  --tecla-ativa-texto: #a3262a;
   --visor-erro: #b42318;
 }
 
@@ -62,7 +62,7 @@
   color: var(--blue-2);
 }
 :root[data-theme="light"] .calc-memoria {
-  color: #1d4ed8;
+  color: var(--blue-2);
 }
 .calc-copiar {
   margin-left: auto;
@@ -177,7 +177,7 @@
 .calc .tecla.igual {
   font-size: 26px;
   font-weight: 600;
-  color: #fff;
+  color: var(--on-primary);
   background: var(--grad);
 }
 .calc .tecla.ativa {
@@ -272,7 +272,7 @@
   color: var(--blue-2);
 }
 :root[data-theme="light"] .calc-item-valor.destaque {
-  color: #1d4ed8;
+  color: var(--blue-2);
 }
 
 /* ---------- Científica ---------- */
@@ -292,7 +292,7 @@
   opacity: 1;
 }
 :root[data-theme="light"] .calc-indicadores span.ligado {
-  color: #1d4ed8;
+  color: var(--blue-2);
 }
 .calc-recentes {
   display: grid;

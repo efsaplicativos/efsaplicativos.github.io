@@ -14,7 +14,7 @@
   --qb-acerto-fundo: #14532d;
   --qb-erro: #fca5a5;
   --qb-erro-fundo: #7f1d1d;
-  --qb-overlay: rgba(5, 10, 30, 0.82);
+  --qb-overlay: rgba(10, 12, 16, 0.82);
   max-width: 600px;
   margin: 0 auto;
 }
@@ -26,7 +26,7 @@
   --qb-acerto-fundo: #dcfce7;
   --qb-erro: #991b1b;
   --qb-erro-fundo: #fee2e2;
-  --qb-overlay: rgba(243, 246, 255, 0.86);
+  --qb-overlay: rgba(240, 250, 245, 0.88);
 }
 
 .qb-painel {
@@ -284,6 +284,8 @@
   height: 100%;
   object-fit: contain;
   border-radius: 6px;
+  /* Contorno que segue a bandeira (não a caixa): a parte branca não some no fundo claro */
+  filter: drop-shadow(0 0 0.6px rgba(0, 0, 0, 0.5)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18));
 }
 .qb-cartao img.qb-entrar {
   animation: qb-entrar 320ms ease-out;

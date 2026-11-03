@@ -53,20 +53,17 @@ const themeToggle = document.querySelector("[data-theme-toggle]");
 if (themeToggle) {
   const root = document.documentElement;
   const themeMeta = document.querySelector('meta[name="theme-color"]');
+  // O botão é o modo noturno: pressionado = tema escuro
   const applyTheme = (theme) => {
-    const light = theme === "light";
-    root.setAttribute("data-theme", light ? "light" : "dark");
-    themeToggle.setAttribute("aria-pressed", String(light));
-    themeToggle.setAttribute(
-      "aria-label",
-      light ? "Ativar tema escuro" : "Ativar tema claro",
-    );
+    const dark = theme === "dark";
+    root.setAttribute("data-theme", dark ? "dark" : "light");
+    themeToggle.setAttribute("aria-pressed", String(dark));
     if (themeMeta)
-      themeMeta.setAttribute("content", light ? "#f3f6ff" : "#050a1e");
+      themeMeta.setAttribute("content", dark ? "#0f1115" : "#f0faf5");
   };
-  applyTheme(root.getAttribute("data-theme") === "light" ? "light" : "dark");
+  applyTheme(root.getAttribute("data-theme") === "dark" ? "dark" : "light");
   themeToggle.addEventListener("click", () => {
-    const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+    const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
     applyTheme(next);
     try {
       localStorage.setItem("efs-theme", next);

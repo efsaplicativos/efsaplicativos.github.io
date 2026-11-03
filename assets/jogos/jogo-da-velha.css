@@ -361,7 +361,7 @@
   box-shadow: var(--shadow-lg);
 }
 .jv-dialogo::backdrop {
-  background: rgba(5, 10, 30, 0.6);
+  background: rgba(10, 12, 16, 0.6);
 }
 .jv-dialogo h2 {
   margin: 0 0 8px;

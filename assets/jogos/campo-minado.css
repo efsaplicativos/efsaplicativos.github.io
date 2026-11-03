@@ -269,7 +269,7 @@
   box-shadow: var(--shadow-lg);
 }
 .cm-dialogo::backdrop {
-  background: rgba(5, 10, 30, 0.6);
+  background: rgba(10, 12, 16, 0.6);
 }
 .cm-dialogo h2 {
   margin: 0 0 8px;

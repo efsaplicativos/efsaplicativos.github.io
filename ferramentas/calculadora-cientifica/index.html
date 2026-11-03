@@ -1,10 +1,10 @@
 <!doctype html>
 <!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/ferramentas/calculadora-cientifica.html. Edite lá. -->
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#050a1e" />
+    <meta name="theme-color" content="#f0faf5" />
     <script>
       (function () {
         var root = document.documentElement;
@@ -15,12 +15,11 @@
         } catch (error) {
           theme = null;
         }
-        if (theme === "light" || theme === "dark") {
-          root.setAttribute("data-theme", theme);
-        }
-        if (theme === "light") {
+        // O verde (claro) é o padrão; o escuro vale para quem ligou o modo noturno
+        if (theme === "dark") {
+          root.setAttribute("data-theme", "dark");
           var meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.setAttribute("content", "#f3f6ff");
+          if (meta) meta.setAttribute("content", "#0f1115");
         }
       })();
     </script>
@@ -33,10 +32,16 @@
     <meta property="og:url" content="https://efsaplicativos.com.br/ferramentas/calculadora-cientifica/" />
     <meta property="og:locale" content="pt_BR" />
     <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
-    <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
-    <link rel="stylesheet" href="/assets/web.css?v=9335b7c5c72f" />
-    <link rel="stylesheet" href="/assets/ferramentas/calculadora.css?v=e45d5b2ae700" />
-    <script src="/site.js?v=b4f7be01c332" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600..800&amp;family=Nunito:wght@400..800&amp;display=swap"
+    />
+    <link rel="stylesheet" href="/site.css?v=4c564150c14a" />
+    <link rel="stylesheet" href="/assets/web.css?v=f3e589d2c105" />
+    <link rel="stylesheet" href="/assets/ferramentas/calculadora.css?v=326c7edcfaf3" />
+    <script src="/site.js?v=69a6a981d35b" defer></script>
     <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
     <script src="/assets/numeros.js?v=ab57092e489e" defer></script>
     <script src="/assets/ferramentas/matematica-comum.js?v=0eae9ffeb3f8" defer></script>
@@ -77,8 +82,8 @@
             type="button"
             data-theme-toggle
             aria-pressed="false"
-            aria-label="Ativar tema claro"
-            title="Alternar tema claro/escuro"
+            aria-label="Modo noturno"
+            title="Modo noturno"
           >
             <svg
               class="icon-sun"

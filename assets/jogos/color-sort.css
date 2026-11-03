@@ -20,7 +20,7 @@
   --cs-borda: #9fb0e0;
   --cs-selecao: #0284c7;
   --cs-sucesso: #2e7d32;
-  --cs-contorno-bola: rgba(15, 21, 51, 0.35);
+  --cs-contorno-bola: rgba(11, 59, 54, 0.35);
   --cs-destaque: #c81e45;
 }
 
@@ -315,10 +315,10 @@
   box-shadow: var(--shadow-lg);
 }
 .cs-dialogo::backdrop {
-  background: rgba(5, 10, 30, 0.7);
+  background: rgba(10, 12, 16, 0.7);
 }
 :root[data-theme="light"] .cs-dialogo::backdrop {
-  background: rgba(15, 21, 51, 0.45);
+  background: rgba(11, 59, 54, 0.45);
 }
 .cs-dialogo[open] {
   animation: cs-abrir 220ms ease-out;
