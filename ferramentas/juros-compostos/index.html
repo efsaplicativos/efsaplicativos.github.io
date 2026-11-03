@@ -1,0 +1,301 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/ferramentas/juros-compostos.html. Edite lá. -->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050a1e" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        if (theme === "light" || theme === "dark") {
+          root.setAttribute("data-theme", theme);
+        }
+        if (theme === "light") {
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#f3f6ff");
+        }
+      })();
+    </script>
+    <title>Calculadora de Juros Compostos Online e Grátis — EFS Aplicativos</title>
+    <meta name="description" content="Calcule o valor final, o capital inicial, a taxa ou o prazo com juros compostos. Taxa mensal ou anual, tabela mês a mês e explicação da fórmula. Grátis e sem cadastro." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/ferramentas/juros-compostos/" />
+    <meta property="og:title" content="Calculadora de Juros Compostos Online e Grátis — EFS Aplicativos" />
+    <meta property="og:description" content="Calcule o valor final, o capital inicial, a taxa ou o prazo com juros compostos. Taxa mensal ou anual, tabela mês a mês e explicação da fórmula. Grátis e sem cadastro." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/ferramentas/juros-compostos/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
+    <link rel="stylesheet" href="/assets/web.css?v=991718a9651a" />
+    
+    <script src="/site.js?v=610304cd64d8" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/numeros.js?v=a9c18015da85" defer></script>
+    <script src="/assets/ferramentas/juros-compostos.js?v=ac57d76f0f55" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Calculadora de Juros Compostos", "url": "https://efsaplicativos.com.br/ferramentas/juros-compostos/", "description": "Calcule o valor final, o capital inicial, a taxa ou o prazo com juros compostos. Taxa mensal ou anual, tabela mês a mês e explicação da fórmula. Grátis e sem cadastro.", "applicationCategory": "FinanceApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas" aria-current="page">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Ativar tema claro"
+            title="Alternar tema claro/escuro"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Juros compostos</li>
+  </ol>
+  <h1>Calculadora de juros compostos</h1>
+  <p>
+    Descubra quanto um valor rende com juros sobre juros, ou calcule o capital, a taxa ou o
+    prazo de que você precisa. O cálculo é feito no seu navegador, enquanto você digita.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora">
+  <div class="tool-grid">
+    <form class="fields" id="juros" novalidate>
+      <fieldset class="field">
+        <legend>O que você quer calcular?</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-alvo="montante" aria-pressed="true">Valor final</button>
+          <button type="button" class="filter" data-alvo="capital" aria-pressed="false">Capital inicial</button>
+          <button type="button" class="filter" data-alvo="taxa" aria-pressed="false">Taxa de juros</button>
+          <button type="button" class="filter" data-alvo="prazo" aria-pressed="false">Prazo</button>
+        </div>
+      </fieldset>
+      <div class="field" data-campo="capital">
+        <label for="capital">Capital inicial (R$)</label>
+        <input class="input" id="capital" inputmode="decimal" autocomplete="off" value="1.000,00" placeholder="Ex.: 1.000,00" />
+      </div>
+      <div class="field" data-campo="montante" hidden>
+        <label for="montante">Valor final (R$)</label>
+        <input class="input" id="montante" inputmode="decimal" autocomplete="off" placeholder="Ex.: 2.000,00" />
+      </div>
+      <div class="field" data-campo="taxa">
+        <label for="taxa">Taxa de juros (%)</label>
+        <div class="input-row">
+          <input class="input" id="taxa" inputmode="decimal" autocomplete="off" value="1" placeholder="Ex.: 1" />
+          <select class="select" id="periodo-taxa" aria-label="Período da taxa">
+            <option value="mes">ao mês</option>
+            <option value="ano">ao ano</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" data-campo="prazo">
+        <label for="prazo">Prazo</label>
+        <div class="input-row">
+          <input class="input" id="prazo" inputmode="decimal" autocomplete="off" value="12" placeholder="Ex.: 12" />
+          <select class="select" id="unidade-prazo" aria-label="Unidade do prazo">
+            <option value="meses">meses</option>
+            <option value="anos">anos</option>
+          </select>
+        </div>
+      </div>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Preencha os campos para ver o resultado.</p>
+    </div>
+  </div>
+  <div id="evolucao" hidden>
+    <h2 class="table-title" id="evolucao-titulo">Evolução do saldo</h2>
+    <div class="table-wrap">
+      <table class="data" aria-labelledby="evolucao-titulo">
+        <thead>
+          <tr>
+            <th scope="col" id="evolucao-periodo">Mês</th>
+            <th scope="col">Juros no período</th>
+            <th scope="col">Juros acumulados</th>
+            <th scope="col">Saldo</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>O que são juros compostos</h2>
+  <p>
+    Nos juros compostos, os juros de cada período são somados ao saldo e passam a render
+    juros também. Por isso se fala em "juros sobre juros". É o regime usado em investimentos
+    como poupança, CDB e Tesouro Direto, e também em financiamentos, empréstimos e no rotativo
+    do cartão de crédito.
+  </p>
+  <p>
+    Nos juros simples, ao contrário, os juros são calculados sempre sobre o valor inicial. No
+    começo a diferença é pequena, mas com o tempo os juros compostos crescem cada vez mais
+    rápido.
+  </p>
+
+  <h2>Fórmula dos juros compostos</h2>
+  <p class="formula">M = C × (1 + i)ⁿ</p>
+  <ul>
+    <li><strong>M</strong> é o montante, o valor final.</li>
+    <li><strong>C</strong> é o capital, o valor aplicado no início.</li>
+    <li><strong>i</strong> é a taxa de juros por período, em decimal (1% = 0,01).</li>
+    <li><strong>n</strong> é o número de períodos, na mesma unidade da taxa.</li>
+  </ul>
+  <p>
+    Os juros ganhos são a diferença entre o montante e o capital: <strong>J = M − C</strong>.
+    A partir da mesma fórmula dá para isolar as outras partes:
+  </p>
+  <ul>
+    <li>Capital: C = M ÷ (1 + i)ⁿ</li>
+    <li>Taxa: i = (M ÷ C)^(1/n) − 1</li>
+    <li>Prazo: n = ln(M ÷ C) ÷ ln(1 + i)</li>
+  </ul>
+
+  <h2>Exemplo de cálculo</h2>
+  <p>
+    R$ 1.000,00 aplicados a 1% ao mês durante 12 meses:
+  </p>
+  <p class="formula">M = 1.000 × (1 + 0,01)¹² = 1.000 × 1,126825 ≈ R$ 1.126,83</p>
+  <p>
+    Os juros do período somam R$ 126,83. Com juros simples, seriam R$ 120,00. Em 10 anos, a
+    mesma aplicação chegaria a cerca de R$ 3.300,39 com juros compostos, contra R$ 2.200,00
+    com juros simples.
+  </p>
+
+  <h2>Taxa mensal e taxa anual não se convertem dividindo por 12</h2>
+  <p>
+    Um erro comum é achar que 12% ao ano é o mesmo que 1% ao mês. Nos juros compostos, a
+    taxa mensal equivalente a 12% ao ano é de cerca de <strong>0,9489% ao mês</strong>, porque
+    os juros de cada mês também rendem. No sentido contrário, 1% ao mês equivale a cerca de
+    <strong>12,68% ao ano</strong>.
+  </p>
+  <p class="formula">taxa anual = (1 + taxa mensal)¹² − 1&nbsp;&nbsp;&nbsp;&nbsp;taxa mensal = (1 + taxa anual)^(1/12) − 1</p>
+  <p>
+    Esta calculadora faz essa conversão sozinha: você pode digitar a taxa ao mês ou ao ano e
+    o prazo em meses ou em anos, e o resultado mostra as duas taxas equivalentes.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>O resultado considera impostos e taxas?</h3>
+  <p>
+    Não. A calculadora mostra o rendimento bruto. Em investimentos como CDB e Tesouro Direto
+    há Imposto de Renda sobre o lucro e, em alguns casos, taxas de custódia, que reduzem o
+    valor recebido.
+  </p>
+  <h3>E se eu fizer depósitos todos os meses?</h3>
+  <p>
+    Esta página considera um único valor aplicado no início. Para simular aportes mensais, use
+    o app Calculadora Multifunção, que tem uma calculadora de juros com aportes.
+  </p>
+  <h3>O prazo pode dar um número quebrado?</h3>
+  <p>
+    Sim. Ao calcular o prazo, o resultado é o tempo exato para chegar ao valor final, que
+    pode ser, por exemplo, 69,7 meses. Na prática, o valor só é alcançado no fim do mês 70.
+  </p>
+  <h3>Meus dados são enviados para algum lugar?</h3>
+  <p>
+    Não. Todo o cálculo é feito no seu navegador e nada do que você digita é enviado para a
+    EFS Aplicativos.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Juros com aportes, financiamento, aposentadoria e mais de 20 ferramentas, a maioria funcionando sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

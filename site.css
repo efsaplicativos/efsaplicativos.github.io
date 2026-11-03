@@ -869,6 +869,18 @@ h1 {
 .store-link span[aria-hidden="true"] {
   display: none;
 }
+.card-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+}
+.card-links .store-link {
+  margin-top: 0;
+}
+.online-actions {
+  margin-top: 0;
+}
 
 /* ---------- Contato ---------- */
 .support {
@@ -1198,7 +1210,12 @@ h1 {
     padding: 12px 0;
   }
   .nav {
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 6px;
+  }
+  .nav a {
+    padding: 8px 10px;
   }
   .nav .contact-link {
     border: 0;

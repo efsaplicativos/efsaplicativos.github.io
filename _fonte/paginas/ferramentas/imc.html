@@ -1,0 +1,141 @@
+<!--
+titulo: Calculadora de IMC Online: Índice de Massa Corporal — EFS Aplicativos
+descricao: Calcule seu IMC (índice de massa corporal) com peso e altura, veja a classificação da OMS e a faixa de peso saudável para a sua altura. Grátis e sem cadastro.
+scripts: /assets/numeros.js /assets/ferramentas/imc.js
+app: Calculadora de IMC | HealthApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">IMC</li>
+  </ol>
+  <h1>Calculadora de IMC</h1>
+  <p>
+    Digite seu peso e sua altura para ver o índice de massa corporal, a classificação da
+    Organização Mundial da Saúde (OMS) e a faixa de peso considerada saudável para a sua
+    altura.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora">
+  <div class="tool-grid">
+    <form class="fields" id="imc" novalidate>
+      <div class="field">
+        <label for="peso">Peso (kg)</label>
+        <input class="input" id="peso" inputmode="decimal" autocomplete="off" placeholder="Ex.: 70,5" />
+      </div>
+      <div class="field">
+        <label for="altura">Altura</label>
+        <input class="input" id="altura" inputmode="decimal" autocomplete="off" placeholder="Ex.: 1,75 ou 175" aria-describedby="altura-dica" />
+        <span class="hint" id="altura-dica">Em metros (1,75) ou em centímetros (175).</span>
+      </div>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Preencha o peso e a altura para ver o resultado.</p>
+    </div>
+  </div>
+  <h2 class="table-title" id="tabela-titulo">Classificação do IMC para adultos (OMS)</h2>
+  <div class="table-wrap">
+    <table class="data" aria-labelledby="tabela-titulo" id="tabela-imc">
+      <thead>
+        <tr>
+          <th scope="col">Classificação</th>
+          <th scope="col">IMC (kg/m²)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-classe="0"><td>Magreza grave</td><td>menor que 16,0</td></tr>
+        <tr data-classe="1"><td>Magreza moderada</td><td>16,0 a 16,9</td></tr>
+        <tr data-classe="2"><td>Magreza leve</td><td>17,0 a 18,4</td></tr>
+        <tr data-classe="3"><td>Peso normal</td><td>18,5 a 24,9</td></tr>
+        <tr data-classe="4"><td>Sobrepeso (pré-obesidade)</td><td>25,0 a 29,9</td></tr>
+        <tr data-classe="5"><td>Obesidade grau I</td><td>30,0 a 34,9</td></tr>
+        <tr data-classe="6"><td>Obesidade grau II</td><td>35,0 a 39,9</td></tr>
+        <tr data-classe="7"><td>Obesidade grau III</td><td>40,0 ou mais</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>O que é o IMC</h2>
+  <p>
+    O índice de massa corporal (IMC) é uma conta simples que relaciona o peso com a altura. A
+    Organização Mundial da Saúde usa o IMC para estimar, em adultos, se o peso está abaixo,
+    dentro ou acima da faixa associada a menos riscos para a saúde.
+  </p>
+
+  <h2>Como calcular o IMC</h2>
+  <p>Divida o peso, em quilos, pela altura, em metros, elevada ao quadrado:</p>
+  <p class="formula">IMC = peso ÷ (altura × altura)</p>
+  <p>
+    Por exemplo, uma pessoa com 70 kg e 1,75 m tem IMC = 70 ÷ (1,75 × 1,75) = 70 ÷ 3,0625 ≈
+    <strong>22,9</strong>, dentro da faixa de peso normal.
+  </p>
+
+  <h2>Faixa de peso saudável</h2>
+  <p>
+    Fazendo a conta ao contrário, dá para saber o peso que corresponde à faixa normal para cada
+    altura: multiplique a altura ao quadrado por 18,5 e por 24,9. Para 1,75 m, a faixa vai de
+    cerca de 56,7 kg a 76,3 kg. A calculadora acima mostra essa faixa para a sua altura e
+    quantos quilos faltam para chegar nela, se for o caso.
+  </p>
+
+  <h2>Limitações do IMC</h2>
+  <p>
+    O IMC é uma referência rápida, não um diagnóstico. Ele não distingue músculo de gordura
+    nem mostra onde a gordura está concentrada. Por isso:
+  </p>
+  <ul>
+    <li>
+      <strong>Crianças e adolescentes</strong> (até 19 anos) são avaliados por curvas de
+      crescimento que levam em conta idade e sexo, e não por esta tabela.
+    </li>
+    <li>
+      <strong>Pessoas idosas</strong> costumam ser avaliadas com faixas diferentes. O
+      Ministério da Saúde, por exemplo, usa outros limites a partir dos 60 anos.
+    </li>
+    <li>
+      <strong>Gestantes</strong> têm acompanhamento próprio do ganho de peso.
+    </li>
+    <li>
+      <strong>Atletas e pessoas muito musculosas</strong> podem ter IMC alto sem excesso de
+      gordura.
+    </li>
+  </ul>
+  <p class="note">
+    Esta calculadora é informativa e não substitui a avaliação de um médico ou nutricionista,
+    que considera outros dados, como a circunferência da cintura e exames.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Posso digitar a altura em centímetros?</h3>
+  <p>
+    Sim. Valores até 3 são lidos como metros (1,75) e valores maiores, como centímetros (175).
+  </p>
+  <h3>Por que a classificação usa uma casa decimal?</h3>
+  <p>
+    As faixas da OMS são definidas com uma casa decimal. A classificação usa o mesmo valor
+    arredondado que aparece no resultado, para não haver diferença entre o número exibido e a
+    faixa indicada.
+  </p>
+  <h3>Meus dados são enviados para algum lugar?</h3>
+  <p>
+    Não. O cálculo é feito no seu navegador, e o peso e a altura não são enviados nem
+    guardados.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>IMC, ingestão de água, idade, datas, juros e mais de 20 ferramentas em um só app.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

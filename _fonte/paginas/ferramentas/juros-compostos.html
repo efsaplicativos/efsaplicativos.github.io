@@ -1,0 +1,174 @@
+<!--
+titulo: Calculadora de Juros Compostos Online e Grátis — EFS Aplicativos
+descricao: Calcule o valor final, o capital inicial, a taxa ou o prazo com juros compostos. Taxa mensal ou anual, tabela mês a mês e explicação da fórmula. Grátis e sem cadastro.
+scripts: /assets/numeros.js /assets/ferramentas/juros-compostos.js
+app: Calculadora de Juros Compostos | FinanceApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Juros compostos</li>
+  </ol>
+  <h1>Calculadora de juros compostos</h1>
+  <p>
+    Descubra quanto um valor rende com juros sobre juros, ou calcule o capital, a taxa ou o
+    prazo de que você precisa. O cálculo é feito no seu navegador, enquanto você digita.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora">
+  <div class="tool-grid">
+    <form class="fields" id="juros" novalidate>
+      <fieldset class="field">
+        <legend>O que você quer calcular?</legend>
+        <div class="segmented">
+          <button type="button" class="filter active" data-alvo="montante" aria-pressed="true">Valor final</button>
+          <button type="button" class="filter" data-alvo="capital" aria-pressed="false">Capital inicial</button>
+          <button type="button" class="filter" data-alvo="taxa" aria-pressed="false">Taxa de juros</button>
+          <button type="button" class="filter" data-alvo="prazo" aria-pressed="false">Prazo</button>
+        </div>
+      </fieldset>
+      <div class="field" data-campo="capital">
+        <label for="capital">Capital inicial (R$)</label>
+        <input class="input" id="capital" inputmode="decimal" autocomplete="off" value="1.000,00" placeholder="Ex.: 1.000,00" />
+      </div>
+      <div class="field" data-campo="montante" hidden>
+        <label for="montante">Valor final (R$)</label>
+        <input class="input" id="montante" inputmode="decimal" autocomplete="off" placeholder="Ex.: 2.000,00" />
+      </div>
+      <div class="field" data-campo="taxa">
+        <label for="taxa">Taxa de juros (%)</label>
+        <div class="input-row">
+          <input class="input" id="taxa" inputmode="decimal" autocomplete="off" value="1" placeholder="Ex.: 1" />
+          <select class="select" id="periodo-taxa" aria-label="Período da taxa">
+            <option value="mes">ao mês</option>
+            <option value="ano">ao ano</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" data-campo="prazo">
+        <label for="prazo">Prazo</label>
+        <div class="input-row">
+          <input class="input" id="prazo" inputmode="decimal" autocomplete="off" value="12" placeholder="Ex.: 12" />
+          <select class="select" id="unidade-prazo" aria-label="Unidade do prazo">
+            <option value="meses">meses</option>
+            <option value="anos">anos</option>
+          </select>
+        </div>
+      </div>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Preencha os campos para ver o resultado.</p>
+    </div>
+  </div>
+  <div id="evolucao" hidden>
+    <h2 class="table-title" id="evolucao-titulo">Evolução do saldo</h2>
+    <div class="table-wrap">
+      <table class="data" aria-labelledby="evolucao-titulo">
+        <thead>
+          <tr>
+            <th scope="col" id="evolucao-periodo">Mês</th>
+            <th scope="col">Juros no período</th>
+            <th scope="col">Juros acumulados</th>
+            <th scope="col">Saldo</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<article class="texto">
+  <h2>O que são juros compostos</h2>
+  <p>
+    Nos juros compostos, os juros de cada período são somados ao saldo e passam a render
+    juros também. Por isso se fala em "juros sobre juros". É o regime usado em investimentos
+    como poupança, CDB e Tesouro Direto, e também em financiamentos, empréstimos e no rotativo
+    do cartão de crédito.
+  </p>
+  <p>
+    Nos juros simples, ao contrário, os juros são calculados sempre sobre o valor inicial. No
+    começo a diferença é pequena, mas com o tempo os juros compostos crescem cada vez mais
+    rápido.
+  </p>
+
+  <h2>Fórmula dos juros compostos</h2>
+  <p class="formula">M = C × (1 + i)ⁿ</p>
+  <ul>
+    <li><strong>M</strong> é o montante, o valor final.</li>
+    <li><strong>C</strong> é o capital, o valor aplicado no início.</li>
+    <li><strong>i</strong> é a taxa de juros por período, em decimal (1% = 0,01).</li>
+    <li><strong>n</strong> é o número de períodos, na mesma unidade da taxa.</li>
+  </ul>
+  <p>
+    Os juros ganhos são a diferença entre o montante e o capital: <strong>J = M − C</strong>.
+    A partir da mesma fórmula dá para isolar as outras partes:
+  </p>
+  <ul>
+    <li>Capital: C = M ÷ (1 + i)ⁿ</li>
+    <li>Taxa: i = (M ÷ C)^(1/n) − 1</li>
+    <li>Prazo: n = ln(M ÷ C) ÷ ln(1 + i)</li>
+  </ul>
+
+  <h2>Exemplo de cálculo</h2>
+  <p>
+    R$ 1.000,00 aplicados a 1% ao mês durante 12 meses:
+  </p>
+  <p class="formula">M = 1.000 × (1 + 0,01)¹² = 1.000 × 1,126825 ≈ R$ 1.126,83</p>
+  <p>
+    Os juros do período somam R$ 126,83. Com juros simples, seriam R$ 120,00. Em 10 anos, a
+    mesma aplicação chegaria a cerca de R$ 3.300,39 com juros compostos, contra R$ 2.200,00
+    com juros simples.
+  </p>
+
+  <h2>Taxa mensal e taxa anual não se convertem dividindo por 12</h2>
+  <p>
+    Um erro comum é achar que 12% ao ano é o mesmo que 1% ao mês. Nos juros compostos, a
+    taxa mensal equivalente a 12% ao ano é de cerca de <strong>0,9489% ao mês</strong>, porque
+    os juros de cada mês também rendem. No sentido contrário, 1% ao mês equivale a cerca de
+    <strong>12,68% ao ano</strong>.
+  </p>
+  <p class="formula">taxa anual = (1 + taxa mensal)¹² − 1&nbsp;&nbsp;&nbsp;&nbsp;taxa mensal = (1 + taxa anual)^(1/12) − 1</p>
+  <p>
+    Esta calculadora faz essa conversão sozinha: você pode digitar a taxa ao mês ou ao ano e
+    o prazo em meses ou em anos, e o resultado mostra as duas taxas equivalentes.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>O resultado considera impostos e taxas?</h3>
+  <p>
+    Não. A calculadora mostra o rendimento bruto. Em investimentos como CDB e Tesouro Direto
+    há Imposto de Renda sobre o lucro e, em alguns casos, taxas de custódia, que reduzem o
+    valor recebido.
+  </p>
+  <h3>E se eu fizer depósitos todos os meses?</h3>
+  <p>
+    Esta página considera um único valor aplicado no início. Para simular aportes mensais, use
+    o app Calculadora Multifunção, que tem uma calculadora de juros com aportes.
+  </p>
+  <h3>O prazo pode dar um número quebrado?</h3>
+  <p>
+    Sim. Ao calcular o prazo, o resultado é o tempo exato para chegar ao valor final, que
+    pode ser, por exemplo, 69,7 meses. Na prática, o valor só é alcançado no fim do mês 70.
+  </p>
+  <h3>Meus dados são enviados para algum lugar?</h3>
+  <p>
+    Não. Todo o cálculo é feito no seu navegador e nada do que você digita é enviado para a
+    EFS Aplicativos.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/calculadoramultifuncao.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>Calculadora Multifunção no celular</h2>
+    <p>Juros com aportes, financiamento, aposentadoria e mais de 20 ferramentas, a maioria funcionando sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

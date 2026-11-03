@@ -1,0 +1,238 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/jogos/2048.html. Edite lá. -->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050a1e" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        if (theme === "light" || theme === "dark") {
+          root.setAttribute("data-theme", theme);
+        }
+        if (theme === "light") {
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#f3f6ff");
+        }
+      })();
+    </script>
+    <title>2048 Online Grátis: Jogue no Navegador — EFS Aplicativos</title>
+    <meta name="description" content="Jogue 2048 online, grátis e sem instalar nada. Junte os blocos iguais até chegar ao 2048, no computador ou no celular. Sua partida e seu recorde ficam salvos no navegador." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/jogos/2048/" />
+    <meta property="og:title" content="2048 Online Grátis: Jogue no Navegador — EFS Aplicativos" />
+    <meta property="og:description" content="Jogue 2048 online, grátis e sem instalar nada. Junte os blocos iguais até chegar ao 2048, no computador ou no celular. Sua partida e seu recorde ficam salvos no navegador." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/jogos/2048/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="stylesheet" href="/site.css?v=10791e83acb7" />
+    <link rel="stylesheet" href="/assets/web.css?v=991718a9651a" />
+    <link rel="stylesheet" href="/assets/jogos/2048.css?v=4557a833d1b1" />
+    <script src="/site.js?v=610304cd64d8" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/jogos/2048.js?v=b8b127cf2728" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "2048", "url": "https://efsaplicativos.com.br/jogos/2048/", "description": "Jogue 2048 online, grátis e sem instalar nada. Junte os blocos iguais até chegar ao 2048, no computador ou no celular. Sua partida e seu recorde ficam salvos no navegador.", "applicationCategory": "GameApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos" aria-current="page">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Ativar tema claro"
+            title="Alternar tema claro/escuro"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">2048</li>
+  </ol>
+  <h1>2048 online</h1>
+  <p>
+    Deslize os blocos, junte números iguais e tente chegar ao 2048. Funciona no computador e no
+    celular, e a partida fica salva se você fechar a página.
+  </p>
+</header>
+
+<section class="game2048" aria-label="Jogo 2048">
+  <div class="game-bar">
+    <div class="scores">
+      <div class="score"><span>Pontos</span><strong id="pontos">0</strong></div>
+      <div class="score"><span>Recorde</span><strong id="recorde">0</strong></div>
+    </div>
+    <button type="button" class="button secondary" id="novo-jogo">Novo jogo</button>
+  </div>
+  <div
+    class="board"
+    id="tabuleiro"
+    tabindex="0"
+    role="application"
+    aria-label="Tabuleiro do 2048. Use as setas do teclado ou deslize o dedo."
+    aria-describedby="ajuda-jogo"
+  >
+    <div class="board-cells" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <div class="board-tiles" aria-hidden="true"></div>
+    <div class="board-overlay" id="aviso" hidden>
+      <p id="aviso-texto"></p>
+      <div class="overlay-actions" id="aviso-botoes"></div>
+    </div>
+  </div>
+  <p class="game-help" id="ajuda-jogo">
+    No computador, use as setas do teclado ou W, A, S e D. No celular, deslize o dedo sobre o
+    tabuleiro.
+  </p>
+  <p class="sr-only" aria-live="polite" id="status-jogo"></p>
+</section>
+
+<article class="texto">
+  <h2>Como jogar 2048</h2>
+  <p>
+    O tabuleiro tem 16 casas. A cada jogada, você escolhe uma direção e todos os blocos deslizam
+    até a borda. Quando dois blocos com o mesmo número se encontram, eles se juntam em um só,
+    com a soma dos dois: 2 + 2 vira 4, 4 + 4 vira 8, e assim por diante. Depois de cada jogada,
+    aparece um bloco novo, de 2 ou de 4, em uma casa vazia.
+  </p>
+  <p>
+    O objetivo é formar o bloco <strong>2048</strong>. Você pode continuar jogando depois disso
+    para buscar 4096 ou mais. A partida acaba quando o tabuleiro fica cheio e nenhum par de
+    blocos iguais está lado a lado.
+  </p>
+
+  <h2>Regras que fazem diferença</h2>
+  <ul>
+    <li>Cada bloco se junta no máximo uma vez por jogada: 4, 4, 8 deslizando vira 8, 8, e não 16.</li>
+    <li>Com três ou quatro blocos iguais em fila, juntam-se primeiro os que estão mais perto da borda para onde você deslizou.</li>
+    <li>Uma jogada que não move nenhum bloco não conta e não faz aparecer bloco novo.</li>
+    <li>Cada junção soma o valor do bloco novo aos seus pontos.</li>
+  </ul>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para chegar ao 2048</h2>
+  <ol>
+    <li><strong>Escolha um canto</strong> e mantenha o maior bloco sempre nele.</li>
+    <li><strong>Use principalmente duas direções</strong>, como para baixo e para a esquerda, e evite a direção que tira o maior bloco do canto.</li>
+    <li><strong>Monte uma fileira em ordem</strong> ao lado do canto (por exemplo 512, 256, 128...), para as junções acontecerem em sequência.</li>
+    <li><strong>Não deixe blocos pequenos presos</strong> entre os grandes: eles travam a fileira.</li>
+    <li><strong>Pense antes de jogar</strong> quando o tabuleiro estiver quase cheio. Uma jogada errada nessa hora costuma encerrar a partida.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Minha partida fica salva?</h3>
+  <p>
+    Sim. A partida em andamento e o seu recorde ficam guardados no próprio navegador. Se você
+    limpar os dados do navegador ou jogar em outro aparelho, eles não aparecem.
+  </p>
+  <h3>O que acontece depois do 2048?</h3>
+  <p>
+    Aparece um aviso de vitória e você escolhe entre continuar a mesma partida ou começar outra.
+    Continuando, os blocos seguem dobrando: 4096, 8192 e além.
+  </p>
+  <h3>Preciso de internet para jogar?</h3>
+  <p>
+    Só para abrir a página. Para jogar sem internet, instale o app 2048: Block Merge no celular.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/game2048.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>2048: Block Merge no celular</h2>
+    <p>O mesmo jogo, com animações, tema escuro e partidas salvas, também sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.game2048&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,215 @@
+/* ==========================================================================
+   2048 — paleta clássica, a mesma do app 2048: Block Merge (ui/tema/Cores.kt)
+   ========================================================================== */
+
+.game2048 {
+  --gap: clamp(8px, 2.4vw, 14px);
+  --board: #4e463f;
+  --cell: #615850;
+  --score: #4e463f;
+  --score-label: #cdc1b4;
+  --overlay: rgba(28, 26, 23, 0.9);
+  --overlay-text: #f9f6f2;
+  max-width: 480px;
+  margin: 0 auto;
+}
+:root[data-theme="light"] .game2048 {
+  --board: #bbada0;
+  --cell: #cdc1b4;
+  --score: #776e65;
+  --score-label: #eee4da;
+  --overlay: rgba(250, 248, 239, 0.9);
+  --overlay-text: #776e65;
+}
+
+.game-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.scores {
+  display: flex;
+  gap: 10px;
+}
+.score {
+  min-width: 92px;
+  padding: 8px 14px;
+  text-align: center;
+  color: #fff;
+  background: var(--score);
+  border-radius: 10px;
+}
+.score span {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--score-label);
+}
+.score strong {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* O tabuleiro recebe os gestos: sem rolar a página nem selecionar texto ao deslizar */
+.board {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 1;
+  background: var(--board);
+  border-radius: 12px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  outline-offset: 4px;
+}
+.board-cells,
+.board-tiles {
+  position: absolute;
+  inset: var(--gap);
+}
+.board-cells {
+  display: grid;
+  grid-template: repeat(4, 1fr) / repeat(4, 1fr);
+  gap: var(--gap);
+}
+.board-cells i {
+  background: var(--cell);
+  border-radius: 8px;
+}
+
+.tile {
+  --x: 0;
+  --y: 0;
+  --fs: 12;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc((100% - 3 * var(--gap)) / 4);
+  height: calc((100% - 3 * var(--gap)) / 4);
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  font-size: calc(var(--fs) * 1cqi);
+  font-weight: 800;
+  line-height: 1;
+  color: #f9f6f2;
+  background: #3c3a32;
+  transform: translate(
+    calc(var(--x) * (100% + var(--gap))),
+    calc(var(--y) * (100% + var(--gap)))
+  );
+  transition: transform 110ms ease-in-out;
+}
+.tile.new {
+  animation: aparecer 160ms ease-out 110ms backwards;
+}
+.tile.merged {
+  z-index: 2;
+  animation: juntar 180ms ease-in-out 110ms;
+}
+.tile.absorbed {
+  z-index: 1;
+}
+@keyframes aparecer {
+  from {
+    scale: 0;
+  }
+}
+@keyframes juntar {
+  50% {
+    scale: 1.14;
+  }
+}
+.tile[data-valor="2"] {
+  background: #eee4da;
+  color: #776e65;
+}
+.tile[data-valor="4"] {
+  background: #ede0c8;
+  color: #776e65;
+}
+.tile[data-valor="8"] {
+  background: #f2b179;
+}
+.tile[data-valor="16"] {
+  background: #f59563;
+}
+.tile[data-valor="32"] {
+  background: #f67c5f;
+}
+.tile[data-valor="64"] {
+  background: #f65e3b;
+}
+.tile[data-valor="128"] {
+  background: #edcf72;
+}
+.tile[data-valor="256"] {
+  background: #edcc61;
+}
+.tile[data-valor="512"] {
+  background: #edc850;
+}
+.tile[data-valor="1024"] {
+  background: #edc53f;
+}
+.tile[data-valor="2048"] {
+  background: #edc22e;
+}
+
+.board-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-content: center;
+  gap: 18px;
+  padding: 20px;
+  text-align: center;
+  color: var(--overlay-text);
+  background: var(--overlay);
+  border-radius: 12px;
+  animation: aparecer-aviso 250ms ease-out;
+}
+.board-overlay p {
+  margin: 0;
+  font-size: clamp(22px, 6cqi, 32px);
+  font-weight: 800;
+  line-height: 1.25;
+}
+/* Logo depois do fim de jogo, um toque que já vinha do gesto não aperta um botão */
+.board-overlay.locked .overlay-actions {
+  pointer-events: none;
+}
+.overlay-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+@keyframes aparecer-aviso {
+  from {
+    opacity: 0;
+  }
+}
+
+.game-help {
+  margin: 14px 0 0;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile {
+    transition: none;
+  }
+  .tile.new,
+  .tile.merged,
+  .board-overlay {
+    animation: none;
+  }
+}

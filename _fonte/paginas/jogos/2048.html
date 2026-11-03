@@ -1,0 +1,113 @@
+<!--
+titulo: 2048 Online Grátis: Jogue no Navegador — EFS Aplicativos
+descricao: Jogue 2048 online, grátis e sem instalar nada. Junte os blocos iguais até chegar ao 2048, no computador ou no celular. Sua partida e seu recorde ficam salvos no navegador.
+estilos: /assets/jogos/2048.css
+scripts: /assets/jogos/2048.js
+app: 2048 | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">2048</li>
+  </ol>
+  <h1>2048 online</h1>
+  <p>
+    Deslize os blocos, junte números iguais e tente chegar ao 2048. Funciona no computador e no
+    celular, e a partida fica salva se você fechar a página.
+  </p>
+</header>
+
+<section class="game2048" aria-label="Jogo 2048">
+  <div class="game-bar">
+    <div class="scores">
+      <div class="score"><span>Pontos</span><strong id="pontos">0</strong></div>
+      <div class="score"><span>Recorde</span><strong id="recorde">0</strong></div>
+    </div>
+    <button type="button" class="button secondary" id="novo-jogo">Novo jogo</button>
+  </div>
+  <div
+    class="board"
+    id="tabuleiro"
+    tabindex="0"
+    role="application"
+    aria-label="Tabuleiro do 2048. Use as setas do teclado ou deslize o dedo."
+    aria-describedby="ajuda-jogo"
+  >
+    <div class="board-cells" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <div class="board-tiles" aria-hidden="true"></div>
+    <div class="board-overlay" id="aviso" hidden>
+      <p id="aviso-texto"></p>
+      <div class="overlay-actions" id="aviso-botoes"></div>
+    </div>
+  </div>
+  <p class="game-help" id="ajuda-jogo">
+    No computador, use as setas do teclado ou W, A, S e D. No celular, deslize o dedo sobre o
+    tabuleiro.
+  </p>
+  <p class="sr-only" aria-live="polite" id="status-jogo"></p>
+</section>
+
+<article class="texto">
+  <h2>Como jogar 2048</h2>
+  <p>
+    O tabuleiro tem 16 casas. A cada jogada, você escolhe uma direção e todos os blocos deslizam
+    até a borda. Quando dois blocos com o mesmo número se encontram, eles se juntam em um só,
+    com a soma dos dois: 2 + 2 vira 4, 4 + 4 vira 8, e assim por diante. Depois de cada jogada,
+    aparece um bloco novo, de 2 ou de 4, em uma casa vazia.
+  </p>
+  <p>
+    O objetivo é formar o bloco <strong>2048</strong>. Você pode continuar jogando depois disso
+    para buscar 4096 ou mais. A partida acaba quando o tabuleiro fica cheio e nenhum par de
+    blocos iguais está lado a lado.
+  </p>
+
+  <h2>Regras que fazem diferença</h2>
+  <ul>
+    <li>Cada bloco se junta no máximo uma vez por jogada: 4, 4, 8 deslizando vira 8, 8, e não 16.</li>
+    <li>Com três ou quatro blocos iguais em fila, juntam-se primeiro os que estão mais perto da borda para onde você deslizou.</li>
+    <li>Uma jogada que não move nenhum bloco não conta e não faz aparecer bloco novo.</li>
+    <li>Cada junção soma o valor do bloco novo aos seus pontos.</li>
+  </ul>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para chegar ao 2048</h2>
+  <ol>
+    <li><strong>Escolha um canto</strong> e mantenha o maior bloco sempre nele.</li>
+    <li><strong>Use principalmente duas direções</strong>, como para baixo e para a esquerda, e evite a direção que tira o maior bloco do canto.</li>
+    <li><strong>Monte uma fileira em ordem</strong> ao lado do canto (por exemplo 512, 256, 128...), para as junções acontecerem em sequência.</li>
+    <li><strong>Não deixe blocos pequenos presos</strong> entre os grandes: eles travam a fileira.</li>
+    <li><strong>Pense antes de jogar</strong> quando o tabuleiro estiver quase cheio. Uma jogada errada nessa hora costuma encerrar a partida.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Minha partida fica salva?</h3>
+  <p>
+    Sim. A partida em andamento e o seu recorde ficam guardados no próprio navegador. Se você
+    limpar os dados do navegador ou jogar em outro aparelho, eles não aparecem.
+  </p>
+  <h3>O que acontece depois do 2048?</h3>
+  <p>
+    Aparece um aviso de vitória e você escolhe entre continuar a mesma partida ou começar outra.
+    Continuando, os blocos seguem dobrando: 4096, 8192 e além.
+  </p>
+  <h3>Preciso de internet para jogar?</h3>
+  <p>
+    Só para abrir a página. Para jogar sem internet, instale o app 2048: Block Merge no celular.
+  </p>
+</article>
+
+<aside class="cta-app" aria-label="Aplicativo para Android">
+  <img src="/images/apps/game2048.png" alt="" width="72" height="72" loading="lazy" />
+  <div>
+    <h2>2048: Block Merge no celular</h2>
+    <p>O mesmo jogo, com animações, tema escuro e partidas salvas, também sem internet.</p>
+  </div>
+  <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.game2048&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
+</aside>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
