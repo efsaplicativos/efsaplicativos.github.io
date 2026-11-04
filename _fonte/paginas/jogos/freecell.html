@@ -1,0 +1,145 @@
+<!--
+titulo: FreeCell Online Grátis: Paciência com Partidas Numeradas — EFS Aplicativos
+descricao: Jogue FreeCell online e grátis no navegador: partidas numeradas de 1 a 1.000.000, dica que procura a solução, desfazer, final automático e estatísticas salvas.
+estilos: /assets/jogos/freecell.css
+scripts: /assets/jogos/freecell-logica.js /assets/jogos/sons.js /assets/jogos/freecell.js
+app: FreeCell | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">FreeCell</li>
+  </ol>
+  <h1>FreeCell online</h1>
+  <p>
+    A paciência em que todas as cartas ficam abertas desde o começo: use as quatro células livres
+    para organizar as 52 cartas por naipe, do Ás ao Rei. Cada partida tem um número, para você
+    jogar de novo ou desafiar alguém com as mesmas cartas.
+  </p>
+</header>
+
+<section class="freecell" aria-label="FreeCell">
+  <div class="fc-info">
+    <div class="fc-dado"><span>Tempo</span><strong id="fc-tempo">00:00</strong></div>
+    <div class="fc-dado"><span>Movimentos</span><strong id="fc-movimentos">0</strong></div>
+    <div class="fc-dado"><span>Na fundação</span><strong id="fc-fundacao">0/52</strong></div>
+  </div>
+  <p class="fc-partida" id="fc-partida"></p>
+
+  <div class="fc-mesa" id="fc-mesa" role="group" aria-label="Mesa do FreeCell" aria-describedby="fc-ajuda"></div>
+
+  <div class="fc-botoes">
+    <button type="button" class="button secondary" id="fc-desfazer">Desfazer</button>
+    <button type="button" class="button secondary" id="fc-dica">Dica</button>
+    <button type="button" class="button" id="fc-nova">Nova partida</button>
+    <button type="button" class="som-botao" id="fc-som"></button>
+  </div>
+
+  <form class="fc-escolher" id="fc-escolher">
+    <label for="fc-numero">Jogar a partida nº</label>
+    <input id="fc-numero" type="number" inputmode="numeric" min="1" max="1000000" placeholder="1 a 1.000.000" />
+    <button type="submit" class="button secondary">Jogar</button>
+  </form>
+
+  <p class="fc-ajuda" id="fc-ajuda">
+    Toque numa carta para mandá-la ao melhor lugar, ou arraste para escolher o destino. As cartas que
+    não fazem mais falta na mesa sobem sozinhas para as fundações. No teclado, as setas escolhem a
+    pilha e a carta, Enter joga, Espaço pega e solta, e Ctrl+Z desfaz.
+  </p>
+  <p class="sr-only" aria-live="polite" id="fc-status"></p>
+
+  <details class="fc-estatisticas">
+    <summary>Suas estatísticas</summary>
+    <dl class="fc-est-lista" id="fc-est-lista"></dl>
+    <button type="button" class="fc-zerar" id="fc-zerar">Zerar as estatísticas</button>
+  </details>
+
+  <dialog class="fc-dialogo" id="fc-dialogo" aria-labelledby="fc-dialogo-titulo">
+    <h2 id="fc-dialogo-titulo"></h2>
+    <p id="fc-dialogo-texto"></p>
+    <dl class="fc-dialogo-dados" id="fc-dialogo-dados"></dl>
+    <div class="fc-dialogo-botoes" id="fc-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<aside class="indicacao" data-indicacao="freecell" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar FreeCell</h2>
+  <p>
+    O FreeCell usa um baralho de 52 cartas, todas distribuídas viradas para cima em oito colunas: as
+    quatro primeiras com 7 cartas e as outras com 6. O objetivo é levar todas as cartas para as
+    quatro fundações, no alto à direita, uma para cada naipe, começando pelo Ás e subindo até o Rei.
+  </p>
+  <ul>
+    <li><strong>Nas colunas,</strong> uma carta vai sobre outra de valor um acima e de cor diferente: um 6 de copas, vermelho, vai sobre um 7 de espadas ou de paus.</li>
+    <li><strong>As quatro células livres,</strong> no alto à esquerda, guardam uma carta cada uma, para tirá-la do caminho por um tempo.</li>
+    <li><strong>Coluna vazia aceita qualquer carta,</strong> e não só o Rei.</li>
+    <li><strong>Sequências inteiras</strong> em ordem, alternando as cores, passam de uma coluna para outra, desde que haja espaço para mover carta por carta (veja abaixo).</li>
+    <li><strong>Carta que subiu para a fundação</strong> não volta para a mesa.</li>
+  </ul>
+
+  <h2>Quantas cartas se movem de uma vez</h2>
+  <p>
+    Pela regra, só se move uma carta por vez. Mover uma sequência inteira é um atalho para várias
+    jogadas, usando as células e as colunas vazias como apoio. Por isso, o tamanho máximo é: células
+    livres mais 1, vezes 2 para cada coluna vazia. Com 4 células livres e nenhuma coluna vazia, são 5
+    cartas; com 2 células livres e 1 coluna vazia, 6. Indo para uma coluna vazia, ela própria não
+    conta.
+  </p>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para ganhar mais partidas</h2>
+  <ol>
+    <li><strong>Pense antes da primeira jogada.</strong> Como todas as cartas estão à vista, dá para planejar: procure onde estão os Ases e os 2, e o que está em cima deles.</li>
+    <li><strong>Economize as células.</strong> Cada célula ocupada diminui as sequências que você consegue mover. Use-as para liberar uma carta importante, não para guardar qualquer coisa.</li>
+    <li><strong>Esvaziar uma coluna vale muito.</strong> Ela dobra o tamanho da sequência que se move de uma vez e aceita qualquer carta.</li>
+    <li><strong>Não tenha pressa de subir as cartas do meio.</strong> Um 6 vermelho na mesa ainda pode receber um 5 preto. O jogo só sobe sozinho as cartas que não fazem mais falta.</li>
+    <li><strong>Desenterre primeiro as cartas baixas.</strong> Um Ás no fundo de uma coluna comprida trava o jogo inteiro até sair de lá.</li>
+    <li><strong>Use o Desfazer à vontade.</strong> No FreeCell, quase toda partida tem solução: voltar algumas jogadas e tentar outro caminho costuma resolver.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Toda partida de FreeCell tem solução?</h3>
+  <p>
+    Quase todas. Das 32 mil partidas da numeração clássica, só a de número 11.982 não tem solução
+    nenhuma. Então, quando a partida trava, quase sempre foi alguma jogada lá atrás: desfaça e tente
+    de novo.
+  </p>
+  <h3>O que é o número da partida?</h3>
+  <p>
+    Cada distribuição de cartas tem um número, de 1 a 1.000.000, e o mesmo número dá sempre as mesmas
+    cartas. A numeração é a clássica do FreeCell, a mesma de muitos outros jogos. Para jogar uma
+    partida específica, digite o número em "Jogar a partida nº". Com "Jogar esta de novo", no fim da
+    partida, você recebe as mesmas cartas outra vez.
+  </p>
+  <h3>Como funciona a dica?</h3>
+  <p>
+    O botão Dica procura uma solução completa a partir da posição em que você está e acende a primeira
+    jogada dela. Seguindo as dicas, quase sempre a partida chega ao fim. Se não achar uma solução em
+    poucos segundos, a dica mostra
+    uma jogada que ajuda, como liberar uma célula ou tirar uma carta do lugar errado. Pedir dica não
+    tem custo.
+  </p>
+  <h3>Por que algumas cartas sobem sozinhas?</h3>
+  <p>
+    O jogo leva para a fundação as cartas que não fazem mais falta na mesa: os Ases, os 2 e as cartas
+    cujos valores um abaixo, da outra cor, já subiram. Quando todas as colunas ficam em ordem
+    decrescente, a partida está ganha e termina sozinha.
+  </p>
+  <h3>Se eu sair da página, perco a partida?</h3>
+  <p>
+    Não. A partida em andamento fica salva neste navegador, com o tempo e as últimas jogadas para
+    desfazer. Começar outra partida no meio de uma conta como partida não terminada nas
+    estatísticas.
+  </p>
+  <h3>Dá para jogar no celular?</h3>
+  <p>
+    Dá. A mesa se ajusta à largura da tela: toque numa carta para jogar ou arraste com o dedo. Os sons
+    são gerados pelo próprio navegador, e o botão Som liga e desliga os efeitos.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

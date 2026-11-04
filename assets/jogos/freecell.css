@@ -1,0 +1,501 @@
+/* ==========================================================================
+   FreeCell — oito colunas, quatro células, cartas desenhadas em CSS e naipes em SVG próprios
+   ========================================================================== */
+
+.freecell {
+  --fc-mesa-1: #2a6190;
+  --fc-mesa-2: #163a5e;
+  --fc-face: #fffdf8;
+  --fc-borda: #cfc5b3;
+  --fc-preta: #1c1a17;
+  --fc-vermelha: #c3261f;
+  --fc-destaque: #ffd23f;
+  --naipe-espadas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 3C71 25 95 41 95 62c0 13-10 23-23 23-8 0-15-4-19-10 1 9 5 16 13 22H34c8-6 12-13 13-22-4 6-11 10-19 10C15 85 5 75 5 62 5 41 29 25 50 3z'/%3E%3C/svg%3E");
+  --naipe-copas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 93C22 71 4 53 4 32 4 17 15 7 29 7c9 0 16 5 21 13 5-8 12-13 21-13 14 0 25 10 25 25 0 21-18 39-46 61z'/%3E%3C/svg%3E");
+  --naipe-ouros: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 2 88 50 50 98 12 50z'/%3E%3C/svg%3E");
+  --naipe-paus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='28' r='21'/%3E%3Ccircle cx='27' cy='60' r='21'/%3E%3Ccircle cx='73' cy='60' r='21'/%3E%3Cpath d='M44 40h12v20c0 15 4 26 14 37H30c10-11 14-22 14-37z'/%3E%3C/svg%3E");
+  /* A mesa tem cerca de 0,9 vez a largura de altura: limitar a largura pela altura da janela faz
+     a mesa inteira caber na tela do notebook sem rolar */
+  max-width: clamp(320px, calc((100vh - 90px) * 1.1), 820px);
+  margin: 0 auto;
+  overflow-x: clip;
+}
+@supports (height: 100svh) {
+  .freecell {
+    max-width: clamp(320px, calc((100svh - 90px) * 1.1), 820px);
+  }
+}
+:root[data-theme="dark"] .freecell {
+  --fc-mesa-1: #224f78;
+  --fc-mesa-2: #112b45;
+  --fc-face: #f4f0e7;
+}
+
+.fc-info {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.fc-dado {
+  padding: 8px 10px;
+  text-align: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.fc-dado span {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.fc-dado strong {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.fc-partida {
+  margin: 8px 0 12px;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ---------- Mesa ---------- */
+.fc-mesa {
+  --cw: 60px;
+  --ch: 84px;
+  position: relative;
+  /* As cartas usam z-index alto; isolar evita que passem por cima do cabeçalho fixo do site. */
+  isolation: isolate;
+  width: 100%;
+  min-height: 260px;
+  background:
+    radial-gradient(130% 90% at 50% 0%, rgba(255, 255, 255, 0.08), transparent 60%),
+    linear-gradient(180deg, var(--fc-mesa-1), var(--fc-mesa-2));
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25), inset 0 3px 22px rgba(0, 0, 0, 0.28);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fc-pilha {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  border-radius: calc(var(--cw) * 0.1);
+  outline: none;
+}
+/* Células: um fundo um pouco mais escuro; fundações: o naipe de cada uma, bem claro */
+.fc-pilha-celula {
+  background: rgba(0, 0, 0, 0.12);
+}
+.fc-pilha-fundacao::after {
+  content: "";
+  position: absolute;
+  inset: 26%;
+  background: rgba(255, 255, 255, 0.22);
+  -webkit-mask: var(--naipe) center / contain no-repeat;
+  mask: var(--naipe) center / contain no-repeat;
+}
+.fc-pilha-coluna {
+  border-style: dashed;
+}
+
+.fc-anel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3000;
+  box-sizing: border-box;
+  border-radius: calc(var(--cw) * 0.12);
+  outline: 3px solid var(--fc-destaque);
+  outline-offset: 2px;
+  pointer-events: none;
+}
+
+/* Aviso curto na parte de baixo da mesa: por que a carta não saiu */
+.fc-mensagem {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  z-index: 3500;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 9px 14px;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+  color: #fff;
+  background: rgba(10, 20, 32, 0.92);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  translate: -50% 6px;
+  transition: opacity 160ms ease, translate 160ms ease;
+}
+.fc-mensagem.visivel {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+/* ---------- Cartas ---------- */
+.fc-carta {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--cw);
+  height: var(--ch);
+  border-radius: calc(var(--cw) * 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  transition: translate 180ms ease;
+  touch-action: manipulation;
+}
+.fc-carta.movel {
+  cursor: grab;
+  touch-action: none;
+}
+.fc-carta.coberta {
+  visibility: hidden;
+}
+.fc-mesa.sem-animacao .fc-carta {
+  transition: none;
+}
+.fc-mesa.arrastando .fc-carta.no-ar {
+  transition: none;
+  cursor: grabbing;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.42);
+}
+
+.fc-frente {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: inherit;
+  color: var(--fc-preta);
+  background: var(--fc-face);
+  border: 1px solid var(--fc-borda);
+}
+.fc-carta.vermelha .fc-frente {
+  color: var(--fc-vermelha);
+}
+
+/* O valor e o naipe do canto cabem na faixa que aparece das cartas empilhadas na coluna */
+.fc-valor {
+  position: absolute;
+  top: 2%;
+  left: 6%;
+  font-family: "Nunito", sans-serif;
+  font-size: calc(var(--cw) * 0.34);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.07em;
+}
+.fc-naipe {
+  display: block;
+  background-color: currentColor;
+  -webkit-mask: var(--naipe) center / contain no-repeat;
+  mask: var(--naipe) center / contain no-repeat;
+}
+.fc-naipe-espadas,
+.fc-pilha[data-naipe="espadas"] {
+  --naipe: var(--naipe-espadas);
+}
+.fc-naipe-copas,
+.fc-pilha[data-naipe="copas"] {
+  --naipe: var(--naipe-copas);
+}
+.fc-naipe-ouros,
+.fc-pilha[data-naipe="ouros"] {
+  --naipe: var(--naipe-ouros);
+}
+.fc-naipe-paus,
+.fc-pilha[data-naipe="paus"] {
+  --naipe: var(--naipe-paus);
+}
+.fc-naipe-canto {
+  position: absolute;
+  top: 4%;
+  right: 6%;
+  width: calc(var(--cw) * 0.27);
+  height: calc(var(--cw) * 0.27);
+}
+.fc-centro {
+  position: absolute;
+  right: 18%;
+  bottom: 9%;
+  left: 18%;
+  height: 46%;
+  display: grid;
+  place-items: center;
+}
+.fc-centro .fc-naipe {
+  width: 100%;
+  height: 100%;
+}
+.fc-figura {
+  right: 15%;
+  bottom: 8%;
+  left: 15%;
+  height: 50%;
+  padding-top: 0.06em;
+  font-family: "Baloo 2", sans-serif;
+  font-size: calc(var(--cw) * 0.5);
+  font-weight: 800;
+  line-height: 1;
+  border: max(1px, calc(var(--cw) * 0.025)) solid currentColor;
+  border-radius: calc(var(--cw) * 0.08);
+}
+
+.fc-carta.fc-selecionada {
+  box-shadow: 0 0 0 3px var(--fc-destaque), 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+.fc-carta.fc-dica,
+.fc-pilha.fc-dica {
+  animation: fc-brilho 550ms ease-in-out 4 alternate;
+}
+.fc-carta.tremendo {
+  animation: fc-tremer 320ms ease-in-out;
+}
+.fc-mesa.fc-festa .fc-carta {
+  animation: fc-pulo 520ms ease-in-out calc(var(--k, 0) * 90ms) 2;
+}
+@keyframes fc-brilho {
+  to {
+    box-shadow: 0 0 0 3px var(--fc-destaque), 0 0 18px 4px rgba(255, 210, 63, 0.8);
+  }
+}
+@keyframes fc-tremer {
+  20%,
+  60% {
+    rotate: -5deg;
+  }
+  40%,
+  80% {
+    rotate: 5deg;
+  }
+}
+@keyframes fc-pulo {
+  50% {
+    scale: 1.12;
+    rotate: -6deg;
+  }
+}
+
+/* ---------- Botões, ajuda e estatísticas ---------- */
+.fc-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+.fc-botoes .button,
+.fc-botoes .som-botao {
+  min-height: 44px;
+}
+.fc-botoes .button {
+  padding: 10px 18px;
+}
+.fc-botoes .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Escolher a partida pelo número */
+.fc-escolher {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 10px;
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.fc-escolher input {
+  width: 9.5em;
+  min-height: 44px;
+  padding: 8px 12px;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+}
+.fc-escolher .button {
+  min-height: 44px;
+  padding: 10px 18px;
+}
+
+.fc-ajuda {
+  margin: 14px 0 0;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.fc-estatisticas {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.fc-estatisticas summary {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.fc-est-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px 18px;
+  margin: 12px 0 0;
+}
+.fc-est-lista div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.fc-est-lista dt {
+  color: var(--muted);
+}
+.fc-est-lista dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.fc-zerar {
+  margin-top: 12px;
+  padding: 0;
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--link);
+  text-decoration: underline;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ---------- Diálogo ---------- */
+.fc-dialogo {
+  width: min(92vw, 400px);
+  padding: 24px;
+  color: var(--text);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.fc-dialogo::backdrop {
+  background: rgba(10, 12, 16, 0.6);
+}
+.fc-dialogo h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+.fc-dialogo p {
+  margin: 0 0 16px;
+  color: var(--text-2);
+}
+.fc-dialogo-dados {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px;
+  text-align: left;
+}
+.fc-dialogo-dados div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.fc-dialogo-dados dt {
+  color: var(--muted);
+}
+.fc-dialogo-dados dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.fc-dialogo-dados .destaque dt {
+  font-weight: 800;
+  color: var(--accent);
+}
+:root[data-theme="light"] .fc-dialogo-dados .destaque dt {
+  color: #92400e;
+}
+.fc-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.fc-dialogo.travado .fc-dialogo-botoes {
+  pointer-events: none;
+}
+
+@media (max-width: 420px) {
+  .fc-info {
+    gap: 6px;
+  }
+  .fc-dado {
+    padding: 6px 4px;
+  }
+  .fc-dado strong {
+    font-size: 17px;
+  }
+  .fc-botoes {
+    gap: 8px;
+  }
+  .fc-botoes .button {
+    padding: 10px 14px;
+  }
+  /* Cartas pequenas: o valor cresce um pouco e o naipe do meio dá lugar a ele */
+  .fc-valor {
+    font-size: calc(var(--cw) * 0.4);
+  }
+  .fc-naipe-canto {
+    width: calc(var(--cw) * 0.3);
+    height: calc(var(--cw) * 0.3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-carta {
+    transition: none;
+  }
+  .fc-carta.fc-dica,
+  .fc-pilha.fc-dica {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--fc-destaque);
+  }
+  .fc-carta.tremendo,
+  .fc-mesa.fc-festa .fc-carta {
+    animation: none;
+  }
+  .fc-mensagem {
+    transition: none;
+  }
+}

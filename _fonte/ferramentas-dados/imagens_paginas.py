@@ -154,6 +154,17 @@ IMAGENS = {
     "showing one big suit symbol in the middle: a red heart, a black spade, a red diamond and a "
     "black club. Only the suit symbols, no letters and no numbers anywhere on the cards. Behind "
     "the fan, one more card lies face down with an orange patterned back.",
+    "jogos/paciencia-spider": "A neat diagonal cascade of five overlapping white playing cards, each "
+    "showing only one big black spade symbol in the middle, with no letters and no numbers anywhere "
+    "on the cards. Beside the cascade, two cards lie face down with a purple patterned back. A small "
+    "friendly cartoon spider hangs from a thin thread above the cards.",
+    "jogos/freecell": "A small rounded blue felt mat seen from above. Along its top edge, four empty "
+    "card-shaped slots with soft outlines, one of them holding a white playing card with a big red "
+    "heart. Below the slots, one straight vertical column of four white playing cards, each card "
+    "overlapping the one above it so that only its top part shows, except the last card, fully "
+    "visible. Each card has just one suit symbol at the top and none elsewhere: from top to bottom "
+    "a black spade, a red diamond, a black club and a red heart. No letters and no numbers anywhere "
+    "on the cards.",
     # Jogos: conhecimento
     "jogos/qual-e-a-bandeira": "A blue globe with several small colorful flags on poles stuck around "
     "it and a big orange question mark floating beside it.",

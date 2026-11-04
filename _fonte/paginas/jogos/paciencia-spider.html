@@ -1,0 +1,166 @@
+<!--
+titulo: Paciência Spider Online Grátis: 1, 2 ou 4 Naipes — EFS Aplicativos
+descricao: Jogue Paciência Spider online e grátis no navegador, com 1, 2 ou 4 naipes: dois baralhos, dez colunas, desfazer, dica, pontos e estatísticas salvas.
+estilos: /assets/jogos/paciencia-spider.css
+scripts: /assets/jogos/paciencia-spider-logica.js /assets/jogos/sons.js /assets/jogos/paciencia-spider.js
+app: Paciência Spider | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Paciência Spider</li>
+  </ol>
+  <h1>Paciência Spider online</h1>
+  <p>
+    A paciência de dois baralhos e dez colunas: monte sequências do Rei ao Ás do mesmo naipe para
+    tirá-las da mesa. Jogue com 1, 2 ou 4 naipes, desfaça jogadas e peça uma dica quando travar.
+  </p>
+</header>
+
+<section class="spider" aria-label="Paciência Spider">
+  <div class="segmented sp-modos" role="group" aria-label="Quantidade de naipes">
+    <button type="button" class="filter active" data-modo="1" aria-pressed="true">1 naipe</button>
+    <button type="button" class="filter" data-modo="2" aria-pressed="false">2 naipes</button>
+    <button type="button" class="filter" data-modo="4" aria-pressed="false">4 naipes</button>
+  </div>
+
+  <div class="sp-info">
+    <div class="sp-dado"><span>Tempo</span><strong id="sp-tempo">00:00</strong></div>
+    <div class="sp-dado"><span>Movimentos</span><strong id="sp-movimentos">0</strong></div>
+    <div class="sp-dado"><span>Pontos</span><strong id="sp-pontos">500</strong></div>
+  </div>
+  <p class="sp-partida" id="sp-partida"></p>
+
+  <div class="sp-mesa" id="sp-mesa" role="group" aria-label="Mesa da Paciência Spider" aria-describedby="sp-ajuda"></div>
+
+  <div class="sp-botoes">
+    <button type="button" class="button secondary" id="sp-desfazer">Desfazer</button>
+    <button type="button" class="button secondary" id="sp-dica">Dica</button>
+    <button type="button" class="button" id="sp-nova">Nova partida</button>
+    <button type="button" class="som-botao" id="sp-som"></button>
+  </div>
+
+  <p class="sp-ajuda" id="sp-ajuda">
+    Toque numa carta para mandá-la ao melhor lugar, ou arraste para escolher a coluna. Toque no
+    monte, no alto à direita, para pôr mais uma carta em cada coluna. No teclado, as setas escolhem a
+    coluna e a carta, Enter joga, Espaço pega e solta, e Ctrl+Z desfaz.
+  </p>
+  <p class="sr-only" aria-live="polite" id="sp-status"></p>
+
+  <details class="sp-estatisticas">
+    <summary>Suas estatísticas com <span id="sp-est-modo">1 naipe</span></summary>
+    <dl class="sp-est-lista" id="sp-est-lista"></dl>
+    <button type="button" class="sp-zerar" id="sp-zerar">Zerar as estatísticas deste modo</button>
+  </details>
+
+  <dialog class="sp-dialogo" id="sp-dialogo" aria-labelledby="sp-dialogo-titulo">
+    <h2 id="sp-dialogo-titulo"></h2>
+    <p id="sp-dialogo-texto"></p>
+    <dl class="sp-dialogo-dados" id="sp-dialogo-dados"></dl>
+    <div class="sp-dialogo-botoes" id="sp-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<aside class="indicacao" data-indicacao="paciencia-spider" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar Paciência Spider</h2>
+  <p>
+    A Paciência Spider usa dois baralhos, 104 cartas. O objetivo é montar, dentro das colunas, oito
+    sequências completas do Rei ao Ás, cada uma de um naipe só. Quando uma sequência fica pronta, ela
+    sai sozinha da mesa e vai para o canto de cima, à esquerda. Ganha quem tirar as oito.
+  </p>
+  <p>
+    A mesa tem dez colunas: as quatro primeiras começam com 6 cartas e as outras seis com 5. Só a
+    carta de cima de cada coluna fica virada para cima. As 50 cartas que sobram formam o monte, no
+    canto de cima, à direita, e saem de 10 em 10.
+  </p>
+  <ul>
+    <li><strong>Uma carta vai sobre outra de valor um acima,</strong> de qualquer naipe: um 6 pode ir sobre qualquer 7.</li>
+    <li><strong>Só sequências do mesmo naipe se movem juntas.</strong> Um 7, 6 e 5 de copas passam juntos para outra coluna; se o 6 for de espadas, só o 5 sai.</li>
+    <li><strong>Coluna vazia aceita qualquer carta</strong> ou qualquer sequência do mesmo naipe, e não só o Rei.</li>
+    <li><strong>Carta fechada por cima</strong> de uma coluna vira sozinha.</li>
+    <li><strong>O monte</strong> põe uma carta nova, aberta, em cada uma das dez colunas. Para usar o monte, nenhuma coluna pode estar vazia.</li>
+  </ul>
+
+  <h2>1, 2 ou 4 naipes</h2>
+  <p>
+    Com 1 naipe, as 104 cartas são de espadas, e qualquer sequência em ordem já é do mesmo naipe: é o
+    modo para aprender e o mais fácil de ganhar. Com 2 naipes, metade das cartas é de espadas e
+    metade de copas. Com 4 naipes, cada naipe aparece duas vezes, as sequências se misturam muito
+    mais e ganhar exige planejar várias jogadas à frente; é um dos desafios mais difíceis entre as
+    paciências.
+  </p>
+
+  <h2>Pontuação</h2>
+  <ul>
+    <li><strong>A partida começa com 500 pontos.</strong></li>
+    <li><strong>Cada jogada tira 1 ponto:</strong> mover cartas, usar o monte e também desfazer.</li>
+    <li><strong>Cada naipe completo</strong> que sai da mesa dá 100 pontos.</li>
+  </ul>
+  <p>
+    Uma vitória vale no máximo 1.300 pontos, menos um por jogada: quanto menos jogadas, mais pontos.
+    Os pontos nunca ficam negativos. Para
+    cada modo, as estatísticas guardam as partidas, as vitórias, o melhor tempo, a maior pontuação e a
+    maior sequência de vitórias.
+  </p>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para ganhar mais partidas</h2>
+  <ol>
+    <li><strong>Abra as cartas fechadas antes de tudo.</strong> Cada carta virada traz jogadas novas, e as colunas da esquerda começam com mais cartas escondidas.</li>
+    <li><strong>Prefira pôr a carta sobre outra do mesmo naipe.</strong> Uma sequência de naipes misturados não se move inteira e fica presa na coluna.</li>
+    <li><strong>Esvaziar uma coluna vale muito.</strong> Ela recebe qualquer carta e serve de espaço para reorganizar as outras colunas.</li>
+    <li><strong>Antes de usar o monte, arrume a mesa.</strong> As dez cartas novas caem por cima de tudo e podem esconder sequências que estavam quase prontas.</li>
+    <li><strong>Cuidado com os Reis nas colunas cheias.</strong> Nada vai sobre um Rei, e ele só sai com uma coluna vazia ou dentro de um naipe completo.</li>
+    <li><strong>Use o Desfazer para testar caminhos.</strong> No 4 naipes, voltar algumas jogadas costuma revelar a saída.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Qual a diferença entre Paciência e Paciência Spider?</h3>
+  <p>
+    Na <a href="/jogos/paciencia/">Paciência clássica</a>, de um baralho, as cartas vão para quatro
+    fundações e, nas colunas, alternam cores. Na Spider, de dois baralhos, as sequências são montadas
+    dentro das próprias colunas, sem olhar a cor, e saem da mesa quando chegam do Rei ao Ás no mesmo
+    naipe.
+  </p>
+  <h3>Toda partida tem solução?</h3>
+  <p>
+    Quase todas as partidas de 1 naipe têm. Com 4 naipes, uma parte das distribuições não tem saída,
+    mesmo jogando sem errar. Quando não encontra mais jogadas úteis, o jogo avisa e oferece desfazer,
+    recomeçar a mesma partida ou começar outra.
+  </p>
+  <h3>Como funciona a dica?</h3>
+  <p>
+    O botão Dica acende a jogada mais útil do momento: primeiro a que completa um naipe, depois a que
+    abre uma carta fechada, depois a que desfaz uma sequência fora de ordem e, por fim, usar o monte.
+    Pedir dica não tira pontos.
+  </p>
+  <h3>Por que o monte não funciona?</h3>
+  <p>
+    Porque há uma coluna vazia. Pela regra da Spider, o monte só pode ser usado com todas as dez
+    colunas ocupadas: ponha uma carta ou uma sequência na coluna vazia e toque no monte de novo.
+  </p>
+  <h3>O que é o número da partida?</h3>
+  <p>
+    Cada distribuição de cartas tem um número. Com "Jogar esta de novo", no fim da partida, ou
+    "Recomeçar esta partida", quando ela trava, você recebe as mesmas cartas outra vez para tentar
+    outro caminho.
+  </p>
+  <h3>Se eu sair da página, perco a partida?</h3>
+  <p>
+    Não. A partida em andamento fica salva neste navegador, com o tempo, os pontos e as últimas
+    jogadas para desfazer. Começar outra partida no meio de uma conta como partida não terminada nas
+    estatísticas.
+  </p>
+  <h3>Dá para jogar no celular?</h3>
+  <p>
+    Dá. A mesa se ajusta à largura da tela: toque numa carta para jogar ou arraste com o dedo. Com a
+    tela deitada, as cartas ficam maiores. Os sons são gerados pelo próprio navegador, e o botão Som
+    liga e desliga os efeitos.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

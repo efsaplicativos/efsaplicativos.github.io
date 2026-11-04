@@ -1,0 +1,279 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/jogos/freecell.html. Edite lá. -->
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fff7f0" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        // O laranja (claro) é o padrão; o escuro vale para quem ligou o modo noturno
+        if (theme === "dark") {
+          root.setAttribute("data-theme", "dark");
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#0f1115");
+        }
+      })();
+    </script>
+    <title>FreeCell Online Grátis: Paciência com Partidas Numeradas — EFS Aplicativos</title>
+    <meta name="description" content="Jogue FreeCell online e grátis no navegador: partidas numeradas de 1 a 1.000.000, dica que procura a solução, desfazer, final automático e estatísticas salvas." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/jogos/freecell/" />
+    <meta property="og:title" content="FreeCell Online Grátis: Paciência com Partidas Numeradas — EFS Aplicativos" />
+    <meta property="og:description" content="Jogue FreeCell online e grátis no navegador: partidas numeradas de 1 a 1.000.000, dica que procura a solução, desfazer, final automático e estatísticas salvas." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/jogos/freecell/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600..800&amp;family=Nunito:wght@400..800&amp;display=swap"
+    />
+    <link rel="stylesheet" href="/site.css?v=dfdb216d18d2" />
+    <link rel="stylesheet" href="/assets/web.css?v=f4683d85c12d" />
+    <link rel="stylesheet" href="/assets/jogos/freecell.css?v=60e3404e3b0f" />
+    <script src="/assets/estatisticas.js?v=da0036a12f2f" async></script>
+    <script src="/site.js?v=926b8efae759" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/indicacoes.js?v=2acc737ddf09" defer></script>
+    <script src="/assets/jogos/freecell-logica.js?v=1bc3732c8df8" defer></script>
+    <script src="/assets/jogos/sons.js?v=21d1381b6bd0" defer></script>
+    <script src="/assets/jogos/freecell.js?v=25644fd2e4e2" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "FreeCell", "url": "https://efsaplicativos.com.br/jogos/freecell/", "description": "Jogue FreeCell online e grátis no navegador: partidas numeradas de 1 a 1.000.000, dica que procura a solução, desfazer, final automático e estatísticas salvas.", "applicationCategory": "GameApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos" aria-current="page">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Modo noturno"
+            title="Modo noturno"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">FreeCell</li>
+  </ol>
+  <h1>FreeCell online</h1>
+  <p>
+    A paciência em que todas as cartas ficam abertas desde o começo: use as quatro células livres
+    para organizar as 52 cartas por naipe, do Ás ao Rei. Cada partida tem um número, para você
+    jogar de novo ou desafiar alguém com as mesmas cartas.
+  </p>
+</header>
+
+<section class="freecell" aria-label="FreeCell">
+  <div class="fc-info">
+    <div class="fc-dado"><span>Tempo</span><strong id="fc-tempo">00:00</strong></div>
+    <div class="fc-dado"><span>Movimentos</span><strong id="fc-movimentos">0</strong></div>
+    <div class="fc-dado"><span>Na fundação</span><strong id="fc-fundacao">0/52</strong></div>
+  </div>
+  <p class="fc-partida" id="fc-partida"></p>
+
+  <div class="fc-mesa" id="fc-mesa" role="group" aria-label="Mesa do FreeCell" aria-describedby="fc-ajuda"></div>
+
+  <div class="fc-botoes">
+    <button type="button" class="button secondary" id="fc-desfazer">Desfazer</button>
+    <button type="button" class="button secondary" id="fc-dica">Dica</button>
+    <button type="button" class="button" id="fc-nova">Nova partida</button>
+    <button type="button" class="som-botao" id="fc-som"></button>
+  </div>
+
+  <form class="fc-escolher" id="fc-escolher">
+    <label for="fc-numero">Jogar a partida nº</label>
+    <input id="fc-numero" type="number" inputmode="numeric" min="1" max="1000000" placeholder="1 a 1.000.000" />
+    <button type="submit" class="button secondary">Jogar</button>
+  </form>
+
+  <p class="fc-ajuda" id="fc-ajuda">
+    Toque numa carta para mandá-la ao melhor lugar, ou arraste para escolher o destino. As cartas que
+    não fazem mais falta na mesa sobem sozinhas para as fundações. No teclado, as setas escolhem a
+    pilha e a carta, Enter joga, Espaço pega e solta, e Ctrl+Z desfaz.
+  </p>
+  <p class="sr-only" aria-live="polite" id="fc-status"></p>
+
+  <details class="fc-estatisticas">
+    <summary>Suas estatísticas</summary>
+    <dl class="fc-est-lista" id="fc-est-lista"></dl>
+    <button type="button" class="fc-zerar" id="fc-zerar">Zerar as estatísticas</button>
+  </details>
+
+  <dialog class="fc-dialogo" id="fc-dialogo" aria-labelledby="fc-dialogo-titulo">
+    <h2 id="fc-dialogo-titulo"></h2>
+    <p id="fc-dialogo-texto"></p>
+    <dl class="fc-dialogo-dados" id="fc-dialogo-dados"></dl>
+    <div class="fc-dialogo-botoes" id="fc-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<aside class="indicacao" data-indicacao="freecell" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar FreeCell</h2>
+  <p>
+    O FreeCell usa um baralho de 52 cartas, todas distribuídas viradas para cima em oito colunas: as
+    quatro primeiras com 7 cartas e as outras com 6. O objetivo é levar todas as cartas para as
+    quatro fundações, no alto à direita, uma para cada naipe, começando pelo Ás e subindo até o Rei.
+  </p>
+  <ul>
+    <li><strong>Nas colunas,</strong> uma carta vai sobre outra de valor um acima e de cor diferente: um 6 de copas, vermelho, vai sobre um 7 de espadas ou de paus.</li>
+    <li><strong>As quatro células livres,</strong> no alto à esquerda, guardam uma carta cada uma, para tirá-la do caminho por um tempo.</li>
+    <li><strong>Coluna vazia aceita qualquer carta,</strong> e não só o Rei.</li>
+    <li><strong>Sequências inteiras</strong> em ordem, alternando as cores, passam de uma coluna para outra, desde que haja espaço para mover carta por carta (veja abaixo).</li>
+    <li><strong>Carta que subiu para a fundação</strong> não volta para a mesa.</li>
+  </ul>
+
+  <h2>Quantas cartas se movem de uma vez</h2>
+  <p>
+    Pela regra, só se move uma carta por vez. Mover uma sequência inteira é um atalho para várias
+    jogadas, usando as células e as colunas vazias como apoio. Por isso, o tamanho máximo é: células
+    livres mais 1, vezes 2 para cada coluna vazia. Com 4 células livres e nenhuma coluna vazia, são 5
+    cartas; com 2 células livres e 1 coluna vazia, 6. Indo para uma coluna vazia, ela própria não
+    conta.
+  </p>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para ganhar mais partidas</h2>
+  <ol>
+    <li><strong>Pense antes da primeira jogada.</strong> Como todas as cartas estão à vista, dá para planejar: procure onde estão os Ases e os 2, e o que está em cima deles.</li>
+    <li><strong>Economize as células.</strong> Cada célula ocupada diminui as sequências que você consegue mover. Use-as para liberar uma carta importante, não para guardar qualquer coisa.</li>
+    <li><strong>Esvaziar uma coluna vale muito.</strong> Ela dobra o tamanho da sequência que se move de uma vez e aceita qualquer carta.</li>
+    <li><strong>Não tenha pressa de subir as cartas do meio.</strong> Um 6 vermelho na mesa ainda pode receber um 5 preto. O jogo só sobe sozinho as cartas que não fazem mais falta.</li>
+    <li><strong>Desenterre primeiro as cartas baixas.</strong> Um Ás no fundo de uma coluna comprida trava o jogo inteiro até sair de lá.</li>
+    <li><strong>Use o Desfazer à vontade.</strong> No FreeCell, quase toda partida tem solução: voltar algumas jogadas e tentar outro caminho costuma resolver.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Toda partida de FreeCell tem solução?</h3>
+  <p>
+    Quase todas. Das 32 mil partidas da numeração clássica, só a de número 11.982 não tem solução
+    nenhuma. Então, quando a partida trava, quase sempre foi alguma jogada lá atrás: desfaça e tente
+    de novo.
+  </p>
+  <h3>O que é o número da partida?</h3>
+  <p>
+    Cada distribuição de cartas tem um número, de 1 a 1.000.000, e o mesmo número dá sempre as mesmas
+    cartas. A numeração é a clássica do FreeCell, a mesma de muitos outros jogos. Para jogar uma
+    partida específica, digite o número em "Jogar a partida nº". Com "Jogar esta de novo", no fim da
+    partida, você recebe as mesmas cartas outra vez.
+  </p>
+  <h3>Como funciona a dica?</h3>
+  <p>
+    O botão Dica procura uma solução completa a partir da posição em que você está e acende a primeira
+    jogada dela. Seguindo as dicas, quase sempre a partida chega ao fim. Se não achar uma solução em
+    poucos segundos, a dica mostra
+    uma jogada que ajuda, como liberar uma célula ou tirar uma carta do lugar errado. Pedir dica não
+    tem custo.
+  </p>
+  <h3>Por que algumas cartas sobem sozinhas?</h3>
+  <p>
+    O jogo leva para a fundação as cartas que não fazem mais falta na mesa: os Ases, os 2 e as cartas
+    cujos valores um abaixo, da outra cor, já subiram. Quando todas as colunas ficam em ordem
+    decrescente, a partida está ganha e termina sozinha.
+  </p>
+  <h3>Se eu sair da página, perco a partida?</h3>
+  <p>
+    Não. A partida em andamento fica salva neste navegador, com o tempo e as últimas jogadas para
+    desfazer. Começar outra partida no meio de uma conta como partida não terminada nas
+    estatísticas.
+  </p>
+  <h3>Dá para jogar no celular?</h3>
+  <p>
+    Dá. A mesa se ajusta à largura da tela: toque numa carta para jogar ou arraste com o dedo. Os sons
+    são gerados pelo próprio navegador, e o botão Som liga e desliga os efeitos.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

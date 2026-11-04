@@ -79,6 +79,14 @@ const Indicacoes = (() => {
     "cores-da-memoria": [
       produto("Jogo Genius, da Estrela", "O clássico de repetir a sequência de cores e sons.", naAmazon("B077P8HCHD")),
     ],
+    freecell: [
+      produto(
+        "Baralho Copag 139, naipe grande",
+        "Para o FreeCell na mesa basta um baralho: com todas as cartas abertas, números e naipes maiores fazem diferença. No Mercado Livre, vem um kit com dois, um vermelho e um azul-marinho.",
+        "https://link.amazon/B03b6LpYl",
+        "https://meli.la/1ANvoPs",
+      ),
+    ],
     "jogo-da-memoria": [
       produto("Jogo da memória em madeira, 40 peças", "Peças de verdade para jogar em família, sem tela.", naAmazon("B08VCYG2FG")),
     ],
@@ -96,6 +104,14 @@ const Indicacoes = (() => {
       produto(
         "Baralho Copag 139, naipe grande",
         "Números e naipes maiores, fáceis de ler na mesa. No Mercado Livre, vem um kit com dois baralhos, um vermelho e um azul-marinho.",
+        "https://link.amazon/B03b6LpYl",
+        "https://meli.la/1ANvoPs",
+      ),
+    ],
+    "paciencia-spider": [
+      produto(
+        "Baralho Copag 139, naipe grande",
+        "A Spider usa dois baralhos: no Mercado Livre, este vem em kit com dois, um vermelho e um azul-marinho. Números e naipes maiores, fáceis de ler na mesa.",
         "https://link.amazon/B03b6LpYl",
         "https://meli.la/1ANvoPs",
       ),
