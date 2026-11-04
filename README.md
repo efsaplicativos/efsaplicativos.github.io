@@ -23,7 +23,9 @@ Depois de editar algo em `_fonte/` ou em `assets/`, rode na raiz do repositório
 python _fonte/gerar.py
 ```
 
-Ele recria `ferramentas/`, `jogos/`, `sobre/`, `contato/`, `privacidade/` e o `sitemap.xml`, com a versão de cada CSS e JS no endereço para o navegador baixar de novo quando mudarem. Não edite as páginas geradas à mão: a próxima geração apaga a mudança.
+Ele recria `ferramentas/`, `jogos/`, `sobre/`, `contato/`, `privacidade/` e o `sitemap.xml`, com a versão de cada CSS e JS no endereço para o navegador baixar de novo quando mudarem. Também atualiza a versão do `site.css` e do `site.js` no `index.html` e na `politica-privacidade.html`. Não edite as páginas geradas à mão: a próxima geração apaga a mudança.
+
+O passo a passo completo para editar e publicar, e o que não pode ser quebrado (domínio, páginas de privacidade usadas pelo Google Play, anúncios), está em `_fonte/GUIA-PARA-IA.md`.
 
 Para testar no computador:
 

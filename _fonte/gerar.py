@@ -16,7 +16,8 @@ Cada arquivo em _fonte/paginas começa com um comentário de metadados:
 
 _fonte/paginas/ferramentas/imc.html vira ferramentas/imc/index.html (endereço /ferramentas/imc/),
 e um index.html vira o index da própria pasta. O cabeçalho, o rodapé e o resto do <head> vêm de
-_fonte/modelo.html. Também gera o sitemap.xml.
+_fonte/modelo.html. Também gera o sitemap.xml e atualiza a versão do site.css e do site.js nas
+páginas feitas à mão (index.html e politica-privacidade.html), sem mexer no resto delas.
 
 O GitHub Pages (Jekyll) não publica pastas que começam com "_", então _fonte fica só no repositório.
 """
@@ -34,6 +35,8 @@ MODELO = (RAIZ / "_fonte" / "modelo.html").read_text(encoding="utf-8")
 
 # Páginas feitas à mão que também entram no sitemap.xml
 PAGINAS_FIXAS = ["/", "/politica-privacidade.html"]
+# Páginas feitas à mão que carregam o site.css e o site.js da raiz
+PAGINAS_A_MAO = ["index.html", "politica-privacidade.html"]
 
 
 def versao(caminho: str) -> str:
@@ -120,6 +123,20 @@ def gerar(arquivo: Path) -> str:
     return endereco
 
 
+def atualizar_versoes(nome: str) -> None:
+    """Troca só o ?v= do site.css e do site.js; o arquivo mantém as quebras de linha (CRLF)."""
+    arquivo = RAIZ / nome
+    texto = arquivo.read_bytes().decode("utf-8")
+    novo = re.sub(
+        r'((?:href|src)="(site\.(?:css|js))\?v=)[0-9a-f]+"',
+        lambda m: f'{m.group(1)}{versao(m.group(2))}"',
+        texto,
+    )
+    if novo != texto:
+        arquivo.write_bytes(novo.encode("utf-8"))
+    print(f"{'versões atualizadas' if novo != texto else 'versões em dia':32} {nome}")
+
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     enderecos = [gerar(arquivo) for arquivo in sorted(FONTE.rglob("*.html"))]
@@ -132,6 +149,8 @@ def main() -> None:
         newline="\n",
     )
     print(f"sitemap.xml com {len(PAGINAS_FIXAS) + len(enderecos)} endereços")
+    for nome in PAGINAS_A_MAO:
+        atualizar_versoes(nome)
 
 
 if __name__ == "__main__":
