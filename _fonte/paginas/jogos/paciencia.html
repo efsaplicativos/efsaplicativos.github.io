@@ -1,0 +1,157 @@
+<!--
+titulo: Paciência Online Grátis: Jogo de Cartas Clássico — EFS Aplicativos
+descricao: Jogue paciência online e grátis no navegador: o clássico jogo de cartas, virando 1 ou 3 cartas, com desfazer, dica, final automático, pontos e estatísticas salvas.
+estilos: /assets/jogos/paciencia.css
+scripts: /assets/jogos/paciencia-logica.js /assets/jogos/sons.js /assets/jogos/paciencia.js
+app: Paciência | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Paciência</li>
+  </ol>
+  <h1>Paciência online</h1>
+  <p>
+    O clássico jogo de cartas para jogar sozinho: organize as 52 cartas por naipe, do Ás ao Rei.
+    Vire 1 ou 3 cartas por vez, desfaça jogadas e peça uma dica quando travar.
+  </p>
+</header>
+
+<section class="paciencia" aria-label="Paciência">
+  <div class="segmented pc-modos" role="group" aria-label="Cartas viradas por vez">
+    <button type="button" class="filter active" data-modo="1" aria-pressed="true">Virar 1</button>
+    <button type="button" class="filter" data-modo="3" aria-pressed="false">Virar 3</button>
+  </div>
+
+  <div class="pc-info">
+    <div class="pc-dado"><span>Tempo</span><strong id="pc-tempo">00:00</strong></div>
+    <div class="pc-dado"><span>Movimentos</span><strong id="pc-movimentos">0</strong></div>
+    <div class="pc-dado"><span>Pontos</span><strong id="pc-pontos">0</strong></div>
+  </div>
+  <p class="pc-partida" id="pc-partida"></p>
+
+  <div class="pc-mesa" id="pc-mesa" role="group" aria-label="Mesa da paciência" aria-describedby="pc-ajuda"></div>
+
+  <div class="pc-botoes">
+    <button type="button" class="button secondary" id="pc-desfazer">Desfazer</button>
+    <button type="button" class="button secondary" id="pc-dica">Dica</button>
+    <button type="button" class="button" id="pc-nova">Nova partida</button>
+    <button type="button" class="som-botao" id="pc-som"></button>
+  </div>
+
+  <p class="pc-ajuda" id="pc-ajuda">
+    Toque numa carta para mandá-la ao melhor lugar, ou arraste para escolher o destino. Toque no
+    monte para virar cartas. No teclado, as setas escolhem a pilha, Enter joga a carta, Espaço pega
+    e solta, e Ctrl+Z desfaz.
+  </p>
+  <p class="sr-only" aria-live="polite" id="pc-status"></p>
+
+  <details class="pc-estatisticas">
+    <summary>Suas estatísticas no <span id="pc-est-modo">Virar 1</span></summary>
+    <dl class="pc-est-lista" id="pc-est-lista"></dl>
+    <button type="button" class="pc-zerar" id="pc-zerar">Zerar as estatísticas deste modo</button>
+  </details>
+
+  <dialog class="pc-dialogo" id="pc-dialogo" aria-labelledby="pc-dialogo-titulo">
+    <h2 id="pc-dialogo-titulo"></h2>
+    <p id="pc-dialogo-texto"></p>
+    <dl class="pc-dialogo-dados" id="pc-dialogo-dados"></dl>
+    <div class="pc-dialogo-botoes" id="pc-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<aside class="indicacao" data-indicacao="paciencia" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar paciência</h2>
+  <p>
+    A paciência, também chamada de Klondike, usa um baralho de 52 cartas. O objetivo é levar todas
+    as cartas para as quatro fundações, no alto à direita: uma para cada naipe, começando pelo Ás e
+    subindo até o Rei.
+  </p>
+  <p>
+    A mesa tem sete colunas. A primeira começa com 1 carta, a segunda com 2, e assim até a sétima,
+    com 7. Só a carta de cima de cada coluna fica virada para cima. As 24 cartas que sobram formam o
+    monte, no canto esquerdo.
+  </p>
+  <ul>
+    <li><strong>Nas colunas,</strong> uma carta vai sobre outra de valor um acima e de cor diferente: um 6 de copas, vermelho, vai sobre um 7 de espadas ou de paus, pretos.</li>
+    <li><strong>Sequências inteiras</strong> de cartas abertas passam de uma coluna para outra, desde que a primeira carta da sequência encaixe.</li>
+    <li><strong>Carta fechada por cima</strong> de uma coluna vira sozinha.</li>
+    <li><strong>Coluna vazia</strong> só aceita um Rei, sozinho ou com a sequência que estiver sobre ele.</li>
+    <li><strong>O monte</strong> vira cartas para o descarte, ao lado dele. Quando o monte acaba, um toque volta o descarte para o monte, quantas vezes você quiser.</li>
+    <li><strong>A carta de cima de uma fundação</strong> pode voltar para a mesa, se isso ajudar a destravar o jogo.</li>
+  </ul>
+
+  <h2>Virar 1 ou virar 3</h2>
+  <p>
+    No Virar 1, cada toque no monte vira uma carta, e todas as cartas do monte ficam ao seu alcance.
+    No Virar 3, viram três de uma vez e só a de cima pode ser jogada; as outras só aparecem nas
+    próximas voltas. O Virar 3 é bem mais difícil e é o modo preferido de quem já joga há tempo.
+  </p>
+
+  <h2>Pontuação</h2>
+  <ul>
+    <li><strong>Carta do descarte para a mesa:</strong> 5 pontos.</li>
+    <li><strong>Carta para a fundação:</strong> 10 pontos.</li>
+    <li><strong>Carta virada na mesa:</strong> 5 pontos.</li>
+    <li><strong>Carta tirada da fundação:</strong> menos 15 pontos.</li>
+    <li><strong>Voltar o descarte para o monte:</strong> menos 100 pontos no Virar 1 e menos 20 no Virar 3.</li>
+    <li><strong>Bônus de tempo:</strong> ao terminar, 700.000 dividido pelos segundos da partida, para partidas de 30 segundos ou mais. Quanto mais rápido, maior o bônus.</li>
+  </ul>
+  <p>
+    Os pontos nunca ficam negativos. Para cada modo, as estatísticas guardam as partidas, as
+    vitórias, o melhor tempo, a maior pontuação e a maior sequência de vitórias.
+  </p>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para ganhar mais partidas</h2>
+  <ol>
+    <li><strong>Abra primeiro as colunas com mais cartas fechadas.</strong> São elas que escondem as cartas que travam o jogo, e a coluna da direita começa com seis.</li>
+    <li><strong>Não esvazie uma coluna sem ter um Rei para ela.</strong> Uma coluna vazia só aceita Rei; sem ele, o espaço fica parado.</li>
+    <li><strong>Ases e 2 podem ir direto para a fundação.</strong> Com as cartas do meio, como 5, 6 e 7, vale esperar: na mesa, elas ainda recebem cartas da outra cor.</li>
+    <li><strong>Jogue da mesa antes do monte.</strong> Abrir uma carta da coluna cria jogadas novas, e a carta do monte continua lá na próxima volta.</li>
+    <li><strong>Escolha bem o Rei da coluna vazia.</strong> Se houver dois, prefira aquele que já tem por perto uma Dama da cor certa para ir sobre ele.</li>
+    <li><strong>Use o Desfazer para testar caminhos,</strong> principalmente no Virar 3, em que uma volta do monte muda as cartas que aparecem.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Toda partida tem solução?</h3>
+  <p>
+    Não. Algumas distribuições não têm saída, mesmo jogando sem errar, e isso faz parte da
+    paciência. Quando não encontra mais jogadas úteis, o jogo avisa e oferece desfazer, recomeçar a
+    mesma partida ou começar outra.
+  </p>
+  <h3>Como funciona a dica?</h3>
+  <p>
+    O botão Dica acende a jogada mais útil do momento: primeiro as cartas que vão para a fundação,
+    depois as que abrem uma carta fechada, depois as do descarte e, por fim, virar o monte. Pedir
+    dica não tira pontos.
+  </p>
+  <h3>O que é o número da partida?</h3>
+  <p>
+    Cada distribuição de cartas tem um número. Com "Jogar esta de novo", no fim da partida, ou
+    "Recomeçar esta partida", quando ela trava, você recebe as mesmas cartas outra vez para tentar
+    outro caminho.
+  </p>
+  <h3>Quando a partida termina sozinha?</h3>
+  <p>
+    Quando todas as cartas da mesa estão abertas, a partida já está ganha: as cartas sobem sozinhas
+    para as fundações. No Virar 3, isso acontece depois que o monte e o descarte acabam.
+  </p>
+  <h3>Se eu sair da página, perco a partida?</h3>
+  <p>
+    Não. A partida em andamento fica salva neste navegador, com o tempo, os pontos e as últimas
+    jogadas para desfazer. Começar outra partida no meio de uma conta como partida não terminada
+    nas estatísticas.
+  </p>
+  <h3>Dá para jogar no celular?</h3>
+  <p>
+    Dá. A mesa se ajusta à largura da tela: toque numa carta para jogar ou arraste com o dedo. Os
+    sons são gerados pelo próprio navegador, e o botão Som liga e desliga os efeitos.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

@@ -14,13 +14,13 @@
  * Produto sem nenhum link não aparece, e uma página sem nenhum link continua com o espaço
  * escondido. Dá para trocar o nome e o texto de cada produto para combinar com o link escolhido.
  *
- * Links aceitos: https em amazon.com.br, amzn.to, mercadolivre.com.br, mercadolivre.com e
- * meli.la. Para ver como o espaço fica antes de ter os links, abra a página com
+ * Links aceitos: https em amazon.com.br, amzn.to, link.amazon, mercadolivre.com.br,
+ * mercadolivre.com e meli.la. Para ver como o espaço fica antes de ter os links, abra a página com
  * ?indicacoes=teste no endereço.
  */
 const Indicacoes = (() => {
   const LOJAS = {
-    amazon: { nome: "Amazon", hosts: ["amazon.com.br", "amzn.to"] },
+    amazon: { nome: "Amazon", hosts: ["amazon.com.br", "amzn.to", "link.amazon"] },
     mercadolivre: { nome: "Mercado Livre", hosts: ["mercadolivre.com.br", "mercadolivre.com", "meli.la"] },
   };
 
@@ -90,6 +90,14 @@ const Indicacoes = (() => {
         "As peças de verdade, com suporte e dados, para jogar o Mahjong tradicional com amigos.",
         "",
         "https://meli.la/2hMTATj",
+      ),
+    ],
+    paciencia: [
+      produto(
+        "Baralho Copag 139, naipe grande",
+        "Números e naipes maiores, fáceis de ler na mesa. No Mercado Livre, vem um kit com dois baralhos, um vermelho e um azul-marinho.",
+        "https://link.amazon/B03b6LpYl",
+        "https://meli.la/1ANvoPs",
       ),
     ],
     "puzzles-de-xadrez": [

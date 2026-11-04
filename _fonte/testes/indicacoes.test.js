@@ -6,6 +6,7 @@ const I = require("../../assets/indicacoes.js");
 
 // Só https e só os endereços da loja certa
 assert.equal(I.linkValido("https://amzn.to/3AbCdEf", "amazon"), true);
+assert.equal(I.linkValido("https://link.amazon/B03b6LpYl", "amazon"), true);
 assert.equal(I.linkValido("https://www.amazon.com.br/dp/B000000000?tag=efs-20", "amazon"), true);
 assert.equal(I.linkValido("https://mercadolivre.com/sec/1a2b3c", "mercadolivre"), true);
 assert.equal(I.linkValido("https://produto.mercadolivre.com.br/MLB-123", "mercadolivre"), true);
@@ -14,6 +15,8 @@ assert.equal(I.linkValido("http://amzn.to/3AbCdEf", "amazon"), false);
 assert.equal(I.linkValido("https://amzn.to/3AbCdEf", "mercadolivre"), false);
 assert.equal(I.linkValido("https://amazon.com.br.golpe.com/x", "amazon"), false);
 assert.equal(I.linkValido("https://falsoamazon.com.br/x", "amazon"), false);
+assert.equal(I.linkValido("https://link.amazon.golpe.com/x", "amazon"), false);
+assert.equal(I.linkValido("https://link.amazon/x", "mercadolivre"), false);
 assert.equal(I.linkValido("javascript:alert(1)", "amazon"), false);
 assert.equal(I.linkValido("", "amazon"), false);
 assert.equal(I.linkValido("https://amzn.to/x", "outra"), false);

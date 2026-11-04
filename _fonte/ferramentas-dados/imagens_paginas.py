@@ -149,6 +149,11 @@ IMAGENS = {
     "jogos/jogo-da-velha": "A tic-tac-toe grid made of four raised orange bars crossing each other, "
     "floating with no base plate, with blue X-shaped pieces and violet O-shaped pieces in some of "
     "the cells.",
+    # Jogos: cartas
+    "jogos/paciencia": "A small fan of four playing cards slightly overlapping, each white card "
+    "showing one big suit symbol in the middle: a red heart, a black spade, a red diamond and a "
+    "black club. Only the suit symbols, no letters and no numbers anywhere on the cards. Behind "
+    "the fan, one more card lies face down with an orange patterned back.",
     # Jogos: conhecimento
     "jogos/qual-e-a-bandeira": "A blue globe with several small colorful flags on poles stuck around "
     "it and a big orange question mark floating beside it.",

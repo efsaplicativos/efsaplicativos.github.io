@@ -5,7 +5,7 @@ está montado, como publicar uma mudança e o que não pode ser quebrado.
 
 ## 1. O que é o site
 
-- Portal da EFS Aplicativos: apresenta os apps Android do Google Play e tem 13 jogos e 32 ferramentas que
+- Portal da EFS Aplicativos: apresenta os apps Android do Google Play e tem 14 jogos e 32 ferramentas que
   funcionam direto no navegador.
 - Endereço: **https://efsaplicativos.com.br**. O endereço antigo, efsaplicativos.github.io, redireciona
   para ele automaticamente, inclusive com o caminho da página.
@@ -154,8 +154,9 @@ acrescente o botão nos três lugares.
 - **Antes de trocar um produto,** confira na Amazon se ele está disponível e bem avaliado. Não coloque preço
   nem característica que a página do produto não confirme.
 - Produto sem link não aparece. Página sem nenhum link continua com o espaço escondido.
-- Só são aceitos links `https` dos endereços das lojas: amazon.com.br, amzn.to, mercadolivre.com.br,
-  mercadolivre.com e meli.la. Um link fora disso é recusado e aparece um aviso no console do navegador.
+- Só são aceitos links `https` dos endereços das lojas: amazon.com.br, amzn.to, link.amazon (o link curto
+  que a barra da Amazon gera hoje), mercadolivre.com.br, mercadolivre.com e meli.la. Um link fora disso é
+  recusado e aparece um aviso no console do navegador.
 - **Modo de teste:** com `?indicacoes=teste` no endereço, o quadro aparece com todos os produtos sugeridos,
   mesmo os que ainda não têm link.
 - **Teste automático:** rode `node _fonte/testes/indicacoes.test.js` depois de mexer na lista.
