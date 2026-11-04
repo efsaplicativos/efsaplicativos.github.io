@@ -4,7 +4,7 @@
    ========================================================================== */
 
 .nav a[aria-current="page"] {
-  background: var(--mint);
+  background: var(--soft-1);
 }
 .nav .contact-link[aria-current="page"] {
   background: var(--pill-strong);

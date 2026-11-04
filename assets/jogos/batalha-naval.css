@@ -475,7 +475,7 @@
   background: rgba(10, 12, 16, 0.7);
 }
 :root[data-theme="light"] .bn-dialogo::backdrop {
-  background: rgba(11, 59, 54, 0.45);
+  background: rgba(42, 29, 21, 0.45);
 }
 .bn-dialogo[open] {
   animation: bn-abrir 220ms ease-out;

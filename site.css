@@ -1,78 +1,80 @@
 /* ==========================================================================
    EFS Aplicativos — Folha de estilo principal
-   Tema claro (padrão): verde e coral. Tema escuro (botão noturno): noite de jogo.
+   Tema claro (padrão): laranja. Tema escuro (botão noturno): noite de jogo.
    ========================================================================== */
 
 /* ---------- Design tokens: tema claro ---------- */
 :root {
   color-scheme: light;
 
-  --bg: #f0faf5;
+  --bg: #fff7f0;
   --surface: #ffffff;
-  --surface-2: #e6f5ee;
-  --surface-3: #d3eee2;
+  --surface-2: #fff0e3;
+  --surface-3: #ffe2cc;
   --band: #ffffff;
-  --band-card: #f0faf5;
-  --border: #cfe6dc;
-  --border-2: #a6d2c1;
+  --band-card: #fff7f0;
+  --border: #f1dccb;
+  --border-2: #e2b994;
 
-  --text: #0b3b36;
-  --text-2: #2f5550;
-  --muted: #4b6d67;
+  --text: #2a1d15;
+  --text-2: #4d3b30;
+  --muted: #6e5a4d;
 
-  /* Botão principal, destaques e textos em destaque */
-  --primary: #d13438;
-  --primary-hover: #b92a2e;
-  --primary-edge: #9e2226;
+  /* Botão principal, destaques e textos em destaque
+     (laranja escuro o bastante para o texto branco do botão) */
+  --primary: #cc4a0c;
+  --primary-hover: #b23d08;
+  --primary-edge: #8f3006;
   --on-primary: #ffffff;
 
-  --teal: #0e7c6b;
+  /* Links e detalhes */
+  --link: #b4400b;
   --sun: #ffd23f;
-  --on-sun: #0b3b36;
+  --on-sun: #2a1d15;
 
-  /* Fundos dos cartões coloridos */
-  --mint: #cdefe1;
-  --lemon: #fff1c2;
-  --rose: #ffe1df;
+  /* Fundos dos cartões coloridos: pêssego, manteiga e salmão */
+  --soft-1: #ffe3cc;
+  --soft-2: #fff0c2;
+  --soft-3: #ffdcd3;
   /* Fundo das imagens (elas têm fundo branco) */
   --tile: #ffffff;
 
   /* Pílula forte do menu e filtros ativos */
-  --pill-strong: #0b3b36;
+  --pill-strong: #2a1d15;
   --on-pill-strong: #ffffff;
-  --secondary-border: #0b3b36;
+  --secondary-border: #2a1d15;
 
   /* Faixa de contato e convite para o app */
-  --contact-bg: #0b3b36;
+  --contact-bg: #2a1d15;
   --contact-text: #ffffff;
-  --contact-muted: #cfe9e1;
+  --contact-muted: #f2dccb;
 
-  --tint: rgba(14, 124, 107, 0.12);
-  --ring: #0e7c6b;
+  --tint: rgba(204, 74, 12, 0.1);
+  --ring: #c2410c;
 
   /* Nomes antigos, ainda usados pelas folhas das ferramentas e dos jogos */
-  --violet: var(--teal);
-  --violet-2: var(--teal);
-  --blue: var(--teal);
-  --blue-2: var(--teal);
-  --sky: #2bb39c;
+  --violet: var(--link);
+  --violet-2: var(--link);
+  --blue: var(--link);
+  --blue-2: var(--link);
+  --sky: #f28c28;
   --brand: var(--primary);
   --brand-hover: var(--primary-hover);
   --accent: var(--primary);
   --accent-2: var(--primary-hover);
   --accent-ink: var(--on-primary);
   --grad: var(--primary);
-  --grad-warm: linear-gradient(135deg, #e5484d 0%, #c2292e 100%);
+  --grad-warm: linear-gradient(135deg, #d9480f 0%, #b23d08 100%);
   --grad-text: none;
 
-  --header-bg: rgba(240, 250, 245, 0.86);
-  --header-bg-scrolled: rgba(240, 250, 245, 0.95);
+  --header-bg: rgba(255, 247, 240, 0.86);
+  --header-bg-scrolled: rgba(255, 247, 240, 0.95);
   --footer-bg: transparent;
 
-  --shadow-xs: 0 1px 2px rgba(11, 59, 54, 0.1);
-  --shadow-sm: 0 10px 24px -14px rgba(11, 59, 54, 0.35);
-  --shadow-md: 0 22px 44px -26px rgba(11, 59, 54, 0.4);
-  --shadow-lg: 0 40px 80px -40px rgba(11, 59, 54, 0.45);
+  --shadow-xs: 0 1px 2px rgba(74, 38, 12, 0.1);
+  --shadow-sm: 0 10px 24px -14px rgba(74, 38, 12, 0.35);
+  --shadow-md: 0 22px 44px -26px rgba(74, 38, 12, 0.4);
+  --shadow-lg: 0 40px 80px -40px rgba(74, 38, 12, 0.45);
   --glow-violet: 0 4px 0 var(--primary-edge);
   --glow-accent: 0 4px 0 var(--primary-edge);
 
@@ -112,13 +114,13 @@
   --primary-edge: #a87b12;
   --on-primary: #1a1300;
 
-  --teal: #45d4c0;
+  --link: #45d4c0;
   --sun: #ffc83d;
   --on-sun: #1a1300;
 
-  --mint: #16302b;
-  --lemon: #2d2814;
-  --rose: #331f20;
+  --soft-1: #16302b;
+  --soft-2: #2d2814;
+  --soft-3: #331f20;
   --tile: #f6f3ec;
 
   --pill-strong: #ffc83d;
@@ -263,7 +265,7 @@ h3 {
     background 0.2s var(--ease);
 }
 .nav a:hover {
-  background: var(--mint);
+  background: var(--soft-1);
 }
 .nav .contact-link {
   background: var(--pill-strong);
@@ -296,7 +298,7 @@ h3 {
     transform 0.2s var(--ease);
 }
 .theme-toggle:hover {
-  background: var(--mint);
+  background: var(--soft-1);
   transform: translateY(-1px);
 }
 .theme-toggle svg {
@@ -323,7 +325,7 @@ h3 {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   font-weight: 800;
-  color: var(--teal);
+  color: var(--link);
 }
 .eyebrow::before {
   content: "";
@@ -390,7 +392,7 @@ h1 {
   box-shadow: none;
 }
 .button.secondary:hover {
-  background: var(--mint);
+  background: var(--soft-1);
   color: var(--text);
 }
 .button.secondary:active {
@@ -459,7 +461,7 @@ h1 {
   height: 112px;
   background: var(--tile);
   border-radius: 26px;
-  box-shadow: 0 10px 24px -12px rgba(11, 59, 54, 0.45);
+  box-shadow: 0 10px 24px -12px rgba(74, 38, 12, 0.45);
   transition: transform 0.3s var(--ease);
 }
 .adesivo img {
@@ -523,7 +525,7 @@ h1 {
 .link-forte {
   font-size: 16px;
   font-weight: 800;
-  color: var(--teal);
+  color: var(--link);
 }
 .link-forte:hover {
   color: var(--primary);
@@ -540,14 +542,14 @@ h1 {
   flex-direction: column;
   gap: 12px;
   padding: 26px;
-  background: var(--mint);
+  background: var(--soft-1);
   border-radius: 30px;
 }
 .momento-mente {
-  background: var(--lemon);
+  background: var(--soft-2);
 }
 .momento-resolver {
-  background: var(--rose);
+  background: var(--soft-3);
 }
 .momento h3 {
   margin: 0;
@@ -584,6 +586,43 @@ h1 {
   height: 56px;
   border-radius: 14px;
   background: var(--tile);
+}
+/* Cada item tem ao lado o botão para baixar o app na loja */
+.momento-linha {
+  display: flex;
+  gap: 8px;
+}
+.momento-linha .momento-item {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.momento-loja {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 52px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  color: var(--on-primary);
+  background: var(--primary);
+  border-radius: 18px;
+  box-shadow: 0 3px 0 var(--primary-edge);
+  transition:
+    background 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+.momento-loja:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+}
+.momento-loja svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
 }
 .momento-mais {
   margin-top: 4px;
@@ -629,7 +668,7 @@ h1 {
   font-size: 13px;
   font-weight: 800;
   color: var(--text);
-  background: var(--mint);
+  background: var(--soft-1);
   border-radius: var(--r-pill);
   padding: 4px 12px;
 }
@@ -638,7 +677,7 @@ h1 {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--teal);
+  background: var(--link);
 }
 .feature-content h3 {
   font-size: clamp(24px, 2.4vw, 28px);
@@ -753,7 +792,7 @@ h1 {
   font-size: 15px;
 }
 .catalog-footer a {
-  color: var(--teal);
+  color: var(--link);
   font-weight: 800;
 }
 
@@ -785,13 +824,13 @@ h1 {
   height: 136px;
   display: grid;
   place-items: center;
-  background: var(--mint);
+  background: var(--soft-1);
 }
 .app-card[data-category="jogos"] .app-visual {
-  background: var(--lemon);
+  background: var(--soft-2);
 }
 .app-card[data-category="utilidades"] .app-visual {
-  background: var(--rose);
+  background: var(--soft-3);
 }
 .official-icon {
   width: 88px;
@@ -799,7 +838,7 @@ h1 {
   border-radius: 22px;
   background: #fff;
   object-fit: contain;
-  box-shadow: 0 10px 22px -12px rgba(11, 59, 54, 0.5);
+  box-shadow: 0 10px 22px -12px rgba(74, 38, 12, 0.5);
   transition: transform 0.3s var(--ease);
 }
 .app-card:hover .official-icon {
@@ -818,15 +857,15 @@ h1 {
   text-transform: uppercase;
   font-weight: 800;
   color: var(--text);
-  background: var(--mint);
+  background: var(--soft-1);
   border-radius: var(--r-pill);
   padding: 4px 10px;
 }
 .app-card[data-category="jogos"] .category {
-  background: var(--lemon);
+  background: var(--soft-2);
 }
 .app-card[data-category="utilidades"] .category {
-  background: var(--rose);
+  background: var(--soft-3);
 }
 .app-body h3 {
   font-size: 21px;
@@ -879,6 +918,16 @@ h1 {
 }
 .card-links .store-link {
   margin-top: 0;
+}
+/* Botão para baixar o app na loja, sem precisar abrir a versão web */
+.store-link.loja {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 3px 0 var(--primary-edge);
+}
+.store-link.loja:hover {
+  background: var(--primary-hover);
+  color: var(--on-primary);
 }
 
 /* ---------- Contato ---------- */
@@ -1084,7 +1133,7 @@ h1 {
   color: var(--text);
 }
 .legal .important-note-box {
-  background: var(--lemon);
+  background: var(--soft-2);
   border: 1px solid var(--border);
   border-left: 4px solid var(--sun);
   border-radius: var(--r-sm);
@@ -1192,6 +1241,10 @@ h1 {
 @media (max-width: 560px) {
   .app-grid {
     grid-template-columns: 1fr;
+  }
+  .momento-loja {
+    padding: 0 10px;
+    font-size: 13px;
   }
   .hero-art {
     height: 320px;

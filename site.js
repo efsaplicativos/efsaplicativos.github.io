@@ -59,7 +59,7 @@ if (themeToggle) {
     root.setAttribute("data-theme", dark ? "dark" : "light");
     themeToggle.setAttribute("aria-pressed", String(dark));
     if (themeMeta)
-      themeMeta.setAttribute("content", dark ? "#0f1115" : "#f0faf5");
+      themeMeta.setAttribute("content", dark ? "#0f1115" : "#fff7f0");
   };
   applyTheme(root.getAttribute("data-theme") === "dark" ? "dark" : "light");
   themeToggle.addEventListener("click", () => {

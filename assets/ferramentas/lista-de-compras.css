@@ -427,7 +427,7 @@
   --lc-erro: #b42318;
 }
 :root[data-theme="light"] .lista-compras .lc-dialogo::backdrop {
-  background: rgba(11, 59, 54, 0.45);
+  background: rgba(42, 29, 21, 0.45);
 }
 
 /* ---------- Computador: as duas partes lado a lado ---------- */

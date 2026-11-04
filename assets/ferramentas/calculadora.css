@@ -14,12 +14,12 @@
   --visor-erro: #ffb4a8;
 }
 :root[data-theme="light"] .calc {
-  --tecla-operador-fundo: rgba(14, 124, 107, 0.12);
-  --tecla-operador-texto: #0b5e52;
+  --tecla-operador-fundo: rgba(204, 74, 12, 0.1);
+  --tecla-operador-texto: #a8390a;
   --tecla-destaque-fundo: rgba(255, 210, 63, 0.38);
   --tecla-destaque-texto: #6b4e00;
-  --tecla-ativa-fundo: rgba(209, 52, 56, 0.12);
-  --tecla-ativa-texto: #a3262a;
+  --tecla-ativa-fundo: rgba(37, 99, 235, 0.12);
+  --tecla-ativa-texto: #1d4ed8;
   --visor-erro: #b42318;
 }
 

@@ -528,7 +528,7 @@
   color: var(--blue-2);
 }
 :root[data-theme="light"] .lista-tarefas .lt-dialogo::backdrop {
-  background: rgba(11, 59, 54, 0.45);
+  background: rgba(42, 29, 21, 0.45);
 }
 
 @media (max-width: 480px) {

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f0faf5" />
+    <meta name="theme-color" content="#fff7f0" />
     <script>
       (function () {
         var root = document.documentElement;
@@ -14,7 +14,7 @@
         } catch (error) {
           theme = null;
         }
-        // O verde (claro) é o padrão; o escuro vale para quem ligou o modo noturno
+        // O laranja (claro) é o padrão; o escuro vale para quem ligou o modo noturno
         if (theme === "dark") {
           root.setAttribute("data-theme", "dark");
           var meta = document.querySelector('meta[name="theme-color"]');
@@ -45,8 +45,8 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600..800&amp;family=Nunito:wght@400..800&amp;display=swap"
     />
-    <link rel="stylesheet" href="site.css?v=4c564150c14a" />
-    <script src="site.js?v=69a6a981d35b" defer></script>
+    <link rel="stylesheet" href="site.css?v=dfdb216d18d2" />
+    <script src="site.js?v=926b8efae759" defer></script>
     <link
       rel="icon"
       type="image/png"
@@ -174,43 +174,88 @@
             <div class="momento">
               <h3>Para relaxar</h3>
               <p>Partidas tranquilas, no seu ritmo.</p>
-              <a class="momento-item" href="/jogos/mahjong/"
-                ><img src="images/jogos/mahjong.webp" alt="" width="56" height="56" loading="lazy" />Mahjong solitário</a
-              >
-              <a class="momento-item" href="/jogos/2048/"
-                ><img src="images/jogos/2048.webp" alt="" width="56" height="56" loading="lazy" />2048</a
-              >
-              <a class="momento-item" href="/jogos/cores-da-memoria/"
-                ><img src="images/jogos/cores-da-memoria.webp" alt="" width="56" height="56" loading="lazy" />Cores da Memória</a
-              >
+              <div class="momento-linha">
+                <a class="momento-item" href="/jogos/mahjong/"
+                  ><img src="images/jogos/mahjong.webp" alt="" width="56" height="56" loading="lazy" />Mahjong solitário</a
+                >
+                <a class="momento-loja" href="https://play.google.com/store/apps/details?id=com.efsaplicativos.mahjong&amp;hl=pt_BR" aria-label="Baixar Mahjong Solitário Clássico no Google Play" title="Baixar no Google Play"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5 3.5v17L20 12Z" /></svg><span>Baixar</span></a
+                >
+              </div>
+              <div class="momento-linha">
+                <a class="momento-item" href="/jogos/2048/"
+                  ><img src="images/jogos/2048.webp" alt="" width="56" height="56" loading="lazy" />2048</a
+                >
+                <a class="momento-loja" href="https://play.google.com/store/apps/details?id=com.emerson1981.game2048&amp;hl=pt_BR" aria-label="Baixar 2048: Block Merge no Google Play" title="Baixar no Google Play"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5 3.5v17L20 12Z" /></svg><span>Baixar</span></a
+                >
+              </div>
+              <div class="momento-linha">
+                <a class="momento-item" href="/jogos/cores-da-memoria/"
+                  ><img src="images/jogos/cores-da-memoria.webp" alt="" width="56" height="56" loading="lazy" />Cores da Memória</a
+                >
+                <a class="momento-loja" href="https://play.google.com/store/apps/details?id=com.emerson1981.coresmemoria&amp;hl=pt_BR" aria-label="Baixar Cores da Memória no Google Play" title="Baixar no Google Play"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5 3.5v17L20 12Z" /></svg><span>Baixar</span></a
+                >
+              </div>
               <a class="momento-mais" href="/jogos/">Ver todos os jogos</a>
             </div>
             <div class="momento momento-mente">
               <h3>Para desafiar a mente</h3>
               <p>Lógica, atenção e um pouco de estratégia.</p>
-              <a class="momento-item" href="/jogos/sudoku/"
-                ><img src="images/jogos/sudoku.webp" alt="" width="56" height="56" loading="lazy" />Sudoku</a
-              >
-              <a class="momento-item" href="/jogos/puzzles-de-xadrez/"
-                ><img src="images/jogos/puzzles-de-xadrez.webp" alt="" width="56" height="56" loading="lazy" />Puzzles de xadrez</a
-              >
-              <a class="momento-item" href="/jogos/campo-minado/"
-                ><img src="images/jogos/campo-minado.webp" alt="" width="56" height="56" loading="lazy" />Campo minado</a
-              >
+              <div class="momento-linha">
+                <a class="momento-item" href="/jogos/sudoku/"
+                  ><img src="images/jogos/sudoku.webp" alt="" width="56" height="56" loading="lazy" />Sudoku</a
+                >
+                <a class="momento-loja" href="https://play.google.com/store/apps/details?id=com.emerson1981.sudoko&amp;hl=pt_BR" aria-label="Baixar Sudoku Master no Google Play" title="Baixar no Google Play"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5 3.5v17L20 12Z" /></svg><span>Baixar</span></a
+                >
+              </div>
+              <div class="momento-linha">
+                <a class="momento-item" href="/jogos/puzzles-de-xadrez/"
+                  ><img src="images/jogos/puzzles-de-xadrez.webp" alt="" width="56" height="56" loading="lazy" />Puzzles de xadrez</a
+                >
+                <a class="momento-loja" href="https://play.google.com/store/apps/details?id=com.emerson1981.puzzleschess&amp;hl=pt_BR" aria-label="Baixar Puzzles de Xadrez no Google Play" title="Baixar no Google Play"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5 3.5v17L20 12Z" /></svg><span>Baixar</span></a
+                >
+              </div>
+              <div class="momento-linha">
+                <a class="momento-item" href="/jogos/campo-minado/"
+                  ><img src="images/jogos/campo-minado.webp" alt="" width="56" height="56" loading="lazy" />Campo minado</a
+                >
+                <a class="momento-loja" href="https://play.google.com/store/apps/details?id=com.emerson1981.campominado&amp;hl=pt_BR" aria-label="Baixar Campo Minado no Google Play" title="Baixar no Google Play"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5 3.5v17L20 12Z" /></svg><span>Baixar</span></a
+                >
+              </div>
               <a class="momento-mais" href="/jogos/">Ver todos os jogos</a>
             </div>
             <div class="momento momento-resolver">
               <h3>Para resolver</h3>
               <p>Contas e consultas do dia, sem complicação.</p>
-              <a class="momento-item" href="/ferramentas/juros-compostos/"
-                ><img src="images/ferramentas/juros-compostos.webp" alt="" width="56" height="56" loading="lazy" />Juros compostos</a
-              >
-              <a class="momento-item" href="/ferramentas/conversor-de-moedas/"
-                ><img src="images/ferramentas/conversor-de-moedas.webp" alt="" width="56" height="56" loading="lazy" />Conversor de moedas</a
-              >
-              <a class="momento-item" href="/ferramentas/consulta-cep/"
-                ><img src="images/ferramentas/consulta-cep.webp" alt="" width="56" height="56" loading="lazy" />Consulta CEP</a
-              >
+              <div class="momento-linha">
+                <a class="momento-item" href="/ferramentas/juros-compostos/"
+                  ><img src="images/ferramentas/juros-compostos.webp" alt="" width="56" height="56" loading="lazy" />Juros compostos</a
+                >
+                <a class="momento-loja" href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR" aria-label="Baixar Calculadora Multifunção no Google Play" title="Baixar no Google Play"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5 3.5v17L20 12Z" /></svg><span>Baixar</span></a
+                >
+              </div>
+              <div class="momento-linha">
+                <a class="momento-item" href="/ferramentas/conversor-de-moedas/"
+                  ><img src="images/ferramentas/conversor-de-moedas.webp" alt="" width="56" height="56" loading="lazy" />Conversor de moedas</a
+                >
+                <a class="momento-loja" href="https://play.google.com/store/apps/details?id=com.emerson1981.conversormoedas&amp;hl=pt_BR" aria-label="Baixar Conversor de Moedas no Google Play" title="Baixar no Google Play"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5 3.5v17L20 12Z" /></svg><span>Baixar</span></a
+                >
+              </div>
+              <div class="momento-linha">
+                <a class="momento-item" href="/ferramentas/consulta-cep/"
+                  ><img src="images/ferramentas/consulta-cep.webp" alt="" width="56" height="56" loading="lazy" />Consulta CEP</a
+                >
+                <a class="momento-loja" href="https://play.google.com/store/apps/details?id=com.emerson1981.pesquisacep&amp;hl=pt_BR" aria-label="Baixar Pesquisa CEP no Google Play" title="Baixar no Google Play"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M5 3.5v17L20 12Z" /></svg><span>Baixar</span></a
+                >
+              </div>
               <a class="momento-mais" href="/ferramentas/">Ver todas as ferramentas</a>
             </div>
           </div>
@@ -388,7 +433,7 @@
                   estratégia.
                 </p>
                 <a
-                  class="store-link"
+                  class="store-link loja"
                   href="https://play.google.com/store/apps/details?id=com.efsAplicativos.towerdefencewar&amp;hl=pt_BR"
                   aria-label="Ver Tower Defence War no Google Play"
                   ><svg
@@ -421,7 +466,7 @@
                   partidas online em um tabuleiro 3D.
                 </p>
                 <a
-                  class="store-link"
+                  class="store-link loja"
                   href="https://play.google.com/store/apps/details?id=com.emerson1981.batalhanaval&amp;hl=pt_BR"
                   aria-label="Ver Batalha Naval no Google Play"
                   ><svg
@@ -452,7 +497,7 @@
                 <p>Observe as cores, escute os sons e repita a sequência.</p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.coresmemoria&amp;hl=pt_BR"
                     aria-label="Ver Cores da Memória no Google Play"
                     ><svg
@@ -488,7 +533,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadoramultifuncao&amp;hl=pt_BR"
                     aria-label="Ver Calculadora Multifunção no Google Play"
                     ><svg
@@ -524,7 +569,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.listatarefas&amp;hl=pt_BR"
                     aria-label="Ver Lista de Tarefas no Google Play"
                     ><svg
@@ -560,7 +605,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.qualabandeira&amp;hl=pt_BR"
                     aria-label="Ver Qual é a Bandeira no Google Play"
                     ><svg
@@ -596,7 +641,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.jogodamemoria&amp;hl=pt_BR"
                     aria-label="Ver Jogo da Memória no Google Play"
                     ><svg
@@ -632,7 +677,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.pokermanager&amp;hl=pt_BR"
                     aria-label="Ver Poker Manager no Google Play"
                     ><svg
@@ -667,7 +712,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.puzzleschess&amp;hl=pt_BR"
                     aria-label="Ver Puzzles Chess Trainer no Google Play"
                     ><svg
@@ -702,7 +747,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.quebracabeca&amp;hl=pt_BR"
                     aria-label="Ver Quebra-Cabeça Deslizante no Google Play"
                     ><svg
@@ -737,7 +782,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.calculadorajuros&amp;hl=pt_BR"
                     aria-label="Ver Calculadora de Juros no Google Play"
                     ><svg
@@ -772,7 +817,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.relogioxadrez&amp;hl=pt_BR"
                     aria-label="Ver Chess Timer Pro no Google Play"
                     ><svg
@@ -808,7 +853,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.gerarnumerosloteria&amp;hl=pt_BR"
                     aria-label="Ver Gerar Números Loteria no Google Play"
                     ><svg
@@ -843,7 +888,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.conversormoedas&amp;hl=pt_BR"
                     aria-label="Ver Conversor de Moedas no Google Play"
                     ><svg
@@ -878,7 +923,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.multigames&amp;hl=pt_BR"
                     aria-label="Ver Multi-Game Strategy no Google Play"
                     ><svg
@@ -913,7 +958,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.sudoko&amp;hl=pt_BR"
                     aria-label="Ver Sudoku Master no Google Play"
                     ><svg
@@ -949,7 +994,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.campominado&amp;hl=pt_BR"
                     aria-label="Ver Campo Minado no Google Play"
                     ><svg
@@ -982,7 +1027,7 @@
                 <p>Encontre informações de endereços a partir do CEP.</p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.pesquisacep&amp;hl=pt_BR"
                     aria-label="Ver Pesquisa CEP no Google Play"
                     ><svg
@@ -1018,7 +1063,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.game2048&amp;hl=pt_BR"
                     aria-label="Ver 2048: Block Merge no Google Play"
                     ><svg
@@ -1053,7 +1098,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.listacompras&amp;hl=pt_BR"
                     aria-label="Ver Lista de Compras no Google Play"
                     ><svg
@@ -1088,7 +1133,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.marcadordetruco&amp;hl=pt_BR"
                     aria-label="Ver Marcador de Truco no Google Play"
                     ><svg
@@ -1123,7 +1168,7 @@
                 </p>
                 <div class="card-links">
                   <a
-                    class="store-link"
+                    class="store-link loja"
                     href="https://play.google.com/store/apps/details?id=com.emerson1981.tictactoe&amp;hl=pt_BR"
                     aria-label="Ver Tic Tac Toe no Google Play"
                     ><svg

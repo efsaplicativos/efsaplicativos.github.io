@@ -26,7 +26,7 @@
   --qb-acerto-fundo: #dcfce7;
   --qb-erro: #991b1b;
   --qb-erro-fundo: #fee2e2;
-  --qb-overlay: rgba(240, 250, 245, 0.88);
+  --qb-overlay: rgba(255, 247, 240, 0.88);
 }
 
 .qb-painel {
