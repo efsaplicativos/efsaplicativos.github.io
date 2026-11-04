@@ -46,6 +46,7 @@ Os commits são feitos com o autor `efsaplicativos <efsaplicativos@gmail.com>`.
 | `assets/jogos/`, `assets/ferramentas/` | CSS e JS de cada jogo e ferramenta. `<nome>-logica.js` tem as regras e `<nome>.js` cuida da tela | À mão |
 | `assets/anuncios.js` | IDs dos blocos de anúncio do Google AdSense | À mão |
 | `assets/indicacoes.js` | Produtos e links de afiliado da Amazon e do Mercado Livre (seção 9) | À mão |
+| `assets/estatisticas.js` | Tag do Google (GTM-5C9R9438) do Google Analytics 4 (G-29Y6HZZ9M2). Só carrega em efsaplicativos.com.br, nunca em localhost | À mão |
 | `_fonte/testes/` | Testes da lógica de cada página, sem dependências | À mão |
 | `_fonte/ferramentas-dados/` | Scripts que geram dados das páginas e as imagens de cada jogo e ferramenta | À mão |
 | `images/` | Imagens. As de jogos e ferramentas ficam em WebP | — |

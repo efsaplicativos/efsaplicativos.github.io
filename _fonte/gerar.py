@@ -35,8 +35,10 @@ MODELO = (RAIZ / "_fonte" / "modelo.html").read_text(encoding="utf-8")
 
 # Páginas feitas à mão que também entram no sitemap.xml
 PAGINAS_FIXAS = ["/", "/politica-privacidade.html"]
-# Páginas feitas à mão que carregam o site.css e o site.js da raiz
+# Páginas feitas à mão que carregam o site.css, o site.js e o assets/estatisticas.js
 PAGINAS_A_MAO = ["index.html", "politica-privacidade.html"]
+# Arquivos cujo ?v= é atualizado nas páginas feitas à mão
+ARQUIVOS_A_MAO = r"site\.css|site\.js|assets/estatisticas\.js"
 
 
 def versao(caminho: str) -> str:
@@ -124,11 +126,11 @@ def gerar(arquivo: Path) -> str:
 
 
 def atualizar_versoes(nome: str) -> None:
-    """Troca só o ?v= do site.css e do site.js; o arquivo mantém as quebras de linha (CRLF)."""
+    """Troca só o ?v= dos ARQUIVOS_A_MAO; o arquivo mantém as quebras de linha (CRLF)."""
     arquivo = RAIZ / nome
     texto = arquivo.read_bytes().decode("utf-8")
     novo = re.sub(
-        r'((?:href|src)="(site\.(?:css|js))\?v=)[0-9a-f]+"',
+        rf'((?:href|src)="({ARQUIVOS_A_MAO})\?v=)[0-9a-f]+"',
         lambda m: f'{m.group(1)}{versao(m.group(2))}"',
         texto,
     )

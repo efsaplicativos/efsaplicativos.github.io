@@ -12,7 +12,7 @@ Endereço: https://efsaplicativos.com.br (o GitHub Pages redireciona efsaplicati
 - `_fonte/ferramentas-dados/`: scripts que geram dados das páginas (os puzzles de xadrez vêm dos apps) e a
   imagem de cada ferramenta e jogo, em `images/ferramentas/` e `images/jogos/` (`imagens_paginas.py`).
 - `assets/`: estilos e scripts das versões web. Em cada página, `<nome>-logica.js` tem as regras e os cálculos e
-  `<nome>.js` cuida da tela. `assets/anuncios.js` guarda os IDs dos blocos do AdSense.
+  `<nome>.js` cuida da tela. `assets/anuncios.js` guarda os IDs dos blocos do AdSense. `assets/estatisticas.js` guarda o ID do Google Analytics.
 - `ads.txt` (AdSense), `app-ads.txt` (AdMob), `robots.txt` e `sitemap.xml`.
 
 ## Gerar as páginas
@@ -33,4 +33,4 @@ Para testar no computador:
 python -m http.server 8123
 ```
 
-e abra http://localhost:8123. Em localhost nenhum anúncio real é carregado; com `?anuncios=teste` no endereço, aparecem caixas no lugar dos anúncios.
+e abra http://localhost:8123. Em localhost nenhum anúncio real é carregado e o Google Analytics não conta a visita; com `?anuncios=teste` no endereço, aparecem caixas no lugar dos anúncios.
