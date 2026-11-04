@@ -87,6 +87,14 @@ const Indicacoes = (() => {
         "https://meli.la/1ANvoPs",
       ),
     ],
+    "paciencia-piramide": [
+      produto(
+        "Baralho Copag 139, naipe grande",
+        "A Pirâmide pede só um baralho e uma mesa: com 28 cartas abertas umas sobre as outras, números e naipes maiores ajudam a achar os pares. No Mercado Livre, vem um kit com dois, um vermelho e um azul-marinho.",
+        "https://link.amazon/B03b6LpYl",
+        "https://meli.la/1ANvoPs",
+      ),
+    ],
     "jogo-da-memoria": [
       produto("Jogo da memória em madeira, 40 peças", "Peças de verdade para jogar em família, sem tela.", naAmazon("B08VCYG2FG")),
     ],

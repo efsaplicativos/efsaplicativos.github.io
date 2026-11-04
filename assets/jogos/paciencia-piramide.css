@@ -1,0 +1,533 @@
+/* ==========================================================================
+   Paciência Pirâmide — 28 cartas em pirâmide, pares que somam 13, cartas desenhadas em CSS e naipes em SVG próprios
+   ========================================================================== */
+
+.piramide {
+  --pr-mesa-1: #7b2d3b;
+  --pr-mesa-2: #4a1622;
+  --pr-face: #fffdf8;
+  --pr-borda: #cfc5b3;
+  --pr-preta: #1c1a17;
+  --pr-vermelha: #c3261f;
+  --pr-verso-1: #24417a;
+  --pr-verso-2: #111f45;
+  --pr-verso-borda: #e9cf7e;
+  --pr-destaque: #ffd23f;
+  --naipe-espadas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 3C71 25 95 41 95 62c0 13-10 23-23 23-8 0-15-4-19-10 1 9 5 16 13 22H34c8-6 12-13 13-22-4 6-11 10-19 10C15 85 5 75 5 62 5 41 29 25 50 3z'/%3E%3C/svg%3E");
+  --naipe-copas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 93C22 71 4 53 4 32 4 17 15 7 29 7c9 0 16 5 21 13 5-8 12-13 21-13 14 0 25 10 25 25 0 21-18 39-46 61z'/%3E%3C/svg%3E");
+  --naipe-ouros: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 2 88 50 50 98 12 50z'/%3E%3C/svg%3E");
+  --naipe-paus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='28' r='21'/%3E%3Ccircle cx='27' cy='60' r='21'/%3E%3Ccircle cx='73' cy='60' r='21'/%3E%3Cpath d='M44 40h12v20c0 15 4 26 14 37H30c10-11 14-22 14-37z'/%3E%3C/svg%3E");
+  --pr-reciclar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M78 30A36 36 0 1 0 86 58' fill='none' stroke='%23000' stroke-width='12' stroke-linecap='round'/%3E%3Cpath d='M90 8v36H54z'/%3E%3C/svg%3E");
+  /* A mesa tem cerca de 0,78 vez a largura de altura: limitar a largura pela altura da janela faz
+     a mesa inteira caber na tela do notebook sem rolar */
+  max-width: clamp(320px, calc((100vh - 90px) * 1.25), 760px);
+  margin: 0 auto;
+  overflow-x: clip;
+}
+@supports (height: 100svh) {
+  .piramide {
+    max-width: clamp(320px, calc((100svh - 90px) * 1.25), 760px);
+  }
+}
+:root[data-theme="dark"] .piramide {
+  --pr-mesa-1: #6a2533;
+  --pr-mesa-2: #3a101a;
+  --pr-face: #f4f0e7;
+}
+
+.piramide .pr-modos {
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.pr-info {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.pr-dado {
+  padding: 8px 10px;
+  text-align: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.pr-dado span {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.pr-dado strong {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.pr-partida {
+  margin: 8px 0 12px;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ---------- Mesa ---------- */
+.pr-mesa {
+  --cw: 60px;
+  --ch: 84px;
+  position: relative;
+  /* As cartas usam z-index alto; isolar evita que passem por cima do cabeçalho fixo do site. */
+  isolation: isolate;
+  width: 100%;
+  min-height: 220px;
+  background:
+    radial-gradient(130% 90% at 50% 0%, rgba(255, 255, 255, 0.08), transparent 60%),
+    linear-gradient(180deg, var(--pr-mesa-1), var(--pr-mesa-2));
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25), inset 0 3px 22px rgba(0, 0, 0, 0.28);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pr-pilha {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  border-radius: calc(var(--cw) * 0.1);
+  outline: none;
+}
+/* As vagas da pirâmide não têm moldura: quando a carta sai, o feltro fica limpo */
+.pr-pilha-vaga {
+  border-color: transparent;
+}
+.pr-pilha-descarte,
+.pr-pilha-tiradas {
+  border-style: dashed;
+}
+.pr-pilha-tiradas {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.pr-pilha-monte {
+  cursor: pointer;
+}
+.pr-pilha-monte.vazio {
+  cursor: default;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.pr-pilha-monte.reciclar {
+  cursor: pointer;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.pr-pilha-monte.reciclar::after {
+  content: "";
+  position: absolute;
+  inset: 24%;
+  background: rgba(255, 255, 255, 0.5);
+  -webkit-mask: var(--pr-reciclar) center / contain no-repeat;
+  mask: var(--pr-reciclar) center / contain no-repeat;
+}
+
+.pr-anel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3000;
+  box-sizing: border-box;
+  border-radius: calc(var(--cw) * 0.12);
+  outline: 3px solid var(--pr-destaque);
+  outline-offset: 2px;
+  pointer-events: none;
+}
+
+.pr-mensagem {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  z-index: 3500;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 9px 14px;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+  color: #fff;
+  background: rgba(24, 8, 12, 0.92);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  translate: -50% 6px;
+  transition: opacity 160ms ease, translate 160ms ease;
+}
+.pr-mensagem.visivel {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+/* ---------- Cartas ---------- */
+.pr-carta {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--cw);
+  height: var(--ch);
+  border-radius: calc(var(--cw) * 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  transition: translate 200ms ease;
+  touch-action: manipulation;
+}
+.pr-carta.livre {
+  cursor: pointer;
+  touch-action: none;
+}
+.pr-carta.coberta {
+  visibility: hidden;
+}
+.pr-mesa.sem-animacao .pr-carta {
+  transition: none;
+}
+.pr-mesa.arrastando .pr-carta.no-ar {
+  transition: none;
+  cursor: grabbing;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.42);
+}
+
+.pr-frente,
+.pr-verso {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border-radius: inherit;
+}
+.pr-frente {
+  visibility: hidden;
+  overflow: hidden;
+  color: var(--pr-preta);
+  background: var(--pr-face);
+  border: 1px solid var(--pr-borda);
+  transition: filter 160ms ease;
+}
+.pr-carta.vermelha .pr-frente {
+  color: var(--pr-vermelha);
+}
+.pr-carta.aberta .pr-frente {
+  visibility: visible;
+}
+.pr-carta.aberta .pr-verso {
+  visibility: hidden;
+}
+/* Carta ainda coberta na pirâmide: um pouco mais escura, para as livres se destacarem */
+.pr-carta.presa .pr-frente {
+  filter: brightness(0.86);
+}
+/* O desenho do meio apareceria em tiras pelo vão entre as duas cartas de cima */
+.pr-carta.presa .pr-centro {
+  visibility: hidden;
+}
+.pr-verso {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(233, 207, 126, 0.5) 0 12%, transparent 13%),
+    repeating-linear-gradient(45deg, rgba(233, 207, 126, 0.16) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(-45deg, rgba(233, 207, 126, 0.16) 0 2px, transparent 2px 7px),
+    linear-gradient(150deg, var(--pr-verso-1), var(--pr-verso-2));
+  border: max(2px, calc(var(--cw) * 0.05)) solid var(--pr-verso-borda);
+}
+
+/* O valor e o naipe do canto cabem na metade de cima, que aparece mesmo com a carta coberta */
+.pr-valor {
+  position: absolute;
+  top: 2%;
+  left: 6%;
+  font-family: "Nunito", sans-serif;
+  font-size: calc(var(--cw) * 0.34);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.07em;
+}
+.pr-naipe {
+  display: block;
+  background-color: currentColor;
+  -webkit-mask: var(--naipe) center / contain no-repeat;
+  mask: var(--naipe) center / contain no-repeat;
+}
+.pr-naipe-espadas {
+  --naipe: var(--naipe-espadas);
+}
+.pr-naipe-copas {
+  --naipe: var(--naipe-copas);
+}
+.pr-naipe-ouros {
+  --naipe: var(--naipe-ouros);
+}
+.pr-naipe-paus {
+  --naipe: var(--naipe-paus);
+}
+.pr-naipe-canto {
+  position: absolute;
+  top: 4%;
+  right: 6%;
+  width: calc(var(--cw) * 0.27);
+  height: calc(var(--cw) * 0.27);
+}
+.pr-centro {
+  position: absolute;
+  right: 18%;
+  bottom: 9%;
+  left: 18%;
+  height: 46%;
+  display: grid;
+  place-items: center;
+}
+.pr-centro .pr-naipe {
+  width: 100%;
+  height: 100%;
+}
+.pr-figura {
+  right: 15%;
+  bottom: 8%;
+  left: 15%;
+  height: 50%;
+  padding-top: 0.06em;
+  font-family: "Baloo 2", sans-serif;
+  font-size: calc(var(--cw) * 0.5);
+  font-weight: 800;
+  line-height: 1;
+  border: max(1px, calc(var(--cw) * 0.025)) solid currentColor;
+  border-radius: calc(var(--cw) * 0.08);
+}
+
+.pr-carta.pr-escolhida {
+  box-shadow: 0 0 0 3px var(--pr-destaque), 0 6px 14px rgba(0, 0, 0, 0.45);
+}
+.pr-carta.pr-escolhida .pr-frente {
+  filter: none;
+}
+.pr-carta.pr-dica,
+.pr-pilha.pr-dica {
+  animation: pr-brilho 550ms ease-in-out 4 alternate;
+}
+.pr-carta.virando {
+  animation: pr-virar 220ms ease-out;
+}
+.pr-carta.tremendo {
+  animation: pr-tremer 320ms ease-in-out;
+}
+.pr-mesa.pr-festa .pr-carta {
+  animation: pr-pulo 520ms ease-in-out calc(var(--k, 0) * 90ms) 2;
+}
+@keyframes pr-brilho {
+  to {
+    box-shadow: 0 0 0 3px var(--pr-destaque), 0 0 18px 4px rgba(255, 210, 63, 0.8);
+  }
+}
+@keyframes pr-virar {
+  from {
+    scale: 0.06 1;
+  }
+}
+@keyframes pr-tremer {
+  20%,
+  60% {
+    rotate: -5deg;
+  }
+  40%,
+  80% {
+    rotate: 5deg;
+  }
+}
+@keyframes pr-pulo {
+  50% {
+    scale: 1.12;
+    rotate: -6deg;
+  }
+}
+
+/* ---------- Botões, ajuda e estatísticas ---------- */
+.pr-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+.pr-botoes .button,
+.pr-botoes .som-botao {
+  min-height: 44px;
+}
+.pr-botoes .button {
+  padding: 10px 18px;
+}
+.pr-botoes .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pr-ajuda {
+  margin: 14px 0 0;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.pr-estatisticas {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.pr-estatisticas summary {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.pr-est-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px 18px;
+  margin: 12px 0 0;
+}
+.pr-est-lista div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.pr-est-lista dt {
+  color: var(--muted);
+}
+.pr-est-lista dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.pr-zerar {
+  margin-top: 12px;
+  padding: 0;
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--link);
+  text-decoration: underline;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ---------- Diálogo ---------- */
+.pr-dialogo {
+  width: min(92vw, 400px);
+  padding: 24px;
+  color: var(--text);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.pr-dialogo::backdrop {
+  background: rgba(10, 12, 16, 0.6);
+}
+.pr-dialogo h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+.pr-dialogo p {
+  margin: 0 0 16px;
+  color: var(--text-2);
+}
+.pr-dialogo-dados {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px;
+  text-align: left;
+}
+.pr-dialogo-dados div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.pr-dialogo-dados dt {
+  color: var(--muted);
+}
+.pr-dialogo-dados dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.pr-dialogo-dados .destaque dt {
+  font-weight: 800;
+  color: var(--accent);
+}
+:root[data-theme="light"] .pr-dialogo-dados .destaque dt {
+  color: #92400e;
+}
+.pr-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.pr-dialogo.travado .pr-dialogo-botoes {
+  pointer-events: none;
+}
+
+@media (max-width: 420px) {
+  .pr-info {
+    gap: 6px;
+  }
+  .pr-dado {
+    padding: 6px 4px;
+  }
+  .pr-dado strong {
+    font-size: 17px;
+  }
+  .pr-botoes {
+    gap: 8px;
+  }
+  .pr-botoes .button {
+    padding: 10px 14px;
+  }
+  /* Cartas pequenas: o valor cresce um pouco */
+  .pr-valor {
+    font-size: calc(var(--cw) * 0.4);
+  }
+  .pr-naipe-canto {
+    width: calc(var(--cw) * 0.3);
+    height: calc(var(--cw) * 0.3);
+  }
+  .pr-mensagem {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pr-carta,
+  .pr-mensagem {
+    transition: none;
+  }
+  .pr-carta.pr-dica,
+  .pr-pilha.pr-dica {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--pr-destaque);
+  }
+  .pr-carta.virando,
+  .pr-carta.tremendo,
+  .pr-mesa.pr-festa .pr-carta {
+    animation: none;
+  }
+}

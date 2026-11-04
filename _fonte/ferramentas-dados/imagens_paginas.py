@@ -165,6 +165,12 @@ IMAGENS = {
     "visible. Each card has just one suit symbol at the top and none elsewhere: from top to bottom "
     "a black spade, a red diamond, a black club and a red heart. No letters and no numbers anywhere "
     "on the cards.",
+    "jogos/paciencia-piramide": "A small pyramid of white playing cards seen from the front on a "
+    "rounded burgundy felt mat: one card on top, two cards in the middle row and three cards in the "
+    "bottom row, each row slightly overlapping the row above. Every card shows only one big suit "
+    "symbol in the middle: the top card a red heart, the middle row two black spades, the bottom row "
+    "a red diamond, a black club and a red heart. No letters and no numbers anywhere on the cards. "
+    "Beside the pyramid, one card lies face down with a navy blue back and a thin gold border.",
     # Jogos: conhecimento
     "jogos/qual-e-a-bandeira": "A blue globe with several small colorful flags on poles stuck around "
     "it and a big orange question mark floating beside it.",

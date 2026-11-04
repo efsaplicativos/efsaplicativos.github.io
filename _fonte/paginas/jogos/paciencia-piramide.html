@@ -1,0 +1,170 @@
+<!--
+titulo: Paciência Pirâmide Online Grátis: Some 13 e Limpe a Mesa — EFS Aplicativos
+descricao: Jogue Paciência Pirâmide online e grátis: tire pares de cartas que somam 13 até limpar a pirâmide. Com 1, 3 ou mais voltas, dica, desfazer e estatísticas.
+estilos: /assets/jogos/paciencia-piramide.css
+scripts: /assets/jogos/paciencia-piramide-logica.js /assets/jogos/sons.js /assets/jogos/paciencia-piramide.js
+app: Paciência Pirâmide | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Paciência Pirâmide</li>
+  </ol>
+  <h1>Paciência Pirâmide online</h1>
+  <p>
+    A paciência das contas: tire da mesa pares de cartas que somam 13 até desmontar a pirâmide
+    inteira. Partidas rápidas, com dica que procura a solução e desfazer à vontade.
+  </p>
+</header>
+
+<section class="piramide" aria-label="Paciência Pirâmide">
+  <div class="segmented pr-modos" role="group" aria-label="Voltas do monte">
+    <button type="button" class="filter active" data-modo="3" aria-pressed="true">3 voltas</button>
+    <button type="button" class="filter" data-modo="1" aria-pressed="false">1 volta</button>
+    <button type="button" class="filter" data-modo="0" aria-pressed="false">Sem limite</button>
+  </div>
+
+  <div class="pr-info">
+    <div class="pr-dado"><span>Tempo</span><strong id="pr-tempo">00:00</strong></div>
+    <div class="pr-dado"><span>Na pirâmide</span><strong id="pr-piramide">28</strong></div>
+    <div class="pr-dado"><span>No monte</span><strong id="pr-monte">24</strong></div>
+  </div>
+  <p class="pr-partida" id="pr-partida"></p>
+
+  <div class="pr-mesa" id="pr-mesa" role="group" aria-label="Mesa da Paciência Pirâmide" aria-describedby="pr-ajuda"></div>
+
+  <div class="pr-botoes">
+    <button type="button" class="button secondary" id="pr-desfazer">Desfazer</button>
+    <button type="button" class="button secondary" id="pr-dica">Dica</button>
+    <button type="button" class="button" id="pr-nova">Nova partida</button>
+    <button type="button" class="som-botao" id="pr-som"></button>
+  </div>
+
+  <p class="pr-ajuda" id="pr-ajuda">
+    Toque numa carta livre e depois noutra que some 13 com ela, ou arraste uma sobre a outra; o Rei
+    sai com um toque só. Toque no monte, no alto à esquerda, para virar uma carta. No teclado, as
+    setas andam pela mesa, Enter ou Espaço escolhe a carta, Esc desfaz a escolha e Ctrl+Z desfaz a
+    jogada.
+  </p>
+  <p class="sr-only" aria-live="polite" id="pr-status"></p>
+
+  <details class="pr-estatisticas">
+    <summary>Suas estatísticas com <span id="pr-est-modo">3 voltas</span></summary>
+    <dl class="pr-est-lista" id="pr-est-lista"></dl>
+    <button type="button" class="pr-zerar" id="pr-zerar">Zerar as estatísticas deste modo</button>
+  </details>
+
+  <dialog class="pr-dialogo" id="pr-dialogo" aria-labelledby="pr-dialogo-titulo">
+    <h2 id="pr-dialogo-titulo"></h2>
+    <p id="pr-dialogo-texto"></p>
+    <dl class="pr-dialogo-dados" id="pr-dialogo-dados"></dl>
+    <div class="pr-dialogo-botoes" id="pr-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<aside class="indicacao" data-indicacao="paciencia-piramide" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar Paciência Pirâmide</h2>
+  <p>
+    A Paciência Pirâmide usa um baralho de 52 cartas. As 28 primeiras formam uma pirâmide de sete
+    linhas, com todas as cartas viradas para cima: uma carta na ponta e sete na base. Cada carta fica
+    parcialmente coberta pelas duas da linha de baixo. As 24 que sobram formam o monte, no canto de
+    cima, à esquerda.
+  </p>
+  <p>
+    O objetivo é tirar da mesa as 28 cartas da pirâmide. Elas saem em pares cuja soma dá 13, e só
+    entram nos pares as cartas livres: as que não têm nenhuma carta por cima. Ganha quem desmontar a
+    pirâmide inteira; as cartas que sobrarem no monte não contam.
+  </p>
+  <ul>
+    <li><strong>Uma carta fica livre</strong> quando as duas cartas que a cobrem já saíram. No começo, só as sete da base estão livres.</li>
+    <li><strong>Toque numa carta livre e depois noutra</strong> que some 13 com ela: as duas saem juntas. Também dá para arrastar uma carta sobre a outra.</li>
+    <li><strong>O Rei vale 13 sozinho</strong> e sai com um toque, sem par.</li>
+    <li><strong>O monte vira uma carta por vez</strong> para o descarte, ao lado dele. A carta de cima do descarte também está livre e pode formar par com uma carta da pirâmide ou com a próxima carta virada.</li>
+    <li><strong>Quando o monte acaba,</strong> toque nele para devolver o descarte e dar mais uma volta, se o modo ainda permitir.</li>
+  </ul>
+
+  <h2>Os pares que somam 13</h2>
+  <p>Na Pirâmide, o Ás vale 1, o Valete vale 11, a Dama vale 12 e o Rei vale 13. Os pares possíveis são:</p>
+  <ul>
+    <li><strong>Ás + Dama</strong> (1 + 12)</li>
+    <li><strong>2 + Valete</strong> (2 + 11)</li>
+    <li><strong>3 + 10</strong></li>
+    <li><strong>4 + 9</strong></li>
+    <li><strong>5 + 8</strong></li>
+    <li><strong>6 + 7</strong></li>
+    <li><strong>Rei sozinho</strong> (13)</li>
+  </ul>
+  <p>O naipe e a cor não importam: um 6 de copas sai com qualquer 7.</p>
+
+  <h2>1 volta, 3 voltas ou sem limite</h2>
+  <p>
+    O modo diz quantas vezes o monte pode ser percorrido. Com 3 voltas, o modo padrão, o descarte
+    volta a ser o monte duas vezes, e a maioria das partidas tem solução. Com 1 volta, cada carta do
+    monte passa uma vez só: é o modo clássico e o mais difícil, em que poucas distribuições saem. Sem
+    limite, o monte gira quantas vezes você quiser, e a dificuldade fica toda na ordem em que você
+    desmonta a pirâmide.
+  </p>
+  <p>
+    Para cada modo, as estatísticas guardam as partidas, as vitórias, o melhor tempo e a maior
+    sequência de vitórias.
+  </p>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para ganhar mais partidas</h2>
+  <ol>
+    <li><strong>Pense na pirâmide, não no monte.</strong> As cartas do monte voltam a cada volta; as da pirâmide só saem na ordem certa. Prefira o par que libera mais cartas presas.</li>
+    <li><strong>Cuidado com cartas iguais empilhadas.</strong> Se um 4 cobre um 9 que é o seu par, os dois nunca saem juntos: guarde outro 9 ou outro 4 para eles.</li>
+    <li><strong>Nem todo par precisa sair já.</strong> Às vezes vale deixar um par livre para usar uma carta do descarte antes que ela fique enterrada sob as próximas.</li>
+    <li><strong>Conte os parceiros que restam.</strong> Cada valor tem quatro cartas: se três Damas já saíram, o último Ás da pirâmide depende da Dama que sobrou.</li>
+    <li><strong>Use o Desfazer para testar caminhos.</strong> Na Pirâmide, a ordem dos pares decide a partida, e voltar algumas jogadas costuma revelar a saída.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Qual a diferença entre a Pirâmide e a Paciência clássica?</h3>
+  <p>
+    Na <a href="/jogos/paciencia/">Paciência clássica</a>, as cartas são empilhadas em ordem e
+    alternando cores até subirem para as fundações. Na Pirâmide não há colunas nem sequências: tudo
+    depende de somar 13 com as cartas livres, e uma partida costuma durar poucos minutos.
+  </p>
+  <h3>Toda partida tem solução?</h3>
+  <p>
+    Não. Com 3 voltas, pelo menos duas em cada três partidas têm solução; sem limite de voltas, um
+    pouco mais. Com 1 volta, só umas 5 em cada 100 saem, mesmo jogando sem errar. Quando nada mais
+    pode sair, o jogo avisa e oferece desfazer, recomeçar a mesma partida ou começar outra.
+  </p>
+  <h3>Como funciona a dica?</h3>
+  <p>
+    O botão Dica procura uma solução completa a partir da posição em que você está e acende a
+    primeira jogada dela. Se não houver solução dali para a frente, o jogo avisa, e você pode desfazer
+    jogadas até voltar a um ponto que ainda tem saída. Pedir dica não tem custo.
+  </p>
+  <h3>Por que não consigo escolher uma carta?</h3>
+  <p>
+    Porque ela ainda está coberta: só sai uma carta da pirâmide depois que as duas cartas que ficam
+    sobre ela já saíram. No descarte, só a carta de cima pode ser usada.
+  </p>
+  <h3>O que é o número da partida?</h3>
+  <p>
+    Cada distribuição de cartas tem um número. Com "Jogar esta de novo", no fim da partida, ou
+    "Recomeçar esta partida", quando ela trava, você recebe as mesmas cartas outra vez para tentar
+    outro caminho.
+  </p>
+  <h3>Se eu sair da página, perco a partida?</h3>
+  <p>
+    Não. A partida em andamento fica salva neste navegador, com o tempo e as últimas jogadas para
+    desfazer. Começar outra partida no meio de uma conta como partida não terminada nas
+    estatísticas.
+  </p>
+  <h3>Dá para jogar no celular?</h3>
+  <p>
+    Dá. A mesa se ajusta à largura da tela: toque numa carta e depois no par dela, ou arraste uma
+    sobre a outra com o dedo. Com a tela deitada, as cartas ficam maiores. Os sons são gerados pelo
+    próprio navegador, e o botão Som liga e desliga os efeitos.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
