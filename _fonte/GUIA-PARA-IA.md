@@ -45,6 +45,7 @@ Os commits são feitos com o autor `efsaplicativos <efsaplicativos@gmail.com>`.
 | `assets/web.css` | Estilo comum das páginas de jogos e ferramentas | À mão |
 | `assets/jogos/`, `assets/ferramentas/` | CSS e JS de cada jogo e ferramenta. `<nome>-logica.js` tem as regras e `<nome>.js` cuida da tela | À mão |
 | `assets/anuncios.js` | IDs dos blocos de anúncio do Google AdSense | À mão |
+| `assets/indicacoes.js` | Produtos e links de afiliado da Amazon e do Mercado Livre (seção 9) | À mão |
 | `_fonte/testes/` | Testes da lógica de cada página, sem dependências | À mão |
 | `_fonte/ferramentas-dados/` | Scripts que geram dados das páginas e as imagens de cada jogo e ferramenta | À mão |
 | `images/` | Imagens. As de jogos e ferramentas ficam em WebP | — |
@@ -131,7 +132,37 @@ acrescente o botão nos três lugares.
 - A página de privacidade do site (`_fonte/paginas/privacidade.html`) explica os cookies de publicidade. Se
   a forma de anunciar mudar, atualize essa página.
 
-## 9. Contato e redes
+## 9. Indicações de produtos (Amazon e Mercado Livre)
+
+- Cada página de jogo e de ferramenta tem, depois do texto e antes do convite para o app, um espaço
+  `<aside class="indicacao" data-indicacao="<nome da página>" hidden>`. O nome da página é o nome do
+  arquivo em `_fonte/paginas/`, sem `.html`.
+- Os produtos ficam na lista `INDICACOES` de `assets/indicacoes.js`. Cada produto tem um nome, um texto curto
+  e os campos `amazon` e `mercadolivre`, onde vai o link de afiliado.
+- **Para colocar um link,** cole o link de afiliado no campo da loja. Na Amazon, use
+  `naAmazon("<código do produto>")`, que monta o link `amazon.com.br/dp/<código>?tag=efsaplicativo-20` com o
+  ID de associado. O código é o trecho de 10 caracteres depois de `/dp/` no endereço do produto. Ajuste o nome e
+  o texto para combinar com o produto. Depois rode o gerador, para a versão do arquivo mudar nas páginas e o
+  navegador baixar a lista nova.
+- **Antes de trocar um produto,** confira na Amazon se ele está disponível e bem avaliado. Não coloque preço
+  nem característica que a página do produto não confirme.
+- Produto sem link não aparece. Página sem nenhum link continua com o espaço escondido.
+- Só são aceitos links `https` dos endereços das lojas: amazon.com.br, amzn.to, mercadolivre.com.br,
+  mercadolivre.com e meli.la. Um link fora disso é recusado e aparece um aviso no console do navegador.
+- **Modo de teste:** com `?indicacoes=teste` no endereço, o quadro aparece com todos os produtos sugeridos,
+  mesmo os que ainda não têm link.
+- **Teste automático:** rode `node _fonte/testes/indicacoes.test.js` depois de mexer na lista.
+- **Regras dos programas:**
+  - O quadro sempre mostra o aviso de que são links de indicação. Quando há link da Amazon, mostra também a
+    frase exigida pelo Programa de Associados: "Como associado da Amazon, ganho com compras qualificadas.".
+  - Os links levam `rel="sponsored"`.
+  - Não coloque preço nem foto copiada da loja: o preço muda, e as fotos só podem vir das ferramentas dos
+    programas.
+  - Compras feitas pelo próprio dono do site, ou pela família dele, pelos links não contam e violam o
+    contrato da Amazon.
+- A página de privacidade do site (`_fonte/paginas/privacidade.html`) explica os links de indicação.
+
+## 10. Contato e redes
 
 - E-mail de contato mostrado no site: efsaplicativos@hotmail.com.
 - Redes sociais: YouTube https://www.youtube.com/@efsAplicativos e TikTok https://www.tiktok.com/@efsaplicativos.
