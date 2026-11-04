@@ -134,8 +134,10 @@ acrescente o botão nos três lugares.
 
 ## 9. Indicações de produtos (Amazon e Mercado Livre)
 
-- Cada página de jogo e de ferramenta tem, depois do texto e antes do convite para o app, um espaço
-  `<aside class="indicacao" data-indicacao="<nome da página>" hidden>`. O nome da página é o nome do
+- Cada página de jogo e de ferramenta tem, logo depois do jogo ou da ferramenta e antes do texto (o "Como
+  jogar" ou "Como usar"), um espaço `<aside class="indicacao" data-indicacao="<nome da página>" hidden>`.
+  Nas ferramentas ele vem depois do anúncio `data-bloco="meio"`, para que o título e o aviso do quadro
+  separem o anúncio dos botões das lojas. O nome da página é o nome do
   arquivo em `_fonte/paginas/`, sem `.html`.
 - Os produtos ficam na lista `INDICACOES` de `assets/indicacoes.js`. Cada produto tem um nome, um texto curto
   e os campos `amazon` e `mercadolivre`, onde vai o link de afiliado.
@@ -144,6 +146,10 @@ acrescente o botão nos três lugares.
   ID de associado. O código é o trecho de 10 caracteres depois de `/dp/` no endereço do produto. Ajuste o nome e
   o texto para combinar com o produto. Depois rode o gerador, para a versão do arquivo mudar nas páginas e o
   navegador baixar a lista nova.
+- **No Mercado Livre,** o dono da conta gera o link: abre o produto logado, clica em **Gerar link** na barra
+  de afiliado e copia só o "Link do produto" (`https://meli.la/...`). O ID do produto e o texto sugerido
+  servem para redes sociais. O link curto abre o perfil social do afiliado com o produto em destaque no
+  topo e o botão "Ir para produto". O Mercado Livre funciona assim; não é erro.
 - **Antes de trocar um produto,** confira na Amazon se ele está disponível e bem avaliado. Não coloque preço
   nem característica que a página do produto não confirme.
 - Produto sem link não aparece. Página sem nenhum link continua com o espaço escondido.

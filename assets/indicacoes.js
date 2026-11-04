@@ -2,9 +2,10 @@
 /*
  * Indicações de produtos com links de afiliado da Amazon e do Mercado Livre.
  *
- * Cada página de jogo ou ferramenta tem, depois do texto, um espaço
- * <aside class="indicacao" data-indicacao="<nome da página>" hidden>, sempre longe dos botões
- * e do tabuleiro, para ninguém tocar num link de loja sem querer.
+ * Cada página de jogo ou ferramenta tem, logo depois do jogo ou da ferramenta e antes do texto,
+ * um espaço <aside class="indicacao" data-indicacao="<nome da página>" hidden>. O título e o
+ * aviso ficam no alto do quadro, e os botões das lojas embaixo, longe do tabuleiro e dos campos,
+ * para ninguém tocar num link de loja sem querer.
  *
  * Para mostrar um produto, cole o link de afiliado dele em "amazon" ou "mercadolivre" na
  * lista INDICACOES abaixo (o nome da página é o nome do arquivo em _fonte/paginas, sem .html).
@@ -66,7 +67,14 @@ const Indicacoes = (() => {
     "batalha-naval": [
       produto("Jogo Batalha Naval de tabuleiro", "A versão de tabuleiro, para jogar com a família na mesa.", naAmazon("B077PJBVWV")),
     ],
-    "campo-minado": [produto("Livro de desafios de lógica", "Problemas para resolver no papel, com a mesma dedução do campo minado.")],
+    "campo-minado": [
+      produto(
+        "Jogo Campo Minado Aventureiros, da Elka",
+        "O campo minado para pular: placas de EVA no chão e cartas com o caminho certo. De 2 a 8 jogadores, para crianças de 4 a 8 anos.",
+        "",
+        "https://meli.la/1SNswKg",
+      ),
+    ],
     "color-sort": [],
     "cores-da-memoria": [
       produto("Jogo Genius, da Estrela", "O clássico de repetir a sequência de cores e sons.", naAmazon("B077P8HCHD")),
@@ -76,7 +84,14 @@ const Indicacoes = (() => {
     ],
     "jogo-da-velha": [produto("Jogo da velha em madeira", "Para levar a partida para a mesa.", naAmazon("B09Y2KNRVT"))],
     lumibricks: [],
-    mahjong: [produto("Jogo de Mahjong com peças", "As peças de verdade, para jogar o Mahjong tradicional com amigos.")],
+    mahjong: [
+      produto(
+        "Mahjong com 144 peças",
+        "As peças de verdade, com suporte e dados, para jogar o Mahjong tradicional com amigos.",
+        "",
+        "https://meli.la/2hMTATj",
+      ),
+    ],
     "puzzles-de-xadrez": [
       JOGO_XADREZ("Peças e tabuleiro de madeira, com rainhas extras, para montar os problemas e jogar com alguém."),
       produto(
@@ -97,14 +112,28 @@ const Indicacoes = (() => {
     aposentadoria: [LIVRO_FINANCAS()],
     calculadora: [produto("Calculadora de mesa Casio MX-12B", "12 dígitos, para as contas do dia a dia.", naAmazon("B0CN1LNJJ8"))],
     "calculadora-cientifica": [CALCULADORA_CIENTIFICA()],
-    "calculadora-de-combustivel": [produto("Calibrador de pneus digital", "Pneu bem calibrado gasta menos combustível.")],
+    "calculadora-de-combustivel": [
+      produto(
+        "Calibrador de pneus digital portátil",
+        "Com compressor, para calibrar em casa. Pneu bem calibrado gasta menos combustível.",
+        "",
+        "https://meli.la/1BhUHo5",
+      ),
+    ],
     "calculadora-de-datas": [],
     "calculadora-de-idade": [],
     "calculadora-financeira-rpn": [
       produto("Calculadora financeira HP 12C Gold", "A calculadora RPN de verdade, muito usada em finanças.", naAmazon("B006FUTYX8")),
     ],
     "consulta-cep": [],
-    "consumo-de-agua": [produto("Garrafa de água com marcador de horários", "Ajuda a lembrar de beber água ao longo do dia.")],
+    "consumo-de-agua": [
+      produto(
+        "Garrafa motivacional de 2 litros",
+        "Com canudo, alça e frases de motivação, para ter água por perto o dia todo.",
+        "",
+        "https://meli.la/1mAt5uw",
+      ),
+    ],
     "conversor-de-bases": [],
     "conversor-de-medidas": [
       produto("Balança digital de cozinha, até 10 kg", "Pesa os ingredientes de grama em grama.", naAmazon("B0843HKX18")),
@@ -136,13 +165,32 @@ const Indicacoes = (() => {
     "lei-de-ohm": [
       produto("Multímetro digital Minipa ET-1002", "Mede tensão, corrente e resistência na prática.", naAmazon("B075SBGT6Q")),
     ],
-    "lista-de-compras": [produto("Sacolas retornáveis", "Para as compras do mercado, sem sacola plástica.")],
-    "lista-de-tarefas": [produto("Planner semanal", "Para organizar as tarefas no papel também.")],
+    "lista-de-compras": [
+      produto(
+        "Sacola de compras dobrável",
+        "Reforçada e dobrável, para levar na bolsa e usar no mercado no lugar da sacola plástica.",
+        "",
+        "https://meli.la/2iv39eC",
+      ),
+    ],
+    "lista-de-tarefas": [
+      produto(
+        "Planner semanal permanente",
+        "Sem datas impressas, para organizar as tarefas no papel em qualquer semana do ano.",
+        "",
+        "https://meli.la/2hL3taX",
+      ),
+    ],
     "marcador-de-truco": [BARALHO("O baralho clássico das partidas de truco, com naipes grandes e fáceis de ler.")],
     matrizes: [CALCULADORA_CIENTIFICA()],
     "relogio-de-blinds-poker": [
       BARALHO("Um baralho clássico para as mãos do torneio em casa."),
-      produto("Kit de fichas de pôquer", "Fichas para o torneio em casa."),
+      produto(
+        "Maleta de pôquer com 300 fichas",
+        "Fichas e acessórios numa maleta com tranca, para o torneio em casa.",
+        "",
+        "https://meli.la/1gA1D4F",
+      ),
     ],
     "relogio-de-xadrez": [
       produto(
