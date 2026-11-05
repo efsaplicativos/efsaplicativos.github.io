@@ -1,0 +1,341 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/jogos/copas.html. Edite lá. -->
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fff7f0" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        // O laranja (claro) é o padrão; o escuro vale para quem ligou o modo noturno
+        if (theme === "dark") {
+          root.setAttribute("data-theme", "dark");
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#0f1115");
+        }
+      })();
+    </script>
+    <title>Copas Online Grátis: Jogo de Cartas contra o Computador — EFS Aplicativos</title>
+    <meta name="description" content="Jogue Copas (o Hearts) online e grátis contra 3 adversários do computador: passe 3 cartas, fuja das copas e da Dama de espadas ou dê o tiro na lua." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/jogos/copas/" />
+    <meta property="og:title" content="Copas Online Grátis: Jogo de Cartas contra o Computador — EFS Aplicativos" />
+    <meta property="og:description" content="Jogue Copas (o Hearts) online e grátis contra 3 adversários do computador: passe 3 cartas, fuja das copas e da Dama de espadas ou dê o tiro na lua." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/jogos/copas/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600..800&amp;family=Nunito:wght@400..800&amp;display=swap"
+    />
+    <link rel="stylesheet" href="/site.css?v=dfdb216d18d2" />
+    <link rel="stylesheet" href="/assets/web.css?v=f4683d85c12d" />
+    <link rel="stylesheet" href="/assets/jogos/copas.css?v=66cdb93df6e2" />
+    <script src="/assets/estatisticas.js?v=da0036a12f2f" async></script>
+    <script src="/site.js?v=926b8efae759" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/indicacoes.js?v=e1495e5926ea" defer></script>
+    <script src="/assets/jogos/copas-logica.js?v=e4912e4efd5b" defer></script>
+    <script src="/assets/jogos/sons.js?v=21d1381b6bd0" defer></script>
+    <script src="/assets/jogos/copas.js?v=ca0a15c63b3f" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Copas", "url": "https://efsaplicativos.com.br/jogos/copas/", "description": "Jogue Copas (o Hearts) online e grátis contra 3 adversários do computador: passe 3 cartas, fuja das copas e da Dama de espadas ou dê o tiro na lua.", "applicationCategory": "GameApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos" aria-current="page">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Modo noturno"
+            title="Modo noturno"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Copas</li>
+  </ol>
+  <h1>Copas online</h1>
+  <p>
+    O clássico jogo de vazas em que ninguém quer pontos: jogue contra Ana, Beto e Clara, fuja das
+    copas e da Dama de espadas e termine a partida com o menor placar. Ou leve tudo e dê o tiro na
+    lua.
+  </p>
+</header>
+
+<section class="copas" aria-label="Copas">
+  <div class="segmented cp-modos" role="group" aria-label="Pontos para terminar a partida">
+    <button type="button" class="filter active" data-modo="100" aria-pressed="true">Até 100 pontos</button>
+    <button type="button" class="filter" data-modo="50" aria-pressed="false">Até 50 pontos</button>
+  </div>
+
+  <p class="cp-partida" id="cp-partida"></p>
+  <p class="cp-situacao" id="cp-situacao" aria-hidden="true"></p>
+
+  <div class="cp-mesa" id="cp-mesa" role="group" aria-label="Mesa de Copas" aria-describedby="cp-ajuda"></div>
+
+  <div class="cp-botoes">
+    <button type="button" class="button secondary" id="cp-dica">Dica</button>
+    <button type="button" class="button secondary" id="cp-ultima">Última vaza</button>
+    <button type="button" class="button" id="cp-nova">Nova partida</button>
+    <button type="button" class="som-botao" id="cp-som"></button>
+  </div>
+
+  <p class="cp-ajuda" id="cp-ajuda">
+    Toque numa carta da sua mão para jogá-la; as cartas que podem ser jogadas ficam levantadas e as
+    outras, apagadas. Na troca, toque em 3 cartas e depois no botão de passar. No teclado, as setas
+    andam pela mão (e, para cima, pela mesa e pelos adversários) e Enter ou Espaço joga a carta.
+  </p>
+  <p class="sr-only" aria-live="polite" id="cp-status"></p>
+
+  <details class="cp-placar">
+    <summary>Placar <span class="cp-placar-resumo" id="cp-placar-resumo"></span></summary>
+    <div class="cp-placar-rolagem">
+      <table class="cp-tabela" id="cp-tabela"></table>
+    </div>
+  </details>
+
+  <details class="cp-estatisticas">
+    <summary>Suas estatísticas <span id="cp-est-modo">até 100 pontos</span></summary>
+    <dl class="cp-est-lista" id="cp-est-lista"></dl>
+    <button type="button" class="cp-zerar" id="cp-zerar">Zerar as estatísticas deste modo</button>
+  </details>
+
+  <dialog class="cp-dialogo" id="cp-dialogo" aria-labelledby="cp-dialogo-titulo">
+    <h2 id="cp-dialogo-titulo"></h2>
+    <p id="cp-dialogo-texto"></p>
+    <div class="cp-dialogo-vaza" id="cp-dialogo-vaza" hidden></div>
+    <dl class="cp-dialogo-dados" id="cp-dialogo-dados"></dl>
+    <div class="cp-dialogo-botoes" id="cp-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<aside class="indicacao" data-indicacao="copas" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar Copas</h2>
+  <p>
+    Copas é um jogo de vazas para quatro pessoas, cada uma por si, com um baralho comum de 52
+    cartas. Aqui você joga embaixo, contra três adversários do computador: Ana, à sua esquerda,
+    Beto, à sua frente, e Clara, à sua direita. Cada um recebe 13 cartas.
+  </p>
+  <p>
+    Em cada vaza, cada jogador põe uma carta na mesa, um depois do outro, sempre para a esquerda. A
+    primeira carta define o naipe da vaza, e todos são obrigados a segui-lo. Quem não tem o naipe
+    joga qualquer outra carta: é a hora de se livrar das cartas que dão pontos. Ganha a vaza a carta
+    mais alta do naipe que a abriu (o Ás é a mais alta e o 2, a mais baixa), e quem ganhou começa a
+    próxima. Não existe trunfo: uma carta de outro naipe nunca ganha a vaza.
+  </p>
+  <ul>
+    <li><strong>O objetivo é fazer poucos pontos.</strong> As vazas em si não valem nada; o que conta são as cartas de pontos que vêm nelas.</li>
+    <li><strong>Quem tem o 2 de paus começa</strong> a primeira vaza da rodada, obrigatoriamente com ele.</li>
+    <li><strong>Siga o naipe sempre que puder.</strong> O jogo levanta as cartas que podem ser jogadas e apaga as outras; tocando numa carta apagada, aparece o motivo, como "Você precisa seguir o naipe de ouros."</li>
+    <li><strong>Uma rodada tem 13 vazas.</strong> No fim dela, os pontos de cada um vão para o placar e as cartas são distribuídas de novo.</li>
+  </ul>
+
+  <h2>A troca de 3 cartas</h2>
+  <p>
+    Antes das vazas, cada jogador escolhe 3 cartas da mão e passa para um adversário, todos ao mesmo
+    tempo. A direção muda a cada rodada, num ciclo de quatro:
+  </p>
+  <ol>
+    <li><strong>1ª rodada:</strong> para a esquerda (você passa para Ana e recebe de Clara).</li>
+    <li><strong>2ª rodada:</strong> para a direita (você passa para Clara e recebe de Ana).</li>
+    <li><strong>3ª rodada:</strong> para a frente (você e Beto trocam cartas).</li>
+    <li><strong>4ª rodada:</strong> sem troca. Depois o ciclo recomeça pela esquerda.</li>
+  </ol>
+  <p>
+    Toque nas 3 cartas que quer passar (elas sobem na mão) e depois no botão "Passar 3 cartas". As 3
+    que você recebeu aparecem destacadas por alguns segundos e entram na mão em ordem.
+  </p>
+
+  <h2>Os pontos</h2>
+  <ul>
+    <li><strong>Cada carta de copas vale 1 ponto</strong>, do 2 ao Ás.</li>
+    <li><strong>A Dama de espadas vale 13 pontos</strong> sozinha.</li>
+    <li><strong>As outras cartas não valem nada.</strong> Cada rodada tem 26 pontos no total.</li>
+  </ul>
+  <p>
+    Quem ganha uma vaza leva todos os pontos que estiverem nela, inclusive os que os outros
+    descartaram. Os quadros dos adversários mostram os pontos que cada um já levou na rodada, e o
+    placar guarda o total de todas as rodadas.
+  </p>
+
+  <h2>A primeira vaza e "quebrar copas"</h2>
+  <p>
+    <strong>Na primeira vaza da rodada não vale jogar copas nem a Dama de espadas</strong>, nem
+    mesmo quem não tem paus. A exceção é a mão que só tem cartas de pontos: aí não há outra saída.
+  </p>
+  <p>
+    <strong>Ninguém começa uma vaza com copas enquanto as copas não forem quebradas</strong>, ou
+    seja, enquanto ninguém tiver jogado uma copa, por não ter o naipe pedido. Depois que a primeira
+    copa cai na mesa, copas podem abrir vazas normalmente. Quem só tem copas na mão pode começar com
+    elas mesmo antes. A Dama de espadas não quebra copas.
+  </p>
+
+  <h2>Tiro na lua</h2>
+  <p>
+    Quem leva <strong>todas as 13 copas e a Dama de espadas</strong> na mesma rodada dá o tiro na
+    lua: fica com 0 pontos naquela rodada e cada um dos três adversários recebe 26. É uma jogada
+    arriscada, porque basta um adversário levar uma única copa para os pontos voltarem para você.
+    O computador fica de olho: quando alguém leva todos os pontos por muito tempo, ele tenta ganhar
+    uma vaza com copas para impedir.
+  </p>
+
+  <h2>Até 100 ou até 50 pontos</h2>
+  <p>
+    A partida acaba no fim da rodada em que alguém chega aos pontos do modo: 100 no modo padrão ou
+    50 na partida curta, que costuma durar umas quatro rodadas. Ganha quem tiver o menor total. Se
+    o menor total estiver empatado nessa hora, joga-se mais uma rodada, até haver um vencedor.
+  </p>
+  <p>
+    As estatísticas são separadas por modo: partidas, vitórias, a sua melhor pontuação final (a
+    menor), os tiros na lua que você deu e a maior sequência de vitórias.
+  </p>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para fazer menos pontos</h2>
+  <ol>
+    <li><strong>Passe a Dama de espadas se ela estiver desprotegida.</strong> Com três ou mais espadas baixas, dá para segurá-la; com poucas, alguém vai puxar espadas até ela cair na sua vaza. O Rei e o Ás de espadas também são perigosos enquanto a Dama não sai.</li>
+    <li><strong>Fique sem um naipe.</strong> Passar as duas ou três cartas de um naipe curto deixa você livre para descartar copas e a Dama quando ele sair.</li>
+    <li><strong>Jogue por baixo.</strong> Quando dá para seguir o naipe sem ganhar, use a carta mais alta que ainda perde para a que está ganhando: assim você se livra das cartas altas sem levar pontos.</li>
+    <li><strong>Gaste cartas altas nas vazas seguras.</strong> Na primeira vaza ninguém pode descartar pontos, e sendo o último a jogar numa vaza sem pontos, ganhar não custa nada.</li>
+    <li><strong>Conte as cartas.</strong> Lembre quais copas e espadas altas já saíram e quem deixou de seguir algum naipe. O botão "Última vaza" mostra as cartas da vaza anterior.</li>
+    <li><strong>Desconfie de quem leva tudo.</strong> Se um adversário está juntando todas as copas, guarde uma copa alta para ganhar uma vaza no fim e estragar o tiro na lua.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Copas é o mesmo jogo que Hearts?</h3>
+  <p>
+    É. Copas é o nome com que o Hearts é jogado no Brasil, e as regras são as mesmas: troca de 3
+    cartas, 1 ponto por copa, 13 pela Dama de espadas e o tiro na lua. Algumas mesas jogam
+    variações, como o Valete de ouros que desconta 10 pontos; aqui valem as regras tradicionais,
+    sem elas.
+  </p>
+  <h3>Como o computador joga?</h3>
+  <p>
+    Ana, Beto e Clara não veem as suas cartas nem as dos outros: decidem só com o que está na mesa,
+    como uma pessoa faria. Na troca, eles passam a Dama de espadas quando ela está desprotegida, as
+    copas altas e as cartas de um naipe curto. No jogo, ficam abaixo da carta que está ganhando,
+    descartam a Dama e as copas altas quando não têm o naipe, começam as vazas com cartas baixas e
+    puxam espadas para forçar a Dama a sair. A Dica usa esse mesmo raciocínio para sugerir a sua
+    jogada e explica o motivo.
+  </p>
+  <h3>Por que não consigo jogar uma carta?</h3>
+  <p>
+    Porque ela quebraria uma regra: você tem o naipe que abriu a vaza e precisa segui-lo, é a
+    primeira vaza (sem copas nem a Dama de espadas) ou você quer começar com copas antes de elas
+    serem quebradas. A carta treme e o jogo mostra o motivo na mesa.
+  </p>
+  <h3>Dá para desfazer uma jogada?</h3>
+  <p>
+    Não. Como num jogo de verdade contra outras pessoas, carta jogada fica na mesa. Para rever o que
+    aconteceu, use o botão "Última vaza".
+  </p>
+  <h3>Se eu sair da página, perco a partida?</h3>
+  <p>
+    Não. A partida inteira fica salva neste navegador a cada carta: a rodada, o placar, as mãos e a
+    vaza em andamento. Ao voltar, ela continua de onde parou. Começar outra partida no meio de uma
+    conta como partida não terminada nas estatísticas. O número da partida repete as mesmas cartas
+    em cada rodada, e "Jogar esta de novo", no fim, recomeça com elas.
+  </p>
+  <h3>Dá para jogar no celular?</h3>
+  <p>
+    Dá. Na tela estreita, os adversários viram quadros compactos com o nome, as cartas na mão e os
+    pontos da rodada, e a sua mão fica mais sobreposta para caber inteira. Toque na carta que quer
+    jogar. Os sons são gerados pelo próprio navegador, e o botão Som liga e desliga os efeitos.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

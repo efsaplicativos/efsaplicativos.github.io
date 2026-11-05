@@ -171,6 +171,43 @@ IMAGENS = {
     "symbol in the middle: the top card a red heart, the middle row two black spades, the bottom row "
     "a red diamond, a black club and a red heart. No letters and no numbers anywhere on the cards. "
     "Beside the pyramid, one card lies face down with a navy blue back and a thin gold border.",
+    "jogos/paciencia-golf": "A small rounded deep green felt mat with soft mowing stripes. On it, "
+    "a row of three plain white playing cards and, below them, one more white card. Each card shows "
+    "exactly one large suit symbol in its center and nothing at all in its corners: from left to "
+    "right a black spade, a red heart and a black club, and the lower card a red diamond. In a corner "
+    "of the mat, a tiny white golf ball on a wooden tee and a small red flag on a thin pole. No "
+    "letters, no numbers and no small symbols anywhere on the cards.",
+    "jogos/oito-maluco": "A small rounded orange-brown felt mat. In the middle, a face-down pile "
+    "of cards with a navy blue patterned back and, beside it, one face-up plain white card. In front, "
+    "a loose fan of three plain white cards. Each face-up card shows exactly one large suit symbol in "
+    "its center and nothing at all in its corners: the single card a red heart, the fan a black club, "
+    "a red diamond and a black spade. A few small colorful confetti swirls float above the cards. No "
+    "letters, no numbers and no small symbols anywhere on the cards.",
+    "jogos/copas": "A small rounded plum-purple felt mat. In the middle, four plain white playing "
+    "cards meet in a loose cross, one pointing toward each side of the mat as if just played in a "
+    "trick. Each card shows exactly one large suit symbol in its center and nothing at all in its "
+    "corners: three cards a red heart and the fourth a black spade. Near one edge, a short face-down "
+    "fan of three cards with a navy blue back and a thin gold border. No letters, no numbers and no "
+    "small symbols anywhere on the cards.",
+    "jogos/truco": "A small rounded warm-brown wooden table top. In the middle, a hand of three plain "
+    "white playing cards fanned out and, in front of it, one more white card lying flat next to one "
+    "card lying face down with a navy blue back and a thin gold border. Each face-up card shows "
+    "exactly one large suit symbol in its center and nothing at all in its corners: the fan a black "
+    "club, a red heart and a black spade, the flat card a red diamond. Beside the cards, a small heap "
+    "of shiny brown beans used to keep score. No letters, no numbers and no small symbols anywhere "
+    "on the cards.",
+    "jogos/mico": "A small rounded sunny orange felt mat. On it, a small fan of four plain white "
+    "playing cards slightly overlapping. Each card shows exactly one large suit symbol in its center "
+    "and nothing at all in its corners: a red heart, a black spade, a red diamond and a black club. "
+    "A small cute cartoon monkey face with round ears and a friendly smile peeks over the top of the "
+    "fan. Beside the fan, one card lies face down with a navy blue back and a thin gold border. No "
+    "letters, no numbers and no small symbols anywhere on the cards.",
+    "jogos/buraco": "A small rounded indigo felt mat. Across it, a neat straight row of five plain "
+    "white playing cards overlapping sideways, all of them hearts: each card is completely blank "
+    "except for one large red heart in its center, with nothing in its corners. A tiny gold ribbon "
+    "badge rests on the first card of the row. Below the row, two small face-down stacks of cards "
+    "with a red-brown patterned back and one more completely blank white card with only one large "
+    "black spade in its center. No letters, no numbers and no small symbols anywhere on the cards.",
     # Jogos: conhecimento
     "jogos/qual-e-a-bandeira": "A blue globe with several small colorful flags on poles stuck around "
     "it and a big orange question mark floating beside it.",

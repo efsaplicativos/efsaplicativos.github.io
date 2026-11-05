@@ -1,0 +1,742 @@
+/* ==========================================================================
+   Truco — mesa de madeira para quatro, cartas desenhadas em CSS e naipes em SVG próprios
+   ========================================================================== */
+
+.truco {
+  --tr-mesa-1: #9a6334;
+  --tr-mesa-2: #5e3519;
+  --tr-veio: rgba(48, 22, 6, 0.09);
+  --tr-face: #fffdf8;
+  --tr-borda: #cfc5b3;
+  --tr-preta: #1c1a17;
+  --tr-vermelha: #c3261f;
+  --tr-verso-1: #24417a;
+  --tr-verso-2: #111f45;
+  --tr-verso-borda: #e9cf7e;
+  --tr-destaque: #ffd23f;
+  --tr-nos: #2f6fd0;
+  --tr-eles: #c8412f;
+  --tr-nos-claro: #8cc4ff;
+  --tr-eles-claro: #ffab9c;
+  --naipe-espadas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 3C71 25 95 41 95 62c0 13-10 23-23 23-8 0-15-4-19-10 1 9 5 16 13 22H34c8-6 12-13 13-22-4 6-11 10-19 10C15 85 5 75 5 62 5 41 29 25 50 3z'/%3E%3C/svg%3E");
+  --naipe-copas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 93C22 71 4 53 4 32 4 17 15 7 29 7c9 0 16 5 21 13 5-8 12-13 21-13 14 0 25 10 25 25 0 21-18 39-46 61z'/%3E%3C/svg%3E");
+  --naipe-ouros: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 2 88 50 50 98 12 50z'/%3E%3C/svg%3E");
+  --naipe-paus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='28' r='21'/%3E%3Ccircle cx='27' cy='60' r='21'/%3E%3Ccircle cx='73' cy='60' r='21'/%3E%3Cpath d='M44 40h12v20c0 15 4 26 14 37H30c10-11 14-22 14-37z'/%3E%3C/svg%3E");
+  max-width: 760px;
+  margin: 0 auto;
+  overflow-x: clip;
+}
+:root[data-theme="dark"] .truco {
+  --tr-mesa-1: #7a4c27;
+  --tr-mesa-2: #3f2210;
+  --tr-face: #f4f0e7;
+  --tr-nos: #6aa8ff;
+  --tr-eles: #ff8b78;
+}
+
+.truco .tr-modos {
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.tr-info {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.tr-dado {
+  padding: 8px 10px;
+  text-align: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.tr-dado span {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.tr-dado strong {
+  display: block;
+  font-size: 20px;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  white-space: nowrap;
+}
+.tr-cor-nos {
+  color: var(--tr-nos);
+}
+.tr-cor-eles {
+  color: var(--tr-eles);
+}
+.tr-dado.pedindo {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.tr-vazas {
+  display: flex !important;
+  justify-content: center;
+  gap: 6px;
+}
+.tr-vazas i {
+  display: inline-grid;
+  place-items: center;
+  width: 1.25em;
+  height: 1.25em;
+  font-style: normal;
+  font-size: 0.9em;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.tr-vazas i.ganhou {
+  color: #fff;
+  background: #2e8b57;
+  border-color: #2e8b57;
+}
+.tr-vazas i.perdeu {
+  color: #fff;
+  background: #c0392b;
+  border-color: #c0392b;
+}
+.tr-vazas i.empate {
+  color: var(--text);
+  background: var(--surface-2);
+  border-color: var(--border-2);
+}
+.tr-legenda {
+  min-height: 1.4em;
+  margin: 8px 0 10px;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--text-2);
+}
+.tr-legenda .naipe-vermelho {
+  color: var(--tr-vermelha);
+}
+:root[data-theme="dark"] .tr-legenda .naipe-vermelho {
+  color: #ff8a80;
+}
+
+/* ---------- Mesa ---------- */
+.tr-mesa {
+  --cw: 70px;
+  --ch: 98px;
+  position: relative;
+  /* As cartas usam z-index alto; isolar evita que passem por cima do cabeçalho fixo do site. */
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  min-height: 360px;
+  background:
+    radial-gradient(110% 75% at 50% 45%, rgba(255, 226, 170, 0.16), transparent 62%),
+    repeating-linear-gradient(91deg, var(--tr-veio) 0 2px, transparent 2px 9px, rgba(255, 255, 255, 0.025) 9px 11px, transparent 11px 23px),
+    linear-gradient(180deg, var(--tr-mesa-1), var(--tr-mesa-2));
+  border-radius: var(--r-lg);
+  box-shadow: inset 0 0 0 5px rgba(46, 22, 8, 0.45), inset 0 0 0 7px rgba(255, 220, 160, 0.12), inset 0 6px 26px rgba(0, 0, 0, 0.35);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tr-vaga {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: var(--cw);
+  height: var(--ch);
+  border-radius: calc(var(--cw) * 0.1);
+  outline: none;
+}
+.tr-vaga[hidden] {
+  display: none;
+}
+
+.tr-anel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3000;
+  box-sizing: border-box;
+  border-radius: calc(var(--cw) * 0.12);
+  outline: 3px solid var(--tr-destaque);
+  outline-offset: 2px;
+  pointer-events: none;
+}
+
+.tr-nome {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2500;
+  padding: 3px 10px 3px 8px;
+  font-size: 12.5px;
+  font-weight: 800;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: #fff;
+  background: rgba(30, 14, 4, 0.62);
+  border-left: 4px solid var(--tr-nos-claro);
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: box-shadow 200ms ease, background 200ms ease;
+}
+.tr-nome.eles {
+  border-left-color: var(--tr-eles-claro);
+}
+.tr-nome.vez {
+  background: rgba(30, 14, 4, 0.86);
+  box-shadow: 0 0 0 2px var(--tr-destaque), 0 0 14px rgba(255, 210, 63, 0.55);
+}
+.tr-nome.vez::after {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 6px;
+  vertical-align: 1px;
+  border-radius: 50%;
+  background: var(--tr-destaque);
+  animation: tr-piscar 900ms ease-in-out infinite alternate;
+}
+
+.tr-balao {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3600;
+  max-width: 160px;
+  padding: 6px 12px;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: #2a1606;
+  background: #fff8e8;
+  border: 2px solid #2a1606;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.6;
+  transition: opacity 140ms ease, scale 160ms ease;
+}
+.tr-balao.visivel {
+  opacity: 1;
+  scale: 1;
+}
+.tr-balao-0 {
+  transform: translate(-50%, -100%);
+  transform-origin: 50% 100%;
+}
+.tr-balao-2 {
+  transform: translate(-50%, 0);
+  transform-origin: 50% 0;
+}
+.tr-balao-1 {
+  transform: translate(-100%, -100%);
+  transform-origin: 100% 100%;
+}
+.tr-balao-3 {
+  transform: translate(0, -100%);
+  transform-origin: 0 100%;
+}
+
+.tr-rotulo-vira {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: rgba(255, 246, 228, 0.92);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, 0);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.tr-rotulo-vira[hidden] {
+  display: none;
+}
+
+.tr-mensagem {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 3500;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 9px 14px;
+  font-size: 14.5px;
+  font-weight: 650;
+  line-height: 1.4;
+  text-align: center;
+  color: #fff;
+  background: rgba(30, 14, 4, 0.92);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  translate: 0 6px;
+  transition: opacity 160ms ease, translate 160ms ease;
+}
+.tr-mensagem.visivel {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* ---------- Cartas ---------- */
+.tr-carta {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--cw);
+  height: var(--ch);
+  border-radius: calc(var(--cw) * 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition:
+    translate 330ms ease,
+    scale 330ms ease,
+    rotate 330ms ease,
+    opacity 330ms ease,
+    top 150ms ease;
+}
+.tr-carta.fora {
+  visibility: hidden;
+}
+.tr-carta.recolhida {
+  opacity: 0;
+  pointer-events: none;
+}
+.tr-mesa.sem-animacao .tr-carta {
+  transition: none;
+}
+.tr-carta.jogavel {
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .tr-carta.jogavel:hover {
+    top: -10px;
+  }
+}
+
+.tr-frente,
+.tr-verso {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border-radius: inherit;
+}
+.tr-frente {
+  visibility: hidden;
+  overflow: hidden;
+  color: var(--tr-preta);
+  background: var(--tr-face);
+  border: 1px solid var(--tr-borda);
+}
+.tr-carta.vermelha .tr-frente {
+  color: var(--tr-vermelha);
+}
+.tr-carta.aberta .tr-frente {
+  visibility: visible;
+}
+.tr-carta.aberta .tr-verso {
+  visibility: hidden;
+}
+.tr-verso {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(233, 207, 126, 0.5) 0 12%, transparent 13%),
+    repeating-linear-gradient(45deg, rgba(233, 207, 126, 0.16) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(-45deg, rgba(233, 207, 126, 0.16) 0 2px, transparent 2px 7px),
+    linear-gradient(150deg, var(--tr-verso-1), var(--tr-verso-2));
+  border: max(2px, calc(var(--cw) * 0.05)) solid var(--tr-verso-borda);
+}
+
+.tr-valor {
+  position: absolute;
+  top: 2%;
+  left: 6%;
+  font-family: "Nunito", sans-serif;
+  font-size: calc(var(--cw) * 0.34);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.07em;
+}
+.tr-naipe {
+  display: block;
+  background-color: currentColor;
+  -webkit-mask: var(--naipe) center / contain no-repeat;
+  mask: var(--naipe) center / contain no-repeat;
+}
+.tr-naipe-espadas {
+  --naipe: var(--naipe-espadas);
+}
+.tr-naipe-copas {
+  --naipe: var(--naipe-copas);
+}
+.tr-naipe-ouros {
+  --naipe: var(--naipe-ouros);
+}
+.tr-naipe-paus {
+  --naipe: var(--naipe-paus);
+}
+.tr-naipe-canto {
+  position: absolute;
+  top: 4%;
+  right: 6%;
+  width: calc(var(--cw) * 0.27);
+  height: calc(var(--cw) * 0.27);
+}
+.tr-centro {
+  position: absolute;
+  right: 18%;
+  bottom: 9%;
+  left: 18%;
+  height: 46%;
+  display: grid;
+  place-items: center;
+}
+.tr-centro .tr-naipe {
+  width: 100%;
+  height: 100%;
+}
+.tr-figura {
+  right: 15%;
+  bottom: 8%;
+  left: 15%;
+  height: 50%;
+  padding-top: 0.06em;
+  font-family: "Baloo 2", sans-serif;
+  font-size: calc(var(--cw) * 0.5);
+  font-weight: 800;
+  line-height: 1;
+  border: max(1px, calc(var(--cw) * 0.025)) solid currentColor;
+  border-radius: calc(var(--cw) * 0.08);
+}
+/* As manilhas da mão ganham uma borda dourada por dentro */
+.tr-carta.manilha .tr-frente {
+  border-color: #c99a2e;
+  box-shadow: inset 0 0 0 max(2px, calc(var(--cw) * 0.035)) #e6bd4f;
+}
+
+.tr-carta.vencedora {
+  box-shadow: 0 0 0 3px var(--tr-destaque), 0 0 18px 4px rgba(255, 210, 63, 0.7);
+}
+.tr-carta.a-cobrir .tr-frente {
+  filter: brightness(0.82);
+  outline: 2px dashed var(--tr-destaque);
+  outline-offset: -5px;
+}
+.tr-carta.virando {
+  animation: tr-virar 220ms ease-out;
+}
+.tr-mesa.tr-festa .tr-carta.aberta {
+  animation: tr-pulo 520ms ease-in-out calc(var(--k, 0) * 90ms) 2;
+}
+@keyframes tr-virar {
+  from {
+    transform: scaleX(0.06);
+  }
+}
+@keyframes tr-pulo {
+  50% {
+    transform: translateY(-14px);
+  }
+}
+@keyframes tr-piscar {
+  to {
+    opacity: 0.25;
+  }
+}
+
+/* ---------- Pedido de truco e mão de onze ---------- */
+.tr-acao {
+  margin-top: 10px;
+  padding: 10px 14px 12px;
+  text-align: center;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: var(--r-sm);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  animation: tr-surgir 220ms ease-out;
+}
+.tr-acao[hidden] {
+  display: none;
+}
+.tr-acao-titulo {
+  margin: 0;
+  font-family: "Baloo 2", sans-serif;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--text);
+}
+.tr-acao-texto {
+  margin: 2px 0 8px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.tr-acao-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.tr-acao-botoes .button {
+  min-height: 46px;
+  min-width: 110px;
+  padding: 10px 18px;
+  font-size: 16px;
+}
+.tr-acao.travado .tr-acao-botoes {
+  pointer-events: none;
+}
+@keyframes tr-surgir {
+  from {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+}
+
+/* ---------- Botões, ajuda e estatísticas ---------- */
+.tr-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+.tr-botoes .button,
+.tr-botoes .som-botao {
+  min-height: 44px;
+}
+.tr-botoes .button {
+  padding: 10px 18px;
+}
+.tr-botoes .oculto {
+  visibility: hidden;
+}
+.tr-botoes .button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.tr-botoes .button.tr-truco {
+  min-width: 150px;
+  font-family: "Baloo 2", sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.tr-truco small {
+  margin-left: 6px;
+  font-family: "Nunito", sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+#tr-cobrir[aria-pressed="true"] {
+  color: #3d2a00;
+  background: var(--tr-destaque);
+  border-color: #c79a00;
+}
+
+.tr-partida {
+  margin: 10px 0 0;
+  font-size: 13px;
+  text-align: center;
+  color: var(--muted);
+}
+.tr-ajuda {
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.tr-estatisticas {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.tr-estatisticas summary {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.tr-est-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px 18px;
+  margin: 12px 0 0;
+}
+.tr-est-lista div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.tr-est-lista dt {
+  color: var(--muted);
+}
+.tr-est-lista dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.tr-zerar {
+  margin-top: 12px;
+  padding: 0;
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--link);
+  text-decoration: underline;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ---------- Diálogo ---------- */
+.tr-dialogo {
+  width: min(92vw, 400px);
+  padding: 24px;
+  color: var(--text);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.tr-dialogo::backdrop {
+  background: rgba(10, 12, 16, 0.6);
+}
+.tr-dialogo h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+.tr-dialogo p {
+  margin: 0 0 16px;
+  color: var(--text-2);
+}
+.tr-dialogo-dados {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px;
+  text-align: left;
+}
+.tr-dialogo-dados div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.tr-dialogo-dados dt {
+  color: var(--muted);
+}
+.tr-dialogo-dados dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.tr-dialogo-dados .destaque dt {
+  font-weight: 800;
+  color: var(--accent);
+}
+:root[data-theme="light"] .tr-dialogo-dados .destaque dt {
+  color: #92400e;
+}
+.tr-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.tr-dialogo.travado .tr-dialogo-botoes {
+  pointer-events: none;
+}
+
+@media (max-width: 420px) {
+  .tr-info {
+    gap: 6px;
+  }
+  .tr-dado {
+    padding: 6px 4px;
+  }
+  .tr-dado span {
+    font-size: 10px;
+    letter-spacing: 0.03em;
+  }
+  .tr-dado strong {
+    font-size: 17px;
+  }
+  .tr-botoes {
+    gap: 8px;
+  }
+  .tr-botoes .button {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  .tr-botoes .som-botao {
+    padding-inline: 12px;
+  }
+  .tr-botoes .button.tr-truco {
+    min-width: 0;
+    flex: 1 0 100%;
+  }
+  .tr-acao-botoes .button {
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 10px 8px;
+  }
+  .tr-valor {
+    font-size: calc(var(--cw) * 0.38);
+  }
+  .tr-naipe-canto {
+    width: calc(var(--cw) * 0.3);
+    height: calc(var(--cw) * 0.3);
+  }
+  .tr-nome {
+    font-size: 11.5px;
+    padding: 2px 8px 2px 6px;
+  }
+  .tr-balao {
+    font-size: 14px;
+    padding: 5px 10px;
+  }
+  .tr-mensagem {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tr-carta,
+  .tr-mensagem,
+  .tr-balao {
+    transition: none;
+  }
+  .tr-carta.virando,
+  .tr-mesa.tr-festa .tr-carta.aberta,
+  .tr-nome.vez::after,
+  .tr-acao {
+    animation: none;
+  }
+}

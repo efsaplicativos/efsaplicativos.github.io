@@ -1,0 +1,207 @@
+<!--
+titulo: Oito Maluco Online Grátis: Jogo de Cartas contra o Computador — EFS Aplicativos
+descricao: Jogue Oito Maluco online e grátis contra o computador, com 2, 3 ou 4 jogadores: siga o naipe ou o valor, use o 8 para trocar o naipe e chegue a 100 pontos.
+estilos: /assets/jogos/oito-maluco.css
+scripts: /assets/jogos/oito-maluco-logica.js /assets/jogos/sons.js /assets/jogos/oito-maluco.js
+app: Oito Maluco | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Oito Maluco</li>
+  </ol>
+  <h1>Oito Maluco online</h1>
+  <p>
+    O clássico jogo de cartas de descarte: siga o naipe ou o valor da carta da mesa, use o 8 para
+    trocar o naipe e seja o primeiro a ficar sem cartas. Contra 1, 2 ou 3 jogadores do computador.
+  </p>
+</header>
+
+<section class="oito" aria-label="Oito Maluco">
+  <div class="segmented om-modos" role="group" aria-label="Número de jogadores">
+    <button type="button" class="filter" data-modo="2" aria-pressed="false">2 jogadores</button>
+    <button type="button" class="filter active" data-modo="3" aria-pressed="true">3 jogadores</button>
+    <button type="button" class="filter" data-modo="4" aria-pressed="false">4 jogadores</button>
+  </div>
+
+  <div class="om-info">
+    <div class="om-dado"><span>Rodada</span><strong id="om-rodada">1</strong></div>
+    <div class="om-dado"><span>Seus pontos</span><strong id="om-pontos">0 / 100</strong></div>
+    <div class="om-dado"><span>No monte</span><strong id="om-monte">0</strong></div>
+  </div>
+  <p class="om-partida" id="om-partida"></p>
+
+  <div class="om-mesa" id="om-mesa" role="group" aria-label="Mesa do Oito Maluco" aria-describedby="om-ajuda"></div>
+
+  <div class="om-botoes">
+    <button type="button" class="button" id="om-proxima" hidden>Próxima rodada</button>
+    <button type="button" class="button secondary" id="om-dica">Dica</button>
+    <button type="button" class="button secondary" id="om-ordem">Ordenar por valor</button>
+    <button type="button" class="button" id="om-nova">Nova partida</button>
+    <button type="button" class="som-botao" id="om-som"></button>
+  </div>
+
+  <p class="om-ajuda" id="om-ajuda">
+    Toque numa carta acesa da sua mão para jogá-la; as apagadas não servem agora. Toque no monte, no
+    meio da mesa, para comprar. No teclado, as setas andam pelos adversários, pelo monte, pelo
+    descarte e pela sua mão, e Enter ou Espaço joga a carta ou compra.
+  </p>
+  <p class="sr-only" aria-live="polite" id="om-status"></p>
+
+  <details class="om-placar" open>
+    <summary>Pontos por rodada</summary>
+    <div class="om-tabela">
+      <table id="om-placar"></table>
+    </div>
+  </details>
+
+  <details class="om-estatisticas">
+    <summary>Suas estatísticas com <span id="om-est-modo">3 jogadores</span></summary>
+    <dl class="om-est-lista" id="om-est-lista"></dl>
+    <button type="button" class="om-zerar" id="om-zerar">Zerar as estatísticas deste modo</button>
+  </details>
+
+  <dialog class="om-dialogo" id="om-dialogo" aria-labelledby="om-dialogo-titulo">
+    <h2 id="om-dialogo-titulo"></h2>
+    <p id="om-dialogo-texto"></p>
+    <div id="om-dialogo-dados"></div>
+    <div class="om-dialogo-botoes" id="om-dialogo-botoes"></div>
+  </dialog>
+
+  <dialog class="om-dialogo" id="om-naipes" aria-labelledby="om-naipes-titulo" aria-describedby="om-naipes-texto">
+    <h2 id="om-naipes-titulo">Escolha o naipe</h2>
+    <p id="om-naipes-texto">O próximo jogador vai ter de jogar uma carta desse naipe ou outro 8.</p>
+    <div class="om-naipes-botoes" id="om-naipes-botoes" role="group" aria-label="Naipes"></div>
+    <button type="button" class="button secondary" id="om-naipes-cancelar">Cancelar</button>
+  </dialog>
+</section>
+
+<aside class="indicacao" data-indicacao="oito-maluco" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar Oito Maluco</h2>
+  <p>
+    O Oito Maluco usa um baralho comum de 52 cartas, sem curingas. Com 2 jogadores, cada um recebe 7
+    cartas; com 3 ou 4, cada um recebe 5. A carta de cima do monte é virada para começar o descarte,
+    no meio da mesa. Se ela for um 8, volta para o meio do monte e vira-se outra.
+  </p>
+  <p>
+    O objetivo é ficar sem cartas antes dos outros. Na sua vez, jogue no descarte uma carta que
+    combine com a carta de cima:
+  </p>
+  <ul>
+    <li><strong>do mesmo naipe</strong>: sobre um 9 de copas, qualquer carta de copas;</li>
+    <li><strong>ou do mesmo valor</strong>: sobre um 9 de copas, qualquer outro 9, que muda o naipe da vez;</li>
+    <li><strong>ou um 8</strong>, que serve sempre.</li>
+  </ul>
+  <p>
+    As cartas da sua mão que servem ficam acesas; as outras ficam apagadas, e tocar numa delas mostra
+    o que a mesa pede. A vez passa para o jogador seguinte, e a mesa mostra sempre de quem é a vez.
+    Quem está com uma carta só ganha o selo "Última carta!".
+  </p>
+
+  <h2>O 8 é o curinga</h2>
+  <p>
+    O 8 pode ser jogado sobre qualquer carta, e quem o joga escolhe o novo naipe, num quadro com os
+    quatro naipes. O indicador "Naipe da vez", ao lado do descarte, mostra o naipe pedido. O jogador
+    seguinte tem de jogar uma carta desse naipe ou outro 8. Se o 8 for a sua última carta, você
+    simplesmente bate, sem escolher naipe.
+  </p>
+  <p>
+    Nesta versão não há outras cartas especiais: nada de comprar duas, pular a vez ou inverter o
+    sentido. São as regras clássicas do jogo, iguais para você e para o computador.
+  </p>
+
+  <h2>Comprar do monte</h2>
+  <p>
+    Sem carta que sirva, ou se você preferir guardar as suas, toque no monte para comprar uma carta.
+    A vez continua com você: se a carta comprada (ou outra da mão) servir, você pode jogá-la na hora;
+    se não, compre outra, uma de cada vez, até poder jogar.
+  </p>
+  <p>
+    Quando o monte acaba, o descarte, menos a carta de cima, é embaralhado e vira um monte novo. Se
+    não houver nada para comprar e nenhuma carta servir, o monte mostra "Passar a vez", e a vez vai
+    para o próximo jogador.
+  </p>
+
+  <h2>Os pontos e o fim da partida</h2>
+  <p>
+    Quem fica sem cartas primeiro ganha a rodada e marca a soma das cartas que sobraram na mão dos
+    outros jogadores:
+  </p>
+  <ul>
+    <li><strong>8</strong>: 50 pontos;</li>
+    <li><strong>Rei, Dama e Valete</strong>: 10 pontos cada;</li>
+    <li><strong>Ás</strong>: 1 ponto;</li>
+    <li><strong>do 2 ao 10</strong>: o próprio número.</li>
+  </ul>
+  <p>
+    No fim de cada rodada, as cartas dos adversários ficam à mostra e o jogo mostra quanto cada um
+    deixou na mão. A tabela "Pontos por rodada", abaixo da mesa, guarda o placar de todas as rodadas.
+    A cada rodada, quem começa passa para o jogador seguinte. A partida termina quando alguém chega a
+    100 pontos: esse jogador é o vencedor.
+  </p>
+
+  <h2>2, 3 ou 4 jogadores</h2>
+  <p>
+    Escolha quantos jogadores ficam na mesa: você e mais 1, 2 ou 3 jogadores do computador, Ana, Beto
+    e Lia, que jogam nessa ordem depois de você. Com 2 jogadores, as mãos são maiores e a partida dura
+    mais rodadas; com 4, cada rodada é mais curta e alguém bate depressa.
+  </p>
+  <p>
+    Para cada modo, as estatísticas guardam as partidas, as vitórias, as rodadas vencidas e a maior
+    sequência de vitórias. Começar outra partida no meio de uma conta como partida não terminada.
+  </p>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para vencer mais rodadas</h2>
+  <ol>
+    <li><strong>Guarde o 8.</strong> Ele sempre serve, então é a sua saída quando nada mais combina. Use-o cedo só se não houver outro jeito.</li>
+    <li><strong>Fique no seu naipe mais comprido.</strong> Entre duas cartas que servem, jogue a que deixa na mesa o naipe em que você tem mais cartas.</li>
+    <li><strong>Mude de naipe pelo valor.</strong> Um 9 sobre outro 9 troca o naipe sem gastar o 8: ótimo para fugir de um naipe que você não tem.</li>
+    <li><strong>Repare em quem compra.</strong> Se um adversário comprou quando a mesa pedia ouros, provavelmente ele não tem ouros. Peça esse naipe com o seu 8.</li>
+    <li><strong>Livre-se das cartas caras.</strong> Quando alguém está com a "Última carta!", jogue primeiro as figuras e o 8, que valem mais pontos para quem bater.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Quantas pessoas jogam Oito Maluco?</h3>
+  <p>
+    De 2 a 4 aqui: você e 1, 2 ou 3 jogadores do computador. Com 2 jogadores, cada um começa com 7
+    cartas; com 3 ou 4, com 5. Com baralho de verdade, mais gente também joga; a partir de 6
+    jogadores, costuma-se juntar dois baralhos.
+  </p>
+  <h3>Oito Maluco é o mesmo que Crazy Eights?</h3>
+  <p>
+    É. Crazy Eights é o nome em inglês do mesmo jogo tradicional. As regras variam de mesa para mesa;
+    esta versão usa as clássicas: naipe ou valor, o 8 troca o naipe, compra até poder jogar e o
+    vencedor de cada rodada marca as cartas dos outros, até alguém chegar a 100 pontos.
+  </p>
+  <h3>Como o computador joga?</h3>
+  <p>
+    Com as mesmas cartas que você veria: ele não espia mãos nem o monte. Ele guarda os 8 para o fim,
+    joga as cartas do naipe em que tem mais cartas, pede com o 8 o seu naipe mais comprido e repara em
+    quem comprou em cada naipe para adivinhar quem não tem o quê. Quando alguém está perto de bater,
+    ele se livra primeiro das cartas que valem mais. O botão Dica usa esse mesmo raciocínio para
+    sugerir a sua jogada.
+  </p>
+  <h3>Se eu sair da página, perco a partida?</h3>
+  <p>
+    Não. A partida inteira fica salva neste navegador, com as mãos, o monte, o placar e de quem é a
+    vez, e continua de onde parou quando você voltar. Não há desfazer: cada carta jogada vale.
+  </p>
+  <h3>Dá para jogar no celular?</h3>
+  <p>
+    Dá. A mesa se ajusta à largura da tela, com a sua mão em leque embaixo e os adversários em cima;
+    se a mão ficar grande demais, ela passa para duas fileiras. Toque numa carta para jogar e no monte
+    para comprar. Os sons são gerados pelo próprio navegador, e o botão Som liga e desliga os efeitos.
+  </p>
+  <h3>O que é o número da partida?</h3>
+  <p>
+    Cada partida tem um número que define a distribuição das cartas em todas as rodadas. No fim, "Jogar
+    esta de novo" dá as mesmas cartas outra vez, para tentar outro caminho.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

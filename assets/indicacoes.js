@@ -95,6 +95,54 @@ const Indicacoes = (() => {
         "https://meli.la/1ANvoPs",
       ),
     ],
+    "paciencia-golf": [
+      produto(
+        "Baralho Copag 139, naipe grande",
+        "O Golf pede um baralho e uma mesa: com 35 cartas abertas em colunas, números e naipes maiores ajudam a ver de longe qual carta é vizinha de qual. No Mercado Livre, vem um kit com dois, um vermelho e um azul-marinho.",
+        "https://link.amazon/B03b6LpYl",
+        "https://meli.la/1ANvoPs",
+      ),
+    ],
+    copas: [
+      produto(
+        "Baralho Copag 139, naipe grande",
+        "Para jogar Copas na mesa basta um baralho e quatro pessoas: com números e naipes maiores, todo mundo enxerga a vaza de longe. No Mercado Livre, vem um kit com dois, um vermelho e um azul-marinho.",
+        "https://link.amazon/B03b6LpYl",
+        "https://meli.la/1ANvoPs",
+      ),
+    ],
+    truco: [
+      produto(
+        "Baralho Copag 139, naipe grande",
+        "Para o truco na mesa basta um baralho sem os 8, 9 e 10: com números e naipes maiores, os quatro jogadores enxergam a vira e as cartas jogadas de longe. No Mercado Livre, vem um kit com dois, um vermelho e um azul-marinho.",
+        "https://link.amazon/B03b6LpYl",
+        "https://meli.la/1ANvoPs",
+      ),
+    ],
+    buraco: [
+      produto(
+        "Baralho Copag 139, naipe grande",
+        "O Buraco pede dois baralhos completos, e o kit do Mercado Livre já vem com dois Copag 139 de naipe grande, um vermelho e um azul-marinho. Números e naipes maiores ajudam a ler as sequências estendidas na mesa.",
+        "https://link.amazon/B03b6LpYl",
+        "https://meli.la/1ANvoPs",
+      ),
+    ],
+    "oito-maluco": [
+      produto(
+        "Baralho Copag 139, naipe grande",
+        "O Oito Maluco pede só um baralho comum: na roda com a família, números e naipes maiores ajudam todo mundo a ver a carta da mesa. No Mercado Livre, vem um kit com dois, um vermelho e um azul-marinho.",
+        "https://link.amazon/B03b6LpYl",
+        "https://meli.la/1ANvoPs",
+      ),
+    ],
+    mico: [
+      produto(
+        "Baralho Copag 139, naipe grande",
+        "Para jogar Mico em casa basta um baralho comum: tire a Dama de paus e a Dama de espadas vira o mico. Com naipes grandes, até as crianças acham os pares rapidinho; no Mercado Livre, vem um kit com dois, um vermelho e um azul-marinho.",
+        "https://link.amazon/B03b6LpYl",
+        "https://meli.la/1ANvoPs",
+      ),
+    ],
     "jogo-da-memoria": [
       produto("Jogo da memória em madeira, 40 peças", "Peças de verdade para jogar em família, sem tela.", naAmazon("B08VCYG2FG")),
     ],

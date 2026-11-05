@@ -1,0 +1,800 @@
+/* ==========================================================================
+   Copas — você contra três adversários do computador, cartas desenhadas em CSS e naipes em SVG próprios
+   ========================================================================== */
+
+.copas {
+  --cp-mesa-1: #6b2a62;
+  --cp-mesa-2: #3a1236;
+  --cp-face: #fffdf8;
+  --cp-borda: #cfc5b3;
+  --cp-preta: #1c1a17;
+  --cp-vermelha: #c3261f;
+  --cp-verso-1: #24417a;
+  --cp-verso-2: #111f45;
+  --cp-verso-borda: #e9cf7e;
+  --cp-destaque: #ffd23f;
+  --cp-recebida: #6ee7d8;
+  --naipe-espadas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 3C71 25 95 41 95 62c0 13-10 23-23 23-8 0-15-4-19-10 1 9 5 16 13 22H34c8-6 12-13 13-22-4 6-11 10-19 10C15 85 5 75 5 62 5 41 29 25 50 3z'/%3E%3C/svg%3E");
+  --naipe-copas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 93C22 71 4 53 4 32 4 17 15 7 29 7c9 0 16 5 21 13 5-8 12-13 21-13 14 0 25 10 25 25 0 21-18 39-46 61z'/%3E%3C/svg%3E");
+  --naipe-ouros: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 2 88 50 50 98 12 50z'/%3E%3C/svg%3E");
+  --naipe-paus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='28' r='21'/%3E%3Ccircle cx='27' cy='60' r='21'/%3E%3Ccircle cx='73' cy='60' r='21'/%3E%3Cpath d='M44 40h12v20c0 15 4 26 14 37H30c10-11 14-22 14-37z'/%3E%3C/svg%3E");
+  max-width: 940px;
+  margin: 0 auto;
+  overflow-x: clip;
+}
+:root[data-theme="dark"] .copas {
+  --cp-mesa-1: #5a2353;
+  --cp-mesa-2: #2c0d29;
+  --cp-face: #f4f0e7;
+}
+
+.copas .cp-modos {
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.cp-partida {
+  margin: 0 0 4px;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+.cp-situacao {
+  min-height: 1.45em;
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--text);
+}
+
+/* ---------- Mesa ---------- */
+.cp-mesa {
+  --cw: 60px;
+  --ch: 84px;
+  --mw: 34px;
+  --mh: 48px;
+  position: relative;
+  /* As cartas usam z-index alto; isolar evita que passem por cima do cabeçalho fixo do site. */
+  isolation: isolate;
+  width: 100%;
+  min-height: 400px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 80% at 50% 45%, rgba(255, 255, 255, 0.09), transparent 62%),
+    linear-gradient(180deg, var(--cp-mesa-1), var(--cp-mesa-2));
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25), inset 0 3px 22px rgba(0, 0, 0, 0.3);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Quadros dos jogadores: nome, pontos da rodada e cartas na mão */
+.cp-assento {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0 8px;
+  padding: 5px 10px 6px;
+  font-size: 12.5px;
+  line-height: 1.3;
+  color: #fff;
+  background: rgba(16, 4, 15, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  outline: none;
+  transition: box-shadow 200ms ease, background-color 200ms ease;
+}
+.cp-nome {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cp-qtd {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.78);
+  white-space: nowrap;
+}
+.cp-pontos {
+  grid-column: 1 / -1;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.88);
+  white-space: nowrap;
+}
+.cp-pontos b {
+  font-weight: 800;
+  color: #fff;
+}
+.cp-assento.vez {
+  background: rgba(16, 4, 15, 0.62);
+  border-color: var(--cp-destaque);
+  box-shadow: 0 0 0 2px var(--cp-destaque), 0 0 16px rgba(255, 210, 63, 0.45);
+}
+.cp-assento.vez .cp-nome::after {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 6px;
+  vertical-align: 2px;
+  background: var(--cp-destaque);
+  border-radius: 50%;
+  animation: cp-piscar 900ms ease-in-out infinite alternate;
+}
+.cp-assento.ganhou {
+  animation: cp-ganhou 700ms ease-out;
+}
+.cp-assento-0 {
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 0 8px;
+}
+.cp-assento-0 .cp-pontos {
+  grid-column: auto;
+}
+.cp-assento-0 .cp-qtd {
+  display: none;
+}
+.cp-assento-0.vez .cp-nome::after {
+  content: "sua vez";
+  width: auto;
+  height: auto;
+  padding: 1px 7px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: 1px;
+  color: #2a1d00;
+  border-radius: 999px;
+  animation: none;
+}
+
+/* Na tela estreita, cada adversário vira um quadro compacto: o nome em cima e, embaixo, as
+   cartas na mão e os pontos da rodada */
+.cp-mesa.compacta .cp-assento {
+  grid-template-columns: auto 1fr;
+  padding: 4px 7px 5px;
+  font-size: 11.5px;
+}
+.cp-mesa.compacta .cp-nome {
+  grid-column: 1 / -1;
+  font-size: 13px;
+}
+.cp-mesa.compacta .cp-assento:not(.cp-assento-0) .cp-pontos {
+  grid-column: auto;
+  text-align: right;
+}
+.cp-mesa.compacta .cp-qtd {
+  font-size: 11.5px;
+}
+.cp-mesa.compacta .cp-qtd::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 10px;
+  margin-right: 3px;
+  vertical-align: -1px;
+  background: linear-gradient(150deg, var(--cp-verso-1), var(--cp-verso-2));
+  border: 1px solid var(--cp-verso-borda);
+  border-radius: 2px;
+}
+.cp-mesa.compacta .cp-assento-0 {
+  padding: 3px 8px;
+}
+.cp-mesa.compacta .cp-assento-0 .cp-nome {
+  font-size: 12.5px;
+}
+
+/* A vaza no centro: a vaga só serve para o teclado e o leitor de tela */
+.cp-vaga-vaza {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  box-sizing: border-box;
+  border-radius: 14px;
+  outline: none;
+  pointer-events: none;
+}
+.cp-vaga-vaza:focus-visible,
+.cp-assento:focus-visible {
+  outline: 3px solid var(--cp-destaque);
+  outline-offset: 3px;
+}
+.cp-vaga-vaza:focus-visible {
+  z-index: 900;
+}
+
+/* Painel do centro: troca de cartas e fim da rodada */
+.cp-painel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2500;
+  box-sizing: border-box;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  text-align: center;
+  color: #fff;
+  background: rgba(16, 4, 15, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  translate: -50% -50%;
+}
+.cp-painel[hidden] {
+  display: none;
+}
+.cp-painel p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.cp-painel .button {
+  min-height: 44px;
+  padding: 10px 16px;
+  line-height: 1.25;
+}
+.cp-painel .button[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.cp-mesa.compacta .cp-painel {
+  gap: 8px;
+  padding: 8px 9px;
+}
+.cp-mesa.compacta .cp-painel p {
+  font-size: 12.5px;
+}
+.cp-mesa.compacta .cp-painel .button {
+  padding: 8px 10px;
+  font-size: 13.5px;
+}
+
+.cp-mensagem {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  z-index: 3500;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 9px 14px;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+  color: #fff;
+  background: rgba(24, 6, 22, 0.94);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  translate: -50% 6px;
+  transition: opacity 160ms ease, translate 160ms ease;
+}
+.cp-mensagem.visivel {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+/* ---------- Cartas ---------- */
+.cp-carta,
+.cp-mini {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 50% 100%;
+  transition:
+    translate 260ms ease,
+    rotate 260ms ease,
+    scale 260ms ease,
+    opacity 260ms ease,
+    top 120ms ease;
+}
+.cp-carta {
+  width: var(--cw);
+  height: var(--ch);
+  border-radius: calc(var(--cw) * 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.cp-mini {
+  box-sizing: border-box;
+  width: var(--mw);
+  height: var(--mh);
+  border-radius: calc(var(--mw) * 0.12);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.cp-mini[hidden] {
+  display: none;
+}
+.cp-mesa.sem-animacao .cp-carta,
+.cp-mesa.sem-animacao .cp-mini,
+.cp-carta.parada {
+  transition: none;
+}
+.cp-carta.sumindo {
+  opacity: 0;
+}
+.cp-carta.na-mao {
+  cursor: pointer;
+}
+.cp-carta.na-mao:focus-visible {
+  z-index: 950 !important;
+  outline: 3px solid var(--cp-destaque);
+  outline-offset: 2px;
+}
+@media (hover: hover) {
+  .cp-carta.jogavel:hover,
+  .cp-carta.na-mao.trocando:hover {
+    top: -6px;
+  }
+}
+
+.cp-frente,
+.cp-verso {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border-radius: inherit;
+}
+.cp-frente {
+  visibility: hidden;
+  overflow: hidden;
+  color: var(--cp-preta);
+  background: var(--cp-face);
+  border: 1px solid var(--cp-borda);
+  transition: filter 160ms ease;
+}
+.cp-carta.vermelha .cp-frente {
+  color: var(--cp-vermelha);
+}
+.cp-carta.aberta .cp-frente {
+  visibility: visible;
+}
+.cp-carta.aberta .cp-verso {
+  visibility: hidden;
+}
+.cp-verso,
+.cp-mini {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(233, 207, 126, 0.5) 0 12%, transparent 13%),
+    repeating-linear-gradient(45deg, rgba(233, 207, 126, 0.16) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(-45deg, rgba(233, 207, 126, 0.16) 0 2px, transparent 2px 7px),
+    linear-gradient(150deg, var(--cp-verso-1), var(--cp-verso-2));
+}
+.cp-verso {
+  border: max(2px, calc(var(--cw) * 0.05)) solid var(--cp-verso-borda);
+}
+.cp-mini {
+  border: max(2px, calc(var(--mw) * 0.07)) solid var(--cp-verso-borda);
+}
+
+/* O índice (valor e naipe) fica na faixa da esquerda, que aparece mesmo com a mão sobreposta */
+.cp-valor {
+  position: absolute;
+  top: 3%;
+  left: 6%;
+  font-family: "Nunito", sans-serif;
+  font-size: calc(var(--cw) * 0.33);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.07em;
+}
+/* O 10 tem dois algarismos: mais apertado, para caber na faixa visível da mão */
+.cp-valor.dez {
+  letter-spacing: -0.15em;
+  margin-left: -0.04em;
+}
+.cp-naipe {
+  display: block;
+  background-color: currentColor;
+  -webkit-mask: var(--naipe) center / contain no-repeat;
+  mask: var(--naipe) center / contain no-repeat;
+}
+.cp-naipe-espadas {
+  --naipe: var(--naipe-espadas);
+}
+.cp-naipe-copas {
+  --naipe: var(--naipe-copas);
+}
+.cp-naipe-ouros {
+  --naipe: var(--naipe-ouros);
+}
+.cp-naipe-paus {
+  --naipe: var(--naipe-paus);
+}
+.cp-naipe-canto {
+  position: absolute;
+  top: calc(var(--cw) * 0.38);
+  left: 7%;
+  width: calc(var(--cw) * 0.24);
+  height: calc(var(--cw) * 0.24);
+}
+.cp-centro {
+  position: absolute;
+  right: 16%;
+  bottom: 9%;
+  left: 26%;
+  height: 46%;
+  display: grid;
+  place-items: center;
+}
+.cp-centro .cp-naipe {
+  width: 100%;
+  height: 100%;
+}
+.cp-figura {
+  right: 12%;
+  bottom: 8%;
+  left: 24%;
+  height: 50%;
+  padding-top: 0.06em;
+  font-family: "Baloo 2", sans-serif;
+  font-size: calc(var(--cw) * 0.46);
+  font-weight: 800;
+  line-height: 1;
+  border: max(1px, calc(var(--cw) * 0.025)) solid currentColor;
+  border-radius: calc(var(--cw) * 0.08);
+}
+
+/* Na sua vez, as cartas que não podem ser jogadas ficam apagadas */
+.cp-carta.bloqueada .cp-frente {
+  filter: brightness(0.62) saturate(0.55);
+}
+.cp-carta.escolhida {
+  box-shadow: 0 0 0 3px var(--cp-destaque), 0 8px 16px rgba(0, 0, 0, 0.45);
+}
+.cp-carta.recebida {
+  box-shadow: 0 0 0 3px var(--cp-recebida), 0 0 18px 3px rgba(110, 231, 216, 0.7);
+}
+.cp-carta.cp-dica {
+  box-shadow: 0 0 0 3px #fff, 0 0 10px 2px rgba(255, 210, 63, 0.6);
+  animation: cp-brilho 600ms ease-in-out infinite alternate;
+}
+.cp-carta.virando {
+  animation: cp-virar 260ms ease-out;
+}
+.cp-carta.tremendo {
+  animation: cp-tremer 320ms ease-in-out;
+}
+@keyframes cp-brilho {
+  to {
+    box-shadow: 0 0 0 3px #fff, 0 0 22px 7px rgba(255, 210, 63, 0.95);
+  }
+}
+@keyframes cp-virar {
+  0% {
+    scale: 0.06 1;
+  }
+}
+@keyframes cp-tremer {
+  20%,
+  60% {
+    rotate: -5deg;
+  }
+  40%,
+  80% {
+    rotate: 5deg;
+  }
+}
+@keyframes cp-piscar {
+  to {
+    opacity: 0.3;
+  }
+}
+@keyframes cp-ganhou {
+  40% {
+    background: rgba(255, 210, 63, 0.45);
+  }
+}
+
+/* ---------- Botões, ajuda, placar e estatísticas ---------- */
+.cp-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+.cp-botoes .button,
+.cp-botoes .som-botao {
+  min-height: 44px;
+}
+.cp-botoes .button {
+  padding: 10px 18px;
+}
+.cp-botoes .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cp-ajuda {
+  margin: 14px 0 0;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.cp-placar,
+.cp-estatisticas {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.cp-placar summary,
+.cp-estatisticas summary {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.cp-placar-resumo {
+  font-weight: 500;
+  color: var(--muted);
+}
+.cp-placar-rolagem {
+  margin-top: 10px;
+  overflow-x: auto;
+}
+.cp-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.cp-tabela th,
+.cp-tabela td {
+  padding: 6px 8px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+}
+.cp-tabela th:first-child,
+.cp-tabela td:first-child {
+  text-align: left;
+}
+.cp-tabela thead th {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cp-tabela td:first-child {
+  color: var(--muted);
+}
+.cp-tabela tfoot td,
+.cp-tabela tfoot th {
+  font-weight: 800;
+  color: var(--text);
+  border-bottom: 0;
+}
+.cp-tabela .voce {
+  font-weight: 800;
+}
+.cp-tabela .lua {
+  color: var(--accent);
+  font-weight: 800;
+}
+:root[data-theme="light"] .cp-tabela .lua {
+  color: #92400e;
+}
+.cp-tabela .vazia td {
+  text-align: center;
+  color: var(--muted);
+}
+
+.cp-est-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px 18px;
+  margin: 12px 0 0;
+}
+.cp-est-lista div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.cp-est-lista dt {
+  color: var(--muted);
+}
+.cp-est-lista dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.cp-zerar {
+  margin-top: 12px;
+  padding: 0;
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--link);
+  text-decoration: underline;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ---------- Diálogo ---------- */
+.cp-dialogo {
+  width: min(92vw, 420px);
+  padding: 24px;
+  color: var(--text);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.cp-dialogo::backdrop {
+  background: rgba(10, 12, 16, 0.6);
+}
+.cp-dialogo h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+.cp-dialogo p {
+  margin: 0 0 16px;
+  color: var(--text-2);
+}
+.cp-dialogo-dados {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px;
+  text-align: left;
+}
+.cp-dialogo-dados[hidden] {
+  display: none;
+}
+.cp-dialogo-dados div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.cp-dialogo-dados dt {
+  color: var(--muted);
+}
+.cp-dialogo-dados dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.cp-dialogo-dados .destaque dt {
+  font-weight: 800;
+  color: var(--accent);
+}
+:root[data-theme="light"] .cp-dialogo-dados .destaque dt {
+  color: #92400e;
+}
+.cp-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.cp-dialogo.travado .cp-dialogo-botoes {
+  pointer-events: none;
+}
+
+/* A última vaza, desenhada no diálogo: cada carta do lado de quem a jogou */
+.cp-dialogo-vaza {
+  --cw: 54px;
+  --ch: 76px;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-template-areas:
+    ". j2 ."
+    "j1 . j3"
+    ". j0 .";
+  justify-content: center;
+  gap: 4px 10px;
+  margin: 0 auto 16px;
+  padding: 12px 10px;
+  background: linear-gradient(180deg, var(--cp-mesa-1), var(--cp-mesa-2));
+  border-radius: var(--r-sm);
+}
+.cp-dialogo-vaza[hidden] {
+  display: none;
+}
+.cp-lance {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+.cp-lance-0 {
+  grid-area: j0;
+}
+.cp-lance-1 {
+  grid-area: j1;
+  align-self: center;
+}
+.cp-lance-2 {
+  grid-area: j2;
+}
+.cp-lance-3 {
+  grid-area: j3;
+  align-self: center;
+}
+.cp-lance .cp-carta {
+  position: relative;
+  transition: none;
+}
+.cp-lance.ganhou .cp-carta {
+  box-shadow: 0 0 0 3px var(--cp-destaque), 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+.cp-lance.ganhou span {
+  color: var(--cp-destaque);
+}
+
+@media (max-width: 420px) {
+  .cp-situacao {
+    font-size: 14px;
+  }
+  .cp-botoes {
+    gap: 8px;
+  }
+  .cp-botoes .button {
+    padding: 10px 13px;
+  }
+  /* Cartas pequenas: o valor cresce um pouco */
+  .cp-mesa .cp-valor {
+    font-size: calc(var(--cw) * 0.37);
+  }
+  .cp-mesa .cp-naipe-canto {
+    top: calc(var(--cw) * 0.42);
+    width: calc(var(--cw) * 0.27);
+    height: calc(var(--cw) * 0.27);
+  }
+  .cp-mensagem {
+    font-size: 13px;
+  }
+  .cp-tabela {
+    font-size: 13px;
+  }
+  .cp-tabela th,
+  .cp-tabela td {
+    padding: 6px 5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-carta,
+  .cp-mini,
+  .cp-mensagem {
+    transition: none;
+  }
+  .cp-carta.cp-dica {
+    animation: none;
+  }
+  .cp-carta.virando,
+  .cp-carta.tremendo,
+  .cp-assento.ganhou,
+  .cp-assento.vez .cp-nome::after {
+    animation: none;
+  }
+}

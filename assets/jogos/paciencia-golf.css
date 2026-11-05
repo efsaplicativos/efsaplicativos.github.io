@@ -1,0 +1,513 @@
+/* ==========================================================================
+   Paciência Golf — 7 colunas abertas, uma fundação que sobe e desce de um em um, cartas desenhadas
+   em CSS e naipes em SVG próprios
+   ========================================================================== */
+
+.golf {
+  --gf-mesa-1: #3a6d2c;
+  --gf-mesa-2: #1c3e17;
+  --gf-face: #fffdf8;
+  --gf-borda: #cfc5b3;
+  --gf-preta: #1c1a17;
+  --gf-vermelha: #c3261f;
+  --gf-verso-1: #24417a;
+  --gf-verso-2: #111f45;
+  --gf-verso-borda: #e9cf7e;
+  --gf-destaque: #ffd23f;
+  --naipe-espadas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 3C71 25 95 41 95 62c0 13-10 23-23 23-8 0-15-4-19-10 1 9 5 16 13 22H34c8-6 12-13 13-22-4 6-11 10-19 10C15 85 5 75 5 62 5 41 29 25 50 3z'/%3E%3C/svg%3E");
+  --naipe-copas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 93C22 71 4 53 4 32 4 17 15 7 29 7c9 0 16 5 21 13 5-8 12-13 21-13 14 0 25 10 25 25 0 21-18 39-46 61z'/%3E%3C/svg%3E");
+  --naipe-ouros: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 2 88 50 50 98 12 50z'/%3E%3C/svg%3E");
+  --naipe-paus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='28' r='21'/%3E%3Ccircle cx='27' cy='60' r='21'/%3E%3Ccircle cx='73' cy='60' r='21'/%3E%3Cpath d='M44 40h12v20c0 15 4 26 14 37H30c10-11 14-22 14-37z'/%3E%3C/svg%3E");
+  /* A mesa tem cerca de 0,65 vez a largura de altura: limitar a largura pela altura da janela faz
+     a mesa inteira e os botões caberem na tela do notebook sem rolar */
+  max-width: clamp(320px, calc((100vh - 90px) * 1.45), 800px);
+  margin: 0 auto;
+  overflow-x: clip;
+}
+@supports (height: 100svh) {
+  .golf {
+    max-width: clamp(320px, calc((100svh - 90px) * 1.45), 800px);
+  }
+}
+:root[data-theme="dark"] .golf {
+  --gf-mesa-1: #2f5c24;
+  --gf-mesa-2: #132c10;
+  --gf-face: #f4f0e7;
+}
+
+.golf .gf-modos {
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.gf-info {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.gf-dado {
+  padding: 8px 10px;
+  text-align: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.gf-dado span {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.gf-dado strong {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.gf-partida {
+  margin: 8px 0 12px;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ---------- Mesa ---------- */
+.gf-mesa {
+  --cw: 60px;
+  --ch: 84px;
+  position: relative;
+  /* As cartas usam z-index alto; isolar evita que passem por cima do cabeçalho fixo do site. */
+  isolation: isolate;
+  width: 100%;
+  min-height: 220px;
+  /* Feltro verde de campo de golfe, com as faixas claras e escuras da grama cortada */
+  background:
+    radial-gradient(130% 90% at 50% 0%, rgba(255, 255, 255, 0.09), transparent 60%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 calc(var(--cw) * 0.75), transparent calc(var(--cw) * 0.75) calc(var(--cw) * 1.5)),
+    linear-gradient(180deg, var(--gf-mesa-1), var(--gf-mesa-2));
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25), inset 0 3px 22px rgba(0, 0, 0, 0.28);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gf-pilha {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  border-radius: calc(var(--cw) * 0.1);
+  outline: none;
+}
+/* A vaga da coluna só aparece quando ela fica vazia, bem de leve */
+.gf-pilha-coluna {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.gf-pilha-fundacao {
+  border-style: dashed;
+}
+.gf-pilha-monte {
+  cursor: pointer;
+}
+.gf-pilha-monte.vazio {
+  cursor: default;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.gf-anel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3000;
+  box-sizing: border-box;
+  border-radius: calc(var(--cw) * 0.12);
+  outline: 3px solid var(--gf-destaque);
+  outline-offset: 2px;
+  pointer-events: none;
+}
+
+/* No alto da mesa: assim o aviso cobre só as cartas mais presas das colunas, e não a fundação */
+.gf-mensagem {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  z-index: 3500;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 9px 14px;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+  color: #fff;
+  background: rgba(10, 24, 8, 0.93);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  translate: -50% -6px;
+  transition: opacity 160ms ease, translate 160ms ease;
+}
+.gf-mensagem.visivel {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+/* ---------- Cartas ---------- */
+.gf-carta {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--cw);
+  height: var(--ch);
+  border-radius: calc(var(--cw) * 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  transition: translate 220ms ease;
+  touch-action: manipulation;
+}
+.gf-carta.livre {
+  cursor: pointer;
+  touch-action: none;
+}
+.gf-carta.no-monte {
+  cursor: pointer;
+}
+.gf-carta.coberta {
+  visibility: hidden;
+}
+.gf-mesa.sem-animacao .gf-carta {
+  transition: none;
+}
+.gf-mesa.arrastando .gf-carta.no-ar {
+  transition: none;
+  cursor: grabbing;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.42);
+}
+
+.gf-frente,
+.gf-verso {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border-radius: inherit;
+}
+.gf-frente {
+  visibility: hidden;
+  overflow: hidden;
+  color: var(--gf-preta);
+  background: var(--gf-face);
+  border: 1px solid var(--gf-borda);
+}
+.gf-carta.vermelha .gf-frente {
+  color: var(--gf-vermelha);
+}
+.gf-carta.aberta .gf-frente {
+  visibility: visible;
+}
+.gf-carta.aberta .gf-verso {
+  visibility: hidden;
+}
+.gf-verso {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(233, 207, 126, 0.5) 0 12%, transparent 13%),
+    repeating-linear-gradient(45deg, rgba(233, 207, 126, 0.16) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(-45deg, rgba(233, 207, 126, 0.16) 0 2px, transparent 2px 7px),
+    linear-gradient(150deg, var(--gf-verso-1), var(--gf-verso-2));
+  border: max(2px, calc(var(--cw) * 0.05)) solid var(--gf-verso-borda);
+}
+
+/* O valor e o naipe do canto cabem na faixa de cima, que aparece mesmo com a carta coberta */
+.gf-valor {
+  position: absolute;
+  top: 2%;
+  left: 6%;
+  font-family: "Nunito", sans-serif;
+  font-size: calc(var(--cw) * 0.34);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.07em;
+}
+.gf-naipe {
+  display: block;
+  background-color: currentColor;
+  -webkit-mask: var(--naipe) center / contain no-repeat;
+  mask: var(--naipe) center / contain no-repeat;
+}
+.gf-naipe-espadas {
+  --naipe: var(--naipe-espadas);
+}
+.gf-naipe-copas {
+  --naipe: var(--naipe-copas);
+}
+.gf-naipe-ouros {
+  --naipe: var(--naipe-ouros);
+}
+.gf-naipe-paus {
+  --naipe: var(--naipe-paus);
+}
+.gf-naipe-canto {
+  position: absolute;
+  top: 4%;
+  right: 6%;
+  width: calc(var(--cw) * 0.27);
+  height: calc(var(--cw) * 0.27);
+}
+.gf-centro {
+  position: absolute;
+  right: 18%;
+  bottom: 9%;
+  left: 18%;
+  height: 46%;
+  display: grid;
+  place-items: center;
+}
+.gf-centro .gf-naipe {
+  width: 100%;
+  height: 100%;
+}
+.gf-figura {
+  right: 15%;
+  bottom: 8%;
+  left: 15%;
+  height: 50%;
+  padding-top: 0.06em;
+  font-family: "Baloo 2", sans-serif;
+  font-size: calc(var(--cw) * 0.5);
+  font-weight: 800;
+  line-height: 1;
+  border: max(1px, calc(var(--cw) * 0.025)) solid currentColor;
+  border-radius: calc(var(--cw) * 0.08);
+}
+
+.gf-carta.gf-dica,
+.gf-pilha.gf-dica {
+  animation: gf-brilho 550ms ease-in-out 4 alternate;
+}
+.gf-carta.virando {
+  animation: gf-virar 220ms ease-out;
+}
+.gf-carta.tremendo {
+  animation: gf-tremer 320ms ease-in-out;
+}
+.gf-mesa.gf-festa .gf-carta {
+  animation: gf-pulo 520ms ease-in-out calc(var(--k, 0) * 90ms) 2;
+}
+@keyframes gf-brilho {
+  to {
+    box-shadow: 0 0 0 3px var(--gf-destaque), 0 0 18px 4px rgba(255, 210, 63, 0.8);
+  }
+}
+@keyframes gf-virar {
+  from {
+    scale: 0.06 1;
+  }
+}
+@keyframes gf-tremer {
+  20%,
+  60% {
+    rotate: -5deg;
+  }
+  40%,
+  80% {
+    rotate: 5deg;
+  }
+}
+@keyframes gf-pulo {
+  50% {
+    scale: 1.12;
+    rotate: -6deg;
+  }
+}
+
+/* ---------- Botões, ajuda e estatísticas ---------- */
+.gf-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+.gf-botoes .button,
+.gf-botoes .som-botao {
+  min-height: 44px;
+}
+.gf-botoes .button {
+  padding: 10px 18px;
+}
+.gf-botoes .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gf-ajuda {
+  margin: 14px 0 0;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.gf-estatisticas {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.gf-estatisticas summary {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.gf-est-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px 18px;
+  margin: 12px 0 0;
+}
+.gf-est-lista div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.gf-est-lista dt {
+  color: var(--muted);
+}
+.gf-est-lista dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.gf-zerar {
+  margin-top: 12px;
+  padding: 0;
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--link);
+  text-decoration: underline;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ---------- Diálogo ---------- */
+.gf-dialogo {
+  width: min(92vw, 420px);
+  padding: 24px;
+  color: var(--text);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.gf-dialogo::backdrop {
+  background: rgba(10, 12, 16, 0.6);
+}
+.gf-dialogo h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+.gf-dialogo p {
+  margin: 0 0 16px;
+  color: var(--text-2);
+}
+.gf-dialogo-dados {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px;
+  text-align: left;
+}
+.gf-dialogo-dados div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.gf-dialogo-dados dt {
+  color: var(--muted);
+}
+.gf-dialogo-dados dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.gf-dialogo-dados .destaque dt {
+  font-weight: 800;
+  color: var(--accent);
+}
+:root[data-theme="light"] .gf-dialogo-dados .destaque dt {
+  color: #92400e;
+}
+.gf-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.gf-dialogo.travado .gf-dialogo-botoes {
+  pointer-events: none;
+}
+
+@media (max-width: 420px) {
+  .gf-info {
+    gap: 6px;
+  }
+  .gf-dado {
+    padding: 6px 4px;
+  }
+  .gf-dado span {
+    font-size: 10px;
+    letter-spacing: 0.03em;
+  }
+  .gf-dado strong {
+    font-size: 17px;
+  }
+  .gf-botoes {
+    gap: 8px;
+  }
+  .gf-botoes .button {
+    padding: 10px 14px;
+  }
+  /* Cartas pequenas: o valor cresce um pouco */
+  .gf-valor {
+    font-size: calc(var(--cw) * 0.4);
+  }
+  .gf-naipe-canto {
+    width: calc(var(--cw) * 0.3);
+    height: calc(var(--cw) * 0.3);
+  }
+  .gf-mensagem {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gf-carta,
+  .gf-mensagem {
+    transition: none;
+  }
+  .gf-carta.gf-dica,
+  .gf-pilha.gf-dica {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--gf-destaque);
+  }
+  .gf-carta.virando,
+  .gf-carta.tremendo,
+  .gf-mesa.gf-festa .gf-carta {
+    animation: none;
+  }
+}

@@ -1,0 +1,632 @@
+/* ==========================================================================
+   Mico — baralho comum sem a Dama de paus, pares da mesma cor, cartas desenhadas em CSS e naipes em SVG próprios
+   ========================================================================== */
+
+.mico {
+  --mi-mesa-1: #f4a640;
+  --mi-mesa-2: #cc6a1a;
+  --mi-face: #fffdf8;
+  --mi-borda: #cfc5b3;
+  --mi-preta: #1c1a17;
+  --mi-vermelha: #c3261f;
+  --mi-verso-1: #24417a;
+  --mi-verso-2: #111f45;
+  --mi-verso-borda: #e9cf7e;
+  --mi-tinta: rgba(52, 20, 0, 0.58);
+  --naipe-espadas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 3C71 25 95 41 95 62c0 13-10 23-23 23-8 0-15-4-19-10 1 9 5 16 13 22H34c8-6 12-13 13-22-4 6-11 10-19 10C15 85 5 75 5 62 5 41 29 25 50 3z'/%3E%3C/svg%3E");
+  --naipe-copas: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 93C22 71 4 53 4 32 4 17 15 7 29 7c9 0 16 5 21 13 5-8 12-13 21-13 14 0 25 10 25 25 0 21-18 39-46 61z'/%3E%3C/svg%3E");
+  --naipe-ouros: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 2 88 50 50 98 12 50z'/%3E%3C/svg%3E");
+  --naipe-paus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='28' r='21'/%3E%3Ccircle cx='27' cy='60' r='21'/%3E%3Ccircle cx='73' cy='60' r='21'/%3E%3Cpath d='M44 40h12v20c0 15 4 26 14 37H30c10-11 14-22 14-37z'/%3E%3C/svg%3E");
+  /* A mesa tem cerca de 0,56 vez a largura de altura: limitar a largura pela altura da janela faz
+     a mesa inteira caber na tela do notebook sem rolar */
+  max-width: clamp(320px, calc((100vh - 120px) * 1.45), 820px);
+  margin: 0 auto;
+  overflow-x: clip;
+}
+@supports (height: 100svh) {
+  .mico {
+    max-width: clamp(320px, calc((100svh - 120px) * 1.45), 820px);
+  }
+}
+:root[data-theme="dark"] .mico {
+  --mi-mesa-1: #c4772a;
+  --mi-mesa-2: #85410f;
+  --mi-face: #f4f0e7;
+}
+
+.mico .mi-modos {
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.mi-partida {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ---------- Mesa ---------- */
+.mi-mesa {
+  --cw: 60px;
+  --ch: 84px;
+  --mi-voo: 400ms;
+  position: relative;
+  /* As cartas usam z-index alto; isolar evita que passem por cima do cabeçalho fixo do site. */
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  min-height: 300px;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.07) 1.3px, transparent 1.8px) 0 0 / 18px 18px,
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 244, 200, 0.22), transparent 62%),
+    linear-gradient(180deg, var(--mi-mesa-1), var(--mi-mesa-2));
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2), inset 0 3px 22px rgba(80, 30, 0, 0.3);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Alvos do teclado: invisíveis, embaixo das cartas */
+.mi-vaga {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  outline: none;
+  transform-origin: 50% 50%;
+}
+
+.mi-anel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3000;
+  box-sizing: border-box;
+  border-radius: calc(var(--cw) * 0.1);
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 7px rgba(40, 14, 0, 0.55);
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  transition: translate 140ms ease, rotate 140ms ease, top 140ms ease;
+}
+
+/* Nome, número de cartas e lugar de cada jogador */
+.mi-etiqueta {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 900;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.mi-etiqueta-minha {
+  justify-content: flex-start;
+}
+.mi-pilula {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 3px 4px 3px 10px;
+  font-size: 13.5px;
+  font-weight: 800;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: #fff;
+  background: var(--mi-tinta);
+  border-radius: 999px;
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+.mi-nome {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mi-conta {
+  min-width: 22px;
+  box-sizing: border-box;
+  padding: 1px 6px;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: #5b2500;
+  background: #fff4dc;
+  border-radius: 999px;
+}
+.mi-etiqueta.vez .mi-pilula {
+  background: #2e1300;
+  box-shadow: 0 0 0 3px #fff, 0 0 16px 4px rgba(255, 255, 255, 0.55);
+}
+.mi-etiqueta.saiu .mi-pilula {
+  background: rgba(52, 20, 0, 0.38);
+}
+.mi-etiqueta.saiu .mi-conta {
+  color: #3d2400;
+  background: #ffd23f;
+}
+.mi-etiqueta.perdeu .mi-conta {
+  color: #fff;
+  background: #8f1d14;
+}
+
+/* Narração da partida: de quem é a vez e o que acabou de acontecer */
+.mi-faixa {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 950;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 6px;
+  pointer-events: none;
+}
+.mi-faixa span {
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 4px 12px;
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  color: #fff;
+  background: var(--mi-tinta);
+  border-radius: 12px;
+}
+.mi-faixa span:empty {
+  display: none;
+}
+
+.mi-pilha-rotulo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 950;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  white-space: nowrap;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(60, 20, 0, 0.7);
+  pointer-events: none;
+}
+
+.mi-mensagem {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 3500;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 9px 14px;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+  color: #fff;
+  background: rgba(36, 12, 0, 0.94);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  translate: -50% 6px;
+  transition: opacity 160ms ease, translate 160ms ease;
+}
+.mi-mensagem.visivel {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+/* ---------- Cartas ---------- */
+.mi-carta {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--cw);
+  height: var(--ch);
+  border-radius: calc(var(--cw) * 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  transform-origin: 50% 50%;
+  transition:
+    translate var(--mi-voo) ease,
+    rotate var(--mi-voo) ease,
+    scale var(--mi-voo) ease,
+    top 140ms ease,
+    box-shadow 140ms ease;
+  touch-action: manipulation;
+}
+.mi-carta.coberta {
+  visibility: hidden;
+}
+.mi-mesa.sem-animacao .mi-carta,
+.mi-mesa.sem-animacao .mi-anel {
+  transition: none;
+}
+.mi-carta.oferta {
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .mi-carta.oferta:hover {
+    top: calc(var(--ch) * -0.1);
+  }
+}
+.mi-carta.levantada {
+  top: calc(var(--ch) * -0.12);
+}
+.mi-carta.escolhida {
+  box-shadow: 0 0 0 3px #fff, 0 8px 16px rgba(0, 0, 0, 0.45);
+}
+.mi-carta.mico-meu {
+  cursor: grab;
+  touch-action: none;
+}
+.mi-mesa.arrastando .mi-carta.no-ar {
+  transition: none;
+  cursor: grabbing;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.42);
+}
+
+.mi-giro {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.mi-frente,
+.mi-verso {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border-radius: inherit;
+}
+.mi-frente {
+  visibility: hidden;
+  overflow: hidden;
+  color: var(--mi-preta);
+  background: var(--mi-face);
+  border: 1px solid var(--mi-borda);
+}
+.mi-carta.vermelha .mi-frente {
+  color: var(--mi-vermelha);
+}
+.mi-carta.aberta .mi-frente {
+  visibility: visible;
+}
+.mi-carta.aberta .mi-verso {
+  visibility: hidden;
+}
+.mi-verso {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(233, 207, 126, 0.5) 0 12%, transparent 13%),
+    repeating-linear-gradient(45deg, rgba(233, 207, 126, 0.16) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(-45deg, rgba(233, 207, 126, 0.16) 0 2px, transparent 2px 7px),
+    linear-gradient(150deg, var(--mi-verso-1), var(--mi-verso-2));
+  border: max(2px, calc(var(--cw) * 0.05)) solid var(--mi-verso-borda);
+}
+
+/* O valor e o naipe ficam um embaixo do outro no canto esquerdo, que aparece no leque */
+.mi-indice {
+  position: absolute;
+  top: 3%;
+  left: 3%;
+  width: 34%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--cw) * 0.03);
+}
+.mi-valor {
+  font-family: "Nunito", sans-serif;
+  font-size: calc(var(--cw) * 0.32);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.07em;
+}
+.mi-naipe {
+  display: block;
+  background-color: currentColor;
+  -webkit-mask: var(--naipe) center / contain no-repeat;
+  mask: var(--naipe) center / contain no-repeat;
+}
+.mi-naipe-espadas {
+  --naipe: var(--naipe-espadas);
+}
+.mi-naipe-copas {
+  --naipe: var(--naipe-copas);
+}
+.mi-naipe-ouros {
+  --naipe: var(--naipe-ouros);
+}
+.mi-naipe-paus {
+  --naipe: var(--naipe-paus);
+}
+.mi-indice .mi-naipe {
+  width: calc(var(--cw) * 0.22);
+  height: calc(var(--cw) * 0.22);
+}
+.mi-centro {
+  position: absolute;
+  right: 18%;
+  bottom: 9%;
+  left: 18%;
+  height: 46%;
+  display: grid;
+  place-items: center;
+}
+.mi-centro .mi-naipe {
+  width: 100%;
+  height: 100%;
+}
+.mi-figura {
+  right: 15%;
+  bottom: 8%;
+  left: 15%;
+  height: 50%;
+  padding-top: 0.06em;
+  font-family: "Baloo 2", sans-serif;
+  font-size: calc(var(--cw) * 0.5);
+  font-weight: 800;
+  line-height: 1;
+  border: max(1px, calc(var(--cw) * 0.025)) solid currentColor;
+  border-radius: calc(var(--cw) * 0.08);
+}
+
+/* O mico: a Dama de espadas ganha o selo do macaquinho, no meio e embaixo do canto */
+.mi-selo {
+  right: 8%;
+  bottom: 6%;
+  left: 22%;
+  height: 56%;
+}
+.mi-selo svg,
+.mi-macaco-mini svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.mi-macaco-mini {
+  width: calc(var(--cw) * 0.27);
+  height: calc(var(--cw) * 0.27);
+}
+
+.mi-carta.virando .mi-giro {
+  animation: mi-virar 240ms ease-out;
+}
+.mi-carta.tremendo {
+  animation: mi-tremer 320ms ease-in-out;
+}
+.mi-carta.festa {
+  animation: mi-pulo 560ms ease-in-out 3;
+}
+@keyframes mi-virar {
+  from {
+    transform: scaleX(0.06);
+  }
+}
+@keyframes mi-tremer {
+  20%,
+  60% {
+    rotate: -5deg;
+  }
+  40%,
+  80% {
+    rotate: 5deg;
+  }
+}
+@keyframes mi-pulo {
+  50% {
+    top: calc(var(--ch) * -0.14);
+  }
+}
+
+/* ---------- Botões, ajuda e estatísticas ---------- */
+.mi-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+.mi-botoes .button,
+.mi-botoes .som-botao {
+  min-height: 44px;
+}
+.mi-botoes .button {
+  padding: 10px 18px;
+}
+.mi-botoes .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mi-ajuda {
+  margin: 14px 0 0;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.mi-estatisticas {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.mi-estatisticas summary {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.mi-est-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px 18px;
+  margin: 12px 0 0;
+}
+.mi-est-lista div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.mi-est-lista dt {
+  color: var(--muted);
+}
+.mi-est-lista dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  white-space: nowrap;
+}
+.mi-zerar {
+  margin-top: 12px;
+  padding: 0;
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--link);
+  text-decoration: underline;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ---------- Diálogo ---------- */
+.mi-dialogo {
+  width: min(92vw, 400px);
+  padding: 24px;
+  color: var(--text);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.mi-dialogo::backdrop {
+  background: rgba(10, 12, 16, 0.6);
+}
+.mi-dialogo-arte {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 6px;
+}
+.mi-dialogo-arte svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.mi-dialogo h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+.mi-dialogo p {
+  margin: 0 0 16px;
+  color: var(--text-2);
+}
+.mi-dialogo-dados {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px;
+  text-align: left;
+}
+.mi-dialogo-dados div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.mi-dialogo-dados dt {
+  color: var(--muted);
+}
+.mi-dialogo-dados dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.mi-dialogo-dados .destaque dt,
+.mi-dialogo-dados .destaque dd {
+  font-weight: 800;
+  color: var(--accent);
+}
+:root[data-theme="light"] .mi-dialogo-dados .destaque dt,
+:root[data-theme="light"] .mi-dialogo-dados .destaque dd {
+  color: #92400e;
+}
+.mi-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.mi-dialogo.travado .mi-dialogo-botoes {
+  pointer-events: none;
+}
+
+@media (max-width: 420px) {
+  .mico .mi-modos {
+    gap: 6px;
+  }
+  .mico .mi-modos .filter {
+    padding-inline: 12px;
+  }
+  .mi-botoes {
+    gap: 8px;
+  }
+  .mi-botoes .button {
+    padding: 10px 14px;
+  }
+  /* Cartas pequenas: o canto cresce um pouco */
+  .mi-valor {
+    font-size: calc(var(--cw) * 0.38);
+  }
+  .mi-indice .mi-naipe {
+    width: calc(var(--cw) * 0.26);
+    height: calc(var(--cw) * 0.26);
+  }
+  .mi-pilula {
+    gap: 4px;
+    padding: 2px 3px 2px 7px;
+    font-size: 12.5px;
+  }
+  .mi-conta {
+    min-width: 20px;
+    padding: 1px 4px;
+    font-size: 11.5px;
+  }
+  .mi-faixa span {
+    padding: 4px 10px;
+    font-size: 13px;
+  }
+  .mi-mensagem {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mi-carta,
+  .mi-anel,
+  .mi-mensagem,
+  .mi-pilula {
+    transition: none;
+  }
+  .mi-carta.virando .mi-giro,
+  .mi-carta.tremendo,
+  .mi-carta.festa {
+    animation: none;
+  }
+}

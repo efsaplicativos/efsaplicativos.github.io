@@ -1,0 +1,247 @@
+<!--
+titulo: Truco Online Grátis: Paulista e Mineiro contra o Computador — EFS Aplicativos
+descricao: Jogue truco online e grátis, Paulista ou Mineiro, em dupla com o computador contra outra dupla. Peça truco, seis e doze, com mão de onze e estatísticas.
+estilos: /assets/jogos/truco.css
+scripts: /assets/jogos/truco-logica.js /assets/jogos/sons.js /assets/jogos/truco.js
+app: Truco | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Truco</li>
+  </ol>
+  <h1>Truco online: Paulista e Mineiro</h1>
+  <p>
+    Sente à mesa com o Zé, seu parceiro, contra o Tião e a Cida. Peça truco quando a mão estiver
+    boa (ou quando quiser blefar), aceite, corra ou aumente, e faça 12 tentos antes deles.
+  </p>
+</header>
+
+<section class="truco" aria-label="Truco contra o computador">
+  <div class="segmented tr-modos" role="group" aria-label="Modo de jogo">
+    <button type="button" class="filter active" data-modo="paulista" aria-pressed="true">Paulista</button>
+    <button type="button" class="filter" data-modo="mineiro" aria-pressed="false">Mineiro</button>
+  </div>
+
+  <div class="tr-info">
+    <div class="tr-dado tr-dado-placar">
+      <span><b class="tr-cor-nos">Nós</b> x <b class="tr-cor-eles">Eles</b></span>
+      <strong id="tr-placar">0 x 0</strong>
+    </div>
+    <div class="tr-dado"><span id="tr-valor-rotulo">A mão vale</span><strong id="tr-valor">1</strong></div>
+    <div class="tr-dado"><span>Vazas de Nós</span><strong class="tr-vazas" id="tr-vazas"></strong></div>
+  </div>
+  <p class="tr-legenda" id="tr-legenda"></p>
+
+  <div class="tr-mesa" id="tr-mesa" role="group" aria-label="Mesa de truco" aria-describedby="tr-ajuda"></div>
+
+  <div class="tr-acao" id="tr-acao" role="group" aria-labelledby="tr-acao-titulo" hidden>
+    <p class="tr-acao-titulo" id="tr-acao-titulo"></p>
+    <p class="tr-acao-texto" id="tr-acao-texto"></p>
+    <div class="tr-acao-botoes" id="tr-acao-botoes"></div>
+  </div>
+
+  <div class="tr-botoes">
+    <button type="button" class="button tr-truco" id="tr-truco">Truco!</button>
+    <button type="button" class="button secondary" id="tr-cobrir" aria-pressed="false" title="A próxima carta vai virada para baixo e não vale nada">Carta coberta</button>
+    <button type="button" class="button secondary" id="tr-nova">Nova partida</button>
+    <button type="button" class="som-botao" id="tr-som"></button>
+  </div>
+
+  <p class="tr-partida" id="tr-partida"></p>
+  <p class="tr-ajuda" id="tr-ajuda">
+    Toque numa das suas cartas, embaixo, para jogá-la. O botão Truco! aparece na sua vez quando você
+    pode pedir (ou aumentar); da 2ª vaza em diante, o botão Carta coberta faz a próxima carta ir
+    virada para baixo. Nas vazas, ✓ é vaza de Nós, ✗ de Eles e = empate. No teclado, as setas escolhem a carta
+    e Enter ou Espaço joga.
+  </p>
+  <p class="sr-only" aria-live="polite" id="tr-status"></p>
+
+  <details class="tr-estatisticas">
+    <summary>Suas estatísticas no Truco <span id="tr-est-modo">Paulista</span></summary>
+    <dl class="tr-est-lista" id="tr-est-lista"></dl>
+    <button type="button" class="tr-zerar" id="tr-zerar">Zerar as estatísticas deste modo</button>
+  </details>
+
+  <dialog class="tr-dialogo" id="tr-dialogo" aria-labelledby="tr-dialogo-titulo">
+    <h2 id="tr-dialogo-titulo"></h2>
+    <p id="tr-dialogo-texto"></p>
+    <dl class="tr-dialogo-dados" id="tr-dialogo-dados"></dl>
+    <div class="tr-dialogo-botoes" id="tr-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<aside class="indicacao" data-indicacao="truco" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar truco</h2>
+  <p>
+    O truco é jogado em duplas, dois contra dois, com parceiros sentados frente a frente. Aqui você
+    joga com o Zé, que fica no alto da mesa, contra o Tião (à sua direita) e a Cida (à sua
+    esquerda); no placar, a sua dupla é "Nós" e a deles é "Eles". O baralho tem 40 cartas: sai do
+    baralho comum o 8, o 9, o 10 e os coringas.
+  </p>
+  <ul>
+    <li><strong>Cada jogador recebe 3 cartas</strong>, e a mão é disputada em até 3 vazas (também chamadas de rodadas). Em cada vaza, cada um joga uma carta, e a mais forte leva.</li>
+    <li><strong>Ganha a mão a dupla que fizer 2 vazas</strong> (ou que se der bem nos empates, explicados mais abaixo) e marca os pontos que a mão estiver valendo.</li>
+    <li><strong>O jogo vai a 12 tentos.</strong> O placar para nos 12: uma mão que daria mais pontos só completa o que falta.</li>
+    <li><strong>Joga-se no sentido anti-horário:</strong> as cartas são dadas uma a uma, começando por quem está à direita de quem dá, e é esse jogador quem abre a primeira vaza. Quem dá as cartas muda para a direita a cada mão. Quem ganha uma vaza começa a seguinte.</li>
+    <li><strong>Para jogar, toque numa das suas cartas</strong> (ou use as setas e Enter). As cartas dos outros ficam viradas para baixo e só aparecem quando vão para a mesa.</li>
+  </ul>
+  <p>
+    Se quiser jogar truco com os amigos de verdade, em volta de uma mesa, use o
+    <a href="/ferramentas/marcador-de-truco/">marcador de truco</a> para contar os pontos.
+  </p>
+
+  <h2>A ordem das cartas e as manilhas</h2>
+  <p>
+    Fora as manilhas, a ordem é a mesma nos dois modos, da carta mais forte para a mais fraca:
+    <strong>3, 2, Ás, Rei, Valete, Dama, 7, 6, 5 e 4</strong>. Nessas cartas o naipe não conta: um 3
+    de ouros e um 3 de paus têm a mesma força. Acima de todas ficam as quatro manilhas, e é aí que
+    o Paulista e o Mineiro mudam.
+  </p>
+  <h3>Truco Paulista: manilha pela vira</h3>
+  <p>
+    Depois de dar as cartas, quem distribuiu vira a carta seguinte do baralho na mesa: é a
+    <strong>vira</strong>. As manilhas da mão são as quatro cartas do valor logo acima da vira, na
+    ordem 4, 5, 6, 7, Dama, Valete, Rei, Ás, 2, 3, que dá a volta: vira 7, a manilha é a Dama; vira
+    3, a manilha é o 4. Entre as manilhas, vale o naipe:
+  </p>
+  <ol>
+    <li><strong>Paus (zap)</strong>, a carta mais forte do jogo;</li>
+    <li><strong>Copas</strong> (o copas);</li>
+    <li><strong>Espadas</strong> (a espadilha);</li>
+    <li><strong>Ouros</strong> (o pica-fumo).</li>
+  </ol>
+  <p>A vira fica no canto da mesa, e a linha acima dela lista as manilhas daquela mão.</p>
+  <h3>Truco Mineiro: manilhas fixas</h3>
+  <p>No Mineiro não tem vira: as manilhas são sempre as mesmas quatro cartas.</p>
+  <ol>
+    <li><strong>4 de paus (zap)</strong>, a mais forte;</li>
+    <li><strong>7 de copas</strong> (o copas, ou copeta);</li>
+    <li><strong>Ás de espadas</strong> (a espadilha);</li>
+    <li><strong>7 de ouros</strong> (o pica-fumo).</li>
+  </ol>
+  <p>
+    Os outros 4, os 7 de espadas e de paus e os outros Ases são cartas comuns, na ordem normal. Assim,
+    no Mineiro o 4 de copas é das cartas mais fracas do baralho, enquanto o 4 de paus é a maior.
+  </p>
+
+  <h2>Valor da mão e a escada do truco</h2>
+  <p>
+    Na sua vez, antes de jogar a carta, qualquer jogador pode pedir <strong>truco</strong> para a mão
+    valer mais. A outra dupla responde: <strong>aceita</strong> (a mão passa a valer o pedido),
+    <strong>corre</strong> (desiste da mão, e quem pediu leva o valor de antes do pedido) ou
+    <strong>aumenta</strong>, o que já aceita o pedido e sobe mais um degrau. Depois de aceito, só a
+    dupla que não fez o último pedido pode aumentar de novo, também na própria vez.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Pedido</th><th>Paulista: vale</th><th>Paulista: quem corre dá</th><th>Mineiro: vale</th><th>Mineiro: quem corre dá</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Sem pedido</td><td>1</td><td>—</td><td>2</td><td>—</td></tr>
+        <tr><td>Truco</td><td>3</td><td>1</td><td>4</td><td>2</td></tr>
+        <tr><td>Seis</td><td>6</td><td>3</td><td>6</td><td>4</td></tr>
+        <tr><td>Nove (Paulista) ou Dez (Mineiro)</td><td>9</td><td>6</td><td>10</td><td>6</td></tr>
+        <tr><td>Doze</td><td>12</td><td>9</td><td>12</td><td>10</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    No Mineiro a escada mais comum é 2, 4, 6, 10 e 12, como nos jogos de truco mineiro on-line e
+    em boa parte de Minas; há mesas que jogam o Mineiro com os pontos do Paulista (1, 3, 6, 9 e 12),
+    mas aqui cada modo segue a sua contagem tradicional. Os pedidos não pulam degraus. Quando a
+    sua dupla pede, o Tião ou a Cida respondem com um balão ("Desce!" é aceito, "Corri" é correr);
+    quando eles pedem, aparece o aviso "Eles pediram truco!" com Aceitar, Correr e o aumento, e quem
+    decide pela sua dupla é você.
+  </p>
+
+  <h2>Mão de onze, mão de dez e mão de ferro</h2>
+  <ul>
+    <li><strong>Mão de onze (Paulista):</strong> a dupla que chega a 11 pontos vê as cartas do parceiro e decide se joga a mão, que vale 3, ou se corre, dando 1 ponto aos adversários. Quando é a sua dupla, as cartas do Zé aparecem no alto da mesa até você decidir.</li>
+    <li><strong>Mão de dez (Mineiro):</strong> como no Mineiro os pontos vêm de 2 em 2, a mão especial é a de 10 pontos. Jogando, ela vale 4; correndo, os adversários ganham 2.</li>
+    <li><strong>Sem truco:</strong> na mão de onze e na de dez ninguém pede truco (em muitas mesas, quem pede perde o jogo); por isso o botão some.</li>
+    <li><strong>Mão de ferro:</strong> com 11 x 11 no Paulista ou 10 x 10 no Mineiro, todos jogam no escuro: ninguém vê as próprias cartas, e cada um escolhe uma delas virada para baixo. Não há truco nem carta coberta, e quem ganhar a mão vence a partida. Se as três vazas empatarem, joga-se outra mão de ferro.</li>
+  </ul>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Empates: quando a vaza "canga"</h2>
+  <p>
+    Uma vaza empata (canga) quando as cartas mais fortes dela são iguais e de duplas diferentes; se
+    as duas cartas mais fortes forem de parceiros, a vaza é da dupla deles. Os empates seguem a regra
+    mais usada, a de que quem fez a primeira leva:
+  </p>
+  <ul>
+    <li><strong>Empatou a 1ª vaza:</strong> quem fizer a 2ª ganha a mão. Se a 2ª também empatar, a 3ª decide.</li>
+    <li><strong>Empatou a 2ª:</strong> ganha quem fez a 1ª.</li>
+    <li><strong>Empatou a 3ª</strong> (com uma vaza para cada dupla): ganha quem fez a 1ª.</li>
+    <li><strong>As três empataram:</strong> ninguém marca ponto e vem outra mão.</li>
+    <li><strong>Depois de um empate,</strong> começa a vaza seguinte quem jogou primeiro uma das cartas empatadas.</li>
+  </ul>
+  <h3>Carta coberta</h3>
+  <p>
+    Da 2ª vaza em diante, dá para jogar uma carta coberta, virada para baixo: ela não vale nada,
+    nem para empatar, e ninguém fica sabendo qual era. Serve para esconder do adversário o que você
+    ainda tem na mão. Na 1ª vaza e na mão de ferro não se cobre carta. Para cobrir, toque em
+    Carta coberta e depois na carta.
+  </p>
+
+  <h2>Dicas para ganhar no truco</h2>
+  <ol>
+    <li><strong>Conte as manilhas.</strong> No Paulista, olhe a vira antes de tudo: duas manilhas ou uma manilha e um 3 já são mão para pedir truco. No Mineiro, guarde de cor as quatro manilhas fixas.</li>
+    <li><strong>Guarde a carta forte quando fez a primeira.</strong> Quem fez a 1ª vaza ganha os empates; dá para jogar uma carta fraca (ou coberta) na 2ª e segurar a maior para a 3ª.</li>
+    <li><strong>Não desperdice carta quando o parceiro já ganha.</strong> Se o Zé está levando a vaza, jogue a sua menor carta e deixe as fortes para depois.</li>
+    <li><strong>Ganhe com a menor carta possível.</strong> Se um Rei basta para levar a vaza, não gaste um 3 nela.</li>
+    <li><strong>Peça truco na hora certa.</strong> Com a vaza garantida na 3ª, o truco é ponto a mais; com mão fraca, um blefe de vez em quando faz os outros correrem, mas o computador também sabe aceitar.</li>
+    <li><strong>Olhe o placar antes de aceitar.</strong> Se correr já dá o jogo para eles, aceite; se aceitar e perder entrega a partida, só aceite com mão boa.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Qual a diferença entre o truco Paulista e o Mineiro?</h3>
+  <p>
+    No Paulista, a manilha muda a cada mão conforme a vira, e os pontos são 1, 3, 6, 9 e 12, com a
+    mão de onze. No Mineiro não tem vira: as manilhas são sempre o 4 de paus, o 7 de copas, o Ás de
+    espadas e o 7 de ouros, e a contagem é 2, 4, 6, 10 e 12, com a mão de dez. A ordem das outras
+    cartas, as vazas, os empates e a carta coberta são iguais.
+  </p>
+  <h3>Como funciona a parceria com o computador?</h3>
+  <p>
+    O Zé, seu parceiro, joga as próprias cartas sem ver as suas, como numa mesa de verdade. Ele
+    também pode pedir truco na vez dele. Quando os adversários pedem ou aumentam, quem responde
+    pela dupla é você; na mão de onze (ou de dez), as cartas do Zé aparecem para você decidir.
+  </p>
+  <h3>Como o computador joga?</h3>
+  <p>
+    Cada jogador do computador avalia a própria mão (manilhas, cartas altas e o que já saiu nas
+    vazas) e calcula a chance de a dupla ganhar, imaginando muitas vezes as cartas que ele não vê.
+    Ele joga a menor carta que ganha a vaza, descarta a mais fraca quando o parceiro já está
+    levando, pede truco com mão forte e de vez em quando blefa. Para aceitar ou correr, pesa a
+    própria chance e o placar. Ele não espia as suas cartas nem as do monte.
+  </p>
+  <h3>O que é o número da partida?</h3>
+  <p>
+    Cada partida tem um número que define a ordem das cartas de todas as mãos. No fim, "Jogar esta
+    de novo" distribui as mesmas cartas outra vez; como o computador decide sempre igual diante das
+    mesmas jogadas, dá para tentar outro caminho na mesma partida.
+  </p>
+  <h3>Se eu sair da página, perco a partida?</h3>
+  <p>
+    Não. A partida fica salva neste navegador, com o placar e cada jogada da mão em andamento, e
+    continua de onde parou quando você voltar. Começar outra partida no meio de uma conta como
+    partida não terminada nas estatísticas, que guardam, para cada modo, as partidas, as vitórias,
+    as vitórias seguidas, a maior sequência e os trucos ganhos.
+  </p>
+  <h3>Dá para jogar no celular?</h3>
+  <p>
+    Dá. A mesa se ajusta à largura da tela, inclusive em celulares pequenos: as suas cartas ficam
+    embaixo, grandes, e é só tocar numa delas para jogar. Os avisos de truco aparecem logo abaixo
+    da mesa, com botões grandes. Os sons são gerados pelo próprio navegador, e o botão Som liga e
+    desliga os efeitos.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
