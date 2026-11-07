@@ -1,0 +1,165 @@
+<!--
+titulo: Caça-Palavras Online Grátis: Jogue no Navegador — EFS Aplicativos
+descricao: Jogue caça-palavras online e grátis, no computador ou no celular. 16 temas, três níveis com palavras na horizontal, na vertical, na diagonal e de trás para frente, dica e recordes.
+estilos: /assets/jogos/caca-palavras.css
+scripts: /assets/jogos/caca-palavras-logica.js /assets/jogos/sons.js /assets/jogos/caca-palavras.js
+app: Caça-Palavras | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Caça-palavras</li>
+  </ol>
+  <h1>Caça-palavras online</h1>
+  <p>
+    Encontre as palavras escondidas na grade de letras. Escolha um tema e o nível: no fácil as
+    palavras ficam na horizontal e na vertical; no difícil, em todas as direções, até de trás para
+    frente.
+  </p>
+</header>
+
+<section class="caca-palavras" id="caca-palavras" aria-label="Jogo Caça-palavras">
+  <div class="segmented cz-niveis" role="group" aria-label="Nível de dificuldade">
+    <button type="button" class="filter active" data-nivel="facil" aria-pressed="true">Fácil <small>8 × 8</small></button>
+    <button type="button" class="filter" data-nivel="medio" aria-pressed="false">Médio <small>10 × 10</small></button>
+    <button type="button" class="filter" data-nivel="dificil" aria-pressed="false">Difícil <small>12 × 12</small></button>
+  </div>
+
+  <div class="cz-jogo">
+    <div class="cz-quadro">
+      <div
+        class="cz-grade"
+        id="cz-grade"
+        role="group"
+        aria-label="Grade de letras"
+        aria-describedby="cz-ajuda"
+      ></div>
+    </div>
+
+    <div class="cz-painel">
+      <div class="cz-placar">
+        <div class="cz-contador"><span>Achadas</span><strong id="cz-achadas">0/6</strong></div>
+        <div class="cz-contador"><span>Tempo</span><strong id="cz-tempo">00:00</strong></div>
+        <div class="cz-contador"><span>Recorde</span><strong id="cz-recorde">--:--</strong></div>
+      </div>
+
+      <p class="cz-titulo" id="cz-titulo"></p>
+      <ul class="cz-lista" id="cz-lista" aria-label="Palavras para encontrar"></ul>
+      <p class="cz-mensagem" id="cz-mensagem" aria-hidden="true"></p>
+
+      <div class="cz-acoes">
+        <button type="button" class="button secondary cz-dica" id="cz-dica">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21h6v-1.5H9Zm3-19a7 7 0 0 0-4 12.7V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.3A7 7 0 0 0 12 2Z" /></svg>
+          Dica
+        </button>
+        <button type="button" class="button secondary" id="cz-novo">Novo jogo</button>
+        <button type="button" class="som-botao" id="cz-som"></button>
+      </div>
+
+      <div class="cz-tema-linha">
+        <label for="cz-tema">Tema do próximo jogo</label>
+        <select id="cz-tema" class="cz-tema"></select>
+      </div>
+    </div>
+  </div>
+
+  <p class="cz-ajuda" id="cz-ajuda">
+    Arraste o dedo ou o mouse da primeira à última letra da palavra. Também dá para tocar na
+    primeira letra e depois na última. No teclado, ande pela grade com as setas e aperte Enter na
+    primeira e na última letra; Esc desfaz a escolha.
+  </p>
+  <p class="sr-only" aria-live="polite" id="cz-status"></p>
+
+  <details class="cz-recordes">
+    <summary>Seus melhores tempos no nível <span id="cz-recordes-nivel">Fácil</span></summary>
+    <ol id="cz-recordes-lista"></ol>
+    <p id="cz-recordes-vazio">Nenhum caça-palavras terminado neste nível ainda.</p>
+    <p id="cz-vitorias"></p>
+  </details>
+
+  <dialog class="cz-dialogo" id="cz-dialogo" aria-labelledby="cz-dialogo-titulo">
+    <h2 id="cz-dialogo-titulo"></h2>
+    <p id="cz-dialogo-texto"></p>
+    <dl class="cz-dialogo-dados" id="cz-dialogo-dados"></dl>
+    <div class="cz-dialogo-botoes" id="cz-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<aside class="indicacao" data-indicacao="caca-palavras" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar caça-palavras</h2>
+  <p>
+    A grade esconde as palavras da lista, todas do mesmo tema, no meio de letras sorteadas. Cada
+    palavra está numa linha reta: na horizontal, na vertical ou na diagonal. Quando achar uma,
+    marque da primeira à última letra. Ela ganha uma cor na grade e é riscada da lista. O jogo
+    termina quando todas forem encontradas.
+  </p>
+  <p>
+    Para marcar, arraste o dedo ou o mouse por cima da palavra. Se preferir, toque na primeira
+    letra e depois na última. Vale marcar nos dois sentidos, do começo para o fim ou do fim para o
+    começo.
+  </p>
+  <p>
+    Na grade, as palavras aparecem sem acento e sem cedilha: MAÇÃ fica escrita como MACA. A lista ao
+    lado mostra a forma certa, com acento.
+  </p>
+
+  <h2>Os três níveis</h2>
+  <ul>
+    <li><strong>Fácil (8 × 8):</strong> 6 palavras, só da esquerda para a direita e de cima para baixo.</li>
+    <li><strong>Médio (10 × 10):</strong> 8 palavras na horizontal, na vertical e na diagonal, com pelo menos 3 na diagonal.</li>
+    <li><strong>Difícil (12 × 12):</strong> 10 palavras em todas as direções, inclusive de trás para frente e de baixo para cima. Toda grade tem pelo menos 3 palavras na diagonal e 3 invertidas.</li>
+  </ul>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Temas</h2>
+  <p>
+    São 16 temas: animais, frutas, cores, países, profissões, esportes, corpo humano, cozinha,
+    escola, natureza, transportes, instrumentos musicais, comidas, casa, roupas e espaço. Escolha um
+    em <strong>Tema do próximo jogo</strong> ou deixe o jogo sortear. Cada partida monta uma grade
+    nova, com outras palavras do tema e em outras posições.
+  </p>
+
+  <h2>Dica e recordes</h2>
+  <p>
+    Travou? O botão <strong>Dica</strong> destaca a primeira letra de uma palavra que falta, mas
+    soma 15 segundos ao seu tempo. O cronômetro começa no primeiro toque na grade e para quando a
+    página fica em segundo plano. Os melhores tempos de cada nível ficam guardados neste navegador,
+    junto com a partida em andamento, que continua de onde parou se você fechar a página.
+  </p>
+
+  <h2>Dicas para achar as palavras mais rápido</h2>
+  <ol>
+    <li><strong>Procure letras raras:</strong> uma palavra com X, Z, J ou Q é fácil de achar, porque essas letras aparecem pouco na grade.</li>
+    <li><strong>Comece pelas palavras longas:</strong> elas ocupam mais espaço e saltam aos olhos.</li>
+    <li><strong>Varra por linhas:</strong> procure a primeira letra da palavra e olhe as oito casas em volta dela atrás da segunda.</li>
+    <li><strong>No difícil, leia ao contrário:</strong> muitas palavras estão de trás para frente, então procure também pela última letra.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Precisa instalar ou fazer cadastro?</h3>
+  <p>
+    Não. O caça-palavras roda direto no navegador, no computador, no tablet ou no celular, e é
+    grátis.
+  </p>
+  <h3>Uma palavra pode aparecer duas vezes?</h3>
+  <p>
+    Não: o jogo confere cada grade para que cada palavra da lista apareça uma vez só. Se você achou
+    as letras certas em linha reta, é ela.
+  </p>
+  <h3>Dá para jogar com crianças?</h3>
+  <p>
+    Dá, e o nível fácil foi pensado para isso: grade menor, poucas palavras e só nas direções de
+    leitura. Temas como animais, frutas, cores e escola ajudam na alfabetização e no vocabulário.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem: um aviso a cada palavra achada, outro para seleção errada e uma música curta no fim. O
+    botão Som liga e desliga, e a escolha fica guardada neste aparelho.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

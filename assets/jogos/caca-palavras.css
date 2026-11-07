@@ -1,0 +1,475 @@
+/* ==========================================================================
+   Caça-palavras — grade de letras com as palavras achadas marcadas por
+   faixas coloridas arredondadas, como marca-texto.
+   ========================================================================== */
+
+.caca-palavras {
+  --cz-lado: 8;
+  /* A grade ocupa até 528 px (12 casas de 44 px); no celular, a largura da tela; em telas baixas
+     do computador, encolhe para caber */
+  --cz-cel: clamp(
+    24px,
+    min(calc((100vw - 48px) / var(--cz-lado)), calc((100vh - 250px) / var(--cz-lado)), calc(528px / var(--cz-lado))),
+    56px
+  );
+  --cz-selecao: rgba(204, 74, 12, 0.32);
+  --cz-erro: rgba(220, 38, 38, 0.4);
+  --cz-dica: #0284c7;
+  --cz-c0: rgba(249, 115, 22, 0.42);
+  --cz-c1: rgba(34, 197, 94, 0.42);
+  --cz-c2: rgba(59, 130, 246, 0.38);
+  --cz-c3: rgba(168, 85, 247, 0.36);
+  --cz-c4: rgba(236, 72, 153, 0.36);
+  --cz-c5: rgba(234, 179, 8, 0.5);
+  --cz-c6: rgba(20, 184, 166, 0.42);
+  --cz-c7: rgba(239, 68, 68, 0.36);
+  --cz-c8: rgba(132, 204, 22, 0.48);
+  --cz-c9: rgba(6, 182, 212, 0.42);
+  max-width: 860px;
+  margin: 0 auto;
+  /* A faixa e os destaques nunca passam por cima do cabeçalho fixo */
+  isolation: isolate;
+}
+:root[data-theme="dark"] .caca-palavras {
+  --cz-selecao: rgba(251, 146, 60, 0.38);
+  --cz-dica: #38bdf8;
+  --cz-c0: rgba(249, 115, 22, 0.5);
+  --cz-c1: rgba(34, 197, 94, 0.46);
+  --cz-c2: rgba(59, 130, 246, 0.55);
+  --cz-c3: rgba(168, 85, 247, 0.55);
+  --cz-c4: rgba(236, 72, 153, 0.5);
+  --cz-c5: rgba(234, 179, 8, 0.45);
+  --cz-c6: rgba(20, 184, 166, 0.5);
+  --cz-c7: rgba(239, 68, 68, 0.5);
+  --cz-c8: rgba(132, 204, 22, 0.45);
+  --cz-c9: rgba(6, 182, 212, 0.5);
+}
+
+.caca-palavras .cz-niveis {
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.caca-palavras .filter small {
+  margin-left: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+/* ---------- Disposição: grade e painel lado a lado no computador ---------- */
+.cz-jogo {
+  display: grid;
+  justify-content: center;
+  gap: 14px;
+}
+@media (min-width: 820px) {
+  .cz-jogo {
+    grid-template-columns: auto minmax(240px, 280px);
+    align-items: start;
+    gap: 24px;
+  }
+}
+
+/* ---------- Grade ---------- */
+.cz-quadro {
+  justify-self: center;
+  padding: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-xs);
+}
+.cz-grade {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--cz-lado), var(--cz-cel));
+  grid-auto-rows: var(--cz-cel);
+  /* Arrastar na grade seleciona letras em vez de rolar a página */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.cz-marcas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+.cz-marca {
+  fill: none;
+  stroke-width: 0.76;
+  stroke-linecap: round;
+}
+.cz-marca.nova {
+  animation: cz-pintar 360ms ease-out;
+}
+.cz-selecao {
+  fill: none;
+  stroke: var(--cz-selecao);
+  stroke-width: 0.76;
+  stroke-linecap: round;
+}
+.cz-selecao.erro {
+  stroke: var(--cz-erro);
+  transition: opacity 420ms ease 160ms;
+  opacity: 0;
+}
+.cz-inicio {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 0.08;
+}
+.cz-pista {
+  fill: none;
+  stroke: var(--cz-dica);
+  stroke-width: 0.09;
+  stroke-dasharray: 0.22 0.14;
+}
+.cz-pista.nova {
+  animation: cz-piscar 1.4s ease-in-out 2;
+}
+.cz-cel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  font-family: var(--font-title, inherit);
+  font-size: calc(var(--cz-cel) * 0.5);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text);
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.cz-cel:focus-visible {
+  outline: 3px solid var(--ring, var(--accent));
+  outline-offset: -3px;
+}
+.cz-grade.terminada .cz-cel {
+  cursor: default;
+}
+
+/* ---------- Painel ---------- */
+.cz-painel {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+}
+.cz-placar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.cz-contador {
+  padding: 6px 8px;
+  text-align: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.cz-contador span {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cz-contador strong {
+  font-size: 19px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.cz-titulo {
+  margin: 0;
+  font-family: var(--font-title, inherit);
+  font-size: 19px;
+  font-weight: 800;
+  text-align: center;
+  color: var(--text);
+}
+.cz-lista {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 820px) {
+  .cz-titulo {
+    text-align: left;
+  }
+  .cz-lista {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.cz-palavra {
+  position: relative;
+  padding: 3px 9px;
+  font-size: 14.5px;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  overflow-wrap: anywhere;
+}
+.cz-palavra.achada {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  background: var(--cz-cor, var(--surface-2));
+  border-color: transparent;
+}
+.cz-palavra.achada.nova {
+  animation: cz-pulo 420ms ease-out;
+}
+.cz-mensagem {
+  min-height: 24px;
+  margin: 0;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text);
+}
+.cz-mensagem.aviso {
+  color: var(--accent);
+}
+:root[data-theme="light"] .cz-mensagem.aviso {
+  color: #9a3412;
+}
+.cz-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.cz-acoes .button,
+.cz-acoes .som-botao {
+  min-height: 42px;
+}
+.cz-acoes .button {
+  padding: 8px 16px;
+}
+.cz-dica {
+  gap: 6px;
+}
+.cz-dica svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+.cz-acoes .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.cz-tema-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 10px;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+}
+.cz-tema {
+  min-height: 40px;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+}
+@media (min-width: 820px) {
+  .cz-acoes,
+  .cz-tema-linha {
+    justify-content: flex-start;
+  }
+  .cz-mensagem {
+    text-align: left;
+  }
+}
+
+.cz-ajuda {
+  margin: 16px 0 0;
+  font-size: 14px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ---------- Recordes ---------- */
+.cz-recordes {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.cz-recordes summary {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.cz-recordes ol {
+  margin: 10px 0 0;
+  padding-left: 24px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}
+.cz-recordes p {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ---------- Diálogo ---------- */
+.cz-dialogo {
+  width: min(92vw, 400px);
+  padding: 24px;
+  color: var(--text);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.cz-dialogo::backdrop {
+  background: rgba(10, 12, 16, 0.6);
+}
+.cz-dialogo h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+.cz-dialogo p {
+  margin: 0 0 16px;
+  color: var(--text-2);
+}
+.cz-dialogo-dados {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px;
+  text-align: left;
+}
+.cz-dialogo-dados div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.cz-dialogo-dados dt {
+  color: var(--muted);
+}
+.cz-dialogo-dados dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.cz-dialogo-dados .destaque dd {
+  color: var(--accent);
+}
+.cz-dialogo-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.cz-dialogo.travado .cz-dialogo-botoes {
+  pointer-events: none;
+}
+
+/* ---------- Animações ---------- */
+@keyframes cz-pintar {
+  from {
+    stroke-dasharray: 0 40;
+  }
+  to {
+    stroke-dasharray: 40 0;
+  }
+}
+@keyframes cz-piscar {
+  50% {
+    opacity: 0.2;
+  }
+}
+@keyframes cz-pulo {
+  40% {
+    transform: scale(1.12);
+  }
+}
+.cz-grade.festa .cz-cel {
+  animation: cz-onda 600ms ease-out both;
+  animation-delay: calc(var(--cz-atraso, 0) * 1ms);
+}
+@keyframes cz-onda {
+  40% {
+    transform: scale(1.25);
+    color: var(--accent);
+  }
+}
+
+@media (max-width: 420px) {
+  .caca-palavras {
+    --cz-cel: clamp(22px, calc((100vw - 34px) / var(--cz-lado)), 48px);
+  }
+  /* Os três níveis numa linha só */
+  .caca-palavras .cz-niveis {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  .caca-palavras .cz-niveis .filter {
+    padding: 7px 10px;
+    white-space: nowrap;
+  }
+  .caca-palavras .filter small {
+    margin-left: 2px;
+    font-size: 10.5px;
+  }
+  .cz-quadro {
+    padding: 4px;
+    border-radius: var(--r-sm);
+  }
+  .cz-acoes .button {
+    padding: 8px 12px;
+  }
+  .cz-acoes .som-botao {
+    padding: 8px 11px;
+  }
+  .cz-acoes .som-botao span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .cz-palavra {
+    font-size: 13.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cz-marca.nova,
+  .cz-pista.nova,
+  .cz-palavra.achada.nova,
+  .cz-grade.festa .cz-cel {
+    animation: none;
+  }
+  .cz-selecao.erro {
+    transition: none;
+  }
+}

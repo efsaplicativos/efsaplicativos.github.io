@@ -5,7 +5,7 @@ está montado, como publicar uma mudança e o que não pode ser quebrado.
 
 ## 1. O que é o site
 
-- Portal da EFS Aplicativos: apresenta os apps Android do Google Play e tem 24 jogos e 32 ferramentas que
+- Portal da EFS Aplicativos: apresenta os apps Android do Google Play e tem 25 jogos e 32 ferramentas que
   funcionam direto no navegador.
 - Endereço: **https://efsaplicativos.com.br**. O endereço antigo, efsaplicativos.github.io, redireciona
   para ele automaticamente, inclusive com o caminho da página.

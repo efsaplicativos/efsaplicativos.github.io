@@ -140,6 +140,11 @@ IMAGENS = {
     "Bottom row: all five tiles bright grass green. The green is a true green, not blue. A glowing "
     "yellow light bulb with short light rays floats over the top right corner of the board. "
     "Absolutely no letters, numbers or symbols on any tile.",
+    "jogos/caca-palavras": "A square sheet of puzzle paper, seen slightly from above, printed with a "
+    "grid of small square cells; every cell holds only one tiny gray dot. Three rounded translucent "
+    "highlighter marks cross the grid: an orange one horizontal, a green one vertical and a violet "
+    "one diagonal. A small magnifying glass with a blue handle rests on the bottom right corner of "
+    "the sheet. Absolutely no letters, numbers or symbols anywhere.",
     # Jogos: memória e reflexo
     "jogos/jogo-da-memoria": "Four memory game cards in a two by two layout: two face down with a "
     "blue patterned back, and two face up showing the same cute cartoon cat face.",

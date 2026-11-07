@@ -67,6 +67,7 @@ const Indicacoes = (() => {
     "batalha-naval": [
       produto("Jogo Batalha Naval de tabuleiro", "A versão de tabuleiro, para jogar com a família na mesa.", naAmazon("B077PJBVWV")),
     ],
+    "caca-palavras": [],
     "campo-minado": [
       produto(
         "Jogo Campo Minado Aventureiros, da Elka",
