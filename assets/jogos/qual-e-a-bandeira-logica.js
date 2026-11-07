@@ -4,6 +4,7 @@
  * logica/GeradorPerguntas.kt (sorteio e níveis), logica/Partida.kt (vidas e sequência),
  * logica/Pontuacao.kt (pontos), dados/PartidaSalva.kt (partida gravada) e
  * dados/CatalogoPaises.kt (os 193 países, a dificuldade e o nome em português).
+ * O modo Capital (ver a bandeira e escolher a capital) existe só aqui no site.
  */
 const LogicaBandeiras = (() => {
   const VIDAS_INICIAIS = 3;
@@ -11,6 +12,55 @@ const LogicaBandeiras = (() => {
   const RECENTES_EVITADOS = 20;
   const PONTOS_BASE = 10;
   const MULTIPLICADOR_MAXIMO = 3;
+  /** "pais": ver a bandeira e escolher o país (como no app); "capital": escolher a capital. */
+  const MODOS = Object.freeze(["pais", "capital"]);
+
+  /*
+   * Capital de cada país, com a grafia usada no Brasil. Casos especiais: Bolívia = Sucre
+   * (capital pela Constituição; o governo fica em La Paz), África do Sul = Pretória (sede do
+   * governo; Cidade do Cabo e Bloemfontein são as outras duas), Países Baixos = Amsterdã (o
+   * governo fica em Haia) e Nauru = Yaren (não tem capital oficial). Israel e Palestina ficam
+   * fora do modo Capital porque a capital de ambos é disputada internacionalmente.
+   */
+  const CAPITAIS = {
+    BR: "Brasília", US: "Washington", FR: "Paris", DE: "Berlim", JP: "Tóquio", CN: "Pequim",
+    IT: "Roma", ES: "Madri", PT: "Lisboa", CA: "Ottawa", AU: "Camberra", GB: "Londres",
+    MX: "Cidade do México", AR: "Buenos Aires", RU: "Moscou", IN: "Nova Délhi", KR: "Seul",
+    TR: "Ancara", NL: "Amsterdã", SE: "Estocolmo", CH: "Berna", NO: "Oslo", IE: "Dublin",
+    GR: "Atenas", EG: "Cairo", ZA: "Pretória", NZ: "Wellington", AT: "Viena", BE: "Bruxelas",
+    DK: "Copenhague", FI: "Helsinque", PL: "Varsóvia", CZ: "Praga", HU: "Budapeste",
+
+    CL: "Santiago", CO: "Bogotá", PE: "Lima", VE: "Caracas", BO: "Sucre", EC: "Quito",
+    PY: "Assunção", UY: "Montevidéu", CU: "Havana", DO: "Santo Domingo", GT: "Cidade da Guatemala",
+    CR: "San José", PA: "Cidade do Panamá", HN: "Tegucigalpa", SV: "San Salvador", NI: "Manágua",
+    JM: "Kingston", TT: "Porto de Espanha", MA: "Rabat", DZ: "Argel", TN: "Túnis", LY: "Trípoli",
+    KE: "Nairóbi", NG: "Abuja", GH: "Acra", ET: "Adis Abeba", TZ: "Dodoma", UG: "Kampala",
+    SN: "Dacar", CM: "Iaundé", AO: "Luanda", MZ: "Maputo", ZW: "Harare", SA: "Riad", IR: "Teerã",
+    IQ: "Bagdá", JO: "Amã", LB: "Beirute", SY: "Damasco", KW: "Cidade do Kuwait", QA: "Doha",
+    AE: "Abu Dhabi", PK: "Islamabad", BD: "Daca", LK: "Sri Jayawardenepura Kotte", VN: "Hanói",
+    TH: "Bangcoc", PH: "Manila", ID: "Jacarta", MY: "Kuala Lumpur", SG: "Singapura", TW: "Taipé",
+    MM: "Naypyidaw", KH: "Phnom Penh", LA: "Vientiane", AZ: "Baku", GE: "Tbilisi", AM: "Erevan",
+    KZ: "Astana", UA: "Kiev", RO: "Bucareste", BG: "Sófia", RS: "Belgrado", HR: "Zagreb",
+    SK: "Bratislava", SI: "Liubliana", EE: "Tallinn", LV: "Riga", LT: "Vilnius", IS: "Reykjavík",
+    LU: "Luxemburgo", AL: "Tirana", KP: "Pyongyang", AF: "Cabul", YE: "Sanaa", SD: "Cartum",
+    SO: "Mogadíscio",
+
+    MN: "Ulan Bator", PG: "Port Moresby", HT: "Porto Príncipe", BF: "Uagadugu", ML: "Bamako",
+    NE: "Niamey", TD: "N'Djamena", GA: "Libreville", CG: "Brazzaville", CD: "Kinshasa",
+    CF: "Bangui", RW: "Kigali", BI: "Gitega", MW: "Lilongwe", ZM: "Lusaka", NA: "Windhoek",
+    BW: "Gaborone", LS: "Maseru", SZ: "Mbabane", MG: "Antananarivo", MU: "Port Louis",
+    SC: "Victoria", KM: "Moroni", DJ: "Djibuti", LR: "Monróvia", SL: "Freetown", GW: "Bissau",
+    GN: "Conacri", ST: "São Tomé", CV: "Praia", GM: "Banjul", BJ: "Porto-Novo", TG: "Lomé",
+    CI: "Yamoussoukro", ER: "Asmara", SS: "Juba", OM: "Mascate", BH: "Manama", CY: "Nicósia",
+    MT: "Valeta", NP: "Katmandu", BT: "Thimphu", MV: "Malé", TL: "Díli", BN: "Bandar Seri Begawan",
+    FJ: "Suva", VU: "Port Vila", WS: "Ápia", TO: "Nukualofa", KI: "Tarawa", NR: "Yaren",
+    TV: "Funafuti", SB: "Honiara", MH: "Majuro", FM: "Palikir", PW: "Ngerulmud", KG: "Bishkek",
+    TJ: "Duchambe", TM: "Asgabate", UZ: "Tashkent", ME: "Podgorica", MK: "Escópia",
+    BA: "Sarajevo", MD: "Chisinau", BY: "Minsk", LI: "Vaduz", MC: "Mônaco", SM: "San Marino",
+    VA: "Cidade do Vaticano", AD: "Andorra-a-Velha", SR: "Paramaribo", GY: "Georgetown",
+    BZ: "Belmopan", BB: "Bridgetown", DM: "Roseau", GD: "Saint George's", LC: "Castries",
+    KN: "Basseterre", VC: "Kingstown", AG: "Saint John's",
+  };
 
   // [código ISO 3166-1, dificuldade de 1 (fácil) a 3 (difícil), nome em português]
   const PAISES = [
@@ -67,9 +117,24 @@ const LogicaBandeiras = (() => {
     ["BZ", 3, "Belize"], ["BB", 3, "Barbados"], ["DM", 3, "Dominica"], ["GD", 3, "Granada"],
     ["LC", 3, "Santa Lúcia"], ["KN", 3, "São Cristóvão e Nevis"], ["VC", 3, "São Vicente e Granadinas"],
     ["AG", 3, "Antígua e Barbuda"],
-  ].map(([codigo, dificuldade, nome]) => Object.freeze({ codigo, dificuldade, nome }));
+  ].map(([codigo, dificuldade, nome]) =>
+    Object.freeze({ codigo, dificuldade, nome, capital: CAPITAIS[codigo] || null }),
+  );
 
   const POR_CODIGO = new Map(PAISES.map((pais) => [pais.codigo, pais]));
+  const COM_CAPITAL = PAISES.filter((pais) => pais.capital);
+
+  const modoValido = (modo) => (MODOS.includes(modo) ? modo : "pais");
+
+  /** Países que podem cair no modo: no Capital, só os que têm capital cadastrada. */
+  function paisesDoModo(modo) {
+    return modoValido(modo) === "capital" ? COM_CAPITAL : PAISES;
+  }
+
+  /** O que aparece no botão de resposta: o nome do país ou a capital. */
+  function textoDaOpcao(pais, modo) {
+    return modoValido(modo) === "capital" ? pais.capital : pais.nome;
+  }
 
   /** Faixas do app: perguntas 1–10 fáceis, 11–20 médias, 21–30 difíceis e depois todas. */
   function nivelDaPergunta(numero) {
@@ -223,8 +288,12 @@ const LogicaBandeiras = (() => {
   return {
     VIDAS_INICIAIS,
     TOTAL_OPCOES,
+    MODOS,
     PAISES,
     pais: (codigo) => POR_CODIGO.get(codigo) || null,
+    modoValido,
+    paisesDoModo,
+    textoDaOpcao,
     nivelDaPergunta,
     paisesDoNivel,
     multiplicador,

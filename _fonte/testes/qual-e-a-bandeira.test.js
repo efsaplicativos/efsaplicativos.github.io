@@ -115,6 +115,74 @@ teste("não repete as bandeiras já vistas ao retomar uma partida salva", () => 
   }
 });
 
+// ---------- Modo capital (só no site) ----------
+
+teste("191 países têm capital, sem capitais repetidas; Israel e Palestina ficam de fora", () => {
+  const comCapital = L.paisesDoModo("capital");
+  assert.equal(comCapital.length, 191);
+  assert.ok(comCapital.every((p) => typeof p.capital === "string" && p.capital.trim() === p.capital && p.capital));
+  // Duas opções com a mesma capital tornariam a pergunta impossível
+  assert.equal(new Set(comCapital.map((p) => p.capital)).size, 191);
+  assert.equal(L.pais("IL").capital, null);
+  assert.equal(L.pais("PS").capital, null);
+  assert.ok(!comCapital.some((p) => p.codigo === "IL" || p.codigo === "PS"));
+  // Os três grupos continuam com países no modo capital
+  assert.deepEqual([1, 2, 3].map((d) => comCapital.filter((p) => p.dificuldade === d).length), [34, 77, 80]);
+});
+
+teste("capitais na grafia usada no Brasil, inclusive os casos especiais", () => {
+  const capital = (codigo) => L.pais(codigo).capital;
+  assert.equal(capital("BR"), "Brasília");
+  assert.equal(capital("CN"), "Pequim");
+  assert.equal(capital("AU"), "Camberra");
+  assert.equal(capital("US"), "Washington");
+  assert.equal(capital("BO"), "Sucre");
+  assert.equal(capital("ZA"), "Pretória");
+  assert.equal(capital("NL"), "Amsterdã");
+  assert.equal(capital("BI"), "Gitega");
+  assert.equal(capital("KZ"), "Astana");
+});
+
+teste("modo desconhecido vale como modo país", () => {
+  assert.deepEqual(L.MODOS, ["pais", "capital"]);
+  assert.equal(L.modoValido("capital"), "capital");
+  assert.equal(L.modoValido("xyz"), "pais");
+  assert.equal(L.modoValido(null), "pais");
+  assert.equal(L.paisesDoModo(undefined), L.PAISES);
+  assert.equal(L.textoDaOpcao(L.pais("FR"), "pais"), "França");
+  assert.equal(L.textoDaOpcao(L.pais("FR"), "capital"), "Paris");
+  assert.equal(L.textoDaOpcao(L.pais("FR"), "outro"), "França");
+});
+
+teste("no modo capital as 4 opções têm capitais distintas e nunca trazem Israel ou Palestina", () => {
+  const paises = L.paisesDoModo("capital");
+  for (let semente = 0; semente < 20; semente++) {
+    const aleatorio = L.aleatorioComSemente(semente);
+    let partida = L.novaPartida();
+    for (let i = 0; i < 200; i++) {
+      const p = L.gerarPergunta(partida.numeroPergunta, partida.perguntadas, aleatorio, paises);
+      assert.equal(p.opcoes.length, 4);
+      assert.equal(new Set(p.opcoes.map((o) => L.textoDaOpcao(o, "capital"))).size, 4);
+      assert.ok(p.opcoes.includes(p.correta));
+      assert.ok(p.opcoes.every((o) => o.capital));
+      partida = L.proximaRodada(L.comPergunta(partida, p));
+    }
+  }
+});
+
+teste("modo capital mostra os 191 países uma vez antes de repetir", () => {
+  const paises = L.paisesDoModo("capital");
+  const aleatorio = L.aleatorioComSemente(42);
+  let partida = L.novaPartida();
+  const vistas = [];
+  for (let i = 0; i < paises.length; i++) {
+    const p = L.gerarPergunta(partida.numeroPergunta, partida.perguntadas, aleatorio, paises);
+    vistas.push(p.correta.codigo);
+    partida = L.proximaRodada(L.comPergunta(partida, p));
+  }
+  assert.equal(new Set(vistas).size, 191);
+});
+
 // ---------- Pontuação e partida ----------
 
 teste("pontos seguem 10 × dificuldade × multiplicador da sequência", () => {

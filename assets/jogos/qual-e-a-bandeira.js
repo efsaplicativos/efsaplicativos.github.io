@@ -3,7 +3,8 @@
  * Interface do Qual a Bandeira, como no app (ui/telas/TelaInicial.kt, ui/telas/jogo/TelaJogo.kt,
  * JogoViewModel.kt, PlacarJogo.kt e FimDeJogo.kt): início com "Continuar jogo", placar, vidas,
  * sequência, dificuldade, respostas coloridas por 1,1 s e o fim de jogo. As regras ficam em
- * qual-e-a-bandeira-logica.js; partida e recorde, no localStorage.
+ * qual-e-a-bandeira-logica.js; partida e recorde, no localStorage, separados por modo
+ * (país, como no app, ou capital, só no site).
  */
 (() => {
   const raiz = document.querySelector("#qbandeira");
@@ -13,8 +14,24 @@
   const TEMPO_RESPOSTA_MS = 1100;
   const TRAVA_AVISO_MS = 600;
   const CONTAGEM_MS = 900;
-  const CHAVE_PARTIDA = "efs-qual-e-a-bandeira-partida";
-  const CHAVE_RECORDE = "efs-qual-e-a-bandeira-recorde";
+  const CHAVE_MODO = "efs-qual-e-a-bandeira-modo";
+  // O modo país mantém as chaves de antes, para ninguém perder o recorde nem a partida salva
+  const CHAVES = {
+    pais: { partida: "efs-qual-e-a-bandeira-partida", recorde: "efs-qual-e-a-bandeira-recorde" },
+    capital: { partida: "efs-qual-e-a-bandeira-capital-partida", recorde: "efs-qual-e-a-bandeira-capital-recorde" },
+  };
+  const TEXTOS = {
+    pais: {
+      subtitulo: "Acerte a bandeira antes de perder todas as vidas.",
+      pergunta: "Qual é esta bandeira?",
+      ajuda: "Clique ou toque no nome do país. No teclado, use as teclas 1 a 4.",
+    },
+    capital: {
+      subtitulo: "Veja a bandeira e acerte a capital do país.",
+      pergunta: "Qual é a capital deste país?",
+      ajuda: "Clique ou toque no nome da capital. No teclado, use as teclas 1 a 4.",
+    },
+  };
   const PASTA_BANDEIRAS = "/assets/jogos/qual-e-a-bandeira/bandeiras/";
   const NOMES_DIFICULDADE = { 1: "Fácil", 2: "Médio", 3: "Difícil" };
   /** Acertos seguidos para o selo de sequência aparecer. */
@@ -24,6 +41,11 @@
   const painel = $("#qb-painel");
   const telaInicio = $("#qb-inicio");
   const telaJogo = $("#qb-jogo");
+  const subtitulo = $("#qb-subtitulo");
+  const botoesModo = [...raiz.querySelectorAll("[data-modo]")];
+  const textoPergunta = $("#qb-pergunta");
+  const textoAjuda = $("#qb-ajuda");
+  const revelado = $("#qb-revelado");
   const seloRecorde = $("#qb-selo-recorde");
   const textoRecordeInicio = $("#qb-recorde-inicio");
   const botaoContinuar = $("#qb-continuar");
@@ -52,6 +74,7 @@
       ? Sons.criar("qual-e-a-bandeira", raiz)
       : { tocar() {}, ligarBotao: (b) => b && (b.hidden = true) };
 
+  let modo = "pais";
   let recorde = 0;
   /**
    * Partida na tela: { partida, pergunta, fase: "jogando" | "respondida" | "fim", escolhida,
@@ -68,9 +91,25 @@
 
   // ---------- Armazenamento ----------
 
+  function carregarModo() {
+    try {
+      modo = L.modoValido(localStorage.getItem(CHAVE_MODO));
+    } catch (erro) {
+      modo = "pais";
+    }
+  }
+
+  function salvarModo() {
+    try {
+      localStorage.setItem(CHAVE_MODO, modo);
+    } catch (erro) {
+      /* Sem armazenamento, a página volta sempre no modo país. */
+    }
+  }
+
   function carregarRecorde() {
     try {
-      const valor = Number(localStorage.getItem(CHAVE_RECORDE));
+      const valor = Number(localStorage.getItem(CHAVES[modo].recorde));
       recorde = Number.isInteger(valor) && valor > 0 ? valor : 0;
     } catch (erro) {
       recorde = 0;
@@ -79,7 +118,7 @@
 
   function salvarRecorde() {
     try {
-      localStorage.setItem(CHAVE_RECORDE, String(recorde));
+      localStorage.setItem(CHAVES[modo].recorde, String(recorde));
     } catch (erro) {
       /* Armazenamento indisponível: o recorde vale só enquanto a página estiver aberta. */
     }
@@ -87,7 +126,7 @@
 
   function carregarPartida() {
     try {
-      return L.lerSalva(localStorage.getItem(CHAVE_PARTIDA));
+      return L.lerSalva(localStorage.getItem(CHAVES[modo].partida));
     } catch (erro) {
       return null;
     }
@@ -95,7 +134,7 @@
 
   function salvarPartida(partida) {
     try {
-      localStorage.setItem(CHAVE_PARTIDA, JSON.stringify(L.paraSalvar(partida)));
+      localStorage.setItem(CHAVES[modo].partida, JSON.stringify(L.paraSalvar(partida)));
     } catch (erro) {
       /* Sem armazenamento, "Continuar jogo" não aparece depois de recarregar. */
     }
@@ -103,7 +142,7 @@
 
   function apagarPartida() {
     try {
-      localStorage.removeItem(CHAVE_PARTIDA);
+      localStorage.removeItem(CHAVES[modo].partida);
     } catch (erro) {
       /* Nada a apagar. */
     }
@@ -134,6 +173,12 @@
   function mostrarInicio() {
     clearTimeout(avanco);
     estado = null;
+    subtitulo.textContent = TEXTOS[modo].subtitulo;
+    botoesModo.forEach((b) => {
+      const ativo = b.dataset.modo === modo;
+      b.classList.toggle("active", ativo);
+      b.setAttribute("aria-pressed", String(ativo));
+    });
     const salva = carregarPartida();
     seloRecorde.hidden = recorde <= 0;
     textoRecordeInicio.textContent = formatar(recorde);
@@ -150,6 +195,8 @@
     clearTimeout(avanco);
     esconderAviso(false);
     estado = { partida, pergunta: null, fase: "jogando", escolhida: null, novoRecorde: false, proxima: null };
+    textoPergunta.textContent = TEXTOS[modo].pergunta;
+    textoAjuda.textContent = TEXTOS[modo].ajuda;
     telaInicio.hidden = true;
     telaJogo.hidden = false;
     novaPergunta(partida);
@@ -157,10 +204,11 @@
   }
 
   function novaPergunta(partida, pronta = null) {
-    const pergunta = pronta || L.gerarPergunta(partida.numeroPergunta, partida.perguntadas);
+    const paises = L.paisesDoModo(modo);
+    const pergunta = pronta || L.gerarPergunta(partida.numeroPergunta, partida.perguntadas, Math.random, paises);
     const comPergunta = L.comPergunta(partida, pergunta);
     // A pergunta seguinte depende só do número e das bandeiras já vistas: sorteia agora e pré-carrega
-    const proxima = L.gerarPergunta(comPergunta.numeroPergunta + 1, comPergunta.perguntadas);
+    const proxima = L.gerarPergunta(comPergunta.numeroPergunta + 1, comPergunta.perguntadas, Math.random, paises);
     estado = { ...estado, partida: comPergunta, pergunta, fase: "jogando", escolhida: null, proxima };
     preCarregar(proxima.correta.codigo);
     mostrarBandeira(pergunta.correta.codigo);
@@ -191,22 +239,29 @@
     dificuldade.dataset.nivel = String(nivel);
     textoDificuldade.textContent = NOMES_DIFICULDADE[nivel];
 
+    // No modo capital, depois de responder, o nome do país aparece embaixo da bandeira
+    revelado.hidden = !(modo === "capital" && fase !== "jogando");
+    revelado.textContent = revelado.hidden ? "" : pergunta.correta.nome;
+
     const correta = pergunta.correta.codigo;
     opcoes.forEach((botao, i) => {
       const pais = pergunta.opcoes[i];
+      const texto = L.textoDaOpcao(pais, modo);
       botao.dataset.codigo = pais.codigo;
-      botao.querySelector(".qb-nome").textContent = pais.nome;
-      let classe = "";
+      botao.querySelector(".qb-nome").textContent = texto;
+      // Nomes compridos (como Sri Jayawardenepura Kotte) usam letra menor para caber no botão
+      const longo = texto.length > 20 || texto.split(" ").some((parte) => parte.length > 12);
+      let classe = longo ? "longa" : "";
       let marca = "";
       if (fase !== "jogando") {
         if (pais.codigo === correta) {
-          classe = pais.codigo === escolhida ? "acertou" : "era-certa";
+          classe += pais.codigo === escolhida ? " acertou" : " era-certa";
           marca = "✓";
         } else if (pais.codigo === escolhida) {
-          classe = "errou";
+          classe += " errou";
           marca = "✕";
         } else {
-          classe = "apagada";
+          classe += " apagada";
         }
       }
       botao.className = `qb-opcao ${classe}`.trim();
@@ -247,7 +302,8 @@
     estado = { ...estado, partida, fase: "respondida", escolhida: codigo, novoRecorde: estado.novoRecorde || bateuRecorde };
     desenhar();
     somDaResposta(acertou, partida, estado.novoRecorde);
-    const certa = estado.pergunta.correta.nome;
+    const { nome, capital } = estado.pergunta.correta;
+    const certa = modo === "capital" ? `${capital} (${nome})` : nome;
     if (acertou) {
       status.textContent = `Certo, é ${certa}! Mais ${pontosGanhos} pontos.`;
     } else {
@@ -378,6 +434,18 @@
   opcoes.forEach((b) => b.addEventListener("click", () => responder(b.dataset.codigo)));
   som.ligarBotao($("#qb-som"));
 
+  // O modo só muda na tela inicial; cada um tem a própria partida salva e o próprio recorde
+  botoesModo.forEach((b) =>
+    b.addEventListener("click", () => {
+      const novo = L.modoValido(b.dataset.modo);
+      if (novo === modo) return;
+      modo = novo;
+      salvarModo();
+      carregarRecorde();
+      mostrarInicio();
+    }),
+  );
+
   botaoNovo.addEventListener("click", () => {
     if (carregarPartida()) pedirReinicio(reiniciar, "Cancelar");
     else reiniciar();
@@ -439,6 +507,7 @@
 
   // ---------- Início ----------
 
+  carregarModo();
   carregarRecorde();
   mostrarInicio();
 })();

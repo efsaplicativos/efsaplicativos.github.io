@@ -56,6 +56,21 @@
   margin: 0;
   color: var(--text-2);
 }
+.qb-modos {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+.qb-modos-rotulo {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.qb-modos .segmented {
+  justify-content: center;
+}
 .qb-selo-recorde {
   margin: 0;
   padding: 6px 16px;
@@ -290,6 +305,26 @@
 .qb-cartao img.qb-entrar {
   animation: qb-entrar 320ms ease-out;
 }
+/* Modo capital: o nome do país aparece sobre a borda de baixo do cartão depois da resposta */
+.qb-revelado {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  translate: -50% 50%;
+  max-width: calc(100% - 24px);
+  padding: 4px 14px;
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 750;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--text);
+  background: var(--surface);
+  border: 1.5px solid var(--qb-acerto);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-sm);
+  animation: qb-aparecer 200ms ease-out;
+}
 @keyframes qb-entrar {
   from {
     opacity: 0;
@@ -337,6 +372,9 @@
 }
 .qb-opcao[aria-disabled="true"] {
   cursor: default;
+}
+.qb-opcao.longa {
+  font-size: clamp(12.5px, 3.2vw, 14.5px);
 }
 .qb-opcao kbd {
   position: absolute;
@@ -502,6 +540,7 @@
   .qb-opcao.acertou,
   .qb-opcao.errou,
   .qb-vidas i.perdeu,
+  .qb-revelado,
   .qb-overlay {
     animation: none;
   }

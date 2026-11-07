@@ -134,6 +134,12 @@ IMAGENS = {
     "glossy colored balls in blue, violet, orange and green, the colors mixed between the tubes.",
     "jogos/mahjong": "A small stacked pyramid of ivory mahjong tiles, the tiles decorated with simple "
     "colored circle patterns and bamboo stick patterns, no characters.",
+    "jogos/desvenda": "A small square board, seen slightly from above, holding a grid of three rows "
+    "of five chunky rounded square tiles, all completely blank. Top row: light gray tiles with one "
+    "warm orange tile. Middle row: two bright grass green tiles, one orange and two light gray. "
+    "Bottom row: all five tiles bright grass green. The green is a true green, not blue. A glowing "
+    "yellow light bulb with short light rays floats over the top right corner of the board. "
+    "Absolutely no letters, numbers or symbols on any tile.",
     # Jogos: memória e reflexo
     "jogos/jogo-da-memoria": "Four memory game cards in a two by two layout: two face down with a "
     "blue patterned back, and two face up showing the same cute cartoon cat face.",

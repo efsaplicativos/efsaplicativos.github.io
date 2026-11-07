@@ -24,10 +24,10 @@
       })();
     </script>
     <title>Qual a Bandeira? Quiz de Bandeiras Online Grátis — EFS Aplicativos</title>
-    <meta name="description" content="Quiz de bandeiras online e grátis: veja a bandeira e escolha o país entre quatro opções. São 193 países, 3 vidas, bônus por sequência e recorde salvo no navegador." />
+    <meta name="description" content="Quiz de bandeiras online e grátis: veja a bandeira e escolha o país ou a capital entre quatro opções. São 193 países, 3 vidas, bônus por sequência e recorde salvo." />
     <link rel="canonical" href="https://efsaplicativos.com.br/jogos/qual-e-a-bandeira/" />
     <meta property="og:title" content="Qual a Bandeira? Quiz de Bandeiras Online Grátis — EFS Aplicativos" />
-    <meta property="og:description" content="Quiz de bandeiras online e grátis: veja a bandeira e escolha o país entre quatro opções. São 193 países, 3 vidas, bônus por sequência e recorde salvo no navegador." />
+    <meta property="og:description" content="Quiz de bandeiras online e grátis: veja a bandeira e escolha o país ou a capital entre quatro opções. São 193 países, 3 vidas, bônus por sequência e recorde salvo." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://efsaplicativos.com.br/jogos/qual-e-a-bandeira/" />
     <meta property="og:locale" content="pt_BR" />
@@ -40,21 +40,21 @@
     />
     <link rel="stylesheet" href="/site.css?v=dfdb216d18d2" />
     <link rel="stylesheet" href="/assets/web.css?v=f4683d85c12d" />
-    <link rel="stylesheet" href="/assets/jogos/qual-e-a-bandeira.css?v=0a451f077e18" />
+    <link rel="stylesheet" href="/assets/jogos/qual-e-a-bandeira.css?v=7b0c6b4178c7" />
     <script src="/assets/estatisticas.js?v=da0036a12f2f" async></script>
     <script src="/site.js?v=926b8efae759" defer></script>
     <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
-    <script src="/assets/indicacoes.js?v=e1495e5926ea" defer></script>
-    <script src="/assets/jogos/qual-e-a-bandeira-logica.js?v=82da09cd387f" defer></script>
+    <script src="/assets/indicacoes.js?v=88d53ca46320" defer></script>
+    <script src="/assets/jogos/qual-e-a-bandeira-logica.js?v=a9e7caeb12b4" defer></script>
     <script src="/assets/jogos/sons.js?v=21d1381b6bd0" defer></script>
-    <script src="/assets/jogos/qual-e-a-bandeira.js?v=168519cce3ad" defer></script>
+    <script src="/assets/jogos/qual-e-a-bandeira.js?v=f6c981340f4c" defer></script>
     <link
       rel="icon"
       type="image/png"
       sizes="512x512"
       href="/images/EfsAplicativos_4.png"
     />
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Qual a Bandeira", "url": "https://efsaplicativos.com.br/jogos/qual-e-a-bandeira/", "description": "Quiz de bandeiras online e grátis: veja a bandeira e escolha o país entre quatro opções. São 193 países, 3 vidas, bônus por sequência e recorde salvo no navegador.", "applicationCategory": "GameApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Qual a Bandeira", "url": "https://efsaplicativos.com.br/jogos/qual-e-a-bandeira/", "description": "Quiz de bandeiras online e grátis: veja a bandeira e escolha o país ou a capital entre quatro opções. São 193 países, 3 vidas, bônus por sequência e recorde salvo.", "applicationCategory": "GameApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
   </head>
   <body>
     <a class="skip" href="#conteudo">Ir para o conteúdo</a>
@@ -126,9 +126,10 @@
   </ol>
   <h1>Qual a Bandeira? Quiz de bandeiras online</h1>
   <p>
-    Uma bandeira aparece na tela e você escolhe de que país ela é, entre quatro opções. Começa
-    com as mais conhecidas e fica mais difícil a cada dez perguntas. Funciona no computador e no
-    celular, e a partida fica salva se você fechar a página.
+    Uma bandeira aparece na tela e você escolhe de que país ela é, entre quatro opções. No modo
+    Capital, você escolhe a capital do país da bandeira. Começa com as mais conhecidas e fica mais
+    difícil a cada dez perguntas. Funciona no computador e no celular, e a partida fica salva se
+    você fechar a página.
   </p>
 </header>
 
@@ -136,7 +137,14 @@
   <div class="qb-painel" id="qb-painel">
     <div class="qb-inicio" id="qb-inicio">
       <p class="qb-titulo">Qual a Bandeira?</p>
-      <p class="qb-subtitulo">Acerte a bandeira antes de perder todas as vidas.</p>
+      <p class="qb-subtitulo" id="qb-subtitulo">Acerte a bandeira antes de perder todas as vidas.</p>
+      <div class="qb-modos">
+        <span class="qb-modos-rotulo" id="qb-modos-rotulo">Adivinhe</span>
+        <div class="segmented" role="group" aria-labelledby="qb-modos-rotulo">
+          <button type="button" class="filter active" data-modo="pais" aria-pressed="true">O país</button>
+          <button type="button" class="filter" data-modo="capital" aria-pressed="false">A capital</button>
+        </div>
+      </div>
       <p class="qb-selo-recorde" id="qb-selo-recorde" hidden>
         <span aria-hidden="true">🏆</span> Seu recorde: <strong id="qb-recorde-inicio">0</strong>
       </p>
@@ -188,6 +196,7 @@
       <p class="qb-pergunta" id="qb-pergunta">Qual é esta bandeira?</p>
       <div class="qb-cartao">
         <img id="qb-bandeira" src="data:," alt="Bandeira a adivinhar" width="240" height="160" decoding="async" />
+        <span class="qb-revelado" id="qb-revelado" aria-hidden="true" hidden></span>
       </div>
 
       <div class="qb-opcoes" id="qb-opcoes" role="group" aria-labelledby="qb-pergunta">
@@ -196,7 +205,7 @@
         <button type="button" class="qb-opcao" data-indice="2"><kbd aria-hidden="true">3</kbd><span class="qb-marca" aria-hidden="true"></span><span class="qb-nome"></span></button>
         <button type="button" class="qb-opcao" data-indice="3"><kbd aria-hidden="true">4</kbd><span class="qb-marca" aria-hidden="true"></span><span class="qb-nome"></span></button>
       </div>
-      <p class="qb-ajuda">Clique ou toque no nome do país. No teclado, use as teclas 1 a 4.</p>
+      <p class="qb-ajuda" id="qb-ajuda">Clique ou toque no nome do país. No teclado, use as teclas 1 a 4.</p>
     </div>
 
     <div class="qb-overlay" id="qb-aviso" role="dialog" aria-modal="true" aria-labelledby="qb-aviso-titulo" hidden>
@@ -223,6 +232,11 @@
     errar três vezes: cada erro custa uma das <strong>3 vidas</strong>, e a partida acaba quando
     elas terminam. Depois de responder, o botão certo fica verde e, se você errou, o que você
     escolheu fica vermelho, para você aprender a bandeira na hora.
+  </p>
+  <p>
+    Na tela inicial, escolha o que adivinhar: <strong>o país</strong> ou <strong>a capital</strong>.
+    Os dois modos têm as mesmas vidas, níveis e pontos, e cada um guarda o seu recorde e a sua
+    partida salva.
   </p>
   <p>
     São <strong>193 países</strong>, divididos em três grupos: 34 fáceis (Brasil, Japão,
@@ -252,11 +266,27 @@
 
   <div class="anuncio" data-bloco="meio" hidden></div>
 
+  <h2>Modo Capital</h2>
+  <p>
+    A bandeira aparece do mesmo jeito, mas os quatro botões trazem capitais. Acertou ou errou, o
+    nome do país aparece embaixo da bandeira, então dá para aprender bandeira e capital de uma vez.
+    As capitais estão com a grafia usada no Brasil, como Pequim, Camberra e Nova Délhi.
+  </p>
+  <p>Alguns países têm mais de uma capital ou uma situação especial:</p>
+  <ul>
+    <li><strong>Bolívia:</strong> vale Sucre, a capital pela Constituição. O governo fica em La Paz.</li>
+    <li><strong>África do Sul:</strong> vale Pretória, sede do governo. As outras duas capitais são a Cidade do Cabo (Parlamento) e Bloemfontein (Justiça).</li>
+    <li><strong>Países Baixos:</strong> vale Amsterdã, a capital oficial. O governo fica em Haia.</li>
+    <li><strong>Nauru:</strong> não tem capital oficial; vale Yaren, onde fica o governo.</li>
+    <li><strong>Israel e Palestina:</strong> ficam fora deste modo, porque a capital de ambos é disputada internacionalmente. Por isso o modo Capital tem 191 países.</li>
+  </ul>
+
   <h2>Dicas para ir mais longe</h2>
   <ol>
     <li><strong>Repare nos detalhes:</strong> várias bandeiras usam as mesmas cores em faixas, como as de Indonésia e Mônaco, ou as de Chade e Romênia. O tom e a proporção fazem a diferença.</li>
     <li><strong>Procure símbolos:</strong> estrelas, luas, escudos e animais costumam identificar o país mais rápido que as cores.</li>
     <li><strong>Elimine opções:</strong> quando não souber a resposta, descarte os países cuja bandeira você conhece.</li>
+    <li><strong>A capital nem sempre é a maior cidade:</strong> no modo Capital, lembre que a resposta é Camberra (não Sydney), Ottawa (não Toronto), Ancara (não Istambul), Abuja (não Lagos) e Yamoussoukro (não Abidjan).</li>
     <li><strong>Proteja a sequência nas difíceis:</strong> a partir da 21ª pergunta cada acerto vale muito mais, então vale pensar com calma.</li>
   </ol>
 
@@ -265,8 +295,9 @@
   <p>
     Sim. Depois de cada resposta, a partida e o recorde ficam guardados no próprio navegador. Ao
     voltar, use <strong>Continuar jogo</strong>: a partida segue na pergunta seguinte, com os
-    mesmos pontos e vidas. Se você limpar os dados do navegador ou jogar em outro aparelho, eles
-    não aparecem.
+    mesmos pontos e vidas. Cada modo (país e capital) tem a sua partida e o seu recorde, e o
+    jogo lembra o último modo escolhido. Se você limpar os dados do navegador ou jogar em outro
+    aparelho, eles não aparecem.
   </p>
   <h3>Tem tempo para responder?</h3>
   <p>Não. Você pode pensar o quanto quiser em cada bandeira; só os erros encerram a partida.</p>
@@ -275,6 +306,8 @@
     Aqui no site, em português. O app para Android também tem inglês, espanhol, francês,
     italiano, alemão, chinês, híndi e russo.
   </p>
+  <h3>O modo Capital também existe no app?</h3>
+  <p>Por enquanto, não: o modo Capital é só aqui no site. O app traz o quiz de países.</p>
   <h3>Tem som?</h3>
   <p>
     Tem. A resposta certa toca um sinal agudo e a errada, um som grave. Quando a sequência chega a
@@ -289,7 +322,7 @@
   <img src="/images/apps/qualabandeira.png" alt="" width="72" height="72" loading="lazy" />
   <div>
     <h2>Qual a Bandeira no celular</h2>
-    <p>O mesmo quiz, com nove idiomas para escolher e o recorde salvo, também sem internet.</p>
+    <p>O quiz de países, com nove idiomas para escolher e o recorde salvo, também sem internet.</p>
   </div>
   <a class="button" href="https://play.google.com/store/apps/details?id=com.emerson1981.qualabandeira&amp;hl=pt_BR">Baixar no Google Play <span aria-hidden="true">↗</span></a>
 </aside>

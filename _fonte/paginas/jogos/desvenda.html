@@ -1,0 +1,162 @@
+<!--
+titulo: Desvenda: Jogo da Palavra do Dia com Dica, Online e Grátis — EFS Aplicativos
+descricao: Descubra a palavra de 5 letras em 6 tentativas. Tem palavra do dia, treino à vontade e uma dica que põe a letra certa no lugar. Online, grátis e em português.
+estilos: /assets/jogos/desvenda.css
+scripts: /assets/jogos/desvenda-palavras.js /assets/jogos/desvenda-logica.js /assets/jogos/sons.js /assets/jogos/desvenda.js
+app: Desvenda | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Desvenda</li>
+  </ol>
+  <h1>Desvenda: descubra a palavra do dia</h1>
+  <p>
+    Uma palavra secreta de 5 letras e 6 chances para acertar. A cada chute, as cores contam quais
+    letras estão no lugar certo e quais estão na palavra, mas em outro lugar. Travou? Peça uma dica e
+    ponha uma letra certa no quadrado que ainda falta descobrir.
+  </p>
+</header>
+
+<section class="desvenda" id="desvenda" aria-label="Jogo Desvenda">
+  <div class="segmented dv-modos" role="group" aria-label="Modo de jogo">
+    <button type="button" class="filter active" data-modo="dia" aria-pressed="true">Palavra do dia</button>
+    <button type="button" class="filter" data-modo="treino" aria-pressed="false">Treino</button>
+  </div>
+  <p class="dv-titulo" id="dv-titulo">Palavra do dia</p>
+
+  <div class="dv-grade" id="dv-grade" role="group" aria-label="Tentativas" aria-describedby="dv-ajuda"></div>
+  <p class="dv-mensagem" id="dv-mensagem" aria-hidden="true"></p>
+
+  <div class="dv-acoes">
+    <button type="button" class="button secondary dv-dica" id="dv-dica">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21h6v-1.5H9Zm3-19a7 7 0 0 0-4 12.7V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.3A7 7 0 0 0 12 2Z" /></svg>
+      <span id="dv-dica-texto">Dica (2)</span>
+    </button>
+    <button type="button" class="button secondary" id="dv-outra" hidden>Nova palavra</button>
+    <button type="button" class="som-botao" id="dv-som"></button>
+  </div>
+
+  <div class="dv-teclado" id="dv-teclado" role="group" aria-label="Teclado do jogo"></div>
+
+  <p class="dv-ajuda" id="dv-ajuda">
+    Digite no teclado do computador ou toque nas letras, e envie com Enter. Toque num quadrado da
+    linha para escolher onde escrever: a dica também vai para esse quadrado, se a letra dele ainda
+    não foi descoberta. As setas andam pela linha. Acentos e ç não precisam ser digitados.
+  </p>
+  <p class="sr-only" aria-live="polite" id="dv-status"></p>
+
+  <details class="dv-estatisticas">
+    <summary>Suas estatísticas: <span id="dv-est-modo">palavra do dia</span></summary>
+    <dl class="dv-est-lista" id="dv-est-lista"></dl>
+    <div class="dv-dist" id="dv-est-dist"></div>
+    <button type="button" class="dv-zerar" id="dv-zerar">Zerar as estatísticas deste modo</button>
+  </details>
+
+  <dialog class="dv-dialogo" id="dv-dialogo" aria-labelledby="dv-dialogo-titulo">
+    <h2 id="dv-dialogo-titulo"></h2>
+    <p class="dv-dialogo-texto" id="dv-dialogo-texto"></p>
+    <dl class="dv-est-lista dv-dialogo-est" id="dv-dialogo-est"></dl>
+    <div class="dv-dist" id="dv-dialogo-dist"></div>
+    <p class="dv-proxima" id="dv-proxima" hidden></p>
+    <div class="dv-dialogo-botoes" id="dv-dialogo-botoes"></div>
+  </dialog>
+</section>
+
+<aside class="indicacao" data-indicacao="desvenda" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar o Desvenda</h2>
+  <p>
+    O objetivo é descobrir uma palavra de 5 letras em até 6 tentativas. Escreva uma palavra que
+    exista em português e envie. Cada letra do seu chute muda de cor para mostrar o quanto ela
+    chegou perto:
+  </p>
+  <ul class="dv-legenda">
+    <li><span class="dv-exemplo certa" aria-hidden="true">C</span> <strong>Verde:</strong> a letra está na palavra e nesse mesmo lugar.</li>
+    <li><span class="dv-exemplo presente" aria-hidden="true">A</span> <strong>Laranja:</strong> a letra está na palavra, mas em outro lugar.</li>
+    <li><span class="dv-exemplo ausente" aria-hidden="true">S</span> <strong>Cinza:</strong> a letra não está na palavra.</li>
+  </ul>
+  <p>
+    Além da cor, a letra verde ganha um ✓ e a laranja, uma seta ↔, para quem tem dificuldade de
+    distinguir cores. O teclado do jogo também fica colorido, então dá para ver de relance quais
+    letras já foram descartadas.
+  </p>
+  <p>
+    Se a palavra tiver letras repetidas, cada cor vale para uma ocorrência. Por exemplo, se a
+    resposta tem um só A e você chuta uma palavra com dois, só um deles acende. Os acentos e o ç
+    não contam: digite <em>acao</em> e o jogo entende <em>ação</em>.
+  </p>
+
+  <h2>A dica</h2>
+  <p>
+    Esta é a diferença do Desvenda para outros jogos de palavras: quando travar, use o botão
+    <strong>Dica</strong>. Ele põe a letra certa num quadrado que você ainda não descobriu. Toque no
+    quadrado onde quer a ajuda antes de pedir; se você escolher um quadrado que já está verde, a
+    dica vai para o primeiro que falta.
+  </p>
+  <ul>
+    <li>São no máximo <strong>2 dicas</strong> por palavra.</li>
+    <li>A letra da dica fica presa no lugar e volta sozinha nas linhas seguintes.</li>
+    <li>A dica nunca entrega a palavra inteira: quando falta descobrir só uma letra, ela não aparece.</li>
+    <li>As estatísticas contam quantas vitórias foram <strong>sem dica</strong>, para quem quer o desafio completo.</li>
+  </ul>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Palavra do dia e treino</h2>
+  <p>
+    Na <strong>Palavra do dia</strong>, todo mundo recebe a mesma palavra, que muda à meia-noite no
+    horário de Brasília. Dá para jogar uma vez por dia, comparar com os amigos e manter uma
+    sequência de vitórias. Ao terminar, o botão <strong>Copiar resultado</strong> copia os quadrados
+    coloridos, sem mostrar as letras, para colar onde quiser.
+  </p>
+  <p>
+    No <strong>Treino</strong>, as palavras são sorteadas e você joga quantas quiser. Começar outra
+    palavra no meio de uma partida conta como derrota nas estatísticas do treino. Cada modo guarda
+    as suas estatísticas e a partida em andamento no próprio navegador.
+  </p>
+
+  <h2>Dicas para ir mais longe</h2>
+  <ol>
+    <li><strong>Comece com vogais e letras comuns:</strong> palavras como <em>areia</em>, <em>teias</em> ou <em>reino</em> testam várias letras frequentes de uma vez.</li>
+    <li><strong>Use as letras cinza a seu favor:</strong> evite repetir o que já foi descartado; o teclado colorido ajuda.</li>
+    <li><strong>Mude o laranja de lugar:</strong> uma letra laranja não pode voltar para o mesmo quadrado.</li>
+    <li><strong>Guarde a dica para o fim:</strong> ela rende mais quando faltam uma ou duas letras difíceis.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Por que meu chute não foi aceito?</h3>
+  <p>
+    O jogo só aceita palavras do português, para que cada chute seja uma tentativa de verdade. Ele
+    conhece cerca de 10 mil palavras de 5 letras, incluindo plurais e verbos conjugados. Nomes
+    próprios, siglas e palavras estrangeiras ficam de fora.
+  </p>
+  <h3>De onde vêm as palavras?</h3>
+  <p>
+    As palavras aceitas vêm da lista aberta
+    <a href="https://github.com/fserb/pt-br">pt-br, de Fernando Serboncini</a> (licença MIT). As
+    respostas são cerca de mil palavras comuns escolhidas dessa lista, sem nomes próprios nem
+    palavrões.
+  </p>
+  <h3>Perdi a palavra do dia. Posso jogar a de ontem?</h3>
+  <p>
+    Não: a palavra do dia vale só no dia dela. Para continuar jogando, use o Treino, que sorteia
+    palavras novas à vontade.
+  </p>
+  <h3>Minha partida fica salva?</h3>
+  <p>
+    Sim. Os chutes e as dicas ficam guardados neste navegador, então dá para fechar a página e
+    continuar depois. Se você limpar os dados do navegador ou jogar em outro aparelho, a partida e
+    as estatísticas não aparecem lá.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem: um clique a cada letra, o som das peças virando, um aviso para palavra recusada e uma
+    música curta no fim. O botão Som, ao lado da dica, liga e desliga, e a escolha fica guardada
+    neste aparelho.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

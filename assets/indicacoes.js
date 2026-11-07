@@ -147,6 +147,7 @@ const Indicacoes = (() => {
       produto("Jogo da memória em madeira, 40 peças", "Peças de verdade para jogar em família, sem tela.", naAmazon("B08VCYG2FG")),
     ],
     "jogo-da-velha": [produto("Jogo da velha em madeira", "Para levar a partida para a mesa.", naAmazon("B09Y2KNRVT"))],
+    desvenda: [],
     lumibricks: [],
     mahjong: [
       produto(
