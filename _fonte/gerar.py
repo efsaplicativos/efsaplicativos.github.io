@@ -115,6 +115,13 @@ def gerar(arquivo: Path) -> str:
         pagina = pagina.replace(f'data-secao="{secao}"', f'data-secao="{secao}" aria-current="page"')
 
     pagina = re.sub(r"\[\[v:([^\]]+)\]\]", lambda m: versao(m.group(1)), pagina)
+    # Imagens dos cartões: hash na URL, senão o navegador continua mostrando o ícone antigo depois de
+    # trocar o arquivo (o mesmo ?v= que já existe em CSS e JS)
+    pagina = re.sub(
+        r'src="(/images/[^"]+?\.webp)(?:\?v=[0-9a-f]+)?"',
+        lambda m: f'src="{m.group(1)}?v={versao(m.group(1)[1:])}"',
+        pagina,
+    )
     sobra = re.search(r"\[\[[^\]]+\]\]", pagina)
     if sobra:
         raise SystemExit(f"{arquivo}: marcador sem valor {sobra.group(0)}")
@@ -133,6 +140,12 @@ def atualizar_versoes(nome: str) -> None:
         rf'((?:href|src)="({ARQUIVOS_A_MAO})\?v=)[0-9a-f]+"',
         lambda m: f'{m.group(1)}{versao(m.group(2))}"',
         texto,
+    )
+    # As imagens dos cartões também ganham ?v=, inclusive nas páginas feitas à mão
+    novo = re.sub(
+        r'src="(/images/[^"]+?\.webp)(?:\?v=[0-9a-f]+)?"',
+        lambda m: f'src="{m.group(1)}?v={versao(m.group(1)[1:])}"',
+        novo,
     )
     if novo != texto:
         arquivo.write_bytes(novo.encode("utf-8"))
