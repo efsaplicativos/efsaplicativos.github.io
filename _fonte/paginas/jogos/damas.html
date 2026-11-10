@@ -1,0 +1,148 @@
+<!--
+titulo: Damas Online Grátis: Jogue contra o Computador — EFS Aplicativos
+descricao: Jogue damas online e grátis no tabuleiro 8x8: captura obrigatória, dama coroada e três níveis contra o computador ou dois jogadores no mesmo aparelho. A partida fica salva.
+estilos: /assets/jogos/damas.css
+scripts: /assets/jogos/damas-logica.js /assets/jogos/sons.js /assets/jogos/damas.js
+app: Damas | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Damas</li>
+  </ol>
+  <h1>Damas online</h1>
+  <p>
+    O clássico tabuleiro de 8x8 com as regras da dama brasileira: captura obrigatória, peão que vira
+    dama na última linha e dama que voa pela diagonal. Jogue contra o computador em três níveis ou
+    com outra pessoa no mesmo aparelho.
+  </p>
+</header>
+
+<section class="damas" aria-label="Damas">
+  <div class="segmented dm-modos" role="group" aria-label="Modo de jogo">
+    <button type="button" class="filter active" data-modo="computador" aria-pressed="true">Contra o computador</button>
+    <button type="button" class="filter" data-modo="dois" aria-pressed="false">2 jogadores</button>
+  </div>
+
+  <div class="dm-niveis" id="dm-niveis">
+    <span class="dm-rotulo" id="dm-niveis-rotulo">Dificuldade</span>
+    <div class="segmented" role="group" aria-labelledby="dm-niveis-rotulo">
+      <button type="button" class="filter" data-nivel="facil" aria-pressed="false">Fácil</button>
+      <button type="button" class="filter active" data-nivel="medio" aria-pressed="true">Médio</button>
+      <button type="button" class="filter" data-nivel="dificil" aria-pressed="false">Difícil</button>
+    </div>
+  </div>
+
+  <p class="dm-mensagem" id="dm-mensagem" aria-live="polite"></p>
+
+  <p class="dm-contagem">
+    <span>Brancas <strong id="dm-brancas">12</strong></span>
+    <span>Pretas <strong id="dm-pretas">12</strong></span>
+  </p>
+
+  <div class="dm-tabuleiro" id="dm-tabuleiro" role="group" aria-label="Tabuleiro de damas" aria-describedby="dm-ajuda"></div>
+
+  <div class="dm-botoes">
+    <button type="button" class="button" id="dm-nova">Reiniciar</button>
+    <button type="button" class="button secondary" id="dm-desfazer">Desfazer</button>
+    <button type="button" class="som-botao" id="dm-som"></button>
+  </div>
+
+  <p class="dm-ultimo" id="dm-ultimo"></p>
+  <p class="dm-ajuda" id="dm-ajuda">
+    Toque numa peça branca para ver as casas possíveis e toque no anel verde para jogar. As casas
+    escuras são as que têm peça. Comer é obrigatório: quando houver captura, só as capturas acendem.
+  </p>
+
+  <div class="dm-cartao" id="dm-placar" hidden>
+    <div class="dm-cartao-topo">
+      <h2>Placar</h2>
+      <button type="button" class="dm-link" id="dm-zerar">Zerar placar</button>
+    </div>
+    <div class="dm-numeros">
+      <div class="dm-numero dm-cor-b"><strong id="dm-placar-b">0</strong><span>Brancas</span></div>
+      <div class="dm-numero dm-cor-empate"><strong id="dm-placar-empates">0</strong><span>Empates</span></div>
+      <div class="dm-numero dm-cor-p"><strong id="dm-placar-p">0</strong><span>Pretas</span></div>
+    </div>
+  </div>
+
+  <div class="dm-cartao" id="dm-desempenho" hidden>
+    <div class="dm-cartao-topo">
+      <h2>Seu desempenho no nível <span id="dm-desempenho-nivel">Médio</span></h2>
+    </div>
+    <div class="dm-numeros">
+      <div class="dm-numero dm-cor-vitoria"><strong id="dm-vitorias">0</strong><span>Vitórias</span></div>
+      <div class="dm-numero dm-cor-empate"><strong id="dm-empates">0</strong><span>Empates</span></div>
+      <div class="dm-numero dm-cor-derrota"><strong id="dm-derrotas">0</strong><span>Derrotas</span></div>
+    </div>
+    <details class="dm-historico" id="dm-historico">
+      <summary>Histórico de partidas (<span id="dm-historico-total">0 partidas</span>)</summary>
+      <p id="dm-historico-vazio">Nenhuma partida contra o computador ainda.</p>
+      <ol id="dm-historico-lista" hidden></ol>
+      <button type="button" class="dm-link" id="dm-limpar" hidden>Limpar histórico</button>
+    </details>
+  </div>
+</section>
+
+<aside class="indicacao" data-indicacao="damas" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar damas</h2>
+  <p>
+    O tabuleiro tem 8 casas por 8, e as peças ocupam só as casas escuras: 12 brancas e 12 pretas. As
+    brancas começam e o jogo é sempre para a frente, na diagonal. Vence quem deixar o adversário sem
+    peças ou sem nenhum lance possível.
+  </p>
+  <p>
+    Aqui valem as regras da dama brasileira, as mesmas que se jogam nas praças e nas escolas do
+    país. Elas fazem diferença na hora de escolher o lance:
+  </p>
+  <ul>
+    <li><strong>Peão:</strong> anda uma casa na diagonal, só para a frente, mas come em qualquer das quatro diagonais, inclusive para trás.</li>
+    <li><strong>Dama:</strong> o peão que chega à última linha vira dama e passa a andar e a comer a qualquer distância na diagonal, desde que o caminho esteja livre.</li>
+    <li><strong>Comer é obrigatório:</strong> quando existe uma captura, você não pode escolher outra jogada. É a regra que mais confunde quem está começando.</li>
+    <li><strong>Captura em cadeia:</strong> se depois de comer a mesma peça puder comer de novo, ela continua e leva tudo na mesma jogada.</li>
+    <li><strong>Promoção na captura:</strong> o peão que chega à última linha no meio de uma captura para ali, vira dama e não continua a comer.</li>
+    <li><strong>Empate:</strong> 40 lances seguidos sem nenhuma captura encerram a partida empatada.</li>
+  </ul>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas de estratégia</h2>
+  <ol>
+    <li><strong>Não abra a sua base.</strong> As peças da última linha seguram o adversário: se elas saem, as damas dele entram e não saem mais.</li>
+    <li><strong>Troque quando estiver com mais peças.</strong> Cada troca vale mais para quem tem vantagem de material, porque a diferença relativa aumenta.</li>
+    <li><strong>Conte as capturas antes de comer.</strong> Como a captura é obrigatória, um erro de sequência pode entregar duas ou três peças de uma vez.</li>
+    <li><strong>Corra para a dama pelo lado em que o caminho está livre.</strong> Chegar primeiro à última linha quase sempre decide a partida.</li>
+    <li><strong>Controle o centro.</strong> As peças do miolo têm mais opções de ataque e defesa do que as encostadas na borda.</li>
+    <li><strong>Use o Desfazer.</strong> Antes de a partida terminar, ele volta o último lance (o seu e o do computador), para você testar outra ideia.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>É a dama brasileira ou a internacional?</h3>
+  <p>
+    É a brasileira, jogada em 8x8 com 12 peças de cada lado. A diferença em relação à internacional
+    (10x10, 20 peças) é o tamanho do tabuleiro e o número de peças; as regras de captura que valem
+    aqui são as da dama brasileira.
+  </p>
+  <h3>Preciso comer quando tenho captura?</h3>
+  <p>
+    Sim. Diferente do xadrez, aqui a captura é obrigatória, e o jogo só mostra as casas de captura
+    quando alguma existe. Quando apenas uma peça pode jogar, ela já vem escolhida para você.
+  </p>
+  <h3>Dá para ganhar do computador no Difícil?</h3>
+  <p>
+    Dá. O Difícil calcula quatro lances à frente, com uma busca que descarta os caminhos ruins
+    (minimax com poda alfa-beta), e valoriza material, avanço, base protegida e o miolo do tabuleiro.
+    Ele erra pouco, mas erra.
+  </p>
+  <h3>A partida fica salva se eu fechar a página?</h3>
+  <p>
+    Fica, no seu navegador: a partida em andamento, o modo, o nível, o placar de dois jogadores e as
+    últimas 200 partidas contra o computador. Nada é enviado para nenhum servidor.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+

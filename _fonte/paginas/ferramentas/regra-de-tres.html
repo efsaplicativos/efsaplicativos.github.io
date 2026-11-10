@@ -1,0 +1,226 @@
+<!--
+titulo: Regra de Três Simples e Composta: Calculadora Online — EFS Aplicativos
+descricao: Resolva regra de três simples (direta ou inversa) e composta em segundos, com o passo a passo da proporção. Calculadora online grátis, sem cadastro.
+scripts: /assets/numeros.js /assets/ferramentas/regra-de-tres-logica.js /assets/ferramentas/regra-de-tres.js
+app: Regra de três | EducationalApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Regra de três</li>
+  </ol>
+  <h1>Regra de três simples e composta</h1>
+  <p>
+    Digite os valores que você conhece e descubra o x: na simples, basta dizer se as grandezas são
+    diretas ou inversas; na composta, cada linha diz se a grandeza cresce ou cai junto com o resultado.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora de regra de três">
+  <div class="tool-grid">
+    <form class="fields" id="regra-de-tres" novalidate>
+      <fieldset class="field">
+        <legend>Tipo</legend>
+        <div class="segmented" role="group" aria-label="Tipo de regra de três">
+          <button type="button" class="filter active" data-modo="simples" aria-pressed="true">Simples</button>
+          <button type="button" class="filter" data-modo="composta" aria-pressed="false">Composta</button>
+        </div>
+      </fieldset>
+
+      <div data-bloco="simples">
+        <div class="field">
+          <label for="a">Primeiro valor (a)</label>
+          <input class="input" id="a" inputmode="decimal" autocomplete="off" placeholder="Ex.: 2" />
+        </div>
+        <div class="field">
+          <label for="b">Segundo valor (b)</label>
+          <input class="input" id="b" inputmode="decimal" autocomplete="off" placeholder="Ex.: 10" />
+        </div>
+        <div class="field">
+          <label for="c">Terceiro valor (c)</label>
+          <input class="input" id="c" inputmode="decimal" autocomplete="off" placeholder="Ex.: 5" />
+        </div>
+        <div class="field">
+          <label for="inversa">Proporção</label>
+          <select class="select" id="inversa">
+            <option value="direta" selected>Direta (cresce junto)</option>
+            <option value="inversa">Inversa (uma sobe, a outra desce)</option>
+          </select>
+        </div>
+        <p class="hint">
+          Lê-se: a está para b, assim como c está para x.
+        </p>
+      </div>
+
+      <div data-bloco="composta" hidden>
+        <div class="field">
+          <label for="alvo">Grandeza do x: valor conhecido</label>
+          <input class="input" id="alvo" inputmode="decimal" autocomplete="off" placeholder="Ex.: 100" />
+        </div>
+        <div class="field">
+          <label for="conhecido-1">Grandeza 1: valor conhecido</label>
+          <div class="input-row">
+            <input class="input" id="conhecido-1" inputmode="decimal" autocomplete="off" placeholder="Ex.: 2" />
+            <input class="input" id="novo-1" inputmode="decimal" autocomplete="off" placeholder="Novo: 4" aria-label="Grandeza 1: valor novo" />
+          </div>
+          <select class="select" id="inversa-1" aria-label="Grandeza 1: proporção">
+            <option value="direta" selected>Direta</option>
+            <option value="inversa">Inversa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="conhecido-2">Grandeza 2: valor conhecido</label>
+          <div class="input-row">
+            <input class="input" id="conhecido-2" inputmode="decimal" autocomplete="off" placeholder="Ex.: 5 (opcional)" />
+            <input class="input" id="novo-2" inputmode="decimal" autocomplete="off" placeholder="Novo (opcional)" aria-label="Grandeza 2: valor novo" />
+          </div>
+          <select class="select" id="inversa-2" aria-label="Grandeza 2: proporção">
+            <option value="direta" selected>Direta</option>
+            <option value="inversa">Inversa</option>
+          </select>
+          <span class="hint">Deixe a grandeza 2 em branco se o problema tiver só uma.</span>
+        </div>
+      </div>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Preencha os valores para achar o x.</p>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<aside class="indicacao" data-indicacao="regra-de-tres" hidden></aside>
+
+<article class="texto">
+  <h2>Como preencher: um exemplo passo a passo</h2>
+  <p>
+    <strong>Problema:</strong> "Para alimentar o seu cão, uma pessoa gasta 10 kg de ração a cada 15
+    dias. Qual a quantidade total de ração consumida por semana, considerando que por dia é sempre
+    colocada a mesma quantidade?"
+  </p>
+  <p>
+    O enunciado dá dois pares ligados pela mesma razão: <strong>15 dias → 10 kg</strong> e
+    <strong>7 dias → x</strong> (uma semana). A calculadora lê "a está para b, assim como c está para
+    x", então basta encaixar:
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Campo</th>
+          <th scope="col">O que digitar</th>
+          <th scope="col">Por quê</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Primeiro valor (a)</td><td>15</td><td>os 15 dias do enunciado</td></tr>
+        <tr><td>Segundo valor (b)</td><td>10</td><td>os 10 kg que correspondem a esses 15 dias</td></tr>
+        <tr><td>Terceiro valor (c)</td><td>7</td><td>a semana, que é o prazo do x</td></tr>
+        <tr><td>Proporção</td><td>Direta</td><td>menos dias, menos ração: as grandezas crescem juntas</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    A conta fica <strong>15 × x = 10 × 7</strong>, ou seja, <strong>15x = 70</strong> e
+    <strong>x = 4,666… kg</strong> — cerca de <strong>4,67 kg por semana</strong> (4 kg e 667 g, ou
+    aproximadamente 667 g por dia).
+  </p>
+  <p>
+    <button type="button" class="button secondary" data-exemplo="racao">Preencher com este exemplo</button>
+  </p>
+
+  <h3>Outro exemplo, agora na composta</h3>
+  <p>
+    <strong>Problema:</strong> "2 operários, trabalhando 5 dias, produzem 100 peças. Quantas peças
+    produzem 4 operários em 10 dias?"
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Campo</th>
+          <th scope="col">O que digitar</th>
+          <th scope="col">Por quê</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Grandeza do x: valor conhecido</td><td>100</td><td>as peças do enunciado</td></tr>
+        <tr><td>Grandeza 1 (operários)</td><td>2 → 4, direta</td><td>o dobro de operários dobra a produção</td></tr>
+        <tr><td>Grandeza 2 (dias)</td><td>5 → 10, direta</td><td>o dobro de dias dobra a produção</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    O resultado é <strong>100 × 2 × 2 = 400 peças</strong>. A calculadora mostra o fator de cada linha
+    (× 2 e × 2) e o fator total (× 4).
+  </p>
+  <p>
+    <button type="button" class="button secondary" data-exemplo="operarios">Preencher com este exemplo</button>
+  </p>
+  <p class="note">
+    Dica para conferir a proporção: se o resultado "andar para o lado errado" (mais dias dando menos
+    consumo, por exemplo), troque entre direta e inversa. Grandezas diretas crescem juntas; inversas
+    andam em sentidos opostos.
+  </p>
+
+  <h2>O que é a regra de três</h2>
+  <p>
+    É a conta que resolve problemas de proporção: se dois valores conhecidos se relacionam de uma
+    forma, um terceiro valor conhecido se relaciona com o x do mesmo jeito. Multiplica-se em cruz e
+    divide-se pelo valor que sobra.
+  </p>
+  <p class="formula">a / b = c / x → a · x = b · c → x = b · c / a</p>
+
+  <h2>Direta ou inversa?</h2>
+  <ul>
+    <li><strong>Direta:</strong> as duas grandezas crescem juntas. Dobrar os operários dobra a produção, dobrar os litros dobra o preço.</li>
+    <li><strong>Inversa:</strong> quando uma cresce, a outra cai. Dobrar as torneiras corta o tempo pela metade; mais velocidade, menos tempo de viagem.</li>
+  </ul>
+  <p>
+    Na inversa, a proporção se escreve ao contrário — a · b = c · x — e a conta final é a · b / c. Um
+    jeito prático de conferir: se o resultado ficar maior quando deveria ficar menor, troque a opção.
+  </p>
+
+  <h2>Como usar a composta</h2>
+  <p>
+    Na regra de três composta há mais de duas grandezas. O caminho é comparar cada grandeza com a
+    grandeza do x, uma por vez, e multiplicar os efeitos:
+  </p>
+  <ol>
+    <li>Preencha o valor conhecido da grandeza que tem o x.</li>
+    <li>Em cada linha, informe o valor conhecido e o novo valor da outra grandeza.</li>
+    <li>Marque <strong>direta</strong> se, ao aumentar essa grandeza, o x também aumenta; <strong>inversa</strong> se o x diminui.</li>
+  </ol>
+  <p>
+    Exemplo: 2 operários, em 5 dias, fazem 100 peças. Quantas peças fazem 4 operários em 10 dias? O
+    dobro de operários dobra a produção e o dobro de dias dobra de novo: 100 × 2 × 2 = 400 peças.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Regra de três com porcentagem funciona igual?</h3>
+  <p>
+    Sim. Basta usar 100 como referência: se 100% corresponde a um valor, 35% correspondem a x. Depois
+    de montar a proporção, a conta é a mesma — multiplicar em cruz e dividir.
+  </p>
+  <h3>Posso usar números decimais e vírgula?</h3>
+  <p>
+    Pode: os campos aceitam vírgula ou ponto, e também o separador de milhar. O resultado aparece com
+    até seis casas decimais, sem arredondar demais o que você digitou.
+  </p>
+  <h3>O que fazer quando o resultado é uma dízima?</h3>
+  <p>
+    A calculadora mostra o valor completo (até seis casas). Para uma resposta de prova, arredonde
+    conforme o enunciado pede — e, se for dinheiro, para dois centavos.
+  </p>
+  <h3>Quando a regra de três não vale?</h3>
+  <p>
+    Ela vale para grandezas proporcionais. Se a relação não é proporcional (juros compostos, escalas
+    como a de temperatura em Celsius para Fahrenheit, tarifas com faixas), é preciso outra fórmula —
+    nesses casos, use as calculadoras específicas do site.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+

@@ -1,0 +1,360 @@
+/* ==========================================================================
+   Cobrinha — tabuleiro, cobra, fruta, setas e cartões de pontuação
+   ========================================================================== */
+
+.cobrinha {
+  --cbr-fundo: #10341f;
+  --cbr-casa: #17502c;
+  --cbr-casa-par: #14461f;
+  --cbr-cobra: #7ef08a;
+  --cbr-cobra-escura: #2f9e44;
+  --cbr-cabeca: #b2ffb8;
+  --cbr-fruta: #f2603c;
+  --cbr-folha: #4ade80;
+  --cbr-vitoria: #2e7d32;
+  --cbr-derrota: #c62828;
+  max-width: 480px;
+  margin: 0 auto;
+}
+:root[data-theme="dark"] .cobrinha {
+  --cbr-fundo: #0a1c12;
+  --cbr-casa: #12351f;
+  --cbr-casa-par: #0f2c1a;
+  --cbr-cobra: #6fe07c;
+  --cbr-cobra-escura: #267a35;
+  --cbr-cabeca: #a9f7b0;
+  --cbr-fruta: #f4704c;
+  --cbr-folha: #3ecf6e;
+  --cbr-vitoria: #81c784;
+  --cbr-derrota: #ef9a9a;
+}
+
+.cobrinha .cbr-niveis {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.cbr-rotulo {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--muted);
+}
+
+/* ---------- Mensagem e dados ---------- */
+.cbr-mensagem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 56px;
+  margin: 0 0 14px;
+  padding: 8px 16px;
+  font-size: 20px;
+  font-weight: 650;
+  text-align: center;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.cbr-mensagem[data-tipo="vitoria"] {
+  color: var(--cbr-vitoria);
+}
+.cbr-mensagem[data-tipo="derrota"] {
+  color: var(--cbr-derrota);
+}
+.cbr-mensagem[data-tipo="pausado"] {
+  color: var(--text-2);
+}
+.cbr-icone {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.cbr-info {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 14px;
+  text-align: center;
+}
+.cbr-dado {
+  padding: 8px 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.cbr-dado span {
+  display: block;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.cbr-dado strong {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Tabuleiro ---------- */
+.cbr-quadro {
+  position: relative;
+  width: min(100%, 440px, max(260px, calc(100vh - 420px)));
+  margin: 0 auto;
+}
+@supports (height: 100svh) {
+  .cbr-quadro {
+    width: min(100%, 440px, max(260px, calc(100svh - 420px)));
+  }
+}
+.cbr-tabuleiro {
+  display: grid;
+  /* Colunas e linhas vêm do nível; nada que esteja dentro da casa muda o tamanho dela */
+  grid-template-columns: repeat(var(--colunas, 16), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--linhas, 16), minmax(0, 1fr));
+  gap: 1px;
+  aspect-ratio: 1;
+  padding: 6px;
+  background: var(--cbr-fundo);
+  border-radius: 16px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.cbr-casa {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  background: var(--cbr-casa);
+  border-radius: 2px;
+}
+/*
+ * O xadrez do gramado fica em :where() para ter especificidade mínima: assim ele nunca
+ * sobrepõe a cor da cobra e da fruta, que são pintadas na própria casa.
+ */
+:where(.cbr-casa):nth-child(even) {
+  background: var(--cbr-casa-par);
+}
+.cbr-casa.cbr-corpo,
+.cbr-casa.cbr-cabeca {
+  background: linear-gradient(160deg, var(--cbr-cobra), var(--cbr-cobra-escura));
+  border-radius: 4px;
+}
+.cbr-casa.cbr-cabeca {
+  background: linear-gradient(160deg, var(--cbr-cabeca), var(--cbr-cobra));
+  border-radius: 6px;
+}
+/* Olhinhos da cabeça */
+.cbr-cabeca::before,
+.cbr-cabeca::after {
+  content: "";
+  position: absolute;
+  top: 26%;
+  width: 22%;
+  height: 22%;
+  background: #10341f;
+  border-radius: 50%;
+}
+.cbr-cabeca::before {
+  left: 20%;
+}
+.cbr-cabeca::after {
+  right: 20%;
+}
+.cbr-casa.cbr-cauda {
+  border-radius: 4px 4px 6px 6px;
+}
+.cbr-casa.cbr-comida {
+  background: radial-gradient(circle at 34% 30%, #ffa07a, var(--cbr-fruta));
+  border-radius: 50%;
+  /* A batida é feita no JS (cobrinha.js), que ajusta esta variável a cada quadro */
+  transform: scale(var(--cbr-batida, 0.86));
+}
+/* Sem batida antes de o jogo começar (parado) e depois que ele acaba (fim) */
+.cbr-tabuleiro[data-jogo="parado"] .cbr-casa.cbr-comida,
+.cbr-tabuleiro[data-jogo="fim"] .cbr-casa.cbr-comida {
+  transform: scale(0.86);
+}
+/* Folhinha da fruta */
+.cbr-comida::after {
+  content: "";
+  position: absolute;
+  left: 52%;
+  top: -6%;
+  width: 34%;
+  height: 20%;
+  background: var(--cbr-folha);
+  border-radius: 60% 10% 60% 10%;
+  transform: rotate(-18deg);
+}
+
+/* ---------- Aviso de pausa ---------- */
+.cbr-aviso {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 20px;
+  text-align: center;
+  background: rgba(8, 20, 14, 0.72);
+  border-radius: 16px;
+  backdrop-filter: blur(2px);
+}
+.cbr-aviso[hidden] {
+  display: none;
+}
+.cbr-aviso p {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: #f4fff5;
+}
+
+/* ---------- Setas ---------- */
+.cbr-setas {
+  display: grid;
+  grid-template-columns: repeat(3, 62px);
+  grid-template-rows: repeat(3, 50px);
+  gap: 6px;
+  justify-content: center;
+  margin: 16px auto 0;
+}
+.cbr-seta {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  font-size: 17px;
+  color: var(--text-2);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    transform 140ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.cbr-seta:hover:not(:disabled) {
+  background: var(--soft-1);
+}
+.cbr-seta:active:not(:disabled) {
+  transform: translateY(2px);
+}
+.cbr-seta:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.cbr-seta:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.cbr-seta[data-direcao="cima"] {
+  grid-area: 1 / 2;
+}
+.cbr-seta[data-direcao="esquerda"] {
+  grid-area: 2 / 1;
+}
+.cbr-seta[data-direcao="baixo"] {
+  grid-area: 2 / 2;
+}
+.cbr-seta[data-direcao="direita"] {
+  grid-area: 2 / 3;
+}
+
+/* ---------- Botões e cartão do recorde ---------- */
+.cbr-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 12px;
+}
+.cbr-ajuda {
+  max-width: 460px;
+  margin: 0 auto 18px;
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+}
+.cbr-cartao {
+  max-width: 460px;
+  margin: 0 auto 16px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+}
+.cbr-cartao-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.cbr-cartao-topo h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.cbr-numeros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+  text-align: center;
+}
+.cbr-numero strong {
+  display: block;
+  font-size: 24px;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}
+.cbr-numero span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.cbr-link {
+  padding: 4px 0;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--violet-2);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.cbr-link:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.cbr-link:disabled {
+  color: var(--muted);
+  text-decoration: none;
+  cursor: default;
+}
+
+@media (max-width: 400px) {
+  .cbr-mensagem {
+    font-size: 18px;
+  }
+  .cbr-setas {
+    grid-template-columns: repeat(3, 58px);
+    grid-template-rows: repeat(3, 46px);
+    gap: 5px;
+  }
+  .cbr-dado strong {
+    font-size: 18px;
+  }
+  .cbr-botoes .button {
+    padding-inline: 14px;
+  }
+}

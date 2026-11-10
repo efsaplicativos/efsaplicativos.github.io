@@ -1,0 +1,148 @@
+/* Soletra. Usa as classes base do site (.button, .som-botao). */
+.soletra {
+  max-width: 620px;
+  margin: 0 auto;
+  color-scheme: light;
+}
+
+.sl-placar-linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.sl-dado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 96px;
+}
+
+.sl-dado span {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.sl-dado strong {
+  font-size: 24px;
+}
+
+.sl-letras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.sl-letra {
+  width: 58px;
+  height: 58px;
+  font: inherit;
+  font-size: 22px;
+  font-weight: 800;
+  color: #1f2937;
+  background: #fff;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.sl-letra:hover {
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+}
+
+.sl-letra:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.sl-central {
+  background: #12647a;
+  border-color: #12647a;
+  color: #fff;
+  transform: scale(1.12);
+}
+
+.sl-central:hover {
+  background: #0d4f61;
+  border-color: #0d4f61;
+}
+
+.sl-entrada {
+  margin: 0 0 14px;
+  text-align: center;
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  min-height: 1.6em;
+  overflow-wrap: anywhere;
+}
+
+.sl-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.sl-mensagem {
+  margin: 0 0 18px;
+  text-align: center;
+  min-height: 1.5em;
+  font-weight: 600;
+}
+
+.sl-aviso {
+  margin: 0 0 14px;
+  min-height: 1.3em;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sl-lista {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 14px;
+}
+
+.sl-grupo {
+  margin: 0 0 10px;
+}
+
+.sl-grupo strong {
+  display: inline-block;
+  min-width: 74px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.sl-palavra {
+  display: inline-block;
+  margin: 3px 4px 0 0;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  font-size: 15px;
+}
+
+.sl-pangrama {
+  background: #fde68a;
+  font-weight: 700;
+}
+
+.sl-vazio {
+  margin: 0;
+  opacity: 0.75;
+}

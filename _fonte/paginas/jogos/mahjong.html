@@ -1,8 +1,8 @@
 <!--
 titulo: Mahjong Solitário Online Grátis: 15 Tabuleiros — EFS Aplicativos
-descricao: Jogue Mahjong solitário online e grátis: forme pares de peças livres em 15 tabuleiros, do fácil ao difícil. Toda partida tem solução, com dica e desfazer.
+descricao: Jogue Mahjong solitário online e grátis: forme pares de peças livres em 15 tabuleiros, do fácil ao difícil. Toda partida tem solução, com dica e desfazer. Tem também o jogo do dia, o mesmo tabuleiro para todos.
 estilos: /assets/jogos/mahjong.css
-scripts: /assets/jogos/mahjong-logica.js /assets/jogos/sons.js /assets/jogos/mahjong.js
+scripts: /assets/jogos/mahjong-logica.js /assets/jogos/diario.js /assets/jogos/sons.js /assets/jogos/mahjong.js
 app: Mahjong Solitário Clássico | GameApplication
 -->
 <header class="page-head">
@@ -25,6 +25,7 @@ app: Mahjong Solitário Clássico | GameApplication
       <select class="select" id="mj-tabuleiro"></select>
     </div>
     <div class="mj-barra-botoes">
+      <button type="button" class="button secondary" id="mj-diario">Jogo do dia</button>
       <button type="button" class="button secondary" id="mj-nova">Nova distribuição</button>
       <button type="button" class="som-botao" id="mj-som"></button>
     </div>
@@ -128,6 +129,12 @@ app: Mahjong Solitário Clássico | GameApplication
 <aside class="indicacao" data-indicacao="mahjong" hidden></aside>
 
 <article class="texto">
+  <h2>Jogo do dia: o mesmo tabuleiro para todos</h2>
+  <p>
+    O botão <strong>Jogo do dia</strong> monta a partida de hoje a partir da data: todo mundo que
+    visitar o site nesta data recebe o mesmo tabuleiro de peças. Serve para comparar o resultado com amigos, sem
+    servidor e sem cadastro. Ao terminar, o site guarda a marca no seu navegador; amanhã há outro.
+  </p>
   <h2>Como jogar Mahjong solitário</h2>
   <p>
     O objetivo é limpar a mesa. Clique em uma peça e depois em outra igual a ela: se as duas

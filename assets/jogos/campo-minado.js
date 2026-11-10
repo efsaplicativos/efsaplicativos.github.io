@@ -271,10 +271,22 @@
 
   // ---------- Partida ----------
 
+  // Modo diário (assets/jogos/diario.js): as minas saem da semente do dia, iguais para todos
+  const D = typeof Diario === "object" ? Diario : null;
+  const botaoDiario = document.querySelector("#cm-diario");
+  if (!D && botaoDiario) botaoDiario.hidden = true;
+  let modoDiario = false;
+  let sorteioDiario = null;
+  const sortearMina = () => (sorteioDiario ? sorteioDiario() : Math.random());
+
   const partidaEmAndamento = () => iniciada && tabuleiro.status === L.JOGANDO;
 
-  function novaPartida(novoNivel = nivel) {
+  botaoDiario?.addEventListener("click", () => novaPartida(nivel, true));
+
+  function novaPartida(novoNivel = nivel, diario = false) {
     fecharDialogo();
+    sorteioDiario = diario && D ? D.doDia("campo-minado").gerador : null;
+    modoDiario = Boolean(sorteioDiario);
     gravar(CHAVE_PARTIDA, null);
     if (inicioTrecho !== null) clearInterval(tique);
     inicioTrecho = null;
@@ -337,6 +349,7 @@
   }
 
   function terminar(venceu) {
+    if (venceu && modoDiario && D) D.marcarConcluido("campo-minado");
     som.tocar(venceu ? "vitoria" : "explosao");
     atualizarCronometro();
     const tempo = segundos();
@@ -375,7 +388,7 @@
     const [linha, coluna] = posicao(i);
     if (tabuleiro.celulas[i].estado === L.REVELADA) aplicar(L.revelarVizinhas(tabuleiro, linha, coluna));
     else if (modoBandeira) aplicar(L.alternarBandeira(tabuleiro, linha, coluna), { bandeira: true });
-    else aplicar(L.revelar(tabuleiro, linha, coluna));
+    else aplicar(L.revelar(tabuleiro, linha, coluna, sortearMina));
   }
 
   /** Toque longo, botão direito ou F: a ação contrária à do modo atual. */
@@ -383,7 +396,7 @@
     if (tabuleiro.status !== L.JOGANDO) return;
     const [linha, coluna] = posicao(i);
     if (tabuleiro.celulas[i].estado === L.REVELADA) aplicar(L.revelarVizinhas(tabuleiro, linha, coluna));
-    else if (modoBandeira) aplicar(L.revelar(tabuleiro, linha, coluna));
+    else if (modoBandeira) aplicar(L.revelar(tabuleiro, linha, coluna, sortearMina));
     else aplicar(L.alternarBandeira(tabuleiro, linha, coluna), { bandeira: true });
   }
 

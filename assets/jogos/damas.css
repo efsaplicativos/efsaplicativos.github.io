@@ -1,0 +1,393 @@
+/* ==========================================================================
+   Damas — tabuleiro 8x8, peças, damas coroadas e cartões de placar
+   ========================================================================== */
+
+.damas {
+  --dm-clara: #f3e3cb;
+  --dm-escura: #4c2a85;
+  --dm-borda: #2c1854;
+  --dm-branca: #fdfdfb;
+  --dm-branca-borda: #9aa4b2;
+  --dm-preta: #23272f;
+  --dm-preta-borda: #4b5563;
+  --dm-coroa: #facc15;
+  --dm-destino: #16a34a;
+  --dm-vitoria: #2e7d32;
+  --dm-derrota: #c62828;
+  --dm-empate: #5f6470;
+  max-width: 480px;
+  margin: 0 auto;
+}
+:root[data-theme="dark"] .damas {
+  --dm-clara: #d9c9ab;
+  --dm-escura: #3b2170;
+  --dm-borda: #1a0f38;
+  --dm-branca: #f4f4f2;
+  --dm-branca-borda: #6b7280;
+  --dm-preta: #14171c;
+  --dm-preta-borda: #374151;
+  --dm-destino: #34d399;
+  --dm-vitoria: #81c784;
+  --dm-derrota: #ef9a9a;
+  --dm-empate: #b8b2a6;
+}
+
+.damas .dm-modos {
+  justify-content: center;
+}
+.dm-niveis {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.dm-niveis[hidden] {
+  display: none;
+}
+.dm-rotulo {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--muted);
+}
+
+/* ---------- Mensagem e contagem ---------- */
+.dm-mensagem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 56px;
+  margin: 16px 0;
+  padding: 8px 16px;
+  font-size: 20px;
+  font-weight: 650;
+  text-align: center;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.dm-mensagem[data-tipo="vitoria"] {
+  color: var(--dm-vitoria);
+}
+.dm-mensagem[data-tipo="derrota"] {
+  color: var(--dm-derrota);
+}
+.dm-icone {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  font-size: 20px;
+  line-height: 1;
+}
+.dm-icone .dm-peca.dm-mini {
+  width: 22px;
+  height: 22px;
+}
+.dm-girando {
+  border: 3px solid var(--border-2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  animation: dm-girar 800ms linear infinite;
+}
+
+.dm-contagem {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  margin: -6px 0 14px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.dm-contagem strong {
+  font-size: 16px;
+  color: var(--text-2);
+}
+
+/* ---------- Tabuleiro ---------- */
+.dm-tabuleiro {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  /* Linhas fixas: nada que esteja dentro da casa pode aumentar a altura da linha */
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+  width: min(100%, 440px, max(260px, calc(100vh - 360px)));
+  aspect-ratio: 1;
+  margin: 0 auto;
+  padding: 8px;
+  background: var(--dm-borda);
+  border-radius: 16px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+@supports (height: 100svh) {
+  .dm-tabuleiro {
+    width: min(100%, 440px, max(260px, calc(100svh - 360px)));
+  }
+}
+.dm-casa {
+  position: relative;
+  display: grid;
+  place-items: center;
+  /* Quadrada sempre: a casa não pode crescer por causa do que tem dentro */
+  aspect-ratio: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.dm-casa.dm-clara {
+  background: var(--dm-clara);
+}
+.dm-casa.dm-escura {
+  background: var(--dm-escura);
+}
+.dm-casa.dm-escura:not(:disabled) {
+  cursor: pointer;
+}
+.dm-casa:disabled {
+  cursor: default;
+}
+.dm-casa:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: -3px;
+  z-index: 2;
+}
+
+.dm-peca {
+  /* Fora do fluxo: a peça ocupa 78% da casa e nunca empurra a linha */
+  position: absolute;
+  inset: 11%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  transition: box-shadow 160ms ease;
+}
+.dm-peca.dm-branca {
+  background: radial-gradient(circle at 36% 30%, #ffffff, var(--dm-branca));
+  border: 3px solid var(--dm-branca-borda);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.22);
+}
+.dm-peca.dm-preta {
+  background: radial-gradient(circle at 36% 30%, #4b5563, var(--dm-preta));
+  border: 3px solid var(--dm-preta-borda);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+.dm-peca.dm-dama {
+  border-color: var(--dm-coroa);
+}
+.dm-peca.dm-mini {
+  position: relative;
+  inset: auto;
+  width: 22px;
+  height: 22px;
+  border-width: 2px;
+}
+.dm-coroa {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+/* Coroa desenhada em CSS: escala junto com a peça e não depende de fonte instalada */
+.dm-coroa::before {
+  content: "";
+  width: 58%;
+  height: 40%;
+  margin-bottom: 5%;
+  background: var(--dm-coroa);
+  clip-path: polygon(0% 100%, 0% 26%, 22% 52%, 32% 0%, 50% 36%, 68% 0%, 78% 52%, 100% 26%, 100% 100%);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45));
+}
+.dm-casa.dm-selecionada .dm-peca {
+  box-shadow:
+    0 0 0 3px var(--ring),
+    0 3px 0 rgba(0, 0, 0, 0.22);
+}
+.dm-casa.dm-origem,
+.dm-casa.dm-chegada {
+  box-shadow: inset 0 0 0 4px rgba(250, 204, 21, 0.65);
+}
+/* Anel tracejado nas casas para onde a peça escolhida pode ir */
+.dm-casa.dm-destino::after {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border: 3px dashed var(--dm-destino);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ---------- Botões e cartões ---------- */
+.dm-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 12px;
+}
+.dm-ultimo {
+  max-width: 460px;
+  min-height: 20px;
+  margin: 0 auto 6px;
+  font-size: 13.5px;
+  color: var(--muted);
+  text-align: center;
+}
+.dm-ajuda {
+  max-width: 460px;
+  margin: 0 auto 18px;
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+}
+.dm-cartao {
+  max-width: 460px;
+  margin: 0 auto 16px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+}
+.dm-cartao[hidden] {
+  display: none;
+}
+.dm-cartao-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.dm-cartao-topo h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.dm-numeros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+  text-align: center;
+}
+.dm-numero strong {
+  display: block;
+  font-size: 28px;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.dm-numero span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.dm-cor-b strong {
+  color: var(--text);
+}
+.dm-cor-p strong {
+  color: var(--text-2);
+}
+.dm-cor-empate strong {
+  color: var(--dm-empate);
+}
+.dm-cor-vitoria strong {
+  color: var(--dm-vitoria);
+}
+.dm-cor-derrota strong {
+  color: var(--dm-derrota);
+}
+.dm-link {
+  padding: 4px 0;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--violet-2);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.dm-link:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.dm-link[hidden] {
+  display: none;
+}
+.dm-historico {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.dm-historico summary {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.dm-historico ol {
+  margin: 10px 0 0;
+  padding-left: 22px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.dm-historico li + li {
+  margin-top: 4px;
+}
+.dm-historico li.dm-vitoria strong {
+  color: var(--dm-vitoria);
+}
+.dm-historico li.dm-derrota strong {
+  color: var(--dm-derrota);
+}
+.dm-historico li.dm-empate strong {
+  color: var(--dm-empate);
+}
+.dm-historico p {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.dm-historico .dm-link {
+  margin-top: 8px;
+}
+
+@keyframes dm-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 400px) {
+  .dm-mensagem {
+    font-size: 18px;
+  }
+  .dm-tabuleiro {
+    padding: 6px;
+    border-radius: 14px;
+  }
+  .dm-peca {
+    border-width: 2px;
+  }
+  .dm-botoes .button {
+    padding-inline: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-girando {
+    animation-duration: 2400ms;
+  }
+}

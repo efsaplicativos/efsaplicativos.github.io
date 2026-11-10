@@ -267,6 +267,7 @@
     desenharRecordes();
     desenharInicio();
     grade.classList.toggle("terminada", L.terminou(partida));
+    if (modoDiario && partida && L.terminou(partida) && D) D.marcarConcluido("caca-palavras");
   }
 
   // ---------- Seleção na grade ----------
@@ -626,12 +627,19 @@
   const temProgresso = () =>
     !L.terminou(partida) && (L.achadas(partida) > 0 || partida.dicas > 0 || decorridoMs() > 20000);
 
-  function iniciarJogo(nivel, tema) {
+  // Modo diário (assets/jogos/diario.js): a grade e as palavras saem da semente do dia
+  const D = typeof Diario === "object" ? Diario : null;
+  const botaoDiario = document.querySelector("#cz-diario");
+  if (!D && botaoDiario) botaoDiario.hidden = true;
+  let modoDiario = false;
+
+  function iniciarJogo(nivel, tema, aleatorio) {
     pararTrecho();
     iniciada = false;
     pendente = null;
     arrasto = null;
-    partida = L.novaPartida(nivel, tema);
+    partida = L.novaPartida(nivel, tema, aleatorio);
+    modoDiario = Boolean(aleatorio) && Boolean(D);
     gravar(CHAVE_NIVEL, partida.nivel);
     salvarPartida();
     montarGrade();
@@ -640,6 +648,11 @@
     mostrarMensagem("");
     atualizarCronometro();
   }
+
+  botaoDiario?.addEventListener("click", () => {
+    if (!D) return;
+    iniciarJogo(partida ? partida.nivel : "facil", seletorTema.value, D.doDia("caca-palavras").gerador);
+  });
 
   function pedirNovoJogo(nivel, tema) {
     if (!temProgresso()) {

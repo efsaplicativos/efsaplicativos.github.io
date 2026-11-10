@@ -1,0 +1,99 @@
+<!--
+titulo: Calculadora de Churrasco: Quantidade de Carne por Pessoa — EFS Aplicativos
+descricao: Calcule quanto comprar para o churrasco: carne por adulto e por criança, acompanhamentos, bebida, carvão e sal, conforme o perfil escolhido. Grátis e sem cadastro.
+scripts: /assets/numeros.js /assets/ferramentas/churrasco-logica.js /assets/ferramentas/churrasco.js
+app: Churrasco | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Churrasco</li>
+  </ol>
+  <h1>Quantidade para o churrasco</h1>
+  <p>
+    Quantos quilos de carne comprar, quanto de acompanhamento, bebida, carvão e sal: informe o número
+    de adultos e de crianças e escolha o perfil do churrasco.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora de churrasco">
+  <div class="tool-grid">
+    <form class="fields" id="churrasco" novalidate>
+      <div class="field">
+        <label for="adultos">Adultos</label>
+        <input class="input" id="adultos" inputmode="numeric" autocomplete="off" value="8" placeholder="Ex.: 8" />
+      </div>
+      <div class="field">
+        <label for="criancas">Crianças</label>
+        <input class="input" id="criancas" inputmode="numeric" autocomplete="off" value="0" placeholder="Ex.: 2" aria-describedby="criancas-dica" />
+        <span class="hint" id="criancas-dica">Criança conta meia porção de carne.</span>
+      </div>
+      <div class="field">
+        <label for="perfil">Perfil do churrasco</label>
+        <select class="select" id="perfil">
+          <option value="classico" selected>Clássico (400 g por adulto)</option>
+          <option value="comOsso">Com osso: costela, asa (500 g)</option>
+          <option value="leve">Mais leve (300 g)</option>
+        </select>
+      </div>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Informe quantos adultos e crianças vão ao churrasco.</p>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<aside class="indicacao" data-indicacao="churrasco" hidden></aside>
+
+<article class="texto">
+  <h2>Como preencher: um exemplo passo a passo</h2>
+  <p>
+    <strong>Problema:</strong> "Vão 8 adultos e 4 crianças ao churrasco de domingo. Quanto comprar?"
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th scope="col">Campo</th><th scope="col">O que digitar</th><th scope="col">Por quê</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Adultos</td><td>8</td><td>quem come porção inteira</td></tr>
+        <tr><td>Crianças</td><td>4</td><td>meia porção de carne cada</td></tr>
+        <tr><td>Perfil</td><td>Clássico</td><td>400 g por adulto e 200 g por criança</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    O resultado é <strong>4 kg de carne</strong> (8 × 400 g + 4 × 200 g), 1,8 kg de acompanhamento,
+    5,2 L de bebida, <strong>2 kg de carvão</strong> e 40 g de sal grosso.
+  </p>
+  <p>
+    <button type="button" class="button secondary" data-exemplo="familia">Preencher com este exemplo</button>
+  </p>
+
+  <h2>As porções usadas</h2>
+  <ul>
+    <li><strong>Carne:</strong> 400 g por adulto no perfil clássico, 500 g com osso e 300 g no mais leve. Criança conta metade.</li>
+    <li><strong>Acompanhamentos:</strong> 150 g por pessoa (farofa, maionese, pão de alho).</li>
+    <li><strong>Bebida:</strong> 500 ml por adulto e 300 ml por criança.</li>
+    <li><strong>Carvão:</strong> cerca de metade do peso da carne.</li>
+    <li><strong>Sal grosso:</strong> 10 g por quilo de carne.</li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Por que o perfil "com osso" pede mais carne?</h3>
+  <p>
+    Porque parte do peso é osso: costela e asa rendem menos carne aproveitada por quilo do que
+    picanha, fraldinha ou linguiça. Por isso a porção sobe de 400 g para 500 g por adulto.
+  </p>
+  <h3>E se sobrar carne?</h3>
+  <p>
+    Melhor sobrar do que faltar, mas dá para ajustar: reduza o perfil para "mais leve" ou conte as
+    crianças como meia porção na conversa com o açougue. Como acompanhamento enche, ter farofa e pão
+    à vontade também diminui a carne necessária.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

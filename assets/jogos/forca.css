@@ -1,0 +1,213 @@
+/* Jogo da forca. Depende apenas das classes base do site (.button, .segmented, .som-botao). */
+.forca {
+  max-width: 760px;
+  margin: 0 auto;
+  /* O site é claro: sem isto o navegador escurece os campos em tema escuro do sistema */
+  color-scheme: light;
+}
+
+.fc-topo {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 560px) {
+  .fc-topo {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+}
+
+.fc-desenho {
+  position: relative;
+  width: 220px;
+  height: 230px;
+  color: #475569;
+}
+
+.fc-parte {
+  position: absolute;
+  background: currentColor;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.fc-parte.is-visivel {
+  opacity: 1;
+}
+
+.fc-base {
+  left: 20px;
+  right: 20px;
+  bottom: 0;
+  height: 12px;
+}
+
+.fc-poste {
+  left: 40px;
+  top: 20px;
+  bottom: 12px;
+  width: 12px;
+}
+
+.fc-travessa {
+  left: 40px;
+  top: 20px;
+  width: 116px;
+  height: 12px;
+}
+
+.fc-corda {
+  left: 146px;
+  top: 32px;
+  width: 6px;
+  height: 26px;
+  border-radius: 0;
+}
+
+.fc-cabeca {
+  left: 128px;
+  top: 56px;
+  width: 42px;
+  height: 42px;
+  background: none;
+  border: 5px solid currentColor;
+  border-radius: 50%;
+}
+
+.fc-corpo {
+  left: 146px;
+  top: 98px;
+  width: 6px;
+  height: 46px;
+}
+
+.fc-braco,
+.fc-perna {
+  left: 147px;
+  width: 6px;
+  transform-origin: top center;
+}
+
+.fc-braco {
+  top: 104px;
+  height: 34px;
+}
+
+.fc-perna {
+  top: 142px;
+  height: 36px;
+}
+
+.fc-braco.esquerdo,
+.fc-perna.esquerdo {
+  transform: rotate(38deg);
+}
+
+.fc-braco.direito,
+.fc-perna.direito {
+  transform: rotate(-38deg);
+}
+
+.fc-dica {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+.fc-palavra {
+  margin: 0 0 10px;
+  font-size: clamp(1.5rem, 5.5vw, 2.3rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  overflow-wrap: anywhere;
+}
+
+.fc-erros {
+  margin: 0 0 6px;
+  font-weight: 600;
+}
+
+.fc-mensagem {
+  margin: 0;
+  min-height: 1.4em;
+}
+
+.fc-teclado {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(46px, 1fr));
+  gap: 8px;
+  margin: 22px 0 18px;
+}
+
+.fc-tecla {
+  min-height: 48px;
+  font: inherit;
+  font-weight: 700;
+  color: #1f2937;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.fc-tecla:hover:not(:disabled) {
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+}
+
+.fc-tecla:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.fc-tecla:disabled {
+  cursor: default;
+}
+
+.fc-tecla.is-certa {
+  background: #dcfce7;
+  border-color: #16a34a;
+  color: #14532d;
+}
+
+.fc-tecla.is-errada {
+  background: #fee2e2;
+  border-color: #dc2626;
+  color: #7f1d1d;
+}
+
+.fc-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.fc-tema {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-weight: 600;
+}
+
+.fc-tema select {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  color: #1f2937;
+  color-scheme: light;
+}
+
+/* Sem media query de tema escuro: o site é claro e a herança de cor deixaria a letra
+   escura sobre o botão escuro quando o sistema estivesse em modo escuro. */
+

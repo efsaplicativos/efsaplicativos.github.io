@@ -1,0 +1,111 @@
+<!--
+titulo: Soletra Online Grátis: Sete Letras, Uma Obrigatória — EFS Aplicativos
+descricao: Jogue Soletra online e grátis: forme palavras de 3 letras ou mais com as sete letras da rodada, sempre usando a letra do meio. Tem pangrama, pontos, jogo do dia e funciona no celular.
+estilos: /assets/jogos/soletra.css
+scripts: /assets/jogos/soletra-dados.js /assets/jogos/soletra-logica.js /assets/jogos/diario.js /assets/jogos/compartilhar.js /assets/jogos/sons.js /assets/jogos/soletra.js
+app: Soletra | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Soletra</li>
+  </ol>
+  <h1>Soletra</h1>
+  <p>
+    Sete letras, uma obrigatória no centro: forme o máximo de palavras de 3 letras ou mais, sempre
+    usando a letra do meio. Quanto maior a palavra, mais pontos — e quem usa as sete letras ganha
+    bônus de pangrama.
+  </p>
+</header>
+
+<section class="soletra" data-jogo="parado" aria-label="Jogo de Soletra">
+  <div class="sl-placar-linha">
+    <div class="sl-dado"><span>Pontos</span><strong id="sl-pontos">0</strong></div>
+    <div class="sl-dado"><span>Palavras</span><strong id="sl-placar">0 de 0</strong></div>
+    <button type="button" class="som-botao" id="sl-som"></button>
+  </div>
+
+  <div class="sl-letras" id="sl-letras" role="group" aria-label="Sete letras da rodada"></div>
+
+  <p class="sl-entrada" id="sl-entrada" aria-live="polite">…</p>
+
+  <div class="sl-acoes">
+    <button type="button" class="button" id="sl-enviar" disabled>Enviar</button>
+    <button type="button" class="button secondary" id="sl-apagar">Apagar</button>
+    <button type="button" class="button secondary" id="sl-diario">Jogo do dia</button>
+    <button type="button" class="button secondary" id="sl-nova">Nova rodada</button>
+    <button type="button" class="button secondary" id="sl-compartilhar" hidden>Compartilhar</button>
+  </div>
+
+  <p class="sl-aviso" id="sl-aviso" role="status"></p>
+
+  <p class="sl-mensagem" id="sl-mensagem" role="status"></p>
+
+  <div class="sl-lista" id="sl-lista" aria-label="Palavras encontradas"></div>
+</section>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+
+<aside class="indicacao" data-indicacao="soletra" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar o Soletra</h2>
+  <p>
+    Cada rodada traz sete letras, e a do meio é obrigatória: <strong>toda palavra precisa dela</strong>.
+    Toque nas letras (ou digite no teclado) para montar a palavra e confirme em <strong>Enviar</strong>.
+    Backspace apaga a última letra e Enter envia.
+  </p>
+  <p>
+    Vale palavra de 3 letras ou mais: 3 e 4 letras valem 1 ponto, 5 valem 2, 6 valem 3 e 7 valem 5.
+    A palavra que usa as <strong>sete letras</strong> é o pangrama e vale 7 pontos extras — é a jogada
+    que separa quem está no jogo de quem está só brincando.
+  </p>
+
+  <h2>Dicas para achar mais palavras</h2>
+  <ul>
+    <li>Comece pelas palavras curtas: com 3 e 4 letras sai muita coisa e o placar sobe rápido.</li>
+    <li>Teste a letra do meio com todas as combinações de vogal e consoante que a rodada permite.</li>
+    <li>Plurais contam: se achou uma palavra, tente o plural dela.</li>
+    <li>Vá atrás do pangrama: ele usa todas as letras e costuma ser uma palavra comum do dia a dia.</li>
+    <li>Não vale palavra com letra que não está na rodada, nem palavra repetida.</li>
+  </ul>
+
+  <h2>Jogo do dia: a mesma rodada para todos</h2>
+  <p>
+    O botão <strong>Jogo do dia</strong> monta as letras de hoje a partir da data: todo mundo que
+    visitar o site nesta data recebe a mesma rodada, com as mesmas palavras possíveis. Serve para
+    comparar pontos com amigos, sem servidor e sem cadastro. Ao completar, o site guarda a marca no
+    seu navegador; amanhã há outra.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Quantas palavras tem cada rodada?</h3>
+  <p>
+    Sorteamos apenas rodadas com pelo menos doze palavras possíveis, e o número aparece no placar
+    ("3 de 20 palavras"). Assim nunca cai uma rodada sem graça — nem uma com palavras demais.
+  </p>
+  <h3>De onde vem o dicionário?</h3>
+  <p>
+    São <strong>quase 9.300 palavras</strong> do português, das mais comuns, de 4 a 8 letras — com
+    plurais e conjugações — mais as palavras curtas do dia a dia (sol, mar, pão, mel). A base é o
+    repositório <em>pt-br</em> de Fernando Serboncini (licença MIT): o léxico de 145 mil palavras
+    filtrado em três camadas — o índice de frequência (palavra rara fica de fora), a lista
+    <em>aceitas</em> do nosso Desvenda (nas de 5 letras) e uma lista de bloqueio com estrangeirismos e
+    nomes próprios, além das palavras negativas do próprio repositório. O recorte é gerado pelo script
+    <code>_fonte/ferramentas-dados/soletra_dados.py</code> e vai junto com as rodadas prontas. Tudo sem
+    acento e sem cedilha: você pode digitar do jeito que quiser.
+  </p>
+  <h3>Preciso instalar algo?</h3>
+  <p>
+    Não. O jogo roda no próprio navegador, de graça e sem cadastro, no computador ou no celular, e
+    não guarda nada sobre você além dos seus próprios pontos.
+  </p>
+  <h3>Por que minha palavra não foi aceita?</h3>
+  <p>
+    O dicionário é enxuto e feito de palavras comuns, de propósito. Se a palavra existe mas não está
+    na lista desta rodada, o jogo avisa — e você pode seguir tentando outras. Palavra repetida,
+    palavra sem a letra do meio e palavra com letra que não está na rodada também são recusadas, cada
+    uma com a sua mensagem.
+  </p>
+</article>

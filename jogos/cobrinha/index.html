@@ -1,0 +1,273 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/jogos/cobrinha.html. Edite lá. -->
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fff7f0" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        // O laranja (claro) é o padrão; o escuro vale para quem ligou o modo noturno
+        if (theme === "dark") {
+          root.setAttribute("data-theme", "dark");
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#0f1115");
+        }
+      })();
+    </script>
+    <title>Cobrinha Online Grátis: Jogo da Cobrinha (Snake) no Navegador — EFS Aplicativos</title>
+    <meta name="description" content="Jogue a cobrinha online e grátis: coma as frutas, cresça e não bata na parede nem no próprio corpo. Três níveis de tabuleiro e velocidade, com setas na tela, recorde salvo e pausa automática." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/jogos/cobrinha/" />
+    <meta property="og:title" content="Cobrinha Online Grátis: Jogo da Cobrinha (Snake) no Navegador — EFS Aplicativos" />
+    <meta property="og:description" content="Jogue a cobrinha online e grátis: coma as frutas, cresça e não bata na parede nem no próprio corpo. Três níveis de tabuleiro e velocidade, com setas na tela, recorde salvo e pausa automática." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/jogos/cobrinha/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600..800&amp;family=Nunito:wght@400..800&amp;display=swap"
+    />
+    <link rel="stylesheet" href="/site.css?v=dfdb216d18d2" />
+    <link rel="stylesheet" href="/assets/web.css?v=f4683d85c12d" />
+    <link rel="stylesheet" href="/assets/jogos/cobrinha.css?v=3400c55bc62a" />
+    <script src="/assets/estatisticas.js?v=da0036a12f2f" async></script>
+    <script src="/site.js?v=926b8efae759" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/indicacoes.js?v=7f30da75c802" defer></script>
+    <script src="/assets/jogos/cobrinha-logica.js?v=a14f2db4209b" defer></script>
+    <script src="/assets/jogos/sons.js?v=21d1381b6bd0" defer></script>
+    <script src="/assets/jogos/cobrinha.js?v=b73da9564150" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Cobrinha", "url": "https://efsaplicativos.com.br/jogos/cobrinha/", "description": "Jogue a cobrinha online e grátis: coma as frutas, cresça e não bata na parede nem no próprio corpo. Três níveis de tabuleiro e velocidade, com setas na tela, recorde salvo e pausa automática.", "applicationCategory": "GameApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos" aria-current="page">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Modo noturno"
+            title="Modo noturno"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Cobrinha</li>
+  </ol>
+  <h1>Cobrinha online</h1>
+  <p>
+    O clássico jogo da cobrinha: coma as frutas para crescer, sem bater na parede nem no próprio
+    corpo. Três níveis mudam o tamanho do tabuleiro e a velocidade, e cada fruta deixa o jogo um
+    pouco mais rápido.
+  </p>
+</header>
+
+<section class="cobrinha" aria-label="Cobrinha">
+  <div class="cbr-niveis" id="cbr-niveis">
+    <span class="cbr-rotulo" id="cbr-niveis-rotulo">Dificuldade</span>
+    <div class="segmented" role="group" aria-labelledby="cbr-niveis-rotulo">
+      <button type="button" class="filter" data-nivel="facil" aria-pressed="false">Fácil</button>
+      <button type="button" class="filter active" data-nivel="medio" aria-pressed="true">Médio</button>
+      <button type="button" class="filter" data-nivel="dificil" aria-pressed="false">Difícil</button>
+    </div>
+  </div>
+
+  <p class="cbr-mensagem" id="cbr-mensagem" aria-live="polite"></p>
+
+  <div class="cbr-info">
+    <div class="cbr-dado"><span>Pontos</span><strong id="cbr-pontos">0</strong></div>
+    <div class="cbr-dado"><span>Recorde</span><strong id="cbr-recorde">0</strong></div>
+    <div class="cbr-dado"><span>Tabuleiro</span><strong id="cbr-tamanho">16 × 16</strong></div>
+  </div>
+
+  <div class="cbr-quadro">
+    <div class="cbr-tabuleiro" id="cbr-tabuleiro" aria-hidden="true"></div>
+    <div class="cbr-aviso" id="cbr-aviso" hidden>
+      <p>Jogo pausado</p>
+      <button type="button" class="button" id="cbr-continuar">Continuar</button>
+    </div>
+  </div>
+
+  <div class="cbr-setas" role="group" aria-label="Setas para virar a cobra">
+    <button type="button" class="cbr-seta" data-direcao="cima" aria-label="Para cima"><span aria-hidden="true">▲</span></button>
+    <button type="button" class="cbr-seta" data-direcao="esquerda" aria-label="Para a esquerda"><span aria-hidden="true">◀</span></button>
+    <button type="button" class="cbr-seta" data-direcao="baixo" aria-label="Para baixo"><span aria-hidden="true">▼</span></button>
+    <button type="button" class="cbr-seta" data-direcao="direita" aria-label="Para a direita"><span aria-hidden="true">▶</span></button>
+  </div>
+
+  <div class="cbr-botoes">
+    <button type="button" class="button" id="cbr-jogar">Jogar</button>
+    <button type="button" class="button secondary" id="cbr-reiniciar">Reiniciar</button>
+    <button type="button" class="som-botao" id="cbr-som"></button>
+  </div>
+
+  <p class="cbr-ajuda" id="cbr-ajuda">
+    No computador, use as setas do teclado ou W, A, S, D; a barra de espaço pausa. No celular, toque
+    nas setas embaixo do tabuleiro. A partida pausa sozinha se você trocar de aba.
+  </p>
+
+  <div class="cbr-cartao">
+    <div class="cbr-cartao-topo">
+      <h2>Recordes por nível</h2>
+      <button type="button" class="cbr-link" id="cbr-zerar">Zerar recordes</button>
+    </div>
+    <div class="cbr-numeros">
+      <div class="cbr-numero"><strong id="cbr-recorde-facil">0</strong><span>Fácil · 13 × 13</span></div>
+      <div class="cbr-numero"><strong id="cbr-recorde-medio">0</strong><span>Médio · 16 × 16</span></div>
+      <div class="cbr-numero"><strong id="cbr-recorde-dificil">0</strong><span>Difícil · 20 × 20</span></div>
+    </div>
+  </div>
+</section>
+
+<aside class="indicacao" data-indicacao="cobrinha" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar a cobrinha</h2>
+  <p>
+    A cobra anda sozinha e você só decide para onde ela vira. Cada fruta comida vale 10 pontos e
+    deixa a cobra uma casa maior. A partida termina se a cabeça bater na parede ou no próprio corpo —
+    e, como a cobra cresce, o espaço vai ficando cada vez mais apertado.
+  </p>
+  <p>
+    A casa que a cauda está deixando conta como livre, como no jogo original: dá para perseguir a
+    própria cauda em espaço curto sem morrer. Encher o tabuleiro inteiro é vitória.
+  </p>
+
+  <h2>Níveis</h2>
+  <ul>
+    <li><strong>Fácil:</strong> tabuleiro de 13 × 13 e passo de 0,2 segundo.</li>
+    <li><strong>Médio:</strong> tabuleiro de 16 × 16 e passo de 0,15 segundo.</li>
+    <li><strong>Difícil:</strong> tabuleiro de 20 × 20 e passo de 0,11 segundo.</li>
+  </ul>
+  <p>
+    Em todos os níveis o passo encurta 4 milésimos a cada fruta, até 60 milésimos mais rápido que o
+    começo. No Difícil o limite é um passo a cada 55 milésimos.
+  </p>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para fazer pontos</h2>
+  <ol>
+    <li><strong>Não corra para a fruta.</strong> Vá para a linha ou para a coluna dela primeiro; assim você chega perto com a cobra alinhada, sem precisar de curvas apertadas.</li>
+    <li><strong>Pense em zigue-zague.</strong> Em vez de atravessar o tabuleiro, suba e desça em faixas: a cobra fica compacta e sobra espaço para as próximas frutas.</li>
+    <li><strong>Evite encostar na parede quando a cobra é grande.</strong> O corpo costuma ocupar o caminho de volta, e o erro aparece justamente na curva seguinte.</li>
+    <li><strong>Vire antes, não em cima.</strong> A virada é guardada para o passo seguinte: se você apertar a seta tarde, a cobra já andou na direção antiga.</li>
+    <li><strong>Use a pausa.</strong> A barra de espaço (ou o botão Pausar) congela o jogo quando a fruta aparece num canto difícil.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>A partida fica salva se eu fechar a página?</h3>
+  <p>
+    Fica, no seu navegador, junto com os recordes de cada nível. Quando você volta, o jogo abre
+    pausado, no ponto em que parou, e basta tocar em Continuar.
+  </p>
+  <h3>Funciona no celular?</h3>
+  <p>
+    Funciona: abaixo do tabuleiro há quatro setas grandes para virar a cobra com o dedo. Também dá
+    para usar as setas do teclado em qualquer aparelho com teclado.
+  </p>
+  <h3>Por que a cobra acelera?</h3>
+  <p>
+    Porque a velocidade é o que dá graça: a cada fruta o passo fica um pouco mais curto, até um
+    limite, para a partida não ficar impossível. O número de pontos é o mesmo por fruta, então o
+    recorde premia quem sobrevive mais tempo.
+  </p>
+  <h3>O recorde é por nível?</h3>
+  <p>
+    Sim. Cada nível guarda o seu recorde, porque o tabuleiro e a velocidade mudam bastante entre
+    eles. O botão Zerar recordes apaga os três, e essa escolha também fica salva.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

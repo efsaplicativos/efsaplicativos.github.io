@@ -1,0 +1,99 @@
+<!--
+titulo: Jogo da Forca Online Grátis: Adivinhe a Palavra — EFS Aplicativos
+descricao: Jogue forca online e grátis: descubra a palavra letra por letra com dica, seis erros e cinco temas (animais, frutas, países, profissões e objetos de casa). Funciona no celular e no computador.
+estilos: /assets/jogos/forca.css
+scripts: /assets/jogos/forca-logica.js /assets/jogos/sons.js /assets/jogos/forca.js
+app: Forca | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Forca</li>
+  </ol>
+  <h1>Jogo da forca</h1>
+  <p>
+    Descubra a palavra letra por letra antes de completar seis erros. Tem dica em todas as palavras e
+    cinco temas para escolher, no celular ou no computador.
+  </p>
+</header>
+
+<section class="forca" data-jogo="forca" aria-label="Jogo da forca">
+  <div class="fc-topo">
+    <div class="fc-desenho" id="fc-desenho" data-erros="0" aria-hidden="true">
+      <div class="fc-parte fc-base" data-desde="0"></div>
+      <div class="fc-parte fc-poste" data-desde="0"></div>
+      <div class="fc-parte fc-travessa" data-desde="0"></div>
+      <div class="fc-parte fc-corda" data-desde="0"></div>
+      <div class="fc-parte fc-cabeca" data-desde="1"></div>
+      <div class="fc-parte fc-corpo" data-desde="2"></div>
+      <div class="fc-parte fc-braco esquerdo" data-desde="3"></div>
+      <div class="fc-parte fc-braco direito" data-desde="4"></div>
+      <div class="fc-parte fc-perna esquerdo" data-desde="5"></div>
+      <div class="fc-parte fc-perna direito" data-desde="6"></div>
+    </div>
+    <div>
+      <p class="fc-dica">Dica: <strong id="fc-dica"></strong></p>
+      <p class="fc-palavra" id="fc-palavra" aria-live="polite"></p>
+      <p class="fc-erros" id="fc-erros"></p>
+      <p class="fc-mensagem" id="fc-mensagem" role="status"></p>
+    </div>
+  </div>
+
+  <div class="fc-teclado" id="fc-teclado" role="group" aria-label="Escolha uma letra"></div>
+
+  <div class="fc-acoes">
+    <button type="button" class="button" id="fc-novo">Nova palavra</button>
+    <label class="fc-tema" for="fc-tema">Tema
+      <select id="fc-tema">
+        <option value="animais" selected>Animais</option>
+        <option value="frutas">Frutas</option>
+        <option value="paises">Países</option>
+        <option value="profissoes">Profissões</option>
+        <option value="objetos">Objetos de casa</option>
+      </select>
+    </label>
+    <button type="button" class="som-botao" id="fc-som"></button>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+
+<aside class="indicacao" data-indicacao="forca" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar</h2>
+  <p>
+    Cada palavra começa escondida e você tenta uma letra por vez. As letras certas aparecem no lugar
+    delas; as erradas vão completando o boneco. São <strong>seis erros</strong>: no sexto, a rodada
+    acaba e a palavra é revelada.
+  </p>
+  <p>
+    No computador dá para usar o teclado — basta digitar a letra. No celular, toque nas teclas da tela.
+    A dica fica sempre visível acima da palavra, e nenhuma letra conta duas vezes.
+  </p>
+
+  <h2>Dicas para acertar mais</h2>
+  <ul>
+    <li>Comece pelas vogais: A, E, I, O e U aparecem em quase toda palavra do português.</li>
+    <li>Depois vá às consoantes mais comuns: S, R, N, T, M e L.</li>
+    <li>Use a dica para pensar na categoria antes de arriscar letras raras.</li>
+    <li>Com letras acentuadas, digite sem acento — o jogo compara do mesmo jeito.</li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Preciso instalar algo?</h3>
+  <p>
+    Não. O jogo roda no próprio navegador, de graça e sem cadastro. Funciona também no celular, com as
+    teclas na tela, e não guarda nada sobre você.
+  </p>
+  <h3>As palavras se repetem?</h3>
+  <p>
+    Dentro do mesmo tema, podem: são listas curtas. Se quiser variedade, troque o tema em "Nova
+    palavra" a cada rodada.
+  </p>
+  <h3>Dá para jogar em duas pessoas?</h3>
+  <p>
+    Dá, revezando as tentativas no mesmo aparelho: quem descobrir a palavra antes dos seis erros ganha.
+  </p>
+</article>

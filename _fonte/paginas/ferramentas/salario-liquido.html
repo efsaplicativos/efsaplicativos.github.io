@@ -1,0 +1,207 @@
+<!--
+titulo: Calculadora de Salário Líquido: INSS e IRRF — EFS Aplicativos
+descricao: Calcule o salário líquido a partir do bruto, com INSS progressivo, IRRF, dependentes e pensão. Veja o desconto passo a passo e as tabelas usadas, grátis e sem cadastro.
+scripts: /assets/numeros.js /assets/ferramentas/salario-liquido-logica.js /assets/ferramentas/salario-liquido.js
+app: Salário líquido | FinanceApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Salário líquido</li>
+  </ol>
+  <h1>Calculadora de salário líquido</h1>
+  <p>
+    Digite o salário bruto para ver o INSS, o imposto de renda retido na fonte e o valor que cai na
+    conta. Dá para incluir dependentes, pensão alimentícia e outros descontos.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora de salário líquido">
+  <div class="tool-grid">
+    <form class="fields" id="salario-liquido" novalidate>
+      <div class="field">
+        <label for="bruto">Salário bruto (R$)</label>
+        <input class="input" id="bruto" inputmode="decimal" autocomplete="off" value="3.000,00" placeholder="Ex.: 3.000,00" />
+        <span class="hint">O valor antes dos descontos, como aparece no contrato.</span>
+      </div>
+      <div class="field">
+        <label for="dependentes">Dependentes</label>
+        <input class="input" id="dependentes" inputmode="numeric" autocomplete="off" value="0" placeholder="Ex.: 1" aria-describedby="dependentes-dica" />
+        <span class="hint" id="dependentes-dica">Filhos e outros dependentes legais, para o imposto de renda.</span>
+      </div>
+      <div class="field">
+        <label for="pensao">Pensão alimentícia (R$)</label>
+        <input class="input" id="pensao" inputmode="decimal" autocomplete="off" placeholder="Ex.: 500,00" />
+      </div>
+      <div class="field">
+        <label for="outros">Outros descontos (R$)</label>
+        <input class="input" id="outros" inputmode="decimal" autocomplete="off" placeholder="Ex.: vale-transporte, plano de saúde" />
+      </div>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Digite o salário bruto para ver o desconto e o líquido.</p>
+    </div>
+  </div>
+
+  <h2 class="table-title" id="inss-titulo">Tabela do INSS usada na conta (2026)</h2>
+  <div class="table-wrap">
+    <table class="data" aria-labelledby="inss-titulo">
+      <thead>
+        <tr>
+          <th scope="col">Faixa de salário</th>
+          <th scope="col">Alíquota</th>
+          <th scope="col">Dedução</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>até R$ 1.621,00</td><td>7,5%</td><td>—</td></tr>
+        <tr><td>de R$ 1.621,01 a R$ 2.902,84</td><td>9%</td><td>R$ 24,32</td></tr>
+        <tr><td>de R$ 2.902,85 a R$ 4.354,27</td><td>12%</td><td>R$ 111,40</td></tr>
+        <tr><td>de R$ 4.354,28 a R$ 8.475,55</td><td>14%</td><td>R$ 198,49</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">
+    A contribuição é progressiva: cada faixa é cobrada só sobre a parte do salário que cai dentro
+    dela (o resultado é o mesmo de multiplicar o salário pela alíquota da faixa e subtrair a dedução
+    da coluna). Quem ganha acima de R$ 8.475,55 contribui sobre o teto, o que dá R$ 988,09.
+  </p>
+
+  <h2 class="table-title" id="irrf-titulo">Tabela do imposto de renda (IRRF 2026)</h2>
+  <div class="table-wrap">
+    <table class="data" aria-labelledby="irrf-titulo">
+      <thead>
+        <tr>
+          <th scope="col">Base de cálculo</th>
+          <th scope="col">Alíquota</th>
+          <th scope="col">Parcela a deduzir</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>até R$ 2.428,80</td><td>isento</td><td>—</td></tr>
+        <tr><td>de R$ 2.428,81 a R$ 2.826,65</td><td>7,5%</td><td>R$ 182,16</td></tr>
+        <tr><td>de R$ 2.826,66 a R$ 3.751,05</td><td>15%</td><td>R$ 394,16</td></tr>
+        <tr><td>de R$ 3.751,06 a R$ 4.664,68</td><td>22,5%</td><td>R$ 675,49</td></tr>
+        <tr><td>acima de R$ 4.664,68</td><td>27,5%</td><td>R$ 908,73</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">
+    Cada dependente legal deduz R$ 189,59 da base, e o desconto simplificado é de R$ 607,20 — a
+    calculadora testa os dois caminhos e usa o que rende menos imposto, como faz o recibo.
+    Desde janeiro de 2026 existe ainda a <strong>redução mensal do imposto</strong> (art. 3º-A da
+    Lei nº 9.250/1995, incluído pela Lei nº 15.270/2025): R$ 312,89 para quem ganha até R$ 5.000,00
+    (o imposto fica zerado), caindo em linha reta até zerar em R$ 7.350,00. A redução nunca passa do
+    imposto apurado e também vale para o 13º salário.
+  </p>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<aside class="indicacao" data-indicacao="salario-liquido" hidden></aside>
+
+<article class="texto">
+  <h2>Como preencher: um exemplo passo a passo</h2>
+  <p>
+    <strong>Exemplo:</strong> salário bruto de R$ 3.000,00, sem dependentes, sem pensão e sem outros
+    descontos.
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th scope="col">Campo</th><th scope="col">O que digitar</th><th scope="col">Por quê</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Salário bruto</td><td>3.000,00</td><td>o valor do contrato, antes dos descontos</td></tr>
+        <tr><td>Dependentes</td><td>0</td><td>nenhum dependente legal para o imposto</td></tr>
+        <tr><td>Pensão alimentícia</td><td>(em branco)</td><td>não há desconto de pensão</td></tr>
+        <tr><td>Outros descontos</td><td>(em branco)</td><td>sem vale-transporte, plano ou adiantamento</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    O resultado é INSS de <strong>R$ 248,60</strong>, imposto de renda <strong>zero</strong> (a redução
+    de 2026 zera o IRRF até R$ 5.000,00) e líquido de <strong>R$ 2.751,40</strong>.
+  </p>
+  <p>
+    <button type="button" class="button secondary" data-exemplo="basico">Preencher com este exemplo</button>
+  </p>
+
+  <h2>Como o salário líquido é calculado</h2>
+  <p>
+    O líquido é o bruto menos os descontos obrigatórios — INSS e imposto de renda — e menos o que
+    você mesmo autorizou, como pensão alimentícia, vale-transporte e plano de saúde. A ordem importa:
+    o INSS sai primeiro, porque ele também é uma dedução do imposto.
+  </p>
+  <ol>
+    <li><strong>INSS:</strong> aplicado por faixa, sobre o salário bruto. Quem ganha R$ 3.000,00 paga 7,5% sobre os primeiros R$ 1.621,00, 9% sobre a parte até R$ 2.902,84 e 12% só no que passar disso — R$ 248,60 no total.</li>
+    <li><strong>Base do imposto:</strong> bruto menos INSS, menos R$ 189,59 por dependente, menos a pensão alimentícia.</li>
+    <li><strong>IRRF:</strong> a alíquota da faixa aplicada sobre essa base, menos a parcela a deduzir da tabela.</li>
+    <li><strong>Redução mensal (desde 01/2026):</strong> do imposto apurado, desconta-se até R$ 312,89 — o que zera o IRRF de quem ganha até R$ 5.000,00.</li>
+    <li><strong>Líquido:</strong> bruto menos INSS, IRRF, pensão e os outros descontos.</li>
+  </ol>
+
+  <h2>A redução do imposto de 2026 (Lei 15.270/2025)</h2>
+  <p>
+    Desde janeiro de 2026, quem ganha até R$ 5.000,00 não paga imposto de renda na fonte: a redução
+    de R$ 312,89 zera o valor apurado na tabela. Entre R$ 5.000,01 e R$ 7.350,00 a redução cai em
+    linha reta (R$ 978,62 − 0,133145 × rendimento) e, acima de R$ 7.350,00, deixa de existir.
+  </p>
+  <p>
+    A regra está no art. 3º-A da Lei nº 9.250/1995, incluído pela Lei nº 15.270/2025: ela incide
+    sobre os <em>rendimentos</em> do mês, é limitada ao imposto apurado (nunca deixa saldo negativo) e
+    também vale para o décimo terceiro salário, que tem tributação exclusiva.
+  </p>
+  <p>
+    Ela vale nos dois caminhos de tributação — com deduções legais ou com o desconto simplificado —,
+    então a conta continua sendo a do recibo: escolhe-se o regime de menor imposto e só depois se
+    aplica a redução.
+  </p>
+
+  <h2>Desconto simplificado ou deduções legais?</h2>
+  <p>
+    O contribuinte pode escolher entre deduzir as despesas comprovadas (dependentes, pensão) ou usar
+    um desconto fixo de R$ 607,20 sobre o bruto. Vale sempre o que resultar em menos imposto, e é
+    isso que a calculadora faz: ela reproduz os dois caminhos e usa o melhor. Para salários menores,
+    o simplificado costuma ganhar; com muitos dependentes, a dedução legal passa à frente.
+  </p>
+
+  <h2>O que costuma ser esquecido</h2>
+  <ul>
+    <li><strong>Benefícios tributáveis entram no bruto:</strong> comissões, horas extras, adicional noturno e prêmios habituais fazem parte da base do INSS e do imposto.</li>
+    <li><strong>Vale-transporte</strong> é desconto de até 6% do salário e não reduz o imposto.</li>
+    <li><strong>Adiantamentos</strong> aparecem como desconto, mas não são tributos: no mês seguinte o valor já foi pago.</li>
+    <li><strong>13º salário e férias</strong> têm conta própria, separada do salário do mês, mesmo sendo pagos juntos.</li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>As tabelas são as atuais?</h3>
+  <p>
+    A calculadora usa as tabelas de 2026: INSS pela Portaria Interministerial MPS/MF nº 13, de
+    09/01/2026, imposto de renda pela tabela vigente e a redução mensal do imposto criada para 2026.
+    O ano de referência aparece no resultado. Quando o governo publicar valores novos, eles precisam
+    ser atualizados no arquivo de cálculo — o resultado de um ano pode não valer no seguinte.
+  </p>
+  <h3>Por que o desconto do INSS não é uma alíquota só?</h3>
+  <p>
+    Porque a contribuição é progressiva: quem está na faixa de 12% não paga 12% sobre tudo, e sim
+    7,5% na primeira parte, 9% na segunda e 12% apenas no que passa da faixa anterior. É por isso que
+    a alíquota efetiva que aparece no resultado é menor que a alíquota da última faixa.
+  </p>
+  <h3>Dependente reduz o desconto total?</h3>
+  <p>
+    Cada dependente reduz R$ 189,59 da base do imposto, o que baixa o IRRF em até 27,5% desse valor.
+    Se o desconto simplificado já estiver sendo mais vantajoso, o dependente não muda nada no
+    resultado — e a calculadora avisa qual caminho foi usado.
+  </p>
+  <h3>Serve para autônomo e MEI?</h3>
+  <p>
+    Serve só para quem tem salário com carteira assinada, que é o caso do INSS de empregado. Autônomo
+    contribui pelo carnê (alíquota de 20% sobre o valor que declarar, limitado ao teto) e tem
+    tributação própria, então o resultado aqui não se aplica.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+

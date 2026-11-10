@@ -1,0 +1,140 @@
+<!--
+titulo: Cobrinha Online Grátis: Jogo da Cobrinha (Snake) no Navegador — EFS Aplicativos
+descricao: Jogue a cobrinha online e grátis: coma as frutas, cresça e não bata na parede nem no próprio corpo. Três níveis de tabuleiro e velocidade, com setas na tela, recorde salvo e pausa automática.
+estilos: /assets/jogos/cobrinha.css
+scripts: /assets/jogos/cobrinha-logica.js /assets/jogos/sons.js /assets/jogos/cobrinha.js
+app: Cobrinha | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Cobrinha</li>
+  </ol>
+  <h1>Cobrinha online</h1>
+  <p>
+    O clássico jogo da cobrinha: coma as frutas para crescer, sem bater na parede nem no próprio
+    corpo. Três níveis mudam o tamanho do tabuleiro e a velocidade, e cada fruta deixa o jogo um
+    pouco mais rápido.
+  </p>
+</header>
+
+<section class="cobrinha" aria-label="Cobrinha">
+  <div class="cbr-niveis" id="cbr-niveis">
+    <span class="cbr-rotulo" id="cbr-niveis-rotulo">Dificuldade</span>
+    <div class="segmented" role="group" aria-labelledby="cbr-niveis-rotulo">
+      <button type="button" class="filter" data-nivel="facil" aria-pressed="false">Fácil</button>
+      <button type="button" class="filter active" data-nivel="medio" aria-pressed="true">Médio</button>
+      <button type="button" class="filter" data-nivel="dificil" aria-pressed="false">Difícil</button>
+    </div>
+  </div>
+
+  <p class="cbr-mensagem" id="cbr-mensagem" aria-live="polite"></p>
+
+  <div class="cbr-info">
+    <div class="cbr-dado"><span>Pontos</span><strong id="cbr-pontos">0</strong></div>
+    <div class="cbr-dado"><span>Recorde</span><strong id="cbr-recorde">0</strong></div>
+    <div class="cbr-dado"><span>Tabuleiro</span><strong id="cbr-tamanho">16 × 16</strong></div>
+  </div>
+
+  <div class="cbr-quadro">
+    <div class="cbr-tabuleiro" id="cbr-tabuleiro" aria-hidden="true"></div>
+    <div class="cbr-aviso" id="cbr-aviso" hidden>
+      <p>Jogo pausado</p>
+      <button type="button" class="button" id="cbr-continuar">Continuar</button>
+    </div>
+  </div>
+
+  <div class="cbr-setas" role="group" aria-label="Setas para virar a cobra">
+    <button type="button" class="cbr-seta" data-direcao="cima" aria-label="Para cima"><span aria-hidden="true">▲</span></button>
+    <button type="button" class="cbr-seta" data-direcao="esquerda" aria-label="Para a esquerda"><span aria-hidden="true">◀</span></button>
+    <button type="button" class="cbr-seta" data-direcao="baixo" aria-label="Para baixo"><span aria-hidden="true">▼</span></button>
+    <button type="button" class="cbr-seta" data-direcao="direita" aria-label="Para a direita"><span aria-hidden="true">▶</span></button>
+  </div>
+
+  <div class="cbr-botoes">
+    <button type="button" class="button" id="cbr-jogar">Jogar</button>
+    <button type="button" class="button secondary" id="cbr-reiniciar">Reiniciar</button>
+    <button type="button" class="som-botao" id="cbr-som"></button>
+  </div>
+
+  <p class="cbr-ajuda" id="cbr-ajuda">
+    No computador, use as setas do teclado ou W, A, S, D; a barra de espaço pausa. No celular, toque
+    nas setas embaixo do tabuleiro. A partida pausa sozinha se você trocar de aba.
+  </p>
+
+  <div class="cbr-cartao">
+    <div class="cbr-cartao-topo">
+      <h2>Recordes por nível</h2>
+      <button type="button" class="cbr-link" id="cbr-zerar">Zerar recordes</button>
+    </div>
+    <div class="cbr-numeros">
+      <div class="cbr-numero"><strong id="cbr-recorde-facil">0</strong><span>Fácil · 13 × 13</span></div>
+      <div class="cbr-numero"><strong id="cbr-recorde-medio">0</strong><span>Médio · 16 × 16</span></div>
+      <div class="cbr-numero"><strong id="cbr-recorde-dificil">0</strong><span>Difícil · 20 × 20</span></div>
+    </div>
+  </div>
+</section>
+
+<aside class="indicacao" data-indicacao="cobrinha" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar a cobrinha</h2>
+  <p>
+    A cobra anda sozinha e você só decide para onde ela vira. Cada fruta comida vale 10 pontos e
+    deixa a cobra uma casa maior. A partida termina se a cabeça bater na parede ou no próprio corpo —
+    e, como a cobra cresce, o espaço vai ficando cada vez mais apertado.
+  </p>
+  <p>
+    A casa que a cauda está deixando conta como livre, como no jogo original: dá para perseguir a
+    própria cauda em espaço curto sem morrer. Encher o tabuleiro inteiro é vitória.
+  </p>
+
+  <h2>Níveis</h2>
+  <ul>
+    <li><strong>Fácil:</strong> tabuleiro de 13 × 13 e passo de 0,2 segundo.</li>
+    <li><strong>Médio:</strong> tabuleiro de 16 × 16 e passo de 0,15 segundo.</li>
+    <li><strong>Difícil:</strong> tabuleiro de 20 × 20 e passo de 0,11 segundo.</li>
+  </ul>
+  <p>
+    Em todos os níveis o passo encurta 4 milésimos a cada fruta, até 60 milésimos mais rápido que o
+    começo. No Difícil o limite é um passo a cada 55 milésimos.
+  </p>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas para fazer pontos</h2>
+  <ol>
+    <li><strong>Não corra para a fruta.</strong> Vá para a linha ou para a coluna dela primeiro; assim você chega perto com a cobra alinhada, sem precisar de curvas apertadas.</li>
+    <li><strong>Pense em zigue-zague.</strong> Em vez de atravessar o tabuleiro, suba e desça em faixas: a cobra fica compacta e sobra espaço para as próximas frutas.</li>
+    <li><strong>Evite encostar na parede quando a cobra é grande.</strong> O corpo costuma ocupar o caminho de volta, e o erro aparece justamente na curva seguinte.</li>
+    <li><strong>Vire antes, não em cima.</strong> A virada é guardada para o passo seguinte: se você apertar a seta tarde, a cobra já andou na direção antiga.</li>
+    <li><strong>Use a pausa.</strong> A barra de espaço (ou o botão Pausar) congela o jogo quando a fruta aparece num canto difícil.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>A partida fica salva se eu fechar a página?</h3>
+  <p>
+    Fica, no seu navegador, junto com os recordes de cada nível. Quando você volta, o jogo abre
+    pausado, no ponto em que parou, e basta tocar em Continuar.
+  </p>
+  <h3>Funciona no celular?</h3>
+  <p>
+    Funciona: abaixo do tabuleiro há quatro setas grandes para virar a cobra com o dedo. Também dá
+    para usar as setas do teclado em qualquer aparelho com teclado.
+  </p>
+  <h3>Por que a cobra acelera?</h3>
+  <p>
+    Porque a velocidade é o que dá graça: a cada fruta o passo fica um pouco mais curto, até um
+    limite, para a partida não ficar impossível. O número de pontos é o mesmo por fruta, então o
+    recorde premia quem sobrevive mais tempo.
+  </p>
+  <h3>O recorde é por nível?</h3>
+  <p>
+    Sim. Cada nível guarda o seu recorde, porque o tabuleiro e a velocidade mudam bastante entre
+    eles. O botão Zerar recordes apaga os três, e essa escolha também fica salva.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+

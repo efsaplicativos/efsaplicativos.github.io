@@ -1,8 +1,8 @@
 <!--
-titulo: Sudoku Online Grátis: Fácil, Médio e Difícil — EFS Aplicativos
-descricao: Jogue Sudoku online e grátis, com jogos novos de solução única em três níveis. Use notas, desfazer e dicas, no computador ou no celular, com a partida salva.
+titulo: Sudoku Online Grátis: Fácil, Médio, Difícil e Jogo do Dia — EFS Aplicativos
+descricao: Jogue Sudoku online e grátis, com jogos novos de solução única em três níveis e o sudoku do dia, o mesmo tabuleiro para todos. Use notas, desfazer e dicas, no computador ou no celular, com a partida salva.
 estilos: /assets/jogos/sudoku.css
-scripts: /assets/jogos/sudoku-logica.js /assets/jogos/sons.js /assets/jogos/sudoku.js
+scripts: /assets/jogos/sudoku-logica.js /assets/jogos/diario.js /assets/jogos/sons.js /assets/jogos/sudoku.js
 app: Sudoku Master | GameApplication
 -->
 <header class="page-head">
@@ -28,9 +28,12 @@ app: Sudoku Master | GameApplication
     </div>
     <div class="sd-botoes-topo">
       <button type="button" class="som-botao" id="sd-som"></button>
+      <button type="button" class="button secondary" id="sd-diario">Jogo do dia</button>
       <button type="button" class="button secondary" id="sd-novo">Novo jogo</button>
     </div>
   </div>
+
+  <p class="sd-diario-aviso" id="sd-diario-aviso" hidden></p>
 
   <div class="sd-info">
     <div class="sd-dado"><span>Erros</span><strong id="sd-erros">0</strong></div>
@@ -101,6 +104,18 @@ app: Sudoku Master | GameApplication
 <aside class="indicacao" data-indicacao="sudoku" hidden></aside>
 
 <article class="texto">
+  <h2>Sudoku do dia: o mesmo tabuleiro para todos</h2>
+  <p>
+    O botão <strong>Jogo do dia</strong> abre o Sudoku de hoje, gerado a partir da data: todo mundo que
+    visitar o site nesta data recebe exatamente o mesmo tabuleiro, sem servidor e sem cadastro. Serve
+    para comparar tempo e erros com amigos, como no jogo de palavra do dia.
+  </p>
+  <p>
+    O tabuleiro do dia usa o nível que estiver selecionado — então dá para resolver o mesmo jogo no
+    Fácil, no Médio ou no Difícil, mudando só a quantidade de casas vazias. Ao terminar, o site guarda
+    a marca no seu navegador e avisa, na próxima vez, que o jogo de hoje já foi completado. Amanhã há
+    outro.
+  </p>
   <h2>Como jogar Sudoku</h2>
   <p>
     A grade tem 81 casas, divididas em 9 linhas, 9 colunas e 9 quadrados de 3 × 3. Algumas casas

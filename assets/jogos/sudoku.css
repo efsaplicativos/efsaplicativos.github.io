@@ -396,3 +396,12 @@
     justify-content: center;
   }
 }
+
+/* Aviso do jogo do dia (assets/jogos/diario.js) */
+.sd-diario-aviso {
+  margin: 0 0 14px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}

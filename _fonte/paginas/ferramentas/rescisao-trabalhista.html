@@ -1,0 +1,191 @@
+<!--
+titulo: Calculadora de Rescisão Trabalhista: Quanto Vou Receber — EFS Aplicativos
+descricao: Calcule a rescisão: saldo de salário, aviso prévio proporcional, férias vencidas e proporcionais, 13º proporcional e multa do FGTS, nos quatro tipos de desligamento, com estimativa de INSS e IRRF.
+scripts: /assets/numeros.js /assets/ferramentas/salario-liquido-logica.js /assets/ferramentas/rescisao-trabalhista-logica.js /assets/ferramentas/rescisao-trabalhista.js
+app: Rescisão trabalhista | FinanceApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Rescisão</li>
+  </ol>
+  <h1>Calculadora de rescisão trabalhista</h1>
+  <p>
+    Informe o salário, as datas de admissão e de afastamento e o tipo de desligamento para ver as
+    verbas da rescisão: saldo de salário, aviso prévio, férias com o terço, 13º proporcional e multa
+    do FGTS.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora de rescisão">
+  <div class="tool-grid">
+    <form class="fields" id="rescisao" novalidate>
+      <div class="field">
+        <label for="salario">Salário bruto (R$)</label>
+        <input class="input" id="salario" inputmode="decimal" autocomplete="off" value="3.000,00" placeholder="Ex.: 3.000,00" />
+        <span class="hint">O salário do mês, sem os adicionais que não entram na rescisão.</span>
+      </div>
+      <div class="field">
+        <label for="admissao">Data de admissão</label>
+        <input class="input" id="admissao" type="date" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="afastamento">Data de afastamento</label>
+        <input class="input" id="afastamento" type="date" autocomplete="off" />
+        <span class="hint">O último dia trabalhado, como consta no aviso ou no TRCT.</span>
+      </div>
+      <div class="field">
+        <label for="tipo">Tipo de desligamento</label>
+        <select class="select" id="tipo">
+          <option value="semJustaCausa" selected>Dispensa sem justa causa</option>
+          <option value="pedido">Pedido de demissão</option>
+          <option value="acordo">Acordo entre as partes (art. 484-A)</option>
+          <option value="justaCausa">Dispensa por justa causa</option>
+        </select>
+      </div>
+      <div class="field" data-campo="aviso">
+        <label for="aviso">Aviso prévio</label>
+        <select class="select" id="aviso">
+          <option value="indenizado" selected>Indenizado (pago em dinheiro)</option>
+          <option value="trabalhado">Trabalhado (cumprido no serviço)</option>
+        </select>
+        <span class="hint">No aviso indenizado o contrato é projetado, o que aumenta férias e 13º.</span>
+      </div>
+      <div class="field">
+        <label for="ferias-vencidas">Férias vencidas (períodos completos)</label>
+        <input class="input" id="ferias-vencidas" inputmode="numeric" autocomplete="off" value="0" placeholder="Ex.: 1" aria-describedby="ferias-dica" />
+        <span class="hint" id="ferias-dica">Períodos de 12 meses já completos e não gozados.</span>
+      </div>
+      <div class="field">
+        <label for="fgts">Saldo do FGTS (R$)</label>
+        <input class="input" id="fgts" inputmode="decimal" autocomplete="off" placeholder="Ex.: 10.000,00" aria-describedby="fgts-dica" />
+        <span class="hint" id="fgts-dica">Aparece no extrato do FGTS. A multa é 40% (ou 20% no acordo).</span>
+      </div>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Informe o salário e as duas datas para ver a rescisão.</p>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<aside class="indicacao" data-indicacao="rescisao-trabalhista" hidden></aside>
+
+<article class="texto">
+  <h2>Como preencher: um exemplo passo a passo</h2>
+  <p>
+    <strong>Exemplo:</strong> salário de R$ 3.000,00, admitido em 05/03/2024 e desligado sem justa causa
+    em 20/11/2026, com aviso indenizado, sem férias vencidas e R$ 10.000,00 de FGTS.
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th scope="col">Campo</th><th scope="col">O que digitar</th><th scope="col">Por quê</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Salário bruto</td><td>3.000,00</td><td>o salário do mês</td></tr>
+        <tr><td>Data de admissão</td><td>05/03/2024</td><td>dá 2 anos completos, logo aviso de 36 dias</td></tr>
+        <tr><td>Data de afastamento</td><td>20/11/2026</td><td>o último dia trabalhado (20 dias no mês)</td></tr>
+        <tr><td>Tipo de desligamento</td><td>Dispensa sem justa causa</td><td>garante aviso, férias e 13º proporcionais e multa de 40%</td></tr>
+        <tr><td>Aviso prévio</td><td>Indenizado</td><td>projeta o contrato até 26/12/2026 e aumenta os avos</td></tr>
+        <tr><td>Férias vencidas</td><td>0</td><td>nenhum período completo em aberto</td></tr>
+        <tr><td>Saldo do FGTS</td><td>10.000,00</td><td>base da multa: 40% = R$ 4.000,00</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    O resultado traz saldo de R$ 2.000,00, aviso de R$ 3.600,00, férias proporcionais 10/12 com o terço,
+    13º de 12/12, multa de R$ 4.000,00 e <strong>total bruto de R$ 15.933,33</strong>.
+  </p>
+  <p>
+    <button type="button" class="button secondary" data-exemplo="demissao">Preencher com este exemplo</button>
+  </p>
+
+  <h2>O que entra na rescisão</h2>
+  <p>
+    A rescisão do contrato de trabalho reúne verbas de naturezas diferentes: um pedaço de salário, o
+    aviso prévio, férias (com o terço constitucional), o 13º proporcional e, em alguns casos, a multa
+    do FGTS. O que você recebe depende do motivo do desligamento.
+  </p>
+  <ul>
+    <li><strong>Saldo de salário:</strong> os dias trabalhados no mês do afastamento, contados sobre um mês de 30 dias.</li>
+    <li><strong>Aviso prévio:</strong> 30 dias mais 3 por ano completo na empresa, até 90 dias (Lei 12.506/2011). No acordo do art. 484-A da CLT ele é indenizado pela metade.</li>
+    <li><strong>Férias vencidas:</strong> períodos de 12 meses completos e não gozados, pagos por inteiro, mais 1/3.</li>
+    <li><strong>Férias proporcionais:</strong> os avos do período aquisitivo em curso (cada mês ou fração de 15 dias vale 1/12), mais 1/3.</li>
+    <li><strong>13º proporcional:</strong> os meses trabalhados no ano do desligamento, com a mesma regra de 15 dias.</li>
+    <li><strong>Multa do FGTS:</strong> 40% do saldo na dispensa sem justa causa e 20% no acordo. Não há multa no pedido de demissão nem na justa causa.</li>
+  </ul>
+
+  <h2>O que muda em cada tipo de desligamento</h2>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th scope="col">Verba</th>
+          <th scope="col">Sem justa causa</th>
+          <th scope="col">Pedido</th>
+          <th scope="col">Acordo</th>
+          <th scope="col">Justa causa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Saldo de salário</td><td>sim</td><td>sim</td><td>sim</td><td>sim</td></tr>
+        <tr><td>Aviso prévio</td><td>indenizado ou trabalhado</td><td>não</td><td>metade, indenizado</td><td>não</td></tr>
+        <tr><td>Férias vencidas + 1/3</td><td>sim</td><td>sim</td><td>sim</td><td>sim</td></tr>
+        <tr><td>Férias proporcionais + 1/3</td><td>sim</td><td>sim</td><td>sim</td><td>não</td></tr>
+        <tr><td>13º proporcional</td><td>sim</td><td>sim</td><td>sim</td><td>não</td></tr>
+        <tr><td>Multa do FGTS</td><td>40%</td><td>—</td><td>20%</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Aviso indenizado projeta o contrato</h2>
+  <p>
+    Quando o aviso é indenizado, os dias dele contam como tempo de serviço: o contrato é projetado
+    até o fim do aviso, e isso aumenta os avos de férias e de 13º. É por isso que o resultado mostra a
+    data projetada — no exemplo de duas datas próximas do fim do ano, a projeção pode valer mais um
+    avo de 13º. No aviso trabalhado não existe projeção.
+  </p>
+
+  <h2>Sobre INSS e imposto de renda</h2>
+  <p>
+    Os descontos mostrados são uma <strong>estimativa</strong>. O INSS incide sobre o saldo de
+    salário, sobre as férias (com o terço) e sobre o 13º — cada um com a tabela progressiva e o teto
+    de contribuição. O imposto de renda na rescisão é retido na fonte, de forma exclusiva, sobre o
+    total tributável, sem as deduções do ajuste anual. O TRCT oficial é emitido pelo empregador e pode
+    trazer particularidades: férias gozadas no mês, adiantamentos, plano de saúde, vale-transporte e
+    descontos autorizados.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Pedido de demissão tem multa do FGTS?</h3>
+  <p>
+    Não. A multa de 40% só existe na dispensa sem justa causa; no acordo do art. 484-A ela é de 20%.
+    No pedido de demissão você recebe saldo de salário, férias vencidas e proporcionais com o terço e
+    13º proporcional, mas não tem direito ao saque do FGTS pela rescisão.
+  </p>
+  <h3>Como conto os avos de férias e de 13º?</h3>
+  <p>
+    Cada mês completo vale 1/12, e a sobra de 15 dias ou mais conta como um mês inteiro. Nas férias, a
+    contagem começa no último aniversário de admissão (o início do período aquisitivo em curso); no
+    13º, começa em 1º de janeiro do ano do desligamento, ou na data de admissão, se ela for posterior.
+  </p>
+  <h3>Preciso cumprir aviso no pedido de demissão?</h3>
+  <p>
+    A lei prevê o aviso de 30 dias também para quem pede demissão. Se não cumprir, o empregador pode
+    descontar o valor correspondente — esse desconto, que depende do acordo entre as partes, não entra
+    nesta estimativa.
+  </p>
+  <h3>O valor que aparece é o que vou receber?</h3>
+  <p>
+    É uma estimativa das verbas e dos descontos mais comuns. Diferenças de convenção coletiva,
+    adicionais habituais (horas extras, insalubridade, comissões), férias já pagas e descontos
+    autorizados mudam o resultado. Confira sempre o TRCT e, em caso de dúvida, o sindicato ou a
+    assessoria trabalhista.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+

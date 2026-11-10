@@ -1,0 +1,62 @@
+# Palavras que o Soletra nunca aceita.
+#
+# Serve para tirar o ruído que vem da lista de frequência: estrangeirismos que entraram no léxico e
+# nomes próprios que viraram "palavra comum". Um termo por linha, sem acento; o que começa com # é
+# comentário. O gerador (_fonte/ferramentas-dados/soletra_dados.py) lê este arquivo a cada execução,
+# então basta editar aqui e rodar o script de novo.
+#
+# Estrangeirismos comuns em legenda
+LIVE
+FILE
+FILES
+FOUR
+THREE
+ONE
+TWO
+FIVE
+SIX
+ERROR
+RECEIVER
+GALLERY
+WALKIE
+PIECES
+CHILDRENS
+HOST
+SLOT
+RISK
+PLAY
+SHOW
+GAME
+STAR
+HAPPY
+BABY
+MISS
+LADY
+BODY
+CITY
+MUSIC
+MOVE
+TEAM
+#
+# Nomes próprios que passaram como palavra
+TITO
+QUITO
+ROSE
+NINO
+NILO
+ADAO
+BETO
+EDU
+SOUSA
+#
+# Estrangeirismo e nome que apareceram nas rodadas de teste
+GEEK
+GREEN
+TREKKING
+FINALE
+TERRIER
+ALVALADE
+ALANA
+ELENA
+LULU
+DELI

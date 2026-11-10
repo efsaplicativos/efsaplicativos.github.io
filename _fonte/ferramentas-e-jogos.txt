@@ -1,0 +1,1000 @@
+================================================================================
+EFS APLICATIVOS — MAPA DAS FERRAMENTAS E DOS JOGOS DO SITE
+================================================================================
+Site:           https://efsaplicativos.com.br
+Levantamento:   09/11/2026
+Conteúdo hoje:  40 ferramentas + 30 jogos publicados no navegador
+                26 aplicativos no catálogo Android da página inicial
+Arquivo de apoio do repositório. Não é uma página do site e não tem link no menu.
+
+--------------------------------------------------------------------------------
+COMO O SITE É MONTADO (resumo para consulta)
+--------------------------------------------------------------------------------
+- Conteúdo das páginas:   _fonte/paginas/<secao>/<nome>.html
+  (o gerador transforma em /ferramentas/<nome>/ ou /jogos/<nome>/)
+- Regras e cálculos:      assets/<secao>/<nome>-logica.js
+- Tela/comportamento:     assets/<secao>/<nome>.js
+- Estilo:                 assets/<secao>/<nome>.css
+- Testes:                 _fonte/testes/<nome>.test.js  (node _fonte/testes/<nome>.test.js)
+- Depois de qualquer mudança: python _fonte/gerar.py
+- Nada de framework: HTML, CSS e JavaScript puro, salvo no localStorage,
+  sem cadastro e sem servidor.
+
+Como ler as fichas:
+  Endereço ...... caminho publicado no site
+  O que faz ..... função principal da ferramenta ou do jogo
+  App ........... app Android correspondente, quando existe botão na página
+
+
+================================================================================
+PARTE 1 — OS 30 JOGOS
+================================================================================
+
+--- Lógica e quebra-cabeças (8) ------------------------------------------------
+
+1) 2048
+   Endereço: /jogos/2048/
+   O que faz: desliza os blocos em quatro direções; blocos iguais se somam e o
+   alvo é chegar ao 2048. Tem recorde salvo, teclado no computador e deslizar no
+   celular. A partida continua de onde parou se fechar a página.
+   App: 2048: Block Merge — com.emerson1981.game2048
+
+2) Sudoku
+   Endereço: /jogos/sudoku/
+   O que faz: grade 9x9 em três níveis. Cada jogo é gerado na hora, com solução
+   única, notas (rascunho), desfazer e dicas. A partida fica salva até terminar.
+   App: Sudoku Master — com.emerson1981.sudoko
+
+3) Campo minado
+   Endereço: /jogos/campo-minado/
+   O que faz: abrir todas as casas sem achar mina, usando as pistas dos números.
+   Três tamanhos, primeira jogada sempre segura, bandeiras, cronômetro e
+   melhores tempos salvos.
+   App: Campo Minado — com.emerson1981.campominado
+
+4) Quebra-cabeça deslizante
+   Endereço: /jogos/quebra-cabeca/
+   O que faz: deslizar as peças até remontar uma imagem (12 figuras) ou a
+   sequência numérica, em grades de 3x3, 4x4 e 5x5. Conta tempo e movimentos, e
+   todo embaralhamento tem solução.
+   App: Quebra-Cabeça Deslizante — com.emerson1981.quebracabeca
+
+5) Color Sort
+   Endereço: /jogos/color-sort/
+   O que faz: despejar bolas de um tubo para outro até cada tubo ter uma cor só.
+   Três níveis com solução garantida, desfazer, recordes e símbolos extras para
+   quem tem daltonismo.
+   App: Multi-Game Strategy — com.emerson1981.multigames
+
+6) Mahjong solitário
+   Endereço: /jogos/mahjong/
+   O que faz: retirar as peças formando pares de peças livres. São 15 tabuleiros,
+   do fácil ao difícil, todos com solução garantida, com dica e desfazer.
+   App: Mahjong Solitário Clássico — com.efsaplicativos.mahjong
+
+7) Desvenda (palavra do dia)
+   Endereço: /jogos/desvenda/
+   O que faz: descobrir uma palavra de 5 letras em 6 tentativas; as cores mostram
+   letra certa no lugar certo e letra que existe em outro lugar. Tem palavra do
+   dia, modo treino ilimitado e uma dica que coloca a letra certa no quadrado.
+   App: (não tem app; existe só na web)
+
+8) Caça-palavras
+   Endereço: /jogos/caca-palavras/
+   O que faz: encontrar as palavras escondidas na grade. 16 temas e três níveis:
+   no fácil, na horizontal e na vertical; no difícil, em todas as direções, até
+   de trás para frente. Tem dica e recordes.
+   App: (não tem app; existe só na web)
+
+--- Memória e reflexo (4) ------------------------------------------------------
+
+9) Jogo da memória
+   Endereço: /jogos/jogo-da-memoria/
+   O que faz: virar duas cartas por vez e achar os pares de bichinhos. Três
+   níveis, de 16 a 64 cartas, com tempo, movimentos e recordes salvos.
+   App: Jogo da Memória — com.emerson1981.jogodamemoria
+
+10) Cores da Memória
+    Endereço: /jogos/cores-da-memoria/
+    O que faz: as cores acendem em sequência e você repete na mesma ordem; a cada
+    rodada entra mais uma cor e o ritmo acelera. Quatro níveis, com recordes.
+    App: Cores da Memória — com.emerson1981.coresmemoria
+
+11) Lumibricks
+    Endereço: /jogos/lumibricks/
+    O que faz: encaixar os blocos que caem, completar linhas para apagá-las e
+    subir de nível. Tem peça-guia, a função Segurar e bloco dourado; funciona no
+    teclado e no celular, e a partida fica salva (pausada) ao sair da página.
+    App: Lumibricks — com.emerson1981.lumibricks
+
+12) Cobrinha
+    Endereço: /jogos/cobrinha/
+    O que faz: o clássico jogo da cobrinha: comer as frutas sem bater na parede
+    nem no próprio corpo, com três tabuleiros (13, 16 e 20 casas de lado) e
+    velocidade que aumenta a cada fruta. Tem setas na tela para o celular,
+    recorde por nível, pausa automática ao trocar de aba e partida salva.
+    App: (não tem app; existe só na web)
+
+--- Estratégia e tabuleiro (5) -------------------------------------------------
+
+13) Puzzles de xadrez
+    Endereço: /jogos/puzzles-de-xadrez/
+    O que faz: encontrar o melhor lance em posições tiradas de partidas reais.
+    Quase 10 mil puzzles do Lichess, escolhidos por tema e dificuldade, com dica,
+    solução e rating que fica salvo no navegador.
+    App: Puzzles de Xadrez — com.emerson1981.puzzleschess
+
+14) Batalha naval
+    Endereço: /jogos/batalha-naval/
+    O que faz: posicionar os cinco navios, escolher a dificuldade e trocar tiros
+    com o computador até afundar a frota dele com o menor número de jogadas. Usa
+    os navios e os sons do app.
+    App: Batalha Naval — com.emerson1981.batalhanaval
+
+15) Jogo da velha
+    Endereço: /jogos/jogo-da-velha/
+    O que faz: contra o computador em três níveis (o difícil nunca perde) ou com
+    duas pessoas no mesmo aparelho. O placar fica salvo.
+    App: Tic Tac Toe — com.emerson1981.tictactoe
+
+16) Lig 4
+    Endereço: /jogos/lig-4/
+    O que faz: soltar as peças nas sete colunas até alinhar quatro da mesma cor,
+    na horizontal, na vertical ou na diagonal. Contra o computador em três níveis
+    (o difícil olha cinco jogadas à frente) ou dois jogadores no mesmo aparelho,
+    com desfazer, placar e histórico salvos.
+    App: (não tem app; existe só na web)
+
+17) Damas
+    Endereço: /jogos/damas/
+    O que faz: dama brasileira no tabuleiro 8x8, com 12 peças de cada lado.
+    Captura obrigatória e em cadeia, peão que vira dama na última linha e dama que
+    voa pela diagonal. Três níveis contra o computador ou dois jogadores, com
+    desfazer, placar e histórico salvos.
+    App: (não tem app; existe só na web)
+
+--- Cartas (10) ----------------------------------------------------------------
+
+18) Paciência (Klondike)
+    Endereço: /jogos/paciencia/
+    O que faz: organizar as 52 cartas por naipe, do Ás ao Rei. Vira 1 ou 3 cartas
+    por vez, com desfazer, dica, final automático, pontos e estatísticas.
+    App: (não tem app; existe só na web)
+
+19) Paciência Spider
+    Endereço: /jogos/paciencia-spider/
+    O que faz: dois baralhos e dez colunas; montar sequências do Rei ao Ás do
+    mesmo naipe para tirá-las da mesa. Joga-se com 1, 2 ou 4 naipes, com desfazer
+    e dica.
+    App: (não tem app)
+
+20) FreeCell
+    Endereço: /jogos/freecell/
+    O que faz: todas as cartas abertas desde o início, com quatro células livres.
+    Partidas numeradas de 1 a 1.000.000 (para repetir ou desafiar alguém), dica
+    que procura a solução, desfazer, final automático e estatísticas.
+    App: (não tem app)
+
+21) Paciência Pirâmide
+    Endereço: /jogos/paciencia-piramide/
+    O que faz: tirar da mesa pares de cartas que somam 13 até desmontar a
+    pirâmide, com 1 volta, 3 voltas ou sem limite, com dica e desfazer.
+    App: (não tem app)
+
+22) Paciência Golf
+    Endereço: /jogos/paciencia-golf/
+    O que faz: levar as cartas das sete colunas para a fundação, sempre um valor
+    acima ou abaixo da carta de cima, até limpar a mesa. Modo Clássico ou Com
+    volta, dica que resolve e estatísticas (menos pontos é melhor).
+    App: (não tem app)
+
+23) Copas (Hearts)
+    Endereço: /jogos/copas/
+    O que faz: jogo de vazas contra três adversários do computador (Ana, Beto e
+    Clara). Passa 3 cartas, foge das copas e da Dama de espadas e tenta terminar
+    com o menor placar — ou leva tudo e dá o "tiro na lua".
+    App: (não tem app)
+
+24) Truco
+    Endereço: /jogos/truco/
+    O que faz: truco Paulista ou Mineiro em dupla com o computador (Zé) contra
+    Tião e Cida. Pede truco, seis e doze, aceita, corre ou aumenta, com mão de
+    onze, até 12 tentos, e estatísticas.
+    App: (não tem app)
+
+25) Buraco
+    Endereço: /jogos/buraco/
+    O que faz: buraco contra o computador (Zeca): sequências, curingas, canastras
+    limpas e sujas, morto e lixo aberto ou fechado, com dica e desfazer.
+    App: (não tem app)
+
+26) Oito Maluco
+    Endereço: /jogos/oito-maluco/
+    O que faz: jogo de descarte em que se segue o naipe ou o valor da carta da
+    mesa e o 8 troca o naipe. Contra 1, 2 ou 3 jogadores do computador, até 100
+    pontos.
+    App: (não tem app)
+
+27) Mico
+    Endereço: /jogos/mico/
+    O que faz: jogo de pares com baralho comum. Tira-se uma carta da mão do
+    vizinho, baixam-se os pares da mesma cor e quem fica com a Dama de espadas (o
+    mico, que não tem par) perde. De 3 a 5 jogadores.
+    App: (não tem app)
+
+--- Conhecimento (3) -----------------------------------------------------------
+
+28) Qual a Bandeira?
+    Endereço: /jogos/qual-e-a-bandeira/
+    O que faz: mostra uma bandeira e você escolhe o país entre quatro opções; no
+    modo Capital, escolhe a capital do país. São 193 países, 3 vidas, bônus por
+    sequência, dificuldade crescente a cada dez perguntas e recorde salvo.
+    App: Qual a Bandeira — com.emerson1981.qualabandeira
+
+29) Forca
+    Endereço: /jogos/forca/
+    O que faz: adivinhar a palavra letra por letra, com dica, seis erros e desenho
+    que cresce a cada erro. Cinco temas (animais, frutas, países, profissões e
+    objetos de casa), teclado na tela e teclado físico. Letras acentuadas são
+    comparadas sem acento e a letra repetida não conta duas vezes.
+    App: (não tem app; existe só na web)
+
+30) Soletra
+    Endereço: /jogos/soletra/
+    O que faz: sete letras, uma obrigatória no meio, e o objetivo é formar palavras
+    de 3 letras ou mais sempre com essa letra. Pontos por tamanho, bônus de 7 para
+    o pangrama (usa as sete letras) e placar "x de y palavras". Dicionário de ~9.270
+    palavras comuns (4 a 8 letras, com plurais e conjugações, mais as curtas da lista
+    curada) e 220 rodadas prontas, gerados por
+    _fonte/ferramentas-dados/soletra_dados.py em assets/jogos/soletra-dados.js a partir
+    do repositório fserb/pt-br (MIT): léxico de 145 mil palavras filtrado por três
+    camadas — índice de frequência (icf, 12,5 nas de 4 letras e 13,5 a 14 nas maiores),
+    lista "aceitas" do Desvenda (as de 5 letras) e uma lista de bloqueio própria em
+    _fonte/ferramentas-dados/soletra_bloqueadas.txt, mais as palavras negativas do
+    repositório. Sem os dados, cai na lista do Desvenda e na curada.
+    Tem jogo do dia (assets/jogos/diario.js).
+    App: (não tem app; existe só na web)
+
+================================================================================
+PARTE 2 — AS 40 FERRAMENTAS
+================================================================================
+
+--- Finanças (11) --------------------------------------------------------------
+
+1) Salário líquido
+   Endereço: /ferramentas/salario-liquido/
+   O que faz: do salário bruto para o líquido, com INSS progressivo por faixa,
+   IRRF com dependentes e pensão, comparação com o desconto simplificado, a
+   redução do imposto de 2026 e a conta aberta linha por linha.
+   App: (não tem app; existe só na web, com as tabelas de 2026)
+
+2) Rescisão trabalhista
+   Endereço: /ferramentas/rescisao-trabalhista/
+   O que faz: saldo de salário, aviso prévio proporcional (30 dias + 3 por ano,
+   até 90), férias vencidas e proporcionais com o terço, 13º proporcional e multa
+   do FGTS (40% ou 20% no acordo), com estimativa de INSS e IRRF, nos quatro
+   tipos de desligamento.
+   App: (não tem app; existe só na web)
+
+3) Férias e 13º
+   Endereço: /ferramentas/ferias-e-decimo-terceiro/
+   O que faz: férias de 1 a 30 dias com o terço constitucional e o abono de 10
+   dias (que não sofre desconto), e o 13º proporcional com as duas parcelas.
+   Calcula INSS e IRRF, já com a redução do imposto de 2026, que também vale
+   para o décimo terceiro.
+   App: (não tem app; existe só na web)
+
+4) Juros compostos
+   Endereço: /ferramentas/juros-compostos/
+   O que faz: calcula o valor final, o capital, a taxa ou o prazo com juros sobre
+   juros, com taxa ao mês ou ao ano, tabela mês a mês e o passo a passo da
+   fórmula. O resultado aparece enquanto digita.
+   App: Calculadora Multifunção — com.emerson1981.calculadoramultifuncao
+
+5) Juros simples
+   Endereço: /ferramentas/juros-simples/
+   O que faz: juros e montante de uma aplicação ou dívida, ou o capital, a taxa e
+   o prazo a partir do valor final. Aceita taxa e prazo em unidades diferentes
+   (dia, mês, ano), com passo a passo e tabela de evolução.
+   App: Calculadora de Juros — com.emerson1981.calculadorajuros
+
+6) Investimento com aportes
+   Endereço: /ferramentas/investimento-com-aportes/
+   O que faz: simula quanto rende um valor inicial com depósitos mensais, ou
+   descobre o aporte, o prazo, a taxa ou o capital inicial para chegar a uma
+   meta. Tem reajuste anual do aporte e evolução mês a mês.
+   App: Calculadora Multifunção
+
+7) Financiamento
+   Endereço: /ferramentas/financiamento/
+   O que faz: simula financiamento ou empréstimo pelas tabelas Price, SAC e SAM,
+   compara os três sistemas, mostra total de juros, CET com custos mensais e a
+   tabela de amortização completa.
+   App: Calculadora Multifunção
+
+8) Aposentadoria
+   Endereço: /ferramentas/aposentadoria/
+   O que faz: estima o patrimônio necessário para ter a renda mensal desejada na
+   aposentadoria e quanto aportar por mês para chegar lá, tudo em valores de hoje
+   (já descontada a inflação), com projeção ano a ano.
+   App: Calculadora Multifunção
+
+9) Correção pelo IPCA
+   Endereço: /ferramentas/correcao-ipca/
+   O que faz: atualiza um valor pela inflação entre dois meses, com IPCA, INPC ou
+   IPCA-15 (índices oficiais do IBGE): inflação acumulada do período, fator de
+   correção e variação mês a mês.
+   App: Calculadora Multifunção
+
+10) Conversor de moedas
+   Endereço: /ferramentas/conversor-de-moedas/
+   O que faz: converte real, dólar, euro e mais de 150 moedas, além de
+   criptomoedas, ouro e prata, com cotação da AwesomeAPI, taxa inversa, variação
+   do dia e histórico dos últimos 30 dias.
+   App: Conversor de Moedas — com.emerson1981.conversormoedas
+
+11) Calculadora financeira RPN
+   Endereço: /ferramentas/calculadora-financeira-rpn/
+   O que faz: calculadora no estilo das financeiras HP, com pilha de quatro
+   níveis: juros compostos, fluxo de caixa (NPV e IRR), amortização, datas,
+   estatística e programação. Guarda a memória no navegador.
+   App: (não tem app; é a única ferramenta sem versão Android)
+
+--- Matemática (9) ------------------------------------------------------------
+
+12) Regra de três
+   Endereço: /ferramentas/regra-de-tres/
+   O que faz: regra de três simples (direta ou inversa) e composta, com o
+   passo a passo da proporção e o fator de cada grandeza auxiliar.
+   App: (não tem app; existe só na web)
+13) Porcentagem
+   Endereço: /ferramentas/porcentagem/
+   O que faz: X% de um valor, aumento e desconto, variação entre dois valores
+   e quantos por cento uma parte representa do total.
+   App: (não tem app; existe só na web)
+
+
+14) Calculadora
+   Endereço: /ferramentas/calculadora/
+   O que faz: calculadora básica com as quatro operações, porcentagem, memória
+   (M+ e M−), histórico das contas e atalhos de teclado. Conta decimal exata.
+   App: Calculadora Multifunção
+
+15) Calculadora científica
+    Endereço: /ferramentas/calculadora-cientifica/
+    O que faz: trigonometria em graus, radianos ou grados, logaritmos, raízes,
+    potências, fatorial, arranjo e combinação, com parênteses, a expressão
+    inteira à vista e o resultado aparecendo enquanto digita.
+    App: Calculadora Multifunção
+
+16) Equações
+    Endereço: /ferramentas/equacoes/
+    O que faz: raízes de equações do 1º, 2º e 3º grau (inclusive complexas) e
+    sistemas lineares 2x2 e 3x3, com gráfico, vértice e passo a passo (Bhaskara
+    e Cramer).
+    App: Calculadora Multifunção
+
+17) Estatística
+    Endereço: /ferramentas/estatistica/
+    O que faz: a partir de uma lista colada de números, mostra média, mediana,
+    moda, desvio padrão, variância, quartis, valores atípicos, histograma e
+    tabela de frequência.
+    App: Calculadora Multifunção
+
+18) Geometria
+    Endereço: /ferramentas/geometria/
+    O que faz: área, perímetro e volume de 11 figuras planas e 7 sólidos, com
+    desenho da figura, fórmulas usadas e a unidade escolhida.
+    App: Calculadora Multifunção
+
+19) Matrizes
+    Endereço: /ferramentas/matrizes/
+    O que faz: soma, produto, determinante, inversa, transposta, posto, traço e
+    potências de matrizes de até 6x6; o resultado pode virar a matriz A ou B da
+    próxima conta.
+    App: Calculadora Multifunção
+
+20) Conversor de bases
+    Endereço: /ferramentas/conversor-de-bases/
+    O que faz: binário, octal, decimal, hexadecimal e qualquer base de 2 a 36,
+    com frações e complemento de dois, além de converter texto em bytes UTF-8.
+    App: Calculadora Multifunção
+
+--- Conversores e dia a dia (11) ------------------------------------------------
+
+21) Preço por quilo
+   Endereço: /ferramentas/preco-por-quilo/
+   O que faz: compara duas embalagens pelo custo por quilo, litro ou unidade,
+   com a economia em reais e em porcentagem.
+   App: (não tem app; existe só na web)
+22) Consumo de energia
+   Endereço: /ferramentas/energia-eletrica/
+   O que faz: potência, horas de uso e tarifa viram kWh e reais no mês, no dia
+   e no ano; compara dois aparelhos e mostra a economia.
+   App: (não tem app; existe só na web)
+
+23) Churrasco
+   Endereço: /ferramentas/churrasco/
+   O que faz: quantidade de carne por adulto e por criança (três perfis),
+   acompanhamento, bebida, carvão e sal para o número de convidados.
+   App: (não tem app; existe só na web)
+
+
+24) Conversor de medidas
+    Endereço: /ferramentas/conversor-de-medidas/
+    O que faz: 16 grandezas e mais de 150 unidades (comprimento, área, volume,
+    massa, velocidade, pressão, energia e outras), dos sistemas métrico,
+    americano e britânico, mais medidas brasileiras como alqueire e arroba.
+    App: Calculadora Multifunção
+
+25) Conversor de temperatura
+    Endereço: /ferramentas/conversor-de-temperatura/
+    O que faz: digita-se em qualquer uma das oito escalas (Celsius, Fahrenheit,
+    Kelvin, Rankine, Réaumur, Newton, Delisle e Rømer) e as outras sete são
+    convertidas na hora, com fórmulas e exemplos.
+    App: Calculadora Multifunção
+
+26) Calculadora de combustível
+    Endereço: /ferramentas/calculadora-de-combustivel/
+    O que faz: diz se compensa álcool ou gasolina (regra dos 70% ou consumo real
+    do carro), calcula o km/L do veículo e o custo de uma viagem com pedágios e
+    divisão por pessoa.
+    App: Calculadora Multifunção
+
+27) Calculadora de datas
+    Endereço: /ferramentas/calculadora-de-datas/
+    O que faz: dias, semanas e meses entre duas datas; somar ou subtrair dias,
+    meses e anos; contar dias úteis; dia da semana e semana do ano de qualquer
+    data.
+    App: Calculadora Multifunção
+
+28) Calculadora de idade
+    Endereço: /ferramentas/calculadora-de-idade/
+    O que faz: idade exata em anos, meses e dias, total de dias vividos, contagem
+    para o próximo aniversário, dia da semana em que nasceu, signo e geração.
+    App: Calculadora Multifunção
+
+29) Fuso horário
+    Endereço: /ferramentas/fuso-horario/
+    O que faz: compara a hora de duas cidades em tempo real, mostra a diferença
+    entre fusos, converte um horário (reunião, voo) e monta um relógio mundial,
+    já considerando o horário de verão de cada lugar.
+    App: Calculadora Multifunção
+
+30) Cronômetro e timer
+    Endereço: /ferramentas/cronometro-e-timer/
+    O que faz: cronômetro com centésimos e voltas (mais rápida e mais lenta) e
+    timer regressivo com alarme. O tempo é calculado pelo relógio do aparelho,
+    então continua certo com a aba em segundo plano ou a página recarregada.
+    App: Calculadora Multifunção
+
+31) Lei de Ohm e resistores
+    Endereço: /ferramentas/lei-de-ohm/
+    O que faz: tensão, corrente, resistência e potência a partir de duas
+    grandezas; resistores em série e em paralelo, divisor de tensão e o valor do
+    resistor pelo código de cores.
+    App: Calculadora Multifunção
+
+--- Saúde (2) -----------------------------------------------------------------
+
+32) IMC
+    Endereço: /ferramentas/imc/
+    O que faz: índice de massa corporal com peso e altura, classificação da OMS,
+    faixa de peso saudável para a altura e as limitações do índice (crianças,
+    idosos, gestantes e atletas).
+    App: Calculadora Multifunção
+
+33) Consumo de água
+    Endereço: /ferramentas/consumo-de-agua/
+    O que faz: estima quanta água beber por dia a partir do peso, com acréscimos
+    para atividade física, calor, gestação e amamentação, em litros e copos e
+    distribuída em horários ao longo do dia.
+    App: Calculadora Multifunção
+
+--- Organização e lazer (7) ----------------------------------------------------
+
+34) Lista de compras
+    Endereço: /ferramentas/lista-de-compras/
+    O que faz: cadastra os itens de casa, marca o que já está no carrinho, anota
+    quantidade e preço e soma o total da compra. Fica salva no navegador.
+    App: Lista de Compras — com.emerson1981.listacompras
+
+35) Lista de tarefas
+    Endereço: /ferramentas/lista-de-tarefas/
+    O que faz: tarefas com data, divisão em subtarefas, filtros de hoje e de
+    atrasadas, tudo salvo no navegador, sem cadastro.
+    App: Lista de Tarefas — com.emerson1981.listatarefas
+
+36) Consulta CEP
+    Endereço: /ferramentas/consulta-cep/
+    O que faz: mostra o endereço completo de um CEP (rua, bairro, cidade, estado,
+    DDD e código IBGE) ou descobre o CEP pelo nome da rua, em um estado ou em
+    todos. Dados do ViaCEP.
+    App: Pesquisa CEP — com.emerson1981.pesquisacep
+
+37) Gerador de números da loteria
+    Endereço: /ferramentas/gerador-de-numeros-loteria/
+    O que faz: sorteia números para Mega-Sena, Lotofácil, Quina, Lotomania,
+    Timemania, Dupla Sena, Dia de Sorte, +Milionária, Super Sete e Loteca, sem
+    repetir e já em ordem. A página avisa que as combinações não garantem prêmio.
+    App: Gerar Números Loteria — com.emerson1981.gerarnumerosloteria
+
+38) Marcador de truco
+    Endereço: /ferramentas/marcador-de-truco/
+    O que faz: placar por dupla até 12 pontos com os valores do truco paulista
+    (truco, seis, nove e doze), aviso de mão de 11, disputa em melhor de 3 ou de
+    5, desfazer e histórico das partidas.
+    App: Marcador de Truco — com.emerson1981.marcadordetruco
+
+39) Relógio de xadrez
+    Endereço: /ferramentas/relogio-de-xadrez/
+    O que faz: relógio para dois jogadores, com ritmos prontos (bullet, blitz,
+    rápida, clássica) ou personalizados e incremento Fischer, Bronstein ou
+    atraso.
+    App: Relógio Xadrez — com.emerson1981.relogioxadrez
+
+40) Relógio de blinds (poker)
+    Endereço: /ferramentas/relogio-de-blinds-poker/
+    O que faz: controla o tempo de cada nível, os blinds e os intervalos; registra
+    jogadores, rebuys e add-ons e mostra o prize pool já dividido entre os
+    premiados.
+    App: Poker Manager — com.emerson1981.pokermanager
+
+
+================================================================================
+PARTE 3 — APLICATIVOS ANDROID DO CATÁLOGO (página inicial)
+================================================================================
+1.  Tower Defence War — Estratégia (só app; não tem página no site)
+2.  Batalha Naval — Estratégia
+3.  Cores da Memória — Memória
+4.  Calculadora Multifunção — Cálculos
+5.  Lista de Tarefas — Organização
+6.  Qual é a Bandeira — Conhecimento
+7.  Jogo da Memória — Memória
+8.  Poker Manager — Organização
+9.  Puzzles Chess Trainer — Xadrez
+10. Lance Certo: Aprenda Xadrez — Xadrez (só app; no site existem apenas as
+    páginas de privacidade e exclusão de conta)
+11. Quebra-Cabeça Deslizante — Quebra-cabeça
+12. Calculadora de Juros — Finanças
+13. Calculadora Financeira: Juros — Finanças
+14. Chess Timer Pro — Xadrez
+15. Gerar Números Loteria — Ferramentas
+16. Conversor de Moedas — Conversão
+17. Multi-Game Strategy — Estratégia
+18. Sudoku Master — Lógica
+19. Mahjong Solitário Clássico — Tabuleiro
+20. Campo Minado — Lógica
+21. Pesquisa CEP — Consulta
+22. 2048: Block Merge — Quebra-cabeça
+23. Lumibricks — Arcade
+24. Lista de Compras — Organização
+25. Marcador de Truco — Jogos de cartas
+26. Tic Tac Toe — Estratégia
+
+================================================================================
+PARTE 4 — DICAS DE NOVOS JOGOS E FERRAMENTAS
+================================================================================
+
+Como as ideias foram escolhidas
+--------------------------------------------------------------------------------
+Pensei em quatro critérios, nesta ordem:
+  1. Reaproveitamento: motor, arte, palavras, sons ou testes que já existem no
+     repositório (menos código e menos risco de bug).
+  2. Busca no Brasil: o que as pessoas realmente digitam no Google em português
+     (o site vive de busca orgânica e de anúncios).
+  3. Ponte com o Google Play: a página web pode empurrar a instalação de um app
+     que já existe, ou o app pode trazer gente para a versão web.
+  4. Risco baixo: nada que dependa de API paga, de dado que envelhece rápido ou
+     que desrespeite as políticas do AdSense e do Google Play.
+
+Esforço: BAIXO = um dia de trabalho; MÉDIO = alguns dias; ALTO = uma ou mais
+semanas, com gerador/lógica própria.
+
+--------------------------------------------------------------------------------
+4.1 JOGOS — prioridade 1 (baixo esforço, muita busca)
+--------------------------------------------------------------------------------
+
+DAMAS
+  O que é: dama brasileira 8x8 contra o computador em 3 níveis, ou duas pessoas
+  no mesmo aparelho; captura obrigatória, dama coroada, desfazer e histórico.
+  Por que: "jogo de damas online" é uma busca grande e constante, e o site já tem
+  o motor de decisão do jogo da velha (assets/jogos/jogo-da-velha-logica.js, com
+  melhoresJogadas). Dá para adaptar um minimax com poda alfa-beta.
+  Esforço: MÉDIO. Reaproveita: motor minimax, CSS de tabuleiro, padrão de níveis.
+  Bônus: cabe perfeitamente no app Multi-Game Strategy, junto de Batalha Naval,
+  Sudoku e Campo Minado.
+
+LIG 4 (CONECTA 4)
+  O que é: tabuleiro 7x6, quatro em linha; computador em 3 níveis e dois
+  jogadores no mesmo aparelho.
+  Por que: mesma mecânica de decisão da dama e do jogo da velha, com tabuleiro
+  bem mais simples que a dama. É uma das buscas mais fortes de "jogo de tabuleiro
+  online".
+  Esforço: BAIXO. Reaproveita: minimax do jogo da velha, estrutura de placar.
+
+PACIÊNCIA RELÂMPAGO (ou SCORPION)
+  O que é: variação de paciência com as cartas que sobram na mesa.
+  Por que: o motor de Klondike já está pronto em assets/jogos/paciencia-logica.js
+  e nos testes; muda a distribuição e o movimento permitido. Cada variação é uma
+  página nova, com busca própria ("paciência relâmpago", "paciência escorpião").
+  Esforço: BAIXO. Reaproveita: motor, CSS e testes da Paciência.
+
+COBRINHA (SNAKE)
+  O que é: arcade clássico de reflexo; come, cresce, não bate na parede nem em si
+  mesma. Recorde salvo, teclado e deslizar no celular.
+  Por que: "jogo da cobrinha online" tem busca enorme e o site hoje tem pouca
+  coisa de reflexo puro (só Cores da Memória e Lumibricks). É canvas e pouca
+  lógica, sem dependências.
+  Esforço: BAIXO. Reaproveita: padrão de recordes no localStorage e sons de
+  assets/jogos/sons.js.
+
+JOGO DA FORCA
+  O que é: forca com temas (animais, países, profissões), dicas e três níveis.
+  Por que: a lista de palavras pt-BR já está no repositório
+  (assets/jogos/desvenda-palavras.js, base de Fernando Serboncini sob licença
+  MIT — manter o aviso de copyright) e os 16 temas já existem no caça-palavras.
+  Esforço: BAIXO. Reaproveita: lista de palavras, temas, layout do caça-palavras.
+
+QUIZ DO BRASIL (estados e capitais)
+  O que é: bandeiras dos 27 estados, capitais, siglas e regiões; modo "arraste o
+  estado no mapa" como nível extra.
+  Por que: aproveita todo o motor de quiz de Qual a Bandeira (assets/jogos/
+  qual-e-a-bandeira-logica.js + pasta de bandeiras) e pega um público escolar que
+  o quiz de países não pega.
+  Esforço: BAIXO/MÉDIO (só precisa da arte do mapa). Reaproveita: quiz, vidas,
+  sequência e recorde.
+
+--------------------------------------------------------------------------------
+4.2 JOGOS — prioridade 2 (esforço médio, mecânica conhecida)
+--------------------------------------------------------------------------------
+
+PIFE / TRANCA
+  O que é: jogo de cartas brasileiro contra o computador, com sequências, trincas
+  e a opção de bater.
+  Por que: "pife online" e "tranca online" são buscas fortes e o site já tem
+  três jogos de cartas com IA por regras (buraco, truco, mico), que servem de
+  molde para a mão do computador.
+  Esforço: MÉDIO. Reaproveita: motor de cartas, IA, layout e testes do buraco.
+
+STOP / ADEDANHA
+  O que é: sorteia uma letra, conta o tempo e cada um preenche as categorias
+  (nome, cidade, animal, fruta...). A conferência é na tela, com votação do grupo
+  — assim não precisa de dicionário gigante.
+  Por que: jogo de festa e de sala de aula, muito buscado, e ninguém tem versão
+  web boa. Traz público novo (professores, família) para o site.
+  Esforço: MÉDIO. Reaproveita: timer do cronômetro e a lógica de sorteio.
+
+RESTA UM e TORRE DE HANÓI
+  O que é: dois clássicos de lógica curtos — tirar as peças do tabuleiro com
+  saltos até sobrar uma, e mover os discos de uma haste para outra.
+  Por que: são páginas rápidas de fazer, com solução verificável e "menor número
+  de movimentos". Completam a categoria Lógica, que é a que mais traz visita.
+  Esforço: BAIXO (cada um). Reaproveita: desfazer/dica e recordes.
+
+SOKOBAN (empurrar caixas)
+  O que é: níveis em que você empurra caixas até os marcadores; desfazer, dica e
+  contagem de movimentos.
+  Por que: tem fãs fiéis, níveis ficam em JSON (sem gerador) e a lógica é simples.
+  Esforço: MÉDIO. Reaproveita: grade, desfazer e "partida salva" do quebra-cabeça.
+
+VARIAÇÕES RÁPIDAS DE MEMÓRIA
+  O que é: memória de números, memória de posições na grade e memória de sequência
+  de palavras, reaproveitando o que já existe.
+  Por que: cada variação é uma página nova com busca própria, e o custo é baixo
+  porque a lógica de Cores da Memória e do Jogo da Memória já está pronta.
+  Esforço: BAIXO.
+
+--------------------------------------------------------------------------------
+4.3 JOGOS — prioridade 3 (esforço alto, diferencial)
+--------------------------------------------------------------------------------
+
+NONOGRAMA (PICROSS)
+  O que é: grade em que os números das linhas e colunas revelam um desenho.
+  Por que: público fiel, pouca oferta em português e combina com o perfil de quem
+  já joga Sudoku e Campo Minado. O trabalho está no gerador de tabuleiro com
+  solução única.
+  Esforço: ALTO. Reaproveita: verificação de grade e dicas do Sudoku.
+
+XADREZ CONTRA O COMPUTADOR
+  O que é: partida completa no navegador, com níveis de força.
+  Por que: a arte das peças já existe (assets/jogos/puzzles-de-xadrez/pecas.svg) e
+  o site já tem os puzzles e o app Lance Certo. O motor de xadrez é o desafio.
+  Esforço: ALTO. Alternativa barata: "xadrez contra o computador" usando regras
+  simplificadas e profundidade 2, deixando claro que é nível iniciante.
+
+TOWER DEFENCE WEB
+  O que é: versão web simplificada do app Tower Defence War, ou pelo menos uma
+  página do jogo no site com descrição, prints e botão para a Play Store.
+  Por que: é o único jogo do catálogo que não tem nenhuma página no site — quem
+  chega pelo nome do app não encontra nada em efsaplicativos.com.br.
+  Esforço: BAIXO (página) a ALTO (versão jogável).
+
+--------------------------------------------------------------------------------
+4.4 FERRAMENTAS — prioridade 1 (conta simples, busca altíssima no Brasil)
+--------------------------------------------------------------------------------
+
+CALCULADORA DE SALÁRIO LÍQUIDO
+  O que faz: do salário bruto para o líquido, com INSS por faixa, IRRF com
+  dependentes e pensão, mostrando o desconto passo a passo.
+  Por que: é uma das maiores buscas do país e o site já tem o público de finanças.
+  Um "cluster trabalhista" (salário, férias, 13º, rescisão) rende links internos
+  entre as páginas — o que mais ajuda no Google.
+  Esforço: MÉDIO (as tabelas precisam ser atualizadas todo ano; deixe a data da
+  tabela visível na página).
+
+CALCULADORA DE RESCISÃO TRABALHISTA
+  O que faz: saldo de salário, aviso prévio, férias vencidas e proporcionais + 1/3,
+  13º proporcional, FGTS e multa de 40%, com o total a receber.
+  Por que: busca enorme e constante, e quase sempre feita no celular, no meio de
+  um problema real. Combina com a de salário líquido.
+  Esforço: MÉDIO.
+
+FÉRIAS E 13º SALÁRIO
+  O que faz: valor das férias (com o terço) e das duas parcelas do 13º, prazos de
+  pagamento e descontos.
+  Por que: busca sazonal fortíssima (novembro/dezembro e janeiro) e reaproveita a
+  mesma base de INSS/IRRF da calculadora de salário.
+  Esforço: BAIXO depois da de salário líquido.
+
+REGRA DE TRÊS (simples e composta)
+  O que faz: resolve regra de três direta e inversa, com passo a passo.
+  Por que: uma das maiores buscas de matemática no Brasil, o cálculo é trivial e
+  hoje o site não tem uma página dedicada (só aparece escondido em outras).
+  Esforço: BAIXO.
+
+PORCENTAGEM (página dedicada)
+  O que faz: "quanto é X% de Y", aumento, desconto, variação entre dois valores,
+  desconto em cadeia e porcentagem de um total.
+  Por que: a calculadora já faz porcentagem, mas não tem página própria — e é
+  exatamente o que as pessoas pesquisam.
+  Esforço: BAIXO. Reaproveita: assets/ferramentas/expressao-logica.js.
+
+PREÇO POR QUILO / POR LITRO
+  O que faz: compara duas ou três embalagens (peso/volume e preço) e diz qual tem
+  o melhor custo por kg, L ou unidade.
+  Por que: uso real no mercado, no celular, e super simples de calcular. Nenhuma
+  ferramenta do site faz isso hoje.
+  Esforço: BAIXO.
+
+CONSUMO DE ENERGIA ELÉTRICA (kWh em reais)
+  O que faz: potência do aparelho, horas de uso por dia e tarifa → consumo mensal
+  em kWh e o custo em reais, com estimativa de economia.
+  Por que: busca altíssima, resultado objetivo e liga com a Lei de Ohm, que já
+  existe (público de eletrônica).
+  Esforço: BAIXO. Reaproveita: estilo e padrão de resultado das calculadoras.
+
+CHURRASCO (quantidade por pessoa)
+  O que faz: quantidade de carne, acompanhamentos e bebida pelo número de
+  convidados (adultos e crianças), com opção de perfil (com ou sem osso).
+  Por que: busca enorme e sazonal (fins de semana, festas, feriados), público
+  totalmente diferente do atual e uso no celular durante a compra.
+  Esforço: BAIXO.
+
+GERADOR DE SENHAS
+  O que faz: senha aleatória com tamanho, maiúsculas, números e símbolos, com
+  medidor de força e dica de memorização. Tudo calculado no próprio navegador.
+  Por que: busca altíssima, uma tarde de trabalho e nenhum dado sai do aparelho
+  (o que combina com a política de privacidade do site).
+  Esforço: BAIXO (usar crypto.getRandomValues).
+
+SORTEADOR DE NÚMEROS E DE NOMES
+  O que faz: sortear números em um intervalo (sem repetir ou com repetição) e
+  sortear nomes colados em uma lista, com animação de roleta.
+  Por que: professores, sorteios de brindes e lives usam muito; a lógica de
+  sorteio já existe no gerador de loteria.
+  Esforço: BAIXO. Reaproveita: gerador-de-numeros-loteria-logica.js.
+
+--------------------------------------------------------------------------------
+4.5 FERRAMENTAS — prioridade 2 (uso recorrente e público novo)
+--------------------------------------------------------------------------------
+
+POMODORO E TIMER HIIT/TABATA
+  O que faz: ciclos de 25/5 minutos configuráveis e treinos por intervalo
+  (20s/10s, 40s/20s), com alarme e contagem de ciclos.
+  Por que: público de estudo e de treino, uso diário (o que gera visita repetida,
+  e não só uma visita por busca). A lógica de tempo já existe e continua certa em
+  segundo plano.
+  Esforço: BAIXO. Reaproveita: cronometro-e-timer-logica.js e os testes dele.
+
+CALCULADORA DE HORAS (HH:MM)
+  O que faz: soma e subtrai horas e minutos, calcula horas trabalhadas com
+  intervalo, banco de horas e valor da hora.
+  Por que: procura enorme de quem trabalha por hora e de quem preenche planilha;
+  a calculadora de datas já trata diferenças de tempo.
+  Esforço: BAIXO. Reaproveita: calculadora-de-datas-logica.js.
+
+MMC, MDC E FRAÇÕES
+  O que faz: MMC e MDC de vários números e as quatro operações com frações,
+  mostrando o passo a passo.
+  Por que: público escolar enorme e complementa equações, matrizes e estatística
+  (a página pode linkar para as outras três).
+  Esforço: BAIXO.
+
+NÚMEROS ROMANOS
+  O que faz: converte números romanos para arábicos e vice-versa, com a tabela e
+  as regras.
+  Por que: busca grande e constante, custo quase zero; cabe em "Matemática".
+  Esforço: BAIXO.
+
+ORÇAMENTO MENSAL (50/30/20) E CONTROLE DE GASTOS
+  O que faz: divide a renda nas três faixas, compara com os gastos do mês e mostra
+  quanto sobrou, com sugestões de ajuste.
+  Por que: traz o público de finanças pessoais, que já consome juros e
+  financiamento; usa o mesmo localStorage das listas.
+  Esforço: MÉDIO. Reaproveita: lista-de-tarefas.js (salvar/editar no navegador).
+
+CALCULADORA DE OBRA (tinta, piso e tijolo)
+  O que faz: quantos litros de tinta por m² e demãos, quantas caixas de piso ou
+  azulejo com a margem de perda e quantos tijolos por m² de parede.
+  Por que: busca altíssima em reforma, resultado direto e nenhuma ferramenta do
+  site cobre construção hoje.
+  Esforço: BAIXO. Pode ser uma página com abas, como a de geometria.
+
+RECEITA POR PORÇÕES E MEDIDAS DE COZINHA
+  O que faz: reescala a receita pelo número de porções e converte xícaras,
+  colheres e gramas.
+  Por que: uso doméstico constante e o conversor de medidas já tem as unidades;
+  rende links internos entre as duas páginas.
+  Esforço: BAIXO.
+
+CALCULADORA DE GRAVIDEZ
+  O que faz: idade gestacional pela DUM ou pela data da concepção, data provável
+  do parto e em qual trimestre está.
+  Por que: público muito grande, uso no celular e combina com IMC e consumo de
+  água. Precisa do aviso de que não substitui o médico, como o IMC já faz.
+  Esforço: BAIXO. Reaproveita: calculadora-de-datas-logica.js.
+
+CALORIAS: TAXA METABÓLICA E MACROS
+  O que faz: taxa metabólica basal, gasto pela atividade e divisão de proteína,
+  carboidrato e gordura.
+  Por que: fecha o conjunto de saúde do site (IMC + água + calorias), que é o que
+  mais visita por busca.
+  Esforço: MÉDIO.
+
+CONVERSOR E CONTADOR DE TEXTO
+  O que faz: maiúsculas/minúsculas, remover acentos, contar caracteres e palavras
+  (com os limites de cada rede social), inverter e gerar slug.
+  Por que: uso rápido no celular por quem escreve para redes; custo baixo e
+  nenhuma dependência.
+  Esforço: BAIXO.
+
+--------------------------------------------------------------------------------
+4.6 FERRAMENTAS — prioridade 3 (nicho, mas com público fiel)
+--------------------------------------------------------------------------------
+
+METRÔNOMO
+  O que faz: marcação de BPM, compasso e acento, com som pela Web Audio API.
+  Por que: músicos buscam isso toda hora e o site não tem nada de áudio além dos
+  efeitos dos jogos.
+  Esforço: BAIXO/MÉDIO.
+
+CONVERSOR DE TAMANHOS
+  O que faz: roupas, calçados e medidas de pneu entre Brasil, Europa e EUA.
+  Por que: busca alta em compras internacionais; é uma tabela com conversão.
+  Esforço: BAIXO.
+
+BLOCO "PARA PROGRAMADORES"
+  O que faz: Base64 e URL encode/decode, gerador de UUID, conversor de timestamp
+  Unix e formatador de JSON.
+  Por que: conversor de bases e Lei de Ohm já atraem público técnico; essas
+  páginas trazem links e visitas de qualidade, com pouco código.
+  Esforço: BAIXO.
+
+--------------------------------------------------------------------------------
+4.7 MELHORIAS QUE RENDEM MAIS QUE PÁGINA NOVA
+--------------------------------------------------------------------------------
+1) MODO DIÁRIO nos jogos de lógica (sudoku, campo minado, mahjong, quebra-cabeça,
+   caça-palavras). O Desvenda já tem "palavra do dia". Com o mesmo tabuleiro para
+   todos no dia, o site passa a ser buscado como "sudoku do dia" e cria hábito de
+   voltar — o que vale mais que uma visita única de busca.
+   FEITO: sudoku, campo minado, caça-palavras, quebra-cabeça e mahjong já têm o
+   botão "Jogo do dia". O módulo compartilhado assets/jogos/diario.js tira a
+   semente da data (mesma data, mesmo tabuleiro)
+   e guarda em efs-diario-<jogo> o dia já completado.
+   O soletra também entrou. E existe o hub /desafios/ (páginas/desafios.html,
+   assets/jogos/desafios.js e .css): lista os seis jogos do dia, mostra o selo
+   "feito hoje" por Diario.concluido(slug), o placar "x de 6" e o botão
+   "Recomeçar o dia" (Diario.limpar). Teste em _fonte/testes/desafios.test.js.
+2) COMPARTILHAR O RESULTADO em texto (estilo Wordle): "Sudoku fácil em 4min12" ou
+   os quadradinhos coloridos do Desvenda, com botão de copiar. É divulgação de
+   graça, sem servidor.
+   FEITO no hub /desafios/ ("Copiar resultado": data, máscara ✅⬜ e placar "x de 6")
+   e no Soletra (palavras, pontos e pangramas). Módulo compartilhado em
+   assets/jogos/compartilhar.js (dataCurta, marcas, resumo, copiar com plano B e
+   ligar(botao, obterTexto, { rotulo, aviso })), testado em
+   _fonte/testes/compartilhar.test.js. Para levar aos outros jogos: incluir o script
+   na página, criar o botão e ligar com Compartilhar.ligar(...).
+3) TEXTO MAIS LONGO EM CADA PÁGINA ("como jogar", estratégia, curiosidades,
+   perguntas frequentes). Além de melhorar a busca, conteúdo próprio reduz o risco
+   de o AdSense classificar o site como "conteúdo de baixo valor".
+4) LINKS ENTRE PÁGINAS do mesmo assunto no fim de cada jogo/ferramenta (por
+   exemplo, juros simples → juros compostos → aportes → financiamento). Aumenta
+   páginas por visita e ajuda o Google a entender o conjunto.
+5) PÁGINA DE ESTATÍSTICAS no navegador: partidas, vitórias, melhor tempo e
+   sequência de dias jogando. Sem servidor e sem dado pessoal.
+6) INSTALAR COMO APP (PWA): manifest + service worker para abrir sem internet e
+   com ícone na tela inicial. É o caminho natural para quem joga no celular e não
+   quer passar pela loja. Cuidado com o cache: os arquivos já usam ?v= por hash,
+   então o service worker precisa respeitar essa versão.
+7) PÁGINAS EM OUTROS IDIOMAS: vários apps já funcionam em nove idiomas. Criar
+   /en/ e /es/ para as ferramentas mais buscadas amplia o alcance sem depender de
+   novo app. Esforço alto, mas é a maior fonte de tráfego nova fora do Brasil.
+8) UMA PÁGINA PARA CADA APP SEM VERSÃO WEB (Tower Defence War e Lance Certo).
+   Hoje quem procura esses apps pelo nome não encontra nada no site; uma página
+   simples com descrição, imagens e botão da loja já resolve.
+
+--------------------------------------------------------------------------------
+4.8 SUGESTÃO DE ORDEM DE ENTREGA (se quiser começar já)
+--------------------------------------------------------------------------------
+Onda 1 (rápida, tudo com esforço baixo):
+  Jogos: Lig 4, Cobrinha, Jogo da Forca, Paciência Relâmpago.
+  Ferramentas: Gerador de senhas, Sorteador, Regra de três, Porcentagem,
+  Preço por quilo, Consumo de energia.
+
+Onda 2 (o cluster que mais deve render visita):
+  Ferramentas: salário líquido → férias e 13º → rescisão (três páginas ligadas
+  entre si) e churrasco.
+  Jogos: Damas, Stop/Adedanha, Quiz do Brasil.
+
+Onda 3 (aprofundar):
+  Pife/Tranca, Resta Um, Torre de Hanói, Sokoban, variações de memória,
+  modo diário nos jogos de lógica, Pomodoro/HIIT, horas, MMC/frações, obra.
+
+Onda 4 (projetos maiores):
+  Nonograma, xadrez contra o computador, PWA offline, páginas em inglês/espanhol.
+
+================================================================================
+PARTE 5 — CHECKLIST PARA COLOCAR UM JOGO OU FERRAMENTA NO AR
+================================================================================
+1.  Criar _fonte/paginas/<jogos|ferramentas>/<nome>.html com o comentário de
+    metadados: titulo, descricao e, se precisar, estilos, scripts e app.
+2.  Escrever assets/<secao>/<nome>-logica.js (só as regras e os cálculos, sem
+    tocar na tela) e assets/<secao>/<nome>.js (tela, eventos, localStorage).
+    O teste importa o arquivo de lógica, então ele precisa exportar o que o
+    teste usa.
+3.  Criar assets/<secao>/<nome>.css usando as variáveis de cor do site.css
+    (var(--primary), var(--text)...) para funcionar no tema claro e no escuro.
+4.  Escrever _fonte/testes/<nome>.test.js e rodar:
+    node _fonte/testes/<nome>.test.js
+5.  Gerar a imagem do cartão em images/<secao>/<nome>.webp com
+    _fonte/ferramentas-dados/imagens_paginas.py.
+6.  Acrescentar o cartão em _fonte/paginas/<secao>/index.html, na categoria
+    certa, com o texto curto e os botões "Usar online"/"Jogar online" e
+    "Baixar no Google Play" (quando existir app).
+7.  Se o item tiver app: bloco aside.cta-app na página, botão na página inicial
+    (a.momento-loja e catálogo "Todos os aplicativos") e conferir se a política
+    de privacidade cobre os dados que o app coleta.
+8.  Anúncio: <div class="anuncio" data-bloco="meio" hidden> e, nas ferramentas,
+    depois dele o <aside class="indicacao" data-indicacao="<nome>" hidden>.
+    Sempre com texto entre o anúncio e os botões/campos.
+9.  Rodar python _fonte/gerar.py (gera as páginas, o sitemap e as versões ?v=).
+10. Testar em localhost:8123 no computador, em 360px de largura e nos dois temas.
+11. Escrever o texto longo da página (como jogar/usar, exemplos, perguntas
+    frequentes) — é o que sustenta a visita e o anúncio.
+12. Commit em português e push para main; em cerca de 1 minuto está no ar.
+
+--------------------------------------------------------------------------------
+O QUE EVITAR
+--------------------------------------------------------------------------------
+- Jogos de azar com prêmio, roleta de dinheiro, "cassino" ou qualquer promessa de
+  ganho: risco de bloqueio no AdSense e de reprovação no Google Play. O gerador
+  de loteria já está no limite seguro (só sorteia números e avisa que não garante
+  prêmio) — mantenha esse tom.
+- Copiar regras, arte, sons ou listas de terceiros sem licença. O que já está no
+  repositório tem origem registrada (lista pt-BR sob MIT, puzzles do Lichess,
+  peças em SVG); o novo material precisa da mesma atenção.
+- Depender de API paga, de cadastro ou de chave secreta. Hoje só há duas fontes
+  externas, ambas gratuitas (ViaCEP e AwesomeAPI), e todas as contas são feitas
+  no próprio navegador.
+- Dado que envelhece rápido (tabela de INSS, tarifa de energia, cotação) sem
+  mostrar na página a data de referência e a fonte.
+- Promessa de resultado em saúde e em dinheiro. O IMC já traz o aviso de que não
+  substitui o médico; as novas ferramentas de saúde e trabalho precisam do mesmo
+  cuidado.
+- Editar à mão o que é gerado (ferramentas/, jogos/, sobre/, contato/, privacidade/
+  e sitemap.xml) — o gerador apaga a mudança na próxima execução.
+
+================================================================================
+FIM
+================================================================================

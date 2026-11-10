@@ -1,8 +1,8 @@
 <!--
 titulo: Caça-Palavras Online Grátis: Jogue no Navegador — EFS Aplicativos
-descricao: Jogue caça-palavras online e grátis, no computador ou no celular. 16 temas, três níveis com palavras na horizontal, na vertical, na diagonal e de trás para frente, dica e recordes.
+descricao: Jogue caça-palavras online e grátis, no computador ou no celular. 16 temas, três níveis com palavras na horizontal, na vertical, na diagonal e de trás para frente, dica e recordes. Tem também o jogo do dia, o mesmo tabuleiro para todos.
 estilos: /assets/jogos/caca-palavras.css
-scripts: /assets/jogos/caca-palavras-logica.js /assets/jogos/sons.js /assets/jogos/caca-palavras.js
+scripts: /assets/jogos/caca-palavras-logica.js /assets/jogos/diario.js /assets/jogos/sons.js /assets/jogos/caca-palavras.js
 app: Caça-Palavras | GameApplication
 -->
 <header class="page-head">
@@ -53,7 +53,8 @@ app: Caça-Palavras | GameApplication
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21h6v-1.5H9Zm3-19a7 7 0 0 0-4 12.7V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.3A7 7 0 0 0 12 2Z" /></svg>
           Dica
         </button>
-        <button type="button" class="button secondary" id="cz-novo">Novo jogo</button>
+        <button type="button" class="button secondary" id="cz-diario">Jogo do dia</button>
+      <button type="button" class="button secondary" id="cz-novo">Novo jogo</button>
         <button type="button" class="som-botao" id="cz-som"></button>
       </div>
 
@@ -89,6 +90,12 @@ app: Caça-Palavras | GameApplication
 <aside class="indicacao" data-indicacao="caca-palavras" hidden></aside>
 
 <article class="texto">
+  <h2>Jogo do dia: o mesmo tabuleiro para todos</h2>
+  <p>
+    O botão <strong>Jogo do dia</strong> monta a partida de hoje a partir da data: todo mundo que
+    visitar o site nesta data recebe o mesmo grade de palavras. Serve para comparar o resultado com amigos, sem
+    servidor e sem cadastro. Ao terminar, o site guarda a marca no seu navegador; amanhã há outro.
+  </p>
   <h2>Como jogar caça-palavras</h2>
   <p>
     A grade esconde as palavras da lista, todas do mesmo tema, no meio de letras sorteadas. Cada

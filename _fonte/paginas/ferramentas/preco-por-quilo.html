@@ -1,0 +1,154 @@
+<!--
+titulo: Preço por Quilo: Compare Embalagens e Economize no Mercado — EFS Aplicativos
+descricao: Descubra qual embalagem sai mais barata: informe preço e quantidade (grama, quilo, mililitro, litro ou unidade) e compare o custo por quilo, por litro ou por unidade na hora.
+scripts: /assets/numeros.js /assets/ferramentas/preco-por-quilo-logica.js /assets/ferramentas/preco-por-quilo.js
+app: Preço por quilo | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Preço por quilo</li>
+  </ol>
+  <h1>Preço por quilo, litro e unidade</h1>
+  <p>
+    Duas embalagens, tamanhos diferentes: informe preço e quantidade de cada uma e veja qual tem o
+    menor custo por quilo, por litro ou por unidade — com a economia em reais e em porcentagem.
+  </p>
+</header>
+
+<section class="tool" aria-label="Comparador de preço por quilo">
+  <div class="tool-grid">
+    <form class="fields" id="preco-por-quilo" novalidate>
+      <fieldset class="field">
+        <legend>Embalagem A</legend>
+        <div class="field">
+          <label for="nome-a">Nome (opcional)</label>
+          <input class="input" id="nome-a" autocomplete="off" placeholder="Ex.: Pacote 500 g" />
+        </div>
+        <div class="field">
+          <label for="preco-a">Preço (R$)</label>
+          <input class="input" id="preco-a" inputmode="decimal" autocomplete="off" placeholder="Ex.: 18,90" />
+        </div>
+        <div class="field">
+          <label for="quantidade-a">Quantidade</label>
+          <div class="input-row">
+            <input class="input" id="quantidade-a" inputmode="decimal" autocomplete="off" placeholder="Ex.: 500" />
+            <select class="select" id="unidade-a" aria-label="Unidade da embalagem A">
+              <option value="g">grama</option>
+              <option value="kg" selected>quilo</option>
+              <option value="mg">miligrama</option>
+              <option value="ml">mililitro</option>
+              <option value="l">litro</option>
+              <option value="un">unidade</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset class="field">
+        <legend>Embalagem B</legend>
+        <div class="field">
+          <label for="nome-b">Nome (opcional)</label>
+          <input class="input" id="nome-b" autocomplete="off" placeholder="Ex.: Pacote 1 kg" />
+        </div>
+        <div class="field">
+          <label for="preco-b">Preço (R$)</label>
+          <input class="input" id="preco-b" inputmode="decimal" autocomplete="off" placeholder="Ex.: 34,90" />
+        </div>
+        <div class="field">
+          <label for="quantidade-b">Quantidade</label>
+          <div class="input-row">
+            <input class="input" id="quantidade-b" inputmode="decimal" autocomplete="off" placeholder="Ex.: 1" />
+            <select class="select" id="unidade-b" aria-label="Unidade da embalagem B">
+              <option value="g">grama</option>
+              <option value="kg" selected>quilo</option>
+              <option value="mg">miligrama</option>
+              <option value="ml">mililitro</option>
+              <option value="l">litro</option>
+              <option value="un">unidade</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Preencha o preço e a quantidade das duas embalagens.</p>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<aside class="indicacao" data-indicacao="preco-por-quilo" hidden></aside>
+
+<article class="texto">
+  <h2>Como preencher: um exemplo passo a passo</h2>
+  <p>
+    <strong>Problema:</strong> "O pacote de café de 500 g custa R$ 18,90 e o de 1 kg custa
+    R$ 34,90. Qual compensa?"
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th scope="col">Campo</th><th scope="col">Embalagem A</th><th scope="col">Embalagem B</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Nome</td><td>Pacote 500 g</td><td>Pacote 1 kg</td></tr>
+        <tr><td>Preço (R$)</td><td>18,90</td><td>34,90</td></tr>
+        <tr><td>Quantidade e unidade</td><td>500 <strong>grama</strong></td><td>1 <strong>quilo</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    O resultado mostra <strong>R$ 37,80 por quilo</strong> no pacote de 500 g e
+    <strong>R$ 34,90 por quilo</strong> no de 1 kg: o pacote maior sai <strong>7,7% mais barato</strong>,
+    uma economia de R$ 2,90 por quilo.
+  </p>
+  <p>
+    <button type="button" class="button secondary" data-exemplo="cafe">Preencher com este exemplo</button>
+  </p>
+
+  <h2>Por que comparar pelo preço por quilo</h2>
+  <p>
+    O preço na etiqueta não diz qual é mais barato: o que conta é quanto custa cada quilo, litro ou
+    unidade. A conta é simples — preço dividido pela quantidade — mas as embalagens vêm em gramas,
+    mililitros e unidades diferentes, e é aí que a comparação embaralha.
+  </p>
+  <ul>
+    <li><strong>Peso:</strong> 1 quilo = 1.000 gramas = 1.000.000 miligramas.</li>
+    <li><strong>Volume:</strong> 1 litro = 1.000 mililitros.</li>
+    <li><strong>Unidade:</strong> para sabonetes, ovos, latas — o custo por peça.</li>
+  </ul>
+  <p>
+    A calculadora normaliza tudo antes de comparar e recusa comparar peso com volume: um litro de
+    leite não é um quilo de arroz, e misturar as grandezas daria uma conclusão falsa.
+  </p>
+
+  <h2>Quando o preço por quilo engana</h2>
+  <p>
+    Nem sempre o menor custo por quilo é a melhor compra. Vale considerar o que você vai consumir
+    antes de estragar, se a embalagem grande cabe no armário, se o produto é o mesmo (marca,
+    qualidade, validade) e se há promoção com limite por cliente. Para perecíveis, o pacote pequeno
+    muitas vezes sai mais barato no fim do mês, mesmo custando mais por quilo.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Por que a comparação de peso com volume é recusada?</h3>
+  <p>
+    Porque são grandezas diferentes: comparar R$/kg com R$/L só faria sentido se você soubesse a
+    densidade do produto. Escolha a mesma grandeza nas duas embalagens.
+  </p>
+  <h3>Serve para comparar três ou mais produtos?</h3>
+  <p>
+    Sim, em duas rodadas: compare A com B e depois a vencedora com a terceira embalagem. A lógica já
+    aceita várias embalagens, e a tela mostra duas por vez para caber no celular.
+  </p>
+  <h3>O resultado sai em reais por quilo mesmo com gramas?</h3>
+  <p>
+    Sai. Gramas e miligramas são convertidas para quilo antes da conta; mililitros, para litro. Por
+    isso a resposta sempre aparece em R$/kg, R$/L ou R$/unidade.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+

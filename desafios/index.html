@@ -1,0 +1,266 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/desafios.html. Edite lá. -->
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fff7f0" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        // O laranja (claro) é o padrão; o escuro vale para quem ligou o modo noturno
+        if (theme === "dark") {
+          root.setAttribute("data-theme", "dark");
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#0f1115");
+        }
+      })();
+    </script>
+    <title>Desafios do Dia: Seis Jogos para Fazer Todo Dia — EFS Aplicativos</title>
+    <meta name="description" content="Os jogos do dia da EFS Aplicativos numa página só: sudoku, campo minado, caça-palavras, quebra-cabeça, mahjong e soletra. O mesmo tabuleiro para todos, e o seu progresso do dia fica salvo no navegador." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/desafios/" />
+    <meta property="og:title" content="Desafios do Dia: Seis Jogos para Fazer Todo Dia — EFS Aplicativos" />
+    <meta property="og:description" content="Os jogos do dia da EFS Aplicativos numa página só: sudoku, campo minado, caça-palavras, quebra-cabeça, mahjong e soletra. O mesmo tabuleiro para todos, e o seu progresso do dia fica salvo no navegador." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/desafios/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600..800&amp;family=Nunito:wght@400..800&amp;display=swap"
+    />
+    <link rel="stylesheet" href="/site.css?v=dfdb216d18d2" />
+    <link rel="stylesheet" href="/assets/web.css?v=f4683d85c12d" />
+    <link rel="stylesheet" href="/assets/jogos/desafios.css?v=3fd9e60e7235" />
+    <script src="/assets/estatisticas.js?v=da0036a12f2f" async></script>
+    <script src="/site.js?v=926b8efae759" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/indicacoes.js?v=7f30da75c802" defer></script>
+    <script src="/assets/jogos/diario.js?v=885561b3c427" defer></script>
+    <script src="/assets/jogos/compartilhar.js?v=251baa06ecb1" defer></script>
+    <script src="/assets/jogos/desafios.js?v=fb4002ebf4c5" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Desafios do Dia", "url": "https://efsaplicativos.com.br/desafios/", "description": "Os jogos do dia da EFS Aplicativos numa página só: sudoku, campo minado, caça-palavras, quebra-cabeça, mahjong e soletra. O mesmo tabuleiro para todos, e o seu progresso do dia fica salvo no navegador.", "applicationCategory": "WebPage", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Modo noturno"
+            title="Modo noturno"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Desafios do dia</li>
+  </ol>
+  <h1>Desafios do dia</h1>
+  <p>
+    Seis jogos, um desafio de cada por dia: o mesmo tabuleiro para todo mundo que visitar o site
+    nesta data. Faça o que quiser, na ordem que quiser, e o progresso do dia fica guardado no seu
+    navegador.
+  </p>
+</header>
+
+<section class="desafios" aria-label="Jogos do dia">
+  <div class="ds-topo">
+    <p class="ds-data" id="ds-data"></p>
+    <p class="ds-progresso" id="ds-progresso" role="status"></p>
+    <button type="button" class="button secondary" id="ds-limpar" hidden>Recomeçar o dia</button>
+    <button type="button" class="button secondary" id="ds-compartilhar" hidden>Copiar resultado</button>
+  </div>
+
+  <p class="ds-aviso" id="ds-aviso" role="status"></p>
+
+  <ul class="ds-lista" id="ds-lista">
+    <li class="ds-item" data-jogo="sudoku">
+      <div class="ds-texto">
+        <h2><a href="/jogos/sudoku/">Sudoku do dia</a></h2>
+        <p>Grade 9 × 9 com solução única, notas, dicas e desfazer.</p>
+      </div>
+      <span class="ds-selo" hidden>Feito hoje</span>
+      <a class="ds-jogar" href="/jogos/sudoku/">Jogar</a>
+    </li>
+    <li class="ds-item" data-jogo="campo-minado">
+      <div class="ds-texto">
+        <h2><a href="/jogos/campo-minado/">Campo Minado do dia</a></h2>
+        <p>Minas sempre na mesma posição para todos, com primeira jogada segura.</p>
+      </div>
+      <span class="ds-selo" hidden>Feito hoje</span>
+      <a class="ds-jogar" href="/jogos/campo-minado/">Jogar</a>
+    </li>
+    <li class="ds-item" data-jogo="caca-palavras">
+      <div class="ds-texto">
+        <h2><a href="/jogos/caca-palavras/">Caça-palavras do dia</a></h2>
+        <p>A mesma grade e as mesmas palavras escondidas, com dica.</p>
+      </div>
+      <span class="ds-selo" hidden>Feito hoje</span>
+      <a class="ds-jogar" href="/jogos/caca-palavras/">Jogar</a>
+    </li>
+    <li class="ds-item" data-jogo="quebra-cabeca">
+      <div class="ds-texto">
+        <h2><a href="/jogos/quebra-cabeca/">Quebra-cabeça do dia</a></h2>
+        <p>As peças no mesmo embaralhamento para todos os visitantes.</p>
+      </div>
+      <span class="ds-selo" hidden>Feito hoje</span>
+      <a class="ds-jogar" href="/jogos/quebra-cabeca/">Jogar</a>
+    </li>
+    <li class="ds-item" data-jogo="mahjong">
+      <div class="ds-texto">
+        <h2><a href="/jogos/mahjong/">Mahjong do dia</a></h2>
+        <p>A mesma distribuição de peças, sempre com solução garantida.</p>
+      </div>
+      <span class="ds-selo" hidden>Feito hoje</span>
+      <a class="ds-jogar" href="/jogos/mahjong/">Jogar</a>
+    </li>
+    <li class="ds-item" data-jogo="soletra">
+      <div class="ds-texto">
+        <h2><a href="/jogos/soletra/">Soletra do dia</a></h2>
+        <p>Sete letras, uma obrigatória, e as mesmas palavras possíveis para todos.</p>
+      </div>
+      <span class="ds-selo" hidden>Feito hoje</span>
+      <a class="ds-jogar" href="/jogos/soletra/">Jogar</a>
+    </li>
+  </ul>
+
+  <p class="ds-dica" id="ds-dica">
+    Em cada jogo, o botão <strong>Jogo do dia</strong> abre o desafio de hoje. Depois de terminar, o
+    site marca o dia e esta página passa a mostrar o selo.
+  </p>
+</section>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+
+<aside class="indicacao" data-indicacao="desafios" hidden></aside>
+
+<article class="texto">
+  <h2>Como funcionam os desafios do dia</h2>
+  <p>
+    Cada jogo sorteia o tabuleiro a partir da <strong>data</strong>, não do acaso: a mesma semente
+    gera o mesmo resultado, então todo mundo que abrir o site neste dia recebe exatamente a mesma
+    grade de sudoku, o mesmo campo minado, a mesma grade de caça-palavras, o mesmo embaralhamento do
+    quebra-cabeça, a mesma distribuição do mahjong e as mesmas sete letras do soletra.
+  </p>
+  <p>
+    Não há servidor nem cadastro: a data vira um número, esse número alimenta o sorteio de cada jogo e
+    o que fica guardado no seu navegador é só uma marca por jogo — "feito hoje". Amanhã a data muda e
+    tudo é novo.
+  </p>
+
+  <h2>Por que jogar o do dia</h2>
+  <ul>
+    <li>Serve para comparar com amigos: todos enfrentam o mesmo tabuleiro.</li>
+    <li>É um compromisso curto: um desafio por dia, no seu tempo.</li>
+    <li>O nível e o tema são escolhidos por você — muda a dificuldade, não o tabuleiro.</li>
+    <li>Nada de cadastro, e-mail ou senha: o progresso é só seu, no seu aparelho.</li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Perdi o selo, posso jogar de novo?</h3>
+  <p>
+    Pode. O botão <strong>Recomeçar o dia</strong> apaga as marcas e deixa você fazer os seis outra
+    vez — os tabuleiros continuam os mesmos até a meia-noite.
+  </p>
+  <h3>O progresso do dia fica salvo se eu fechar o navegador?</h3>
+  <p>
+    Sim, fica no armazenamento local do navegador. Se você limpar os dados do site, as marcas somem
+    (e os jogos continuam funcionando normalmente).
+  </p>
+  <h3>Os jogos são os mesmos do resto do site?</h3>
+  <p>
+    São os mesmos jogos completos — a página só reúne o botão "Jogo do dia" de cada um, com o selo de
+    concluído. O <a href="/jogos/desvenda/">Desvenda</a> também tem a palavra do dia, dentro da
+    própria página.
+  </p>
+</article>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

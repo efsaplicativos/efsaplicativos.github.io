@@ -1,8 +1,8 @@
 <!--
 titulo: Campo Minado Online Grátis: Jogue no Navegador — EFS Aplicativos
-descricao: Jogue Campo Minado online e grátis, no computador ou no celular. Três níveis, primeira jogada segura, bandeiras, cronômetro e recordes salvos no navegador.
+descricao: Jogue Campo Minado online e grátis, no computador ou no celular. Três níveis, primeira jogada segura, bandeiras, cronômetro e recordes salvos no navegador. Tem também o jogo do dia, o mesmo tabuleiro para todos.
 estilos: /assets/jogos/campo-minado.css
-scripts: /assets/jogos/campo-minado-logica.js /assets/jogos/sons.js /assets/jogos/campo-minado.js
+scripts: /assets/jogos/campo-minado-logica.js /assets/jogos/diario.js /assets/jogos/sons.js /assets/jogos/campo-minado.js
 app: Campo Minado | GameApplication
 -->
 <header class="page-head">
@@ -38,6 +38,7 @@ app: Campo Minado | GameApplication
     </div>
     <div class="cm-botoes">
       <button type="button" class="som-botao" id="cm-som"></button>
+      <button type="button" class="button secondary" id="cm-diario">Jogo do dia</button>
       <button type="button" class="button secondary" id="cm-novo">Novo jogo</button>
     </div>
   </div>
@@ -76,6 +77,12 @@ app: Campo Minado | GameApplication
 <aside class="indicacao" data-indicacao="campo-minado" hidden></aside>
 
 <article class="texto">
+  <h2>Jogo do dia: o mesmo tabuleiro para todos</h2>
+  <p>
+    O botão <strong>Jogo do dia</strong> monta a partida de hoje a partir da data: todo mundo que
+    visitar o site nesta data recebe o mesmo campo de minas. Serve para comparar o resultado com amigos, sem
+    servidor e sem cadastro. Ao terminar, o site guarda a marca no seu navegador; amanhã há outro.
+  </p>
   <h2>Como jogar Campo Minado</h2>
   <p>
     O tabuleiro esconde minas em algumas casas. Ao abrir uma casa segura, aparece um número de 1 a

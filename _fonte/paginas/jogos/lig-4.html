@@ -1,0 +1,147 @@
+<!--
+titulo: Lig 4 Online Grátis: Quatro em Linha contra o Computador — EFS Aplicativos
+descricao: Jogue Lig 4 (quatro em linha) online e grátis: solte as peças nas colunas, alinhe quatro da mesma cor e vença o computador em três níveis ou um amigo no mesmo aparelho. A partida fica salva.
+estilos: /assets/jogos/lig-4.css
+scripts: /assets/jogos/lig-4-logica.js /assets/jogos/sons.js /assets/jogos/lig-4.js
+app: Lig 4 | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Lig 4</li>
+  </ol>
+  <h1>Lig 4 online</h1>
+  <p>
+    Solte as peças nas colunas e alinhe quatro da mesma cor antes do adversário. Jogue contra o
+    computador em três níveis ou com outra pessoa no mesmo aparelho, no computador ou no celular.
+  </p>
+</header>
+
+<section class="lig4" aria-label="Lig 4">
+  <div class="segmented l4-modos" role="group" aria-label="Modo de jogo">
+    <button type="button" class="filter active" data-modo="computador" aria-pressed="true">Contra o computador</button>
+    <button type="button" class="filter" data-modo="dois" aria-pressed="false">2 jogadores</button>
+  </div>
+
+  <div class="l4-niveis" id="l4-niveis">
+    <span class="l4-rotulo" id="l4-niveis-rotulo">Dificuldade</span>
+    <div class="segmented" role="group" aria-labelledby="l4-niveis-rotulo">
+      <button type="button" class="filter" data-nivel="facil" aria-pressed="false">Fácil</button>
+      <button type="button" class="filter active" data-nivel="medio" aria-pressed="true">Médio</button>
+      <button type="button" class="filter" data-nivel="dificil" aria-pressed="false">Difícil</button>
+    </div>
+  </div>
+
+  <p class="l4-mensagem" id="l4-mensagem" aria-live="polite"></p>
+
+  <div class="l4-tabuleiro">
+    <div class="l4-colunas" id="l4-colunas" role="group" aria-label="Escolha a coluna" aria-describedby="l4-ajuda"></div>
+    <div class="l4-grade" id="l4-grade" aria-hidden="true"></div>
+  </div>
+
+  <div class="l4-botoes">
+    <button type="button" class="button" id="l4-nova">Reiniciar</button>
+    <button type="button" class="button secondary" id="l4-desfazer">Desfazer</button>
+    <button type="button" class="som-botao" id="l4-som"></button>
+  </div>
+
+  <p class="l4-ajuda" id="l4-ajuda">
+    Clique ou toque no botão de uma coluna para soltar a peça. No teclado, use as setas para
+    escolher a coluna e o Enter para jogar.
+  </p>
+
+  <div class="l4-cartao" id="l4-placar">
+    <div class="l4-cartao-topo">
+      <h2>Placar</h2>
+      <button type="button" class="l4-link" id="l4-zerar">Zerar placar</button>
+    </div>
+    <div class="l4-numeros">
+      <div class="l4-numero l4-cor-v"><strong id="l4-placar-v">0</strong><span>Vermelho</span></div>
+      <div class="l4-numero l4-cor-empate"><strong id="l4-placar-empates">0</strong><span>Empates</span></div>
+      <div class="l4-numero l4-cor-a"><strong id="l4-placar-a">0</strong><span>Amarelo</span></div>
+    </div>
+  </div>
+
+  <div class="l4-cartao" id="l4-desempenho" hidden>
+    <div class="l4-cartao-topo">
+      <h2>Seu desempenho no nível <span id="l4-desempenho-nivel">Médio</span></h2>
+    </div>
+    <div class="l4-numeros">
+      <div class="l4-numero l4-cor-vitoria"><strong id="l4-vitorias">0</strong><span>Vitórias</span></div>
+      <div class="l4-numero l4-cor-empate"><strong id="l4-empates">0</strong><span>Empates</span></div>
+      <div class="l4-numero l4-cor-derrota"><strong id="l4-derrotas">0</strong><span>Derrotas</span></div>
+    </div>
+    <details class="l4-historico" id="l4-historico">
+      <summary>Histórico de partidas (<span id="l4-historico-total">0 partidas</span>)</summary>
+      <p id="l4-historico-vazio">Nenhuma partida contra o computador ainda.</p>
+      <ol id="l4-historico-lista" hidden></ol>
+      <button type="button" class="l4-link" id="l4-limpar" hidden>Limpar histórico</button>
+    </details>
+  </div>
+</section>
+
+<aside class="indicacao" data-indicacao="lig-4" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar Lig 4</h2>
+  <p>
+    O tabuleiro tem sete colunas e seis linhas, e as peças caem até o fundo. Na sua vez, escolha
+    uma coluna e a peça desce até a primeira casa livre. Vence quem alinhar quatro peças da mesma
+    cor na horizontal, na vertical ou na diagonal. Se as 42 casas encherem sem ninguém alinhar
+    quatro, a partida empata.
+  </p>
+  <p>
+    Aqui o vermelho começa. Contra o computador, você joga sempre com o vermelho; no modo de dois
+    jogadores, as pessoas se alternam entre vermelho e amarelo.
+  </p>
+
+  <h2>Modos e níveis</h2>
+  <ul>
+    <li><strong>Contra o computador:</strong> você começa e o computador responde com o amarelo, meio segundo depois.</li>
+    <li><strong>Fácil:</strong> o computador joga numa coluna livre qualquer.</li>
+    <li><strong>Médio:</strong> ele olha duas jogadas à frente e, de vez em quando, joga ao acaso para não parecer previsível.</li>
+    <li><strong>Difícil:</strong> ele olha cinco jogadas à frente, com uma busca que descarta os caminhos ruins (minimax com poda alfa-beta), e prefere o miolo do tabuleiro.</li>
+    <li><strong>2 jogadores:</strong> duas pessoas no mesmo aparelho, com placar de vermelho, amarelo e empates que fica salvo.</li>
+  </ul>
+
+  <div class="anuncio" data-bloco="meio" hidden></div>
+
+  <h2>Dicas de estratégia</h2>
+  <ol>
+    <li><strong>Dispute o miolo.</strong> A coluna do centro participa de muito mais sequências de quatro do que as das pontas. Quem domina o centro tem mais caminhos para vencer.</li>
+    <li><strong>Não deixe o adversário com três em linha e a ponta livre.</strong> Se ele já tem três peças seguidas, a casa do lado é a jogada mais urgente da partida.</li>
+    <li><strong>Crie duas ameaças de uma vez.</strong> Uma jogada que abre duas possibilidades de quatro ao mesmo tempo não pode ser bloqueada nas duas. É assim que se ganha de quem está atento.</li>
+    <li><strong>Olhe as diagonais.</strong> Quase todo mundo vigia a horizontal e esquece a diagonal, que é por onde as quatro costumam aparecer.</li>
+    <li><strong>Cuide da altura das colunas.</strong> Empilhar peças numa coluna sem plano entrega espaço para o adversário crescer por cima. Prefira colunas com alturas diferentes.</li>
+    <li><strong>Use o Desfazer.</strong> Antes de a partida terminar, ele volta a última jogada (a sua e a do computador), para você testar outra ideia.</li>
+  </ol>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Dá para ganhar do computador no Difícil?</h3>
+  <p>
+    Dá. O Difícil calcula cinco jogadas à frente, o que é bastante para uma partida casual, mas ele
+    não é um solucionador perfeito como os programas de análise. Quem cria duas ameaças ao mesmo
+    tempo costuma vencer.
+  </p>
+  <h3>A partida e o placar ficam salvos?</h3>
+  <p>
+    Ficam, no seu navegador. A partida em andamento, o modo, o nível, o placar do modo de dois
+    jogadores e as últimas 200 partidas contra o computador continuam lá quando você volta. Nada é
+    enviado para nenhum servidor.
+  </p>
+  <h3>Por que a peça cai sempre até o fundo?</h3>
+  <p>
+    Porque no Lig 4 a gravidade faz parte da regra: a peça só pode ocupar a casa livre mais baixa da
+    coluna escolhida. É isso que faz o jogo ser de estratégia, e não de simples alinhamento.
+  </p>
+  <h3>Tem som?</h3>
+  <p>
+    Tem: a peça caindo, o fim da partida e o desfazer, todos criados na hora pelo navegador, sem
+    baixar arquivo nenhum. O botão <strong>Som</strong>, embaixo do tabuleiro, liga e desliga os
+    efeitos, e a escolha fica guardada neste aparelho.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+

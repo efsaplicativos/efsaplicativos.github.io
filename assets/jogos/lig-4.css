@@ -1,0 +1,381 @@
+/* ==========================================================================
+   Lig 4 — tabuleiro, colunas, mensagem e cartões de placar
+   ========================================================================== */
+
+.lig4 {
+  --l4-tabuleiro: #1d3a8f;
+  --l4-tabuleiro-borda: #12275e;
+  --l4-vermelho: #e5484d;
+  --l4-vermelho-fundo: #8f1017;
+  --l4-amarelo: #f7c325;
+  --l4-amarelo-fundo: #a37500;
+  --l4-vitoria: #2e7d32;
+  --l4-derrota: #c62828;
+  --l4-empate: #5f6470;
+  max-width: 480px;
+  margin: 0 auto;
+}
+:root[data-theme="dark"] .lig4 {
+  --l4-tabuleiro: #16255c;
+  --l4-tabuleiro-borda: #0b1436;
+  --l4-vermelho: #f2565b;
+  --l4-vermelho-fundo: #7d0d13;
+  --l4-amarelo: #ffd34d;
+  --l4-amarelo-fundo: #8a6200;
+  --l4-vitoria: #81c784;
+  --l4-derrota: #ef9a9a;
+  --l4-empate: #b8b2a6;
+}
+
+.lig4 .l4-modos {
+  justify-content: center;
+}
+.l4-niveis {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.l4-niveis[hidden] {
+  display: none;
+}
+.l4-rotulo {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--muted);
+}
+
+/* ---------- Mensagem ---------- */
+.l4-mensagem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 56px;
+  margin: 16px 0;
+  padding: 8px 16px;
+  font-size: 20px;
+  font-weight: 650;
+  text-align: center;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.l4-mensagem[data-tipo="vitoria"] {
+  color: var(--l4-vitoria);
+}
+.l4-mensagem[data-tipo="derrota"] {
+  color: var(--l4-derrota);
+}
+.l4-icone {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  font-size: 20px;
+  line-height: 1;
+}
+.l4-icone .l4-disco {
+  width: 22px;
+  height: 22px;
+}
+.l4-girando {
+  border: 3px solid var(--border-2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  animation: l4-girar 800ms linear infinite;
+}
+
+/* ---------- Tabuleiro ---------- */
+.l4-tabuleiro {
+  width: min(100%, 440px, max(260px, calc(100vh - 330px)));
+  margin: 0 auto;
+}
+@supports (height: 100svh) {
+  .l4-tabuleiro {
+    width: min(100%, 440px, max(260px, calc(100svh - 330px)));
+  }
+}
+.l4-colunas {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.l4-coluna {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  height: 34px;
+  padding: 0;
+  color: var(--primary);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.l4-coluna[data-jogador="v"] {
+  color: var(--l4-vermelho);
+}
+.l4-coluna[data-jogador="a"] {
+  color: var(--l4-amarelo-fundo);
+}
+.l4-coluna:hover:not(:disabled) {
+  background: var(--soft-1);
+  transform: translateY(2px);
+}
+.l4-coluna:disabled {
+  color: var(--muted);
+  opacity: 0.45;
+  cursor: default;
+}
+.l4-coluna:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.l4-grade {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+  gap: 6px;
+  padding: 8px;
+  background: linear-gradient(180deg, var(--l4-tabuleiro), var(--l4-tabuleiro-borda));
+  border-radius: 18px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.l4-casa {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  background: var(--surface);
+  border-radius: 50%;
+  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.18);
+}
+.l4-disco {
+  display: block;
+  width: 88%;
+  height: 88%;
+  border-radius: 50%;
+  transition: opacity 200ms ease;
+}
+.l4-disco.l4-vermelho {
+  background: radial-gradient(circle at 34% 30%, var(--l4-vermelho), var(--l4-vermelho-fundo));
+  box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.28);
+}
+.l4-disco.l4-amarelo {
+  background: radial-gradient(circle at 34% 30%, var(--l4-amarelo), var(--l4-amarelo-fundo));
+  box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.28);
+}
+.l4-disco.l4-cai {
+  animation: l4-cair 280ms cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.l4-casa.l4-vencedora .l4-disco {
+  box-shadow:
+    0 0 0 3px var(--l4-vitoria),
+    0 0 14px 2px var(--l4-vitoria);
+  animation: l4-pulsar 900ms ease-in-out infinite alternate;
+}
+.l4-casa.l4-apagada .l4-disco {
+  opacity: 0.4;
+}
+
+/* ---------- Botões ---------- */
+.l4-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 12px;
+}
+.l4-ajuda {
+  max-width: 460px;
+  margin: 0 auto 18px;
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ---------- Cartões ---------- */
+.l4-cartao {
+  max-width: 460px;
+  margin: 0 auto 16px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+}
+.l4-cartao[hidden] {
+  display: none;
+}
+.l4-cartao-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.l4-cartao-topo h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.l4-numeros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+  text-align: center;
+}
+.l4-numero strong {
+  display: block;
+  font-size: 28px;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.l4-numero span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.l4-cor-v strong {
+  color: var(--l4-vermelho);
+}
+.l4-cor-a strong {
+  color: var(--l4-amarelo-fundo);
+}
+.l4-cor-empate strong {
+  color: var(--l4-empate);
+}
+.l4-cor-vitoria strong {
+  color: var(--l4-vitoria);
+}
+.l4-cor-derrota strong {
+  color: var(--l4-derrota);
+}
+.l4-link {
+  padding: 4px 0;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--violet-2);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.l4-link:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.l4-link[hidden] {
+  display: none;
+}
+
+.l4-historico {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.l4-historico summary {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.l4-historico ol {
+  margin: 10px 0 0;
+  padding-left: 22px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.l4-historico li + li {
+  margin-top: 4px;
+}
+.l4-historico li.l4-vitoria strong {
+  color: var(--l4-vitoria);
+}
+.l4-historico li.l4-derrota strong {
+  color: var(--l4-derrota);
+}
+.l4-historico li.l4-empate strong {
+  color: var(--l4-empate);
+}
+.l4-historico p {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.l4-historico .l4-link {
+  margin-top: 8px;
+}
+
+@keyframes l4-cair {
+  from {
+    opacity: 0.35;
+    transform: translateY(-18px) scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes l4-pulsar {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.25);
+  }
+}
+@keyframes l4-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 400px) {
+  .l4-mensagem {
+    font-size: 18px;
+  }
+  .l4-grade {
+    gap: 5px;
+    padding: 6px;
+    border-radius: 16px;
+  }
+  .l4-colunas {
+    gap: 5px;
+  }
+  .l4-coluna {
+    height: 30px;
+    border-radius: 10px;
+  }
+  .l4-botoes .button {
+    padding-inline: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .l4-disco.l4-cai,
+  .l4-casa.l4-vencedora .l4-disco {
+    animation: none;
+  }
+  .l4-girando {
+    animation-duration: 2400ms;
+  }
+}

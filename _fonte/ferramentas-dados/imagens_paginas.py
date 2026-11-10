@@ -43,6 +43,27 @@ ESTILO = (
 # Chave: <seção>/<página>, igual ao endereço da página no site
 IMAGENS = {
     # Finanças
+    "ferramentas/salario-liquido": "A neat white pay slip document with a few horizontal lines and "
+    "a big blue arrow pointing down to a small shiny pile of gold coins and one banknote.",
+    "ferramentas/rescisao-trabalhista": "A closed brown cardboard box with a white document and a "
+    "blue pen resting on top of it, with a violet arrow pointing up beside the box.",
+    "ferramentas/ferias-e-decimo-terceiro": "A bright beach scene with a straw sun hat, a pair of "
+    "sunglasses and a small blue calendar page showing the number thirteen, all on a warm sand tone.",
+    "ferramentas/regra-de-tres": "A white sheet of paper with a simple drawn fraction made of two "
+    "blue rectangles and an equals sign followed by a violet question mark, with an orange pencil "
+    "resting diagonally across the corner.",
+    "ferramentas/porcentagem": "Two big rounded percentage symbols made of violet and orange circles "
+    "with small squares between them, floating above a small white price tag with a blue string.",
+    "ferramentas/preco-por-quilo": "A small silver scale with a paper coffee bag and a paper rice "
+    "bag on its plate, with a blue and orange price tag hanging beside it.",
+    "jogos/soletra": "Seven round letter tiles arranged in a hexagon around one larger warm orange "
+    "tile in the center, like a spelling game board.",
+    "jogos/forca": "A simple wooden gallows with a rope and a blue stick figure drawn on it, with "
+    "four white letter tiles below spelling a blank space, A, E and S.",
+    "ferramentas/energia-eletrica": "A white wall power outlet with a blue plug connected and a warm "
+    "orange lightning bolt floating above it, with a small violet energy meter beside.",
+    "ferramentas/churrasco": "A small round charcoal grill with glowing orange coals, three skewers "
+    "of meat and a pair of blue tongs resting beside it.",
     "ferramentas/juros-compostos": "Stacks of gold coins growing taller from left to right, each "
     "stack much taller than the last, with a smooth upward curved arrow sweeping over them.",
     "ferramentas/juros-simples": "Four stacks of gold coins in a row, each one exactly one coin "
@@ -152,6 +173,8 @@ IMAGENS = {
     "blue, violet, orange and green, with the orange one glowing brightly as if lit up.",
     "jogos/lumibricks": "Colorful glowing falling blocks, each made of four connected squares, "
     "stacking neatly at the bottom with one shiny golden block falling from the top.",
+    "jogos/cobrinha": "A cheerful bright green snake made of rounded square segments curving across "
+    "a dark green grid board, with a shiny red apple with a small leaf just ahead of its head.",
     # Jogos: estratégia e tabuleiro
     "jogos/puzzles-de-xadrez": "A white chess knight and a black chess king standing on a few squares "
     "of a chessboard, with a glowing light bulb floating above them.",
@@ -160,6 +183,11 @@ IMAGENS = {
     "jogos/jogo-da-velha": "A tic-tac-toe grid made of four raised orange bars crossing each other, "
     "floating with no base plate, with blue X-shaped pieces and violet O-shaped pieces in some of "
     "the cells.",
+    "jogos/lig-4": "A deep blue standing board with a grid of round empty holes seen slightly from "
+    "above, with four violet discs lined up horizontally in the bottom row and one warm orange disc "
+    "falling into an empty hole from the top.",
+    "jogos/damas": "A cream and violet checkered game board seen slightly from above, with one blue "
+    "round game piece wearing a small golden crown and one orange round game piece beside it.",
     # Jogos: cartas
     "jogos/paciencia": "A small fan of four playing cards slightly overlapping, each white card "
     "showing one big suit symbol in the middle: a red heart, a black spade, a red diamond and a "

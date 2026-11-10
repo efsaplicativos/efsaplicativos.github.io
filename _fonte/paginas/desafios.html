@@ -1,0 +1,132 @@
+<!--
+titulo: Desafios do Dia: Seis Jogos para Fazer Todo Dia — EFS Aplicativos
+descricao: Os jogos do dia da EFS Aplicativos numa página só: sudoku, campo minado, caça-palavras, quebra-cabeça, mahjong e soletra. O mesmo tabuleiro para todos, e o seu progresso do dia fica salvo no navegador.
+estilos: /assets/jogos/desafios.css
+scripts: /assets/jogos/diario.js /assets/jogos/compartilhar.js /assets/jogos/desafios.js
+app: Desafios do Dia | WebPage
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Desafios do dia</li>
+  </ol>
+  <h1>Desafios do dia</h1>
+  <p>
+    Seis jogos, um desafio de cada por dia: o mesmo tabuleiro para todo mundo que visitar o site
+    nesta data. Faça o que quiser, na ordem que quiser, e o progresso do dia fica guardado no seu
+    navegador.
+  </p>
+</header>
+
+<section class="desafios" aria-label="Jogos do dia">
+  <div class="ds-topo">
+    <p class="ds-data" id="ds-data"></p>
+    <p class="ds-progresso" id="ds-progresso" role="status"></p>
+    <button type="button" class="button secondary" id="ds-limpar" hidden>Recomeçar o dia</button>
+    <button type="button" class="button secondary" id="ds-compartilhar" hidden>Copiar resultado</button>
+  </div>
+
+  <p class="ds-aviso" id="ds-aviso" role="status"></p>
+
+  <ul class="ds-lista" id="ds-lista">
+    <li class="ds-item" data-jogo="sudoku">
+      <div class="ds-texto">
+        <h2><a href="/jogos/sudoku/">Sudoku do dia</a></h2>
+        <p>Grade 9 × 9 com solução única, notas, dicas e desfazer.</p>
+      </div>
+      <span class="ds-selo" hidden>Feito hoje</span>
+      <a class="ds-jogar" href="/jogos/sudoku/">Jogar</a>
+    </li>
+    <li class="ds-item" data-jogo="campo-minado">
+      <div class="ds-texto">
+        <h2><a href="/jogos/campo-minado/">Campo Minado do dia</a></h2>
+        <p>Minas sempre na mesma posição para todos, com primeira jogada segura.</p>
+      </div>
+      <span class="ds-selo" hidden>Feito hoje</span>
+      <a class="ds-jogar" href="/jogos/campo-minado/">Jogar</a>
+    </li>
+    <li class="ds-item" data-jogo="caca-palavras">
+      <div class="ds-texto">
+        <h2><a href="/jogos/caca-palavras/">Caça-palavras do dia</a></h2>
+        <p>A mesma grade e as mesmas palavras escondidas, com dica.</p>
+      </div>
+      <span class="ds-selo" hidden>Feito hoje</span>
+      <a class="ds-jogar" href="/jogos/caca-palavras/">Jogar</a>
+    </li>
+    <li class="ds-item" data-jogo="quebra-cabeca">
+      <div class="ds-texto">
+        <h2><a href="/jogos/quebra-cabeca/">Quebra-cabeça do dia</a></h2>
+        <p>As peças no mesmo embaralhamento para todos os visitantes.</p>
+      </div>
+      <span class="ds-selo" hidden>Feito hoje</span>
+      <a class="ds-jogar" href="/jogos/quebra-cabeca/">Jogar</a>
+    </li>
+    <li class="ds-item" data-jogo="mahjong">
+      <div class="ds-texto">
+        <h2><a href="/jogos/mahjong/">Mahjong do dia</a></h2>
+        <p>A mesma distribuição de peças, sempre com solução garantida.</p>
+      </div>
+      <span class="ds-selo" hidden>Feito hoje</span>
+      <a class="ds-jogar" href="/jogos/mahjong/">Jogar</a>
+    </li>
+    <li class="ds-item" data-jogo="soletra">
+      <div class="ds-texto">
+        <h2><a href="/jogos/soletra/">Soletra do dia</a></h2>
+        <p>Sete letras, uma obrigatória, e as mesmas palavras possíveis para todos.</p>
+      </div>
+      <span class="ds-selo" hidden>Feito hoje</span>
+      <a class="ds-jogar" href="/jogos/soletra/">Jogar</a>
+    </li>
+  </ul>
+
+  <p class="ds-dica" id="ds-dica">
+    Em cada jogo, o botão <strong>Jogo do dia</strong> abre o desafio de hoje. Depois de terminar, o
+    site marca o dia e esta página passa a mostrar o selo.
+  </p>
+</section>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+
+<aside class="indicacao" data-indicacao="desafios" hidden></aside>
+
+<article class="texto">
+  <h2>Como funcionam os desafios do dia</h2>
+  <p>
+    Cada jogo sorteia o tabuleiro a partir da <strong>data</strong>, não do acaso: a mesma semente
+    gera o mesmo resultado, então todo mundo que abrir o site neste dia recebe exatamente a mesma
+    grade de sudoku, o mesmo campo minado, a mesma grade de caça-palavras, o mesmo embaralhamento do
+    quebra-cabeça, a mesma distribuição do mahjong e as mesmas sete letras do soletra.
+  </p>
+  <p>
+    Não há servidor nem cadastro: a data vira um número, esse número alimenta o sorteio de cada jogo e
+    o que fica guardado no seu navegador é só uma marca por jogo — "feito hoje". Amanhã a data muda e
+    tudo é novo.
+  </p>
+
+  <h2>Por que jogar o do dia</h2>
+  <ul>
+    <li>Serve para comparar com amigos: todos enfrentam o mesmo tabuleiro.</li>
+    <li>É um compromisso curto: um desafio por dia, no seu tempo.</li>
+    <li>O nível e o tema são escolhidos por você — muda a dificuldade, não o tabuleiro.</li>
+    <li>Nada de cadastro, e-mail ou senha: o progresso é só seu, no seu aparelho.</li>
+  </ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Perdi o selo, posso jogar de novo?</h3>
+  <p>
+    Pode. O botão <strong>Recomeçar o dia</strong> apaga as marcas e deixa você fazer os seis outra
+    vez — os tabuleiros continuam os mesmos até a meia-noite.
+  </p>
+  <h3>O progresso do dia fica salvo se eu fechar o navegador?</h3>
+  <p>
+    Sim, fica no armazenamento local do navegador. Se você limpar os dados do site, as marcas somem
+    (e os jogos continuam funcionando normalmente).
+  </p>
+  <h3>Os jogos são os mesmos do resto do site?</h3>
+  <p>
+    São os mesmos jogos completos — a página só reúne o botão "Jogo do dia" de cada um, com o selo de
+    concluído. O <a href="/jogos/desvenda/">Desvenda</a> também tem a palavra do dia, dentro da
+    própria página.
+  </p>
+</article>

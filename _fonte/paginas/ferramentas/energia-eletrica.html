@@ -1,0 +1,101 @@
+<!--
+titulo: Consumo de Energia: Quanto Custa um Aparelho por Mês — EFS Aplicativos
+descricao: Calcule quantos kWh um aparelho consome e quanto custa por mês, por dia e no ano. Informe a potência em watts, as horas de uso e o preço do kWh da sua conta de luz.
+scripts: /assets/numeros.js /assets/ferramentas/energia-eletrica-logica.js /assets/ferramentas/energia-eletrica.js
+app: Consumo de energia | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Energia</li>
+  </ol>
+  <h1>Consumo de energia elétrica</h1>
+  <p>
+    Descubra quanto um aparelho gasta por mês: informe a potência em watts (está na etiqueta), as
+    horas de uso por dia e o preço do kWh da sua conta de luz.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora de consumo de energia">
+  <div class="tool-grid">
+    <form class="fields" id="energia" novalidate>
+      <div class="field">
+        <label for="potencia">Potência do aparelho (W)</label>
+        <input class="input" id="potencia" inputmode="decimal" autocomplete="off" value="5500" placeholder="Ex.: 5500" aria-describedby="potencia-dica" />
+        <span class="hint" id="potencia-dica">Está na etiqueta do aparelho ou no manual (em watts).</span>
+      </div>
+      <div class="field">
+        <label for="horas">Horas de uso por dia</label>
+        <input class="input" id="horas" inputmode="decimal" autocomplete="off" value="0,5" placeholder="Ex.: 0,5" />
+      </div>
+      <div class="field">
+        <label for="dias">Dias no período</label>
+        <input class="input" id="dias" inputmode="numeric" autocomplete="off" value="30" placeholder="Ex.: 30" />
+      </div>
+      <div class="field">
+        <label for="tarifa">Preço do kWh (R$)</label>
+        <input class="input" id="tarifa" inputmode="decimal" autocomplete="off" value="0,90" placeholder="Ex.: 0,90" aria-describedby="tarifa-dica" />
+        <span class="hint" id="tarifa-dica">Aparece na conta de luz, no campo "tarifa com impostos".</span>
+      </div>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Informe a potência, as horas por dia e o preço do kWh.</p>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<aside class="indicacao" data-indicacao="energia-eletrica" hidden></aside>
+
+<article class="texto">
+  <h2>Como preencher: um exemplo passo a passo</h2>
+  <p>
+    <strong>Problema:</strong> "Um chuveiro de 5.500 W fica ligado meia hora por dia. Quanto ele custa
+    por mês, com o kWh a R$ 0,90?"
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th scope="col">Campo</th><th scope="col">O que digitar</th><th scope="col">Por quê</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Potência (W)</td><td>5500</td><td>a etiqueta do chuveiro</td></tr>
+        <tr><td>Horas por dia</td><td>0,5</td><td>meia hora = 0,5 h</td></tr>
+        <tr><td>Dias no período</td><td>30</td><td>um mês</td></tr>
+        <tr><td>Preço do kWh</td><td>0,90</td><td>a tarifa da sua conta</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    A conta é <strong>5500 ÷ 1000 × 0,5 × 30 = 82,5 kWh</strong>, que custam
+    <strong>R$ 74,25</strong> no mês. Em um ano, a projeção passa de R$ 900,00.
+  </p>
+  <p>
+    <button type="button" class="button secondary" data-exemplo="chuveiro">Preencher com este exemplo</button>
+  </p>
+
+  <h2>Como a conta funciona</h2>
+  <p class="formula">kWh = (potência em W ÷ 1000) × horas por dia × dias</p>
+  <p>
+    A potência em watts dividida por mil dá o consumo em quilowatts; multiplicando pelas horas de uso
+    chega-se ao kWh do período. O custo é esse valor vezes o preço do kWh da distribuidora.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Onde encontro a potência do aparelho?</h3>
+  <p>
+    Na etiqueta atrás ou embaixo do aparelho, no manual ou na página do fabricante. Aparelhos com
+    controle de temperatura, como chuveiro e ar-condicionado, variam a potência — use a maior, para
+    não subestimar o gasto.
+  </p>
+  <h3>A conta do site bate com a da distribuidora?</h3>
+  <p>
+    Deve ficar próxima, mas a fatura inclui bandeiras tarifárias, impostos e outros componentes. Use a
+    tarifa final, com tributos, e lembre que o consumo vem em kWh na conta — divida o valor pela
+    quantidade para achar o seu preço real.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

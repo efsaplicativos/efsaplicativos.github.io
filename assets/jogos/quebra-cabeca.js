@@ -66,6 +66,7 @@
   let recordes = [];
   let pausado = false;
   let vitoria = null;
+  let modoDiario = false;
   let vendoImagem = false;
   /** O tempo só corre depois de um movimento feito nesta visita à página. */
   let aguardandoMovimento = true;
@@ -122,7 +123,15 @@
     }
   }
 
-  const nova = (imagem, tamanho) => ({ imagem, tamanho, pecas: Q.embaralhar(tamanho), movimentos: 0, tempoMs: 0 });
+  // Modo diário (assets/jogos/diario.js): as peças saem embaralhadas com a semente do dia
+  const D = typeof Diario === "object" ? Diario : null;
+  const botaoDiario = document.querySelector("#qc-diario");
+  if (!D && botaoDiario) botaoDiario.hidden = true;
+  botaoDiario?.addEventListener("click", () => {
+    if (D && partida) comecar(partida.imagem, partida.tamanho, true);
+  });
+
+  const nova = (imagem, tamanho, aleatorio) => ({ imagem, tamanho, pecas: Q.embaralhar(tamanho, aleatorio), movimentos: 0, tempoMs: 0 });
 
   // ---------- Cronômetro ----------
 
@@ -310,10 +319,11 @@
 
   // ---------- Partida ----------
 
-  function comecar(imagem, tamanho) {
+  function comecar(imagem, tamanho, diario = false) {
     fecharDialogo();
     const mudouPecas = imagem !== partida.imagem || tamanho !== partida.tamanho;
-    partida = nova(imagem, tamanho);
+    partida = nova(imagem, tamanho, diario && D ? D.doDia("quebra-cabeca").gerador : undefined);
+    modoDiario = Boolean(diario) && Boolean(D);
     if (inicioTrecho !== null) clearInterval(tique);
     inicioTrecho = null;
     acumuladoMs = 0;
@@ -384,6 +394,8 @@
     const registro = Q.registrarResultado(recordes, resultado);
     recordes = registro.lista;
     vitoria = { ...resultado, novoRecorde: registro.novoRecorde };
+    // Modo diário: fica registrado que o quebra-cabeça de hoje já foi montado
+    if (modoDiario && D) D.marcarConcluido("quebra-cabeca");
     vendoImagem = false;
     gravar(CHAVE_RECORDES, recordes);
     gravar(CHAVE_PARTIDA, null);

@@ -14,6 +14,8 @@
   const CHAVE_RECORDES = "efs-sudoku-recordes";
   const MAX_HISTORICO = 200;
   const TRAVA_DIALOGO_MS = 500;
+  // Modo diário (assets/jogos/diario.js): sem o script, o botão do dia fica escondido
+  const D = typeof Diario === "object" ? Diario : null;
 
   const gradeEl = raiz.querySelector("#sd-grade");
   const textoErros = raiz.querySelector("#sd-erros");
@@ -23,6 +25,9 @@
   const painelPausado = raiz.querySelector("#sd-pausado");
   const botaoContinuar = raiz.querySelector("#sd-continuar");
   const botaoNovo = raiz.querySelector("#sd-novo");
+  const botaoDiario = raiz.querySelector("#sd-diario");
+  const avisoDiario = raiz.querySelector("#sd-diario-aviso");
+  if (!D && botaoDiario) botaoDiario.hidden = true;
   const botaoDesfazer = raiz.querySelector("#sd-desfazer");
   const botaoApagar = raiz.querySelector("#sd-apagar");
   const botaoNotas = raiz.querySelector("#sd-notas");
@@ -43,6 +48,7 @@
   let jogo = null;
   let selecionada = null;
   let modoNotas = false;
+  let modoDiario = false;
   let pausado = false;
   let venceu = false;
   let historico = [];
@@ -260,11 +266,16 @@
 
   // ---------- Partida ----------
 
-  /** `silencioso`: o jogo criado ao abrir a página, sem nenhuma ação da pessoa. */
-  function novoJogo(nivelId, { silencioso = false } = {}) {
+  /**
+   * `silencioso`: o jogo criado ao abrir a página, sem nenhuma ação da pessoa.
+   * `diario`: gera o tabuleiro do dia, o mesmo para todo mundo (semente vinda da data).
+   */
+  function novoJogo(nivelId, { silencioso = false, diario = false } = {}) {
     fecharDialogo();
     const nivel = S.NIVEIS[nivelId];
-    jogo = S.novoJogo(nivel, S.gerar(nivel));
+    const doDia = diario && D ? D.doDia("sudoku") : null;
+    jogo = S.novoJogo(nivel, S.gerar(nivel, doDia ? doDia.gerador : Math.random));
+    modoDiario = Boolean(doDia);
     selecionada = null;
     modoNotas = false;
     pausado = false;
@@ -275,27 +286,37 @@
     acumuladoMs = 0;
     salvar();
     desenhar();
-    status.textContent = `Novo jogo no nível ${nivel.nome}, com ${nivel.casasVazias} casas vazias.`;
+    if (avisoDiario) {
+      avisoDiario.hidden = !doDia;
+      avisoDiario.textContent = doDia ? `Jogo do dia ${doDia.data}` : "";
+    }
+    status.textContent = doDia
+      ? `Jogo do dia ${doDia.data}, nível ${nivel.nome}: o mesmo tabuleiro para todos os visitantes de hoje.`
+      : `Novo jogo no nível ${nivel.nome}, com ${nivel.casasVazias} casas vazias.`;
+    if (doDia && D.concluido("sudoku")) status.textContent += " Você já completou o jogo do dia hoje.";
     if (!silencioso) som.tocar("inicio");
   }
 
   /** Um jogo com alguma jogada feita pede confirmação antes de ser trocado. */
-  function confirmarNovoJogo(nivelId) {
+  function confirmarNovoJogo(nivelId, diario = false) {
     const mexeu = jogo && !venceu && (historico.length > 0 || jogo.erros > 0 || jogo.dicasUsadas > 0 ||
       jogo.valores.some((v, i) => v !== jogo.enunciado[i]) || jogo.notas.some(Boolean));
     if (!mexeu) {
-      novoJogo(nivelId);
+      novoJogo(nivelId, { diario });
       return;
     }
     abrirDialogo({
       titulo: "Começar um novo jogo?",
       texto: "O progresso da partida atual será perdido.",
       botoes: [
-        { rotulo: "Começar", acao: () => novoJogo(nivelId) },
+        { rotulo: "Começar", acao: () => novoJogo(nivelId, { diario }) },
         { rotulo: "Cancelar", acao: () => {}, secundario: true },
       ],
     });
   }
+
+  // O jogo do dia usa o nível que está aberto: o tabuleiro é o mesmo, muda só a dificuldade
+  botaoDiario?.addEventListener("click", () => confirmarNovoJogo(jogo ? jogo.nivel : "medio", true));
 
   const interativo = () => jogo && !pausado && !venceu;
 
@@ -326,6 +347,8 @@
     modoNotas = false;
     historico = [];
     const segundos = Math.max(1, Math.floor(acumuladoMs / 1000));
+    // O jogo do dia fica marcado: ao voltar, o site avisa que o de hoje já foi feito
+    if (modoDiario && D) D.marcarConcluido("sudoku");
     const { lista, posicao } = S.inserirRecorde(recordes[jogo.nivel], { segundos, data: Date.now() });
     recordes = { ...recordes, [jogo.nivel]: lista };
     gravar(CHAVE_RECORDES, recordes);
@@ -338,7 +361,9 @@
     dados.push(["Tempo", S.formatarTempo(segundos)], ["Erros", String(jogo.erros)], ["Dicas usadas", String(jogo.dicasUsadas)]);
     abrirDialogo({
       titulo: "Parabéns!",
-      texto: `Você completou o Sudoku ${nivel.nome}.`,
+      texto: modoDiario
+        ? `Você completou o Sudoku do dia (${D.doDia("sudoku").data}), nível ${nivel.nome}.`
+        : `Você completou o Sudoku ${nivel.nome}.`,
       dados,
       botoes: [
         { rotulo: "Novo jogo", acao: () => novoJogo(jogo.nivel) },

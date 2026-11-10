@@ -1,0 +1,157 @@
+<!--
+titulo: Calculadora de Férias e 13º Salário: Quanto Vou Receber — EFS Aplicativos
+descricao: Calcule as férias com o terço constitucional e o abono de 10 dias, e o 13º salário proporcional, com INSS, IRRF, a redução do imposto de 2026 e as duas parcelas. Grátis e sem cadastro.
+scripts: /assets/numeros.js /assets/ferramentas/salario-liquido-logica.js /assets/ferramentas/ferias-e-decimo-terceiro-logica.js /assets/ferramentas/ferias-e-decimo-terceiro.js
+app: Férias e 13º salário | FinanceApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Férias e 13º</li>
+  </ol>
+  <h1>Calculadora de férias e 13º</h1>
+  <p>
+    Veja quanto você recebe nas férias — com o terço constitucional e a opção de vender 10 dias — e no
+    décimo terceiro, com o INSS, o imposto de renda e a redução do imposto de 2026.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora de férias e décimo terceiro">
+  <div class="tool-grid">
+    <form class="fields" id="ferias-13" novalidate>
+      <div class="field">
+        <label for="salario">Salário bruto (R$)</label>
+        <input class="input" id="salario" inputmode="decimal" autocomplete="off" value="3.000,00" placeholder="Ex.: 3.000,00" />
+        <span class="hint">O mesmo salário serve para as duas contas.</span>
+      </div>
+      <div class="field">
+        <label for="dias">Dias de férias</label>
+        <input class="input" id="dias" inputmode="numeric" autocomplete="off" value="30" placeholder="Ex.: 30" aria-describedby="dias-dica" />
+        <span class="hint" id="dias-dica">De 1 a 30. Se você vender 10 dias, informe 20 aqui.</span>
+      </div>
+      <div class="field">
+        <label for="abono"><input type="checkbox" id="abono" /> Vender 10 dias (abono pecuniário)</label>
+        <span class="hint">O abono entra no valor a receber, mas não sofre INSS nem IRRF.</span>
+      </div>
+      <div class="field">
+        <label for="avos">Meses trabalhados no ano (13º)</label>
+        <input class="input" id="avos" inputmode="numeric" autocomplete="off" value="12" placeholder="Ex.: 12" aria-describedby="avos-dica" />
+        <span class="hint" id="avos-dica">Cada mês ou fração de 15 dias vale 1/12.</span>
+      </div>
+      <div class="field">
+        <label for="parcela">Parcela do 13º</label>
+        <select class="select" id="parcela">
+          <option value="total" selected>Total (as duas parcelas)</option>
+          <option value="primeira">Só a 1ª parcela</option>
+          <option value="segunda">Só a 2ª parcela</option>
+        </select>
+      </div>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Informe o salário para ver as férias e o 13º.</p>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<aside class="indicacao" data-indicacao="ferias-e-decimo-terceiro" hidden></aside>
+
+<article class="texto">
+  <h2>Como preencher: um exemplo passo a passo</h2>
+  <p>
+    <strong>Exemplo:</strong> salário de R$ 3.000,00, 30 dias de férias sem vender dias e 12 meses
+    trabalhados no ano.
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th scope="col">Campo</th><th scope="col">O que digitar</th><th scope="col">Por quê</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Salário bruto</td><td>3.000,00</td><td>serve para as férias e para o 13º</td></tr>
+        <tr><td>Dias de férias</td><td>30</td><td>o período completo de descanso</td></tr>
+        <tr><td>Vender 10 dias</td><td>desmarcado</td><td>sem abono pecuniário</td></tr>
+        <tr><td>Meses trabalhados no ano</td><td>12</td><td>13º integral, 12/12</td></tr>
+        <tr><td>Parcela do 13º</td><td>Total</td><td>as duas parcelas somadas</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    O resultado mostra férias de R$ 4.000,00 (R$ 3.000,00 mais o terço de R$ 1.000,00), INSS de
+    R$ 368,60, imposto zero e <strong>líquido de R$ 3.631,40</strong>; no 13º, R$ 3.000,00 brutos, INSS
+    de R$ 248,60 e <strong>líquido de R$ 2.751,40</strong>.
+  </p>
+  <p>
+    <button type="button" class="button secondary" data-exemplo="padrao">Preencher com este exemplo</button>
+  </p>
+
+  <h2>Como as férias são calculadas</h2>
+  <p>
+    O valor das férias é o salário dividido por 30 e multiplicado pelos dias gozados, mais o terço
+    constitucional. Quem tira os 30 dias recebe um salário inteiro mais um terço; quem tira 15 dias
+    recebe metade do salário mais um terço dessa metade. O INSS e o imposto de renda incidem sobre as
+    férias <em>com</em> o terço, no mês em que elas são pagas.
+  </p>
+  <p>
+    O pagamento deve ser feito até dois dias antes do início das férias, e o terço pode ser pago junto
+    ou adiantado no mês anterior.
+  </p>
+
+  <h2>Vender 10 dias (abono pecuniário)</h2>
+  <p>
+    O trabalhador pode vender até 10 dias das férias, recebendo por eles em dinheiro. O abono, como é
+    indenizatório, <strong>não sofre INSS nem imposto de renda</strong> — por isso ele entra no valor a
+    receber sem desconto nenhum. O pedido precisa ser feito até 15 dias antes do fim do período
+    aquisitivo.
+  </p>
+  <p>
+    Na prática, vender 10 dias e tirar 20 costuma render um líquido parecido com o de 30 dias, porque
+    o abono chega sem desconto. A calculadora mostra os dois números.
+  </p>
+
+  <h2>Como o 13º é calculado</h2>
+  <ul>
+    <li><strong>Valor:</strong> salário ÷ 12 × meses trabalhados no ano. Cada mês (ou fração de 15 dias ou mais) vale 1/12.</li>
+    <li><strong>1ª parcela:</strong> metade do valor bruto, paga até 30 de novembro, sem desconto.</li>
+    <li><strong>2ª parcela:</strong> o restante, pago até 20 de dezembro, já com INSS e imposto de renda descontados.</li>
+    <li><strong>Descontos:</strong> são calculados à parte do salário do mês — o INSS do 13º reduz a base do imposto do próprio 13º.</li>
+  </ul>
+
+  <h2>A redução do imposto de 2026 vale para o 13º</h2>
+  <p>
+    O § 3º do art. 3º-A da Lei nº 9.250/1995, incluído pela Lei nº 15.270/2025, manda aplicar ao décimo
+    terceiro a mesma redução criada para o imposto mensal: até R$ 312,89 para quem recebe até
+    R$ 5.000,00, caindo em linha reta (R$ 978,62 − 0,133145 × rendimento) até zerar em R$ 7.350,00.
+    É por isso que um 13º de R$ 3.000,00 costuma sair sem imposto.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>As férias podem ser pagas em duas vezes?</h3>
+  <p>
+    Podem: a lei permite dividir as férias em até três períodos, desde que um deles tenha pelo menos
+    14 dias e os demais pelo menos 5 dias. O valor segue a mesma conta, proporcional aos dias de cada
+    período.
+  </p>
+  <h3>Quem entra no meio do ano tem 13º integral?</h3>
+  <p>
+    Não. O 13º é proporcional: quem trabalhou 6 meses recebe 6/12. No primeiro ano de contrato, o
+    pagamento pode ser feito em dezembro ou no mês seguinte ao da contratação completar 12 meses.
+  </p>
+  <h3>Por que a 1ª parcela é maior que a 2ª?</h3>
+  <p>
+    Porque a primeira é metade do bruto e vem sem descontos. Todos os descontos de INSS e imposto são
+    recolhidos na segunda parcela, o que faz o valor dela menor. Somando as duas, você chega ao
+    líquido mostrado na opção "Total".
+  </p>
+  <h3>Os valores batem com o meu holerite?</h3>
+  <p>
+    Devem bater para o salário fixo. Adicionais habituais (horas extras, comissões, adicional noturno)
+    entram na base das férias e do 13º, e médias de variáveis seguem regras próprias — nesses casos o
+    valor do recibo pode ser maior do que o calculado aqui.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+

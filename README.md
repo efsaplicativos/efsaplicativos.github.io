@@ -6,7 +6,7 @@ Endereço: https://efsaplicativos.com.br (o GitHub Pages redireciona efsaplicati
 ## Estrutura
 
 - `index.html`, `politica-privacidade.html`, `batalha-naval/`, `lance-certo/`: páginas feitas à mão.
-- `_fonte/paginas/`: páginas das versões web (32 ferramentas, 25 jogos, sobre, contato, privacidade do site).
+- `_fonte/paginas/`: páginas das versões web (40 ferramentas, 30 jogos, sobre, contato, privacidade do site).
 - `_fonte/modelo.html`: cabeçalho, rodapé e `<head>` comuns a essas páginas.
 - `_fonte/testes/`: testes da lógica de cada página, sem dependências. Rode `node _fonte/testes/<página>.test.js`.
 - `_fonte/ferramentas-dados/`: scripts que geram dados das páginas (os puzzles de xadrez vêm dos apps) e a

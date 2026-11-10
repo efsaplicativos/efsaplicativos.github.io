@@ -24,10 +24,10 @@
       })();
     </script>
     <title>Caça-Palavras Online Grátis: Jogue no Navegador — EFS Aplicativos</title>
-    <meta name="description" content="Jogue caça-palavras online e grátis, no computador ou no celular. 16 temas, três níveis com palavras na horizontal, na vertical, na diagonal e de trás para frente, dica e recordes." />
+    <meta name="description" content="Jogue caça-palavras online e grátis, no computador ou no celular. 16 temas, três níveis com palavras na horizontal, na vertical, na diagonal e de trás para frente, dica e recordes. Tem também o jogo do dia, o mesmo tabuleiro para todos." />
     <link rel="canonical" href="https://efsaplicativos.com.br/jogos/caca-palavras/" />
     <meta property="og:title" content="Caça-Palavras Online Grátis: Jogue no Navegador — EFS Aplicativos" />
-    <meta property="og:description" content="Jogue caça-palavras online e grátis, no computador ou no celular. 16 temas, três níveis com palavras na horizontal, na vertical, na diagonal e de trás para frente, dica e recordes." />
+    <meta property="og:description" content="Jogue caça-palavras online e grátis, no computador ou no celular. 16 temas, três níveis com palavras na horizontal, na vertical, na diagonal e de trás para frente, dica e recordes. Tem também o jogo do dia, o mesmo tabuleiro para todos." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://efsaplicativos.com.br/jogos/caca-palavras/" />
     <meta property="og:locale" content="pt_BR" />
@@ -46,15 +46,16 @@
     <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
     <script src="/assets/indicacoes.js?v=7f30da75c802" defer></script>
     <script src="/assets/jogos/caca-palavras-logica.js?v=8daf199a41ec" defer></script>
+    <script src="/assets/jogos/diario.js?v=885561b3c427" defer></script>
     <script src="/assets/jogos/sons.js?v=21d1381b6bd0" defer></script>
-    <script src="/assets/jogos/caca-palavras.js?v=47b86b033224" defer></script>
+    <script src="/assets/jogos/caca-palavras.js?v=88890030ac94" defer></script>
     <link
       rel="icon"
       type="image/png"
       sizes="512x512"
       href="/images/EfsAplicativos_4.png"
     />
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Caça-Palavras", "url": "https://efsaplicativos.com.br/jogos/caca-palavras/", "description": "Jogue caça-palavras online e grátis, no computador ou no celular. 16 temas, três níveis com palavras na horizontal, na vertical, na diagonal e de trás para frente, dica e recordes.", "applicationCategory": "GameApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Caça-Palavras", "url": "https://efsaplicativos.com.br/jogos/caca-palavras/", "description": "Jogue caça-palavras online e grátis, no computador ou no celular. 16 temas, três níveis com palavras na horizontal, na vertical, na diagonal e de trás para frente, dica e recordes. Tem também o jogo do dia, o mesmo tabuleiro para todos.", "applicationCategory": "GameApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
   </head>
   <body>
     <a class="skip" href="#conteudo">Ir para o conteúdo</a>
@@ -166,7 +167,8 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21h6v-1.5H9Zm3-19a7 7 0 0 0-4 12.7V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.3A7 7 0 0 0 12 2Z" /></svg>
           Dica
         </button>
-        <button type="button" class="button secondary" id="cz-novo">Novo jogo</button>
+        <button type="button" class="button secondary" id="cz-diario">Jogo do dia</button>
+      <button type="button" class="button secondary" id="cz-novo">Novo jogo</button>
         <button type="button" class="som-botao" id="cz-som"></button>
       </div>
 
@@ -202,6 +204,12 @@
 <aside class="indicacao" data-indicacao="caca-palavras" hidden></aside>
 
 <article class="texto">
+  <h2>Jogo do dia: o mesmo tabuleiro para todos</h2>
+  <p>
+    O botão <strong>Jogo do dia</strong> monta a partida de hoje a partir da data: todo mundo que
+    visitar o site nesta data recebe o mesmo grade de palavras. Serve para comparar o resultado com amigos, sem
+    servidor e sem cadastro. Ao terminar, o site guarda a marca no seu navegador; amanhã há outro.
+  </p>
   <h2>Como jogar caça-palavras</h2>
   <p>
     A grade esconde as palavras da lista, todas do mesmo tema, no meio de letras sorteadas. Cada

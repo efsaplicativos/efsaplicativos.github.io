@@ -65,6 +65,7 @@
   let selecionada = null;
   let dica = null;
   let vitoria = null;
+  let modoDiario = false;
   /** O jogador fechou o aviso de "sem jogadas" para olhar a mesa. */
   let avisoOculto = false;
   /** O relógio só corre depois do primeiro toque na partida, com a aba visível. */
@@ -492,9 +493,18 @@
     salvar();
   }
 
-  function novaPartida(tabuleiro) {
+  // Modo diário (assets/jogos/diario.js): a distribuição sai da semente do dia
+  const D = typeof Diario === "object" ? Diario : null;
+  const botaoDiario = document.querySelector("#mj-diario");
+  if (!D && botaoDiario) botaoDiario.hidden = true;
+  botaoDiario?.addEventListener("click", () => {
+    if (D && partida) novaPartida(partida.tabuleiro, D.doDia("mahjong").gerador);
+  });
+
+  function novaPartida(tabuleiro, aleatorio) {
     const remontar = !partida || tabuleiro !== partida.tabuleiro;
-    iniciar(M.novaPartida(tabuleiro), { remontar });
+    modoDiario = Boolean(aleatorio) && Boolean(D);
+    iniciar(M.novaPartida(tabuleiro, aleatorio), { remontar });
     anunciar(`Nova distribuição no tabuleiro ${tabuleiro.nome}: ${tabuleiro.totalPecas} peças.`);
   }
 
@@ -577,6 +587,8 @@
   }
 
   function vencer(final) {
+    // Modo diário: fica registrado que o mahjong de hoje já foi terminado
+    if (modoDiario && D) D.marcarConcluido("mahjong");
     partida = final;
     const id = final.tabuleiro.id;
     const anterior = recordes[id] || null;

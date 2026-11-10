@@ -23,11 +23,11 @@
         }
       })();
     </script>
-    <title>Sudoku Online Grátis: Fácil, Médio e Difícil — EFS Aplicativos</title>
-    <meta name="description" content="Jogue Sudoku online e grátis, com jogos novos de solução única em três níveis. Use notas, desfazer e dicas, no computador ou no celular, com a partida salva." />
+    <title>Sudoku Online Grátis: Fácil, Médio, Difícil e Jogo do Dia — EFS Aplicativos</title>
+    <meta name="description" content="Jogue Sudoku online e grátis, com jogos novos de solução única em três níveis e o sudoku do dia, o mesmo tabuleiro para todos. Use notas, desfazer e dicas, no computador ou no celular, com a partida salva." />
     <link rel="canonical" href="https://efsaplicativos.com.br/jogos/sudoku/" />
-    <meta property="og:title" content="Sudoku Online Grátis: Fácil, Médio e Difícil — EFS Aplicativos" />
-    <meta property="og:description" content="Jogue Sudoku online e grátis, com jogos novos de solução única em três níveis. Use notas, desfazer e dicas, no computador ou no celular, com a partida salva." />
+    <meta property="og:title" content="Sudoku Online Grátis: Fácil, Médio, Difícil e Jogo do Dia — EFS Aplicativos" />
+    <meta property="og:description" content="Jogue Sudoku online e grátis, com jogos novos de solução única em três níveis e o sudoku do dia, o mesmo tabuleiro para todos. Use notas, desfazer e dicas, no computador ou no celular, com a partida salva." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://efsaplicativos.com.br/jogos/sudoku/" />
     <meta property="og:locale" content="pt_BR" />
@@ -40,21 +40,22 @@
     />
     <link rel="stylesheet" href="/site.css?v=dfdb216d18d2" />
     <link rel="stylesheet" href="/assets/web.css?v=f4683d85c12d" />
-    <link rel="stylesheet" href="/assets/jogos/sudoku.css?v=b68672649821" />
+    <link rel="stylesheet" href="/assets/jogos/sudoku.css?v=ad7eeabcef77" />
     <script src="/assets/estatisticas.js?v=da0036a12f2f" async></script>
     <script src="/site.js?v=926b8efae759" defer></script>
     <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
     <script src="/assets/indicacoes.js?v=7f30da75c802" defer></script>
     <script src="/assets/jogos/sudoku-logica.js?v=b73de0678093" defer></script>
+    <script src="/assets/jogos/diario.js?v=885561b3c427" defer></script>
     <script src="/assets/jogos/sons.js?v=21d1381b6bd0" defer></script>
-    <script src="/assets/jogos/sudoku.js?v=3eb0d8826b78" defer></script>
+    <script src="/assets/jogos/sudoku.js?v=d97f78132a37" defer></script>
     <link
       rel="icon"
       type="image/png"
       sizes="512x512"
       href="/images/EfsAplicativos_4.png"
     />
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Sudoku Master", "url": "https://efsaplicativos.com.br/jogos/sudoku/", "description": "Jogue Sudoku online e grátis, com jogos novos de solução única em três níveis. Use notas, desfazer e dicas, no computador ou no celular, com a partida salva.", "applicationCategory": "GameApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Sudoku Master", "url": "https://efsaplicativos.com.br/jogos/sudoku/", "description": "Jogue Sudoku online e grátis, com jogos novos de solução única em três níveis e o sudoku do dia, o mesmo tabuleiro para todos. Use notas, desfazer e dicas, no computador ou no celular, com a partida salva.", "applicationCategory": "GameApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
   </head>
   <body>
     <a class="skip" href="#conteudo">Ir para o conteúdo</a>
@@ -141,9 +142,12 @@
     </div>
     <div class="sd-botoes-topo">
       <button type="button" class="som-botao" id="sd-som"></button>
+      <button type="button" class="button secondary" id="sd-diario">Jogo do dia</button>
       <button type="button" class="button secondary" id="sd-novo">Novo jogo</button>
     </div>
   </div>
+
+  <p class="sd-diario-aviso" id="sd-diario-aviso" hidden></p>
 
   <div class="sd-info">
     <div class="sd-dado"><span>Erros</span><strong id="sd-erros">0</strong></div>
@@ -214,6 +218,18 @@
 <aside class="indicacao" data-indicacao="sudoku" hidden></aside>
 
 <article class="texto">
+  <h2>Sudoku do dia: o mesmo tabuleiro para todos</h2>
+  <p>
+    O botão <strong>Jogo do dia</strong> abre o Sudoku de hoje, gerado a partir da data: todo mundo que
+    visitar o site nesta data recebe exatamente o mesmo tabuleiro, sem servidor e sem cadastro. Serve
+    para comparar tempo e erros com amigos, como no jogo de palavra do dia.
+  </p>
+  <p>
+    O tabuleiro do dia usa o nível que estiver selecionado — então dá para resolver o mesmo jogo no
+    Fácil, no Médio ou no Difícil, mudando só a quantidade de casas vazias. Ao terminar, o site guarda
+    a marca no seu navegador e avisa, na próxima vez, que o jogo de hoje já foi completado. Amanhã há
+    outro.
+  </p>
   <h2>Como jogar Sudoku</h2>
   <p>
     A grade tem 81 casas, divididas em 9 linhas, 9 colunas e 9 quadrados de 3 × 3. Algumas casas

@@ -24,10 +24,10 @@
       })();
     </script>
     <title>Quebra-Cabeça Deslizante Online Grátis — EFS Aplicativos</title>
-    <meta name="description" content="Jogue quebra-cabeça deslizante online e grátis: escolha uma imagem ou o modo numérico, grades de 3 × 3 a 5 × 5, e monte com o menor tempo e menos movimentos." />
+    <meta name="description" content="Jogue quebra-cabeça deslizante online e grátis: escolha uma imagem ou o modo numérico, grades de 3 × 3 a 5 × 5, e monte com o menor tempo e menos movimentos. Tem também o jogo do dia, o mesmo tabuleiro para todos." />
     <link rel="canonical" href="https://efsaplicativos.com.br/jogos/quebra-cabeca/" />
     <meta property="og:title" content="Quebra-Cabeça Deslizante Online Grátis — EFS Aplicativos" />
-    <meta property="og:description" content="Jogue quebra-cabeça deslizante online e grátis: escolha uma imagem ou o modo numérico, grades de 3 × 3 a 5 × 5, e monte com o menor tempo e menos movimentos." />
+    <meta property="og:description" content="Jogue quebra-cabeça deslizante online e grátis: escolha uma imagem ou o modo numérico, grades de 3 × 3 a 5 × 5, e monte com o menor tempo e menos movimentos. Tem também o jogo do dia, o mesmo tabuleiro para todos." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://efsaplicativos.com.br/jogos/quebra-cabeca/" />
     <meta property="og:locale" content="pt_BR" />
@@ -46,15 +46,16 @@
     <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
     <script src="/assets/indicacoes.js?v=7f30da75c802" defer></script>
     <script src="/assets/jogos/quebra-cabeca-logica.js?v=bb46ece6ff93" defer></script>
+    <script src="/assets/jogos/diario.js?v=885561b3c427" defer></script>
     <script src="/assets/jogos/sons.js?v=21d1381b6bd0" defer></script>
-    <script src="/assets/jogos/quebra-cabeca.js?v=2bd410456f50" defer></script>
+    <script src="/assets/jogos/quebra-cabeca.js?v=9b8d249a1c7c" defer></script>
     <link
       rel="icon"
       type="image/png"
       sizes="512x512"
       href="/images/EfsAplicativos_4.png"
     />
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Quebra-Cabeça Deslizante", "url": "https://efsaplicativos.com.br/jogos/quebra-cabeca/", "description": "Jogue quebra-cabeça deslizante online e grátis: escolha uma imagem ou o modo numérico, grades de 3 × 3 a 5 × 5, e monte com o menor tempo e menos movimentos.", "applicationCategory": "GameApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Quebra-Cabeça Deslizante", "url": "https://efsaplicativos.com.br/jogos/quebra-cabeca/", "description": "Jogue quebra-cabeça deslizante online e grátis: escolha uma imagem ou o modo numérico, grades de 3 × 3 a 5 × 5, e monte com o menor tempo e menos movimentos. Tem também o jogo do dia, o mesmo tabuleiro para todos.", "applicationCategory": "GameApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
   </head>
   <body>
     <a class="skip" href="#conteudo">Ir para o conteúdo</a>
@@ -172,6 +173,7 @@
   <div class="qc-botoes">
     <button type="button" class="button secondary" id="qc-pausa" aria-pressed="false">Pausar</button>
     <button type="button" class="button secondary" id="qc-ver" aria-pressed="false">Ver imagem</button>
+    <button type="button" class="button secondary" id="qc-diario">Jogo do dia</button>
     <button type="button" class="button secondary" id="qc-reiniciar">Reiniciar</button>
     <button type="button" class="som-botao" id="qc-som"></button>
   </div>
@@ -193,6 +195,12 @@
 <aside class="indicacao" data-indicacao="quebra-cabeca" hidden></aside>
 
 <article class="texto">
+  <h2>Jogo do dia: o mesmo tabuleiro para todos</h2>
+  <p>
+    O botão <strong>Jogo do dia</strong> monta a partida de hoje a partir da data: todo mundo que
+    visitar o site nesta data recebe o mesmo quebra-cabeça. Serve para comparar o resultado com amigos, sem
+    servidor e sem cadastro. Ao terminar, o site guarda a marca no seu navegador; amanhã há outro.
+  </p>
   <h2>Como jogar o quebra-cabeça deslizante</h2>
   <p>
     A imagem é cortada em quadrados e uma peça é retirada, deixando um espaço vazio. As peças

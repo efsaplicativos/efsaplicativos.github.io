@@ -3,6 +3,7 @@
   <url><loc>https://efsaplicativos.com.br/</loc></url>
   <url><loc>https://efsaplicativos.com.br/politica-privacidade.html</loc></url>
   <url><loc>https://efsaplicativos.com.br/contato/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/desafios/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/aposentadoria/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/calculadora-cientifica/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/calculadora-de-combustivel/</loc></url>
@@ -10,6 +11,7 @@
   <url><loc>https://efsaplicativos.com.br/ferramentas/calculadora-de-idade/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/calculadora-financeira-rpn/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/calculadora/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/ferramentas/churrasco/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/consulta-cep/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/consumo-de-agua/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/conversor-de-bases/</loc></url>
@@ -18,8 +20,10 @@
   <url><loc>https://efsaplicativos.com.br/ferramentas/conversor-de-temperatura/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/correcao-ipca/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/cronometro-e-timer/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/ferramentas/energia-eletrica/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/equacoes/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/estatistica/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/ferramentas/ferias-e-decimo-terceiro/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/financiamento/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/fuso-horario/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/geometria/</loc></url>
@@ -34,21 +38,30 @@
   <url><loc>https://efsaplicativos.com.br/ferramentas/lista-de-tarefas/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/marcador-de-truco/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/matrizes/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/ferramentas/porcentagem/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/ferramentas/preco-por-quilo/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/ferramentas/regra-de-tres/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/relogio-de-blinds-poker/</loc></url>
   <url><loc>https://efsaplicativos.com.br/ferramentas/relogio-de-xadrez/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/ferramentas/rescisao-trabalhista/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/ferramentas/salario-liquido/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/2048/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/batalha-naval/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/buraco/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/caca-palavras/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/campo-minado/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/jogos/cobrinha/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/color-sort/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/copas/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/cores-da-memoria/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/jogos/damas/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/desvenda/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/jogos/forca/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/freecell/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/jogo-da-memoria/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/jogo-da-velha/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/jogos/lig-4/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/lumibricks/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/mahjong/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/mico/</loc></url>
@@ -60,6 +73,7 @@
   <url><loc>https://efsaplicativos.com.br/jogos/puzzles-de-xadrez/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/qual-e-a-bandeira/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/quebra-cabeca/</loc></url>
+  <url><loc>https://efsaplicativos.com.br/jogos/soletra/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/sudoku/</loc></url>
   <url><loc>https://efsaplicativos.com.br/jogos/truco/</loc></url>
   <url><loc>https://efsaplicativos.com.br/privacidade/</loc></url>

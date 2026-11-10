@@ -1,0 +1,164 @@
+<!--
+titulo: Calculadora de Porcentagem Online: X% de um Valor, Aumento e Desconto — EFS Aplicativos
+descricao: Calcule porcentagem online e grátis: quanto é X% de um valor, aumentar ou diminuir em porcentagem, variação entre dois valores e quantos por cento uma parte representa do total.
+scripts: /assets/numeros.js /assets/ferramentas/porcentagem-logica.js /assets/ferramentas/porcentagem.js
+app: Porcentagem | EducationalApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Porcentagem</li>
+  </ol>
+  <h1>Calculadora de porcentagem</h1>
+  <p>
+    As quatro contas de porcentagem em um lugar: quanto é X% de um valor, aumentar ou diminuir, a
+    variação entre dois valores e quantos por cento uma parte representa do total.
+  </p>
+</header>
+
+<section class="tool" aria-label="Calculadora de porcentagem">
+  <div class="tool-grid">
+    <form class="fields" id="porcentagem" novalidate>
+      <fieldset class="field">
+        <legend>O que você quer calcular?</legend>
+        <div class="segmented" role="group" aria-label="Tipo de conta">
+          <button type="button" class="filter active" data-modo="parte" aria-pressed="true">X% de um valor</button>
+          <button type="button" class="filter" data-modo="ajuste" aria-pressed="false">Aumento ou desconto</button>
+          <button type="button" class="filter" data-modo="variacao" aria-pressed="false">Variação</button>
+          <button type="button" class="filter" data-modo="proporcao" aria-pressed="false">Parte do total</button>
+        </div>
+      </fieldset>
+
+      <div data-bloco="parte">
+        <div class="field">
+          <label for="percentual">Percentual (%)</label>
+          <input class="input" id="percentual" inputmode="decimal" autocomplete="off" placeholder="Ex.: 15" />
+        </div>
+        <div class="field">
+          <label for="valor">Valor (R$)</label>
+          <input class="input" id="valor" inputmode="decimal" autocomplete="off" placeholder="Ex.: 200,00" />
+        </div>
+      </div>
+
+      <div data-bloco="ajuste" hidden>
+        <div class="field">
+          <label for="ajuste-valor">Valor (R$)</label>
+          <input class="input" id="ajuste-valor" inputmode="decimal" autocomplete="off" placeholder="Ex.: 200,00" />
+        </div>
+        <div class="field">
+          <label for="ajuste-percentual">Percentual (%)</label>
+          <input class="input" id="ajuste-percentual" inputmode="decimal" autocomplete="off" placeholder="Ex.: 10" />
+        </div>
+        <div class="field">
+          <label for="ajuste-tipo">Tipo</label>
+          <select class="select" id="ajuste-tipo">
+            <option value="aumento" selected>Aumento</option>
+            <option value="desconto">Desconto</option>
+          </select>
+        </div>
+      </div>
+
+      <div data-bloco="variacao" hidden>
+        <div class="field">
+          <label for="de">Valor inicial</label>
+          <input class="input" id="de" inputmode="decimal" autocomplete="off" placeholder="Ex.: 80,00" />
+        </div>
+        <div class="field">
+          <label for="para">Valor final</label>
+          <input class="input" id="para" inputmode="decimal" autocomplete="off" placeholder="Ex.: 100,00" />
+        </div>
+      </div>
+
+      <div data-bloco="proporcao" hidden>
+        <div class="field">
+          <label for="parte">Parte</label>
+          <input class="input" id="parte" inputmode="decimal" autocomplete="off" placeholder="Ex.: 25" />
+        </div>
+        <div class="field">
+          <label for="total">Total</label>
+          <input class="input" id="total" inputmode="decimal" autocomplete="off" placeholder="Ex.: 200" />
+        </div>
+      </div>
+    </form>
+    <div class="result" id="resultado" aria-live="polite">
+      <p class="result-message">Informe os valores para ver o resultado.</p>
+    </div>
+  </div>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<aside class="indicacao" data-indicacao="porcentagem" hidden></aside>
+
+<article class="texto">
+  <h2>Como preencher: um exemplo passo a passo</h2>
+  <p>
+    <strong>Problema:</strong> "Uma camisa de R$ 200,00 está com 10% de desconto. Quanto ela passa a
+    custar?"
+  </p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th scope="col">Campo</th><th scope="col">O que digitar</th><th scope="col">Por quê</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Modo</td><td>Aumento ou desconto</td><td>o preço vai cair</td></tr>
+        <tr><td>Valor</td><td>200,00</td><td>o preço cheio</td></tr>
+        <tr><td>Percentual</td><td>10</td><td>o desconto anunciado</td></tr>
+        <tr><td>Tipo</td><td>Desconto</td><td>tira 10% do valor</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    O resultado é <strong>R$ 180,00</strong>, com R$ 20,00 de desconto. No modo "X% de um valor",
+    digitar 10 e 200 dá exatamente esses R$ 20,00 — é a mesma conta, vista de outro ângulo.
+  </p>
+  <p>
+    <button type="button" class="button secondary" data-exemplo="desconto">Preencher com este exemplo</button>
+  </p>
+
+  <h2>As quatro contas e quando usar cada uma</h2>
+  <ul>
+    <li><strong>X% de um valor:</strong> "quanto é 15% de 200?" → 200 × 15 ÷ 100 = 30.</li>
+    <li><strong>Aumento ou desconto:</strong> o valor final depois de somar ou tirar o percentual.</li>
+    <li><strong>Variação:</strong> o percentual de diferença entre o preço antigo e o novo — é a conta de "subiu 25%", que compara com o valor inicial.</li>
+    <li><strong>Parte do total:</strong> "25 de 200 são quantos por cento?" → 12,5%.</li>
+  </ul>
+
+  <h2>Aumentos e descontos não se anulam</h2>
+  <p>
+    Aumentar 10% e depois descontar 10% <strong>não volta ao valor original</strong>: em 100, o
+    aumento leva a 110, e o desconto de 10% sobre 110 tira 11, deixando 99. Cada percentual incide
+    sobre o valor do momento, e não sobre o valor inicial.
+  </p>
+  <p>
+    Pelo mesmo motivo, dois aumentos de 10% dão 21% (100 → 110 → 121), e não 20%. É por isso que a
+    conta de juros compostos, no site, usa a taxa elevada ao número de períodos.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Como faço a conta de cabeça?</h3>
+  <p>
+    Para 10%, ande com a vírgula uma casa (10% de 250 é 25). Para 5%, metade disso (12,5). Para 15%,
+    some os 10% com os 5%. Para 1%, ande duas casas (1% de 250 é 2,50).
+  </p>
+  <h3>Qual a diferença entre "desconto de 20%" e "por 20% do preço"?</h3>
+  <p>
+    Desconto de 20% tira 20% e mantém 80% do valor. "Por 20% do preço" significa pagar 20%, ou seja,
+    um desconto de 80%. São coisas opostas — vale conferir o enunciado antes de calcular.
+  </p>
+  <h3>Porcentagem e ponto percentual são a mesma coisa?</h3>
+  <p>
+    Não. Se uma taxa vai de 5% para 6%, ela subiu 1 ponto percentual, mas a variação relativa foi de
+    20% (1 ÷ 5). Juros e estatísticas costumam usar os dois termos, e confundir muda a conclusão.
+  </p>
+  <h3>Posso usar valores com centavos e vírgula?</h3>
+  <p>
+    Pode: os campos aceitam vírgula ou ponto, além do separador de milhar. Os resultados em dinheiro
+    aparecem arredondados em centavos e os percentuais, com duas casas decimais.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+
