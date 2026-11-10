@@ -1298,3 +1298,54 @@ h1 {
     transform: none;
   }
 }
+
+/* ---------- Apoio por PIX no rodapé ---------- */
+.footer-apoio {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+.pix-chave {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0 0;
+}
+.pix-rotulo {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.pix-chave code {
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(18, 100, 122, 0.08);
+  font-size: 15px;
+}
+.pix-copiar {
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 2px solid currentColor;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.pix-copiar:hover {
+  background: rgba(18, 100, 122, 0.1);
+}
+.pix-copiar:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+}
+.pix-aviso {
+  margin: 8px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 1.2em;
+}

@@ -38,7 +38,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600..800&amp;family=Nunito:wght@400..800&amp;display=swap"
     />
-    <link rel="stylesheet" href="/site.css?v=dfdb216d18d2" />
+    <link rel="stylesheet" href="/site.css?v=ac36ff2eeb30" />
     <link rel="stylesheet" href="/assets/web.css?v=f4683d85c12d" />
     <link rel="stylesheet" href="/assets/ferramentas/calculadora-de-datas.css?v=f294e76c83ed" />
     <script src="/assets/estatisticas.js?v=da0036a12f2f" async></script>
@@ -315,6 +315,59 @@
           ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
         </nav>
       </div>
+      <div class="container footer-apoio">
+        <p class="footer-note">
+          Este site é grátis, sem cadastro e feito por uma pessoa só. Se ele te ajudou e você quiser apoiar, pode mandar
+          um PIX de qualquer valor:
+        </p>
+        <p class="pix-chave">
+          <span class="pix-rotulo">Chave PIX</span>
+          <code id="pix-chave">efsaplicativos@gmail.com</code>
+          <button type="button" class="pix-copiar" id="pix-copiar">Copiar chave</button>
+        </p>
+        <p class="pix-aviso" id="pix-aviso" role="status"></p>
+      </div>
     </footer>
+    <script>
+      // Copiar a chave do PIX, com plano B para navegador antigo ou sem permissão de clipboard
+      (() => {
+        const chave = "efsaplicativos@gmail.com";
+        const botao = document.getElementById("pix-copiar");
+        const aviso = document.getElementById("pix-aviso");
+        if (!botao) return;
+        botao.addEventListener("click", async () => {
+          let copiou = false;
+          try {
+            await navigator.clipboard.writeText(chave);
+            copiou = true;
+          } catch (erro) {
+            copiou = false;
+          }
+          if (!copiou) {
+            const area = document.createElement("textarea");
+            area.value = chave;
+            area.style.position = "fixed";
+            area.style.opacity = "0";
+            document.body.append(area);
+            area.select();
+            try {
+              copiou = document.execCommand("copy");
+            } catch (erro) {
+              copiou = false;
+            }
+            area.remove();
+          }
+          if (aviso) {
+            aviso.textContent = copiou
+              ? "Chave copiada. Obrigado pelo apoio!"
+              : "Não deu para copiar: a chave é " + chave;
+          }
+          botao.textContent = copiou ? "Copiado!" : "Copiar chave";
+          setTimeout(() => {
+            botao.textContent = "Copiar chave";
+          }, 2500);
+        });
+      })();
+    </script>
   </body>
 </html>

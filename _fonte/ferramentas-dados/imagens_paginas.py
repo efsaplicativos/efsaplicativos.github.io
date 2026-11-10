@@ -30,15 +30,20 @@ SITE = RAIZ / "images"
 MODELO = "gemini-2.5-flash-image"
 PROJETO_VERTEX = os.environ.get("VERTEX_PROJETO", "efsaplicativos")
 
-# Mesmo estilo em todas, para as imagens parecerem da mesma família
+# Mesmo estilo em todas, para as imagens parecerem da mesma família: adesivo plano, com contorno
+# grosso e fundo creme. É o estilo mais legível no tamanho pequeno dos cartões (86 px).
 ESTILO = (
-    "Square app icon illustration, soft glossy 3D style with rounded shapes and gentle shadows, "
-    "a single clear subject centered and filling about 80% of the frame, on a plain pure white "
-    "background. Color palette: royal blue (#2563eb), violet (#7c3aed) and warm orange (#f59e0b) "
-    "accents with white and light gray. Clean, friendly and modern, readable at small sizes. "
-    "The background is pure white all the way to the edges and corners. "
-    "No words, no letters, no watermark, no border, no frame, no rounded tile behind the subject."
+    "Square app icon illustration in a flat vector sticker style: bold simple shapes, thick even "
+    "outline, no gradients, one flat shadow tone. A single clear subject centered and filling about "
+    "75% of the frame, on a flat warm cream background (#f7f1e3) that reaches all four edges and "
+    "corners. Color palette: deep teal (#12647a), warm orange (#e8622a) and sand (#e9d7b6), with "
+    "white details. Very legible at small sizes, friendly and modern. No words, no letters, no "
+    "numbers, no watermark, no border, no frame, no rounded tile behind the subject."
 )
+
+# O fundo do adesivo é creme e vai até as bordas: recortar o branco em volta não faz sentido aqui,
+# então a versão do site é só a imagem reduzida. O recorte continua disponível para o estilo 3D.
+RECORTAR = False
 
 # Chave: <seção>/<página>, igual ao endereço da página no site
 IMAGENS = {
@@ -48,7 +53,7 @@ IMAGENS = {
     "ferramentas/rescisao-trabalhista": "A closed brown cardboard box with a white document and a "
     "blue pen resting on top of it, with a violet arrow pointing up beside the box.",
     "ferramentas/ferias-e-decimo-terceiro": "A bright beach scene with a straw sun hat, a pair of "
-    "sunglasses and a small blue calendar page showing the number thirteen, all on a warm sand tone.",
+    "sunglasses and a small teal suitcase, all on a warm sand tone, with a tiny orange sun above.",
     "ferramentas/regra-de-tres": "A white sheet of paper with a simple drawn fraction made of two "
     "blue rectangles and an equals sign followed by a violet question mark, with an orange pencil "
     "resting diagonally across the corner.",
@@ -59,7 +64,7 @@ IMAGENS = {
     "jogos/soletra": "Seven round letter tiles arranged in a hexagon around one larger warm orange "
     "tile in the center, like a spelling game board.",
     "jogos/forca": "A simple wooden gallows with a rope and a blue stick figure drawn on it, with "
-    "four white letter tiles below spelling a blank space, A, E and S.",
+    "four blank cream tiles arranged in a row below it.",
     "ferramentas/energia-eletrica": "A white wall power outlet with a blue plug connected and a warm "
     "orange lightning bolt floating above it, with a small violet energy meter beside.",
     "ferramentas/churrasco": "A small round charcoal grill with glowing orange coals, three skewers "
@@ -298,11 +303,22 @@ def gerar(pagina: str, endereco: str, cabecalhos: dict) -> bytes:
     for parte in resposta.get("candidates", [{}])[0].get("content", {}).get("parts", []):
         if "inlineData" in parte:
             return base64.b64decode(parte["inlineData"]["data"])
-    sys.exit(f"{pagina}: a resposta não trouxe imagem: {json.dumps(resposta)[:500]}")
+    # Sem imagem (finishReason NO_IMAGE, comum quando o filtro do modelo recusa o pedido): avisa e
+    # segue, para um ícone problemático não derrubar o lote inteiro
+    motivo = resposta.get("candidates", [{}])[0].get("finishReason", "?")
+    print(f"  {pagina}: a API não devolveu imagem ({motivo}), pulando", flush=True)
+    return None
 
 
 def reduzir(pagina: str) -> None:
-    """Recorta o branco em volta do desenho, deixa uma margem igual e salva a versão do site."""
+    """Salva a versão do site. Com RECORTAR, tira o branco em volta do desenho e deixa margem igual."""
+    destino = SITE / f"{pagina}.webp"
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    if not RECORTAR:
+        # Fundo do adesivo vai até as bordas: a imagem inteira é o ícone
+        with Image.open(ORIGINAIS / f"{pagina}.png") as imagem:
+            imagem.convert("RGB").resize((192, 192), Image.LANCZOS).save(destino, "WEBP", quality=90, method=6)
+        return
     with Image.open(ORIGINAIS / f"{pagina}.png") as imagem:
         imagem = imagem.convert("RGB")
     # Às vezes o modelo desenha o fundo branco como um cartão arredondado sobre preto: os cantos
@@ -343,15 +359,32 @@ def main() -> None:
             reduzir(pagina)
             print(f"  {SITE / f'{pagina}.webp'}")
         return
+    # --todos: refaz o acervo inteiro no estilo atual (é o que garante a mesma família de imagens)
+    # --secao jogos|ferramentas: só uma das seções
+    todos = sys.argv[1:2] == ["--todos"]
+    nomes = sys.argv[2:] if todos else sys.argv[1:]
     endereco, cabecalhos = acesso()
-    pedidos = paginas(sys.argv[1:]) or [p for p in IMAGENS if not (SITE / f"{p}.webp").exists()]
+    if sys.argv[1:2] == ["--secao"]:
+        prefixo = sys.argv[2].rstrip("/")
+        pedidos = [p for p in IMAGENS if p.startswith(prefixo + "/")]
+        if not pedidos:
+            sys.exit(f"Sem páginas na seção {prefixo}. Use jogos ou ferramentas.")
+    else:
+        pedidos = paginas(nomes) or [p for p in IMAGENS if todos or not (SITE / f"{p}.webp").exists()]
+    falhas = []
     for pagina in pedidos:
         print(f"gerando {pagina}...", flush=True)
         original = ORIGINAIS / f"{pagina}.png"
         original.parent.mkdir(parents=True, exist_ok=True)
-        original.write_bytes(gerar(pagina, endereco, cabecalhos))
+        dados = gerar(pagina, endereco, cabecalhos)
+        if not dados:
+            falhas.append(pagina)
+            continue
+        original.write_bytes(dados)
         reduzir(pagina)
         print(f"  {SITE / f'{pagina}.webp'}")
+    if falhas:
+        print("sem imagem (rode de novo só estas): " + " ".join(falhas))
     print("pronto" if pedidos else "todas as imagens já existem; passe o nome de uma para refazer")
 
 
