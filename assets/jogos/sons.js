@@ -226,6 +226,29 @@ const Sons = (() => {
     apagar(c, d, t) {
       ruido(c, d, t, { dur: 0.09, vol: 0.3, freq: 2200, ate: 900, q: 1 });
     },
+    // Tower Defence Militar: disparos, motores e explosões
+    tiroMetralhadora(c, d, t) {
+      ruido(c, d, t, { dur: 0.035, vol: 0.18, freq: 2300, q: 0.7 });
+      tom(c, d, t, { freq: 260, ate: 120, tipo: "square", dur: 0.05, vol: 0.11, filtro: 2400 });
+    },
+    tiroCanhao(c, d, t) {
+      ruido(c, d, t, { dur: 0.28, vol: 0.25, tipo: "lowpass", freq: 1300, ate: 120, q: 0.5 });
+      tom(c, d, t, { freq: 110, ate: 45, dur: 0.3, vol: 0.24 });
+    },
+    tiroInimigo(c, d, t) {
+      tom(c, d, t, { freq: 180, ate: 80, tipo: "sawtooth", dur: 0.12, vol: 0.13, filtro: 1400 });
+      ruido(c, d, t, { dur: 0.08, vol: 0.13, freq: 1700, q: 0.8 });
+    },
+    helicoptero(c, d, t) {
+      for (let i = 0; i < 6; i++) {
+        tom(c, d, t + i * 0.085, { freq: 85, ate: 68, tipo: "sawtooth", dur: 0.075, vol: 0.09, filtro: 500 });
+      }
+      ruido(c, d, t, { dur: 0.55, vol: 0.08, freq: 280, ate: 210, q: 0.6 });
+    },
+    aviao(c, d, t) {
+      ruido(c, d, t, { dur: 0.75, vol: 0.2, tipo: "highpass", freq: 700, ate: 4000, q: 0.5 });
+      tom(c, d, t, { freq: 220, ate: 75, tipo: "sawtooth", dur: 0.65, vol: 0.08, filtro: 1200 });
+    },
     // Partida nova
     inicio(c, d, t) {
       tom(c, d, t, { freq: DO5, tipo: "triangle", dur: 0.1, vol: 0.13 });

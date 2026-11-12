@@ -180,6 +180,8 @@ IMAGENS = {
     "stacking neatly at the bottom with one shiny golden block falling from the top.",
     "jogos/cobrinha": "A cheerful bright green snake made of rounded square segments curving across "
     "a dark green grid board, with a shiny red apple with a small leaf just ahead of its head.",
+    "jogos/tower-defense": "A friendly green military tank guarding a small bunker, viewed exactly "
+    "from above, with a curved dirt road and a small red enemy tank approaching in the distance.",
     # Jogos: estratégia e tabuleiro
     "jogos/puzzles-de-xadrez": "A white chess knight and a black chess king standing on a few squares "
     "of a chessboard, with a glowing light bulb floating above them.",

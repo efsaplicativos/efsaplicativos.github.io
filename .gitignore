@@ -2,3 +2,7 @@
 # Imagens originais do Nano Banana (o site usa as reduzidas em images/ferramentas)
 _fonte/ferramentas-dados/imagens-originais/
 __pycache__/
+
+# Pacotes de origem do Tower Defence Militar: ficam só no computador.
+# O site carrega exclusivamente os WebP otimizados de assets/jogos/tower-defense/web/.
+assets/jogos/tower-defense/TopDown-TanksArtillery/

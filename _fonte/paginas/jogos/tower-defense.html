@@ -1,0 +1,134 @@
+<!--
+titulo: Tower Defence Militar Online: Jogo de Tower Defense Grátis — EFS Aplicativos
+descricao: Jogue Tower Defence Militar online e grátis. Enfrente tanques, helicópteros e aviões em 20 ondas pela Floresta, Deserto, Neve e Vulcão, no computador ou no celular.
+estilos: /assets/jogos/tower-defense.css
+scripts: /assets/jogos/tower-defense-logica.js /assets/jogos/sons.js /assets/jogos/tower-defense.js
+app: Tower Defence Militar | GameApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/jogos/">Jogos</a></li>
+    <li aria-current="page">Tower Defence Militar</li>
+  </ol>
+  <h1>Tower Defence Militar online</h1>
+  <p>
+    Posicione seus tanques, escolha as melhorias e impeça que os blindados inimigos cheguem ao
+    quartel. São 20 ondas pela Floresta, Deserto, Neve e Vulcão, com tanques, helicópteros, aviões e chefes.
+  </p>
+</header>
+
+<section class="tower-defense" id="tower-defense" aria-label="Tower Defence Militar">
+  <div class="td-status" aria-label="Situação da partida">
+    <div><span>Moedas</span><strong id="td-moedas">330</strong></div>
+    <div><span>Quartel</span><strong id="td-vidas">20</strong></div>
+    <div><span>Onda</span><strong id="td-onda">0/20</strong></div>
+    <div><span>Inimigos</span><strong id="td-inimigos">0</strong></div>
+    <div><span>Melhor</span><strong id="td-recorde">0/20</strong></div>
+  </div>
+
+  <p class="td-mensagem" id="td-mensagem" aria-live="polite">Carregando o campo de batalha…</p>
+
+  <div class="td-quadro" id="td-quadro">
+    <canvas
+      id="td-tela"
+      width="960"
+      height="600"
+      tabindex="0"
+      role="application"
+      aria-label="Campo de batalha visto de cima. Escolha uma torre e toque em uma plataforma para construir."
+      aria-describedby="td-ajuda"
+    ></canvas>
+    <div class="td-carregando" id="td-carregando"><span></span><p>Preparando o campo…</p></div>
+  </div>
+
+  <div class="td-arsenal" id="td-arsenal" role="group" aria-label="Escolha uma defesa para construir">
+    <button type="button" class="td-torre" data-torre="metralhadora" aria-pressed="false">
+      <img src="/assets/jogos/tower-defense/web/icone-metralhadora.webp" alt="" width="64" height="64" />
+      <span><strong>Metralhadora</strong><small>Antiaérea · 80 moedas</small></span><kbd>1</kbd>
+    </button>
+    <button type="button" class="td-torre" data-torre="canhao" aria-pressed="true">
+      <img src="/assets/jogos/tower-defense/web/icone-canhao.webp" alt="" width="64" height="64" />
+      <span><strong>Canhão</strong><small>Só terrestre · 120 moedas</small></span><kbd>2</kbd>
+    </button>
+    <button type="button" class="td-torre" data-torre="artilharia" aria-pressed="false">
+      <img src="/assets/jogos/tower-defense/web/icone-artilharia.webp" alt="" width="64" height="64" />
+      <span><strong>Artilharia</strong><small>Área e aéreo · 180 moedas</small></span><kbd>3</kbd>
+    </button>
+  </div>
+
+  <div class="td-selecionada" id="td-selecionada" hidden>
+    <div><strong id="td-torre-nome">Canhão · nível 1</strong><span id="td-torre-stats"></span></div>
+    <button type="button" class="button secondary" id="td-reparar">Reparar</button>
+    <button type="button" class="button secondary" id="td-melhorar">Melhorar</button>
+    <button type="button" class="td-vender" id="td-vender">Vender</button>
+  </div>
+
+  <div class="td-controles">
+    <button type="button" class="button" id="td-iniciar">Iniciar onda 1</button>
+    <button type="button" class="button secondary" id="td-pausar">Pausar</button>
+    <button type="button" class="button secondary" id="td-velocidade" aria-pressed="false">Velocidade: 1×</button>
+    <button type="button" class="button secondary" id="td-reiniciar">Reiniciar</button>
+    <button type="button" class="button secondary" id="td-tela-cheia">Tela cheia</button>
+    <button type="button" id="td-som"></button>
+  </div>
+
+  <p class="td-ajuda" id="td-ajuda">
+    Escolha uma defesa e toque em um círculo do mapa. Toque em uma torre para reparar, melhorar ou vender.
+    No teclado: 1, 2 e 3 escolhem a torre, Espaço inicia a onda e P pausa.
+  </p>
+
+  <dialog class="td-confirmacao" id="td-confirmar-reinicio" aria-labelledby="td-reinicio-titulo" aria-describedby="td-reinicio-texto">
+    <h2 id="td-reinicio-titulo">Reiniciar partida?</h2>
+    <p id="td-reinicio-texto">Todo o progresso desta operação será perdido. O recorde de ondas será mantido.</p>
+    <div class="td-confirmacao-botoes">
+      <button type="button" class="button secondary" id="td-cancelar-reinicio" autofocus>Cancelar</button>
+      <button type="button" class="button" id="td-confirmar-reinicio-botao">Reiniciar</button>
+    </div>
+  </dialog>
+</section>
+
+<aside class="indicacao" data-indicacao="tower-defense" hidden></aside>
+
+<article class="texto">
+  <h2>Como jogar Tower Defence Militar</h2>
+  <p>
+    Os inimigos seguem a estrada até o quartel. Suas torres atacam automaticamente os alvos dentro
+    do alcance, priorizando o blindado que estiver mais próximo do fim do caminho. Cada inimigo
+    derrotado rende moedas para construir novas defesas, reparar ou melhorar as que já estão no campo.
+    A partir da onda 3, os inimigos também atiram nas suas torres.
+  </p>
+  <ul>
+    <li><strong>Metralhadora:</strong> dispara rápido, combate batedores e ataca aeronaves.</li>
+    <li><strong>Canhão:</strong> tem bom alcance e causa mais dano, mas só atinge alvos terrestres.</li>
+    <li><strong>Artilharia:</strong> alcança longe, ataca aeronaves e atinge inimigos próximos do impacto.</li>
+  </ul>
+  <p>
+    Helicópteros chegam na onda 4 e aviões na 6. Eles seguem as rotas tracejadas, diferentes da estrada
+    dos tanques. Reserve metralhadoras e artilharias para cobrir o céu enquanto os canhões cuidam do solo.
+  </p>
+  <p>
+    Uma torre pode chegar ao nível 3. O reparo custa moedas conforme a vida perdida e tem 10 segundos
+    de recarga por torre. Se ela for
+    destruída, a plataforma fica livre para construir outra. A venda devolve 70% do investimento. Se um
+    inimigo atravessar, o quartel perde vida; a partida termina quando os 20 pontos acabam. Vença a
+    onda 20 para derrotar os dois blindados de comando e concluir a operação. A cada cinco ondas,
+    uma nova região muda o cenário e os inimigos ficam mais resistentes e numerosos.
+  </p>
+  <div class="anuncio" data-bloco="meio" hidden></div>
+  <h2>Dicas para defender o quartel</h2>
+  <ol>
+    <li>Construa perto das curvas para manter os inimigos no alcance por mais tempo.</li>
+    <li>Combine disparos rápidos com artilharia, em vez de usar somente um tipo de torre.</li>
+    <li>Melhore as torres das curvas centrais antes de ocupar todas as plataformas.</li>
+    <li>Você pode construir durante a batalha. Reponha as torres destruídas sem esperar a próxima pausa.</li>
+    <li>Reserve moedas para reparos e reconstruções, principalmente contra os chefes das ondas 10, 15 e 20.</li>
+  </ol>
+  <h2>Funciona no celular?</h2>
+  <p>
+    Sim. Todos os comandos funcionam por toque e o botão Tela cheia ajuda a enxergar melhor o mapa.
+    Ao trocar de aba, a partida pausa. O recorde de ondas fica salvo somente neste aparelho.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
