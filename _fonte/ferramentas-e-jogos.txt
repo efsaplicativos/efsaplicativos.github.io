@@ -3,7 +3,7 @@ EFS APLICATIVOS — MAPA DAS FERRAMENTAS E DOS JOGOS DO SITE
 ================================================================================
 Site:           https://efsaplicativos.com.br
 Levantamento:   09/11/2026
-Conteúdo hoje:  41 ferramentas + 30 jogos publicados no navegador
+Conteúdo hoje:  40 ferramentas + 30 jogos publicados no navegador
                 26 aplicativos no catálogo Android da página inicial
 Arquivo de apoio do repositório. Não é uma página do site e não tem link no menu.
 
@@ -256,7 +256,7 @@ PARTE 1 — OS 30 JOGOS
     App: (não tem app; existe só na web)
 
 ================================================================================
-PARTE 2 — AS 41 FERRAMENTAS
+PARTE 2 — AS 40 FERRAMENTAS
 ================================================================================
 
 --- Finanças (11) --------------------------------------------------------------
@@ -400,7 +400,7 @@ PARTE 2 — AS 41 FERRAMENTAS
     com frações e complemento de dois, além de converter texto em bytes UTF-8.
     App: Calculadora Multifunção
 
---- Conversores e dia a dia (12) ------------------------------------------------
+--- Conversores e dia a dia (11) ------------------------------------------------
 
 21) Preço por quilo
    Endereço: /ferramentas/preco-por-quilo/
@@ -419,7 +419,7 @@ PARTE 2 — AS 41 FERRAMENTAS
    acompanhamento, bebida, carvão e sal para o número de convidados.
    App: (não tem app; existe só na web)
 
-24) Conversor de arquivos
+24) Conversor de arquivos — DESATIVADO POR ENQUANTO (fonte em _fonte/paginas-desativadas/)
     Endereço: /ferramentas/conversor-de-arquivos/
     O que faz: converte no navegador, sem servidor: JSON⇄CSV, Markdown→HTML,
     TXT→PDF (pdf-lib), PDF→TXT (pdf.js), DOCX→HTML/TXT (mammoth),
