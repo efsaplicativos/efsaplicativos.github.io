@@ -328,8 +328,11 @@
    * colunas (fonte de texto é monoespaçada), então indentação e colunas do PDF aparecem no .txt.
    * Linhas muito próximas viram linha em branco e cada página termina em quebra de página (\f).
    */
-  /** Uma página do PDF vira o texto com layout (colunas por posição) — usado no TXT, no HTML e no DOCX. */
-  function paginaParaTexto(pagina, conteudo) {
+  /**
+   * Uma página do PDF em linhas ricas: texto com a posição (x) e o corpo (altura) originais.
+   * Serve para o TXT (só texto), para o HTML (camada sobre a imagem) e para o DOCX (recuo e corpo).
+   */
+  function paginaParaLinhas(pagina, conteudo) {
     const itens = conteudo.items
       .filter((item) => item.str !== "")
       .map((item) => ({
@@ -339,26 +342,27 @@
         altura: Math.abs(item.height || item.transform[3] || 10),
       }))
       .sort((a, b) => b.y - a.y || a.x - b.x);
-    const linhas = [];
+    const grupos = [];
     let atual = null;
     for (const item of itens) {
       if (!atual || Math.abs(atual.y - item.y) > 3) {
         atual = { y: item.y, altura: item.altura, itens: [item] };
-        linhas.push(atual);
+        grupos.push(atual);
       } else {
         atual.itens.push(item);
       }
     }
-    const saida = [];
+    const linhas = [];
     let anterior = null;
-    for (const linha of linhas) {
+    for (const grupo of grupos) {
       // 1 coluna de texto ≈ 0,55 da altura da fonte; é o que mapeia pontos em caracteres
-      const larguraColuna = Math.max(2.2, linha.altura * 0.55);
+      const larguraColuna = Math.max(2.2, grupo.altura * 0.55);
+      const inicio = grupo.itens[0].x;
       let texto = "";
-      for (const item of linha.itens) {
-        const coluna = Math.round(item.x / larguraColuna);
+      for (const item of grupo.itens) {
+        const coluna = Math.round((item.x - inicio) / larguraColuna);
         if (texto.length === 0) {
-          texto = " ".repeat(Math.max(0, coluna));
+          texto = "";
         } else if (coluna > texto.length) {
           texto += " ".repeat(Math.min(coluna - texto.length, 16));
         } else {
@@ -366,19 +370,22 @@
         }
         texto += item.texto;
       }
-      if (anterior !== null && anterior - linha.y > linha.altura * 1.8) saida.push("");
-      saida.push(texto.replace(/\s+$/, ""));
-      anterior = linha.y;
+      if (anterior !== null && anterior - grupo.y > grupo.altura * 1.8) linhas.push({ texto: "", x: inicio, altura: grupo.altura });
+      linhas.push({ texto: texto.replace(/\s+$/, ""), x: inicio, altura: grupo.altura });
+      anterior = grupo.y;
     }
-    return saida.join("\n");
+    return linhas;
   }
+
+  /** Texto com layout (sem metadados), usado no TXT. */
+  const textoDaLinha = (linhas) => linhas.map((linha) => linha.texto).join("\n");
 
   /** Texto com layout do documento inteiro, página a página. */
   async function textoDoDocumento(documento) {
     const paginas = [];
     for (let numero = 1; numero <= documento.numPages; numero++) {
       const pagina = await documento.getPage(numero);
-      paginas.push(paginaParaTexto(pagina, await pagina.getTextContent()));
+      paginas.push(textoDaLinha(paginaParaLinhas(pagina, await pagina.getTextContent())));
     }
     return paginas;
   }
@@ -407,13 +414,24 @@
       contexto.fillStyle = "#ffffff";
       contexto.fillRect(0, 0, tela.width, tela.height);
       await pagina.render({ canvas: tela, canvasContext: contexto, viewport: visor, canvasFactory: fabricaCanvas }).promise;
-      const texto = paginaParaTexto(pagina, await pagina.getTextContent());
-      const escapado = texto.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      const conteudo = await pagina.getTextContent();
+      const base = pagina.getViewport({ scale: 1 });
+      const escapar = (texto) => texto.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      // Camada de texto invisível por cima da imagem: seleciona e copia, sem mudar nada no visual
+      const textos = conteudo.items
+        .filter((item) => item.str.trim() !== "")
+        .map((item) => {
+          const altura = Math.abs(item.height || item.transform[3] || 10);
+          const x = item.transform[4];
+          const y = base.height - item.transform[5];
+          return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="${altura.toFixed(1)}" xml:space="preserve">${escapar(item.str)}</text>`;
+        })
+        .join("");
       folhas.push(
-        `<figure><img src="${tela.toDataURL("image/png")}" alt="Página ${numero}" width="${tela.width}" height="${tela.height}"><figcaption>Página ${numero} — imagem fiel do PDF e, abaixo, o texto extraído (selecionável)</figcaption><pre>${escapado}</pre></figure>`,
+        `<div class="folha"><img src="${tela.toDataURL("image/png")}" alt="Página ${numero}" width="${tela.width}" height="${tela.height}"><svg class="camada" viewBox="0 0 ${base.width.toFixed(1)} ${base.height.toFixed(1)}" preserveAspectRatio="none" aria-label="Texto da página ${numero}">${textos}</svg></div>`,
       );
     }
-    const html = `<!doctype html>\n<html lang="pt-BR">\n<head>\n<meta charset="utf-8">\n<title>Documento</title>\n<style>body{margin:0;padding:12px;background:#f1f5f9;font-family:system-ui,sans-serif}figure{margin:0 auto 12px;max-width:1000px}img{display:block;max-width:100%;height:auto;margin:0 auto;box-shadow:0 1px 4px rgba(0,0,0,.25)}pre{background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px;overflow-x:auto;font-size:12px;line-height:1.35;margin:8px 0 0}figcaption{font-size:12px;color:#475569;margin-top:6px}</style>\n</head>\n<body>\n${folhas.join("\n")}\n</body>\n</html>\n`;
+    const html = `<!doctype html>\n<html lang="pt-BR">\n<head>\n<meta charset="utf-8">\n<title>Documento</title>\n<style>body{margin:0;padding:12px;background:#f1f5f9}.folha{position:relative;margin:0 auto 12px;max-width:1000px;line-height:0}.folha img{display:block;width:100%;height:auto;box-shadow:0 1px 4px rgba(0,0,0,.25)}.camada{position:absolute;inset:0;width:100%;height:100%}.camada text{fill:transparent;font-family:Helvetica,Arial,sans-serif}.camada text::selection{fill:#fde047}</style>\n</head>\n<body>\n${folhas.join("\n")}\n</body>\n</html>\n`;
     return new Blob([html], { type: "text/html;charset=utf-8" });
   }
 
@@ -467,26 +485,26 @@
       contexto.fillRect(0, 0, tela.width, tela.height);
       await pagina.render({ canvas: tela, canvasContext: contexto, viewport: visor, canvasFactory: fabricaCanvas }).promise;
       const base64 = tela.toDataURL("image/png").split(",")[1];
-      const texto = paginaParaTexto(pagina, await pagina.getTextContent());
-      imagens.push({ png: base64, largura: tela.width, altura: tela.height, texto });
+      const linhas = paginaParaLinhas(pagina, await pagina.getTextContent());
+      imagens.push({ png: base64, largura: tela.width, altura: tela.height, linhas });
     }
 
     // 1 cm = 567 twips; A4 = 11906 x 16838 twips; 1 polegada = 914400 EMU
     const LARGURA_TEXTO_EMU = 5_943_000; // 6,5 polegadas
     const escaparXml = (texto) => texto.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    // O texto entra em Courier New (monoespaçado), uma linha por parágrafo, para as colunas ficarem
-    const textoParagrafos = (texto) =>
-      texto
-        .split("\n")
-        .map(
-          (linha) =>
-            `<w:p><w:pPr><w:spacing w:after="0" w:line="200" w:lineRule="auto"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Courier New" w:hAnsi="Courier New"/><w:sz w:val="16"/></w:rPr><w:t xml:space="preserve">${escaparXml(linha) || " "}</w:t></w:r></w:p>`,
-        )
+    // Cada linha vira um parágrafo com o recuo (x do PDF em twips) e o corpo (em meios-pontos)
+    const textoParagrafos = (linhas) =>
+      (linhas || [])
+        .map((linha) => {
+          const recuo = Math.max(0, Math.round(linha.x * 20));
+          const corpo = Math.max(14, Math.round(linha.altura * 2));
+          return `<w:p><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/><w:ind w:left="${recuo}"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="${corpo}"/></w:rPr><w:t xml:space="preserve">${escaparXml(linha.texto) || " "}</w:t></w:r></w:p>`;
+        })
         .join("");
     const paragrafos = imagens.map((imagem, indice) => {
       const id = indice + 1;
       const altura = Math.round((LARGURA_TEXTO_EMU * imagem.altura) / imagem.largura);
-      return `<w:p><w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${LARGURA_TEXTO_EMU}" cy="${altura}"/><wp:docPr id="${id}" name="Pagina ${id}"/><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="${id}" name="imagem${id}.png"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="rId${id}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${LARGURA_TEXTO_EMU}" cy="${altura}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>` + textoParagrafos(imagem.texto) + (id < imagens.length ? '<w:p><w:r><w:br w:type="page"/></w:r></w:p>' : "");
+      return `<w:p><w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${LARGURA_TEXTO_EMU}" cy="${altura}"/><wp:docPr id="${id}" name="Pagina ${id}"/><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="${id}" name="imagem${id}.png"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="rId${id}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${LARGURA_TEXTO_EMU}" cy="${altura}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>` + textoParagrafos(imagem.linhas) + (id < imagens.length ? '<w:p><w:r><w:br w:type="page"/></w:r></w:p>' : "");
     });
 
     pacote.file("[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`);
