@@ -324,13 +324,13 @@
   };
 
   /**
-   * PDF → texto com as linhas reconstruídas por posição. Muitos PDFs desenham as palavras sem o
-   * caractere de espaço, então a decisão de separar vem do espaço em branco entre um pedaço e o
-   * seguinte (mais de 20% da altura da fonte = espaço de verdade).
+   * PDF → texto preservando o LAYOUT: cada pedaço é posicionado pela coordenada x convertida em
+   * colunas (fonte de texto é monoespaçada), então indentação e colunas do PDF aparecem no .txt.
+   * Linhas muito próximas viram linha em branco e cada página termina em quebra de página (\f).
    */
   async function pdfParaTexto(arquivo) {
     const documento = await abrirPdf(arquivo);
-    const partes = [];
+    const paginas = [];
     for (let numero = 1; numero <= documento.numPages; numero++) {
       const pagina = await documento.getPage(numero);
       const conteudo = await pagina.getTextContent();
@@ -339,7 +339,6 @@
         .map((item) => ({
           texto: item.str,
           x: item.transform[4],
-          fim: item.transform[4] + (item.width || 0),
           y: Math.round(item.transform[5] * 10) / 10,
           altura: Math.abs(item.height || item.transform[3] || 10),
         }))
@@ -348,18 +347,36 @@
       let atual = null;
       for (const item of itens) {
         if (!atual || Math.abs(atual.y - item.y) > 3) {
-          atual = { y: item.y, altura: item.altura, partes: [item.texto], fim: item.fim };
+          atual = { y: item.y, altura: item.altura, itens: [item] };
           linhas.push(atual);
-          continue;
+        } else {
+          atual.itens.push(item);
         }
-        const vao = item.x - atual.fim;
-        const espaco = vao > Math.max(1.2, atual.altura * 0.2) ? " " : "";
-        atual.partes.push(espaco + item.texto);
-        atual.fim = Math.max(atual.fim, item.fim);
       }
-      partes.push(linhas.map((linha) => linha.partes.join("").replace(/[ \t]+/g, " ").trim()).join("\n"));
+      const saida = [];
+      let anterior = null;
+      for (const linha of linhas) {
+        // 1 coluna de texto ≈ 0,55 da altura da fonte; é o que mapeia pontos em caracteres
+        const larguraColuna = Math.max(2.2, linha.altura * 0.55);
+        let texto = "";
+        for (const item of linha.itens) {
+          const coluna = Math.round(item.x / larguraColuna);
+          if (texto.length === 0) {
+            texto = " ".repeat(Math.max(0, coluna));
+          } else if (coluna > texto.length) {
+            texto += " ".repeat(Math.min(coluna - texto.length, 16));
+          } else {
+            texto += " ";
+          }
+          texto += item.texto;
+        }
+        if (anterior !== null && anterior - linha.y > linha.altura * 1.8) saida.push("");
+        saida.push(texto.replace(/\s+$/, ""));
+        anterior = linha.y;
+      }
+      paginas.push(saida.join("\n"));
     }
-    return new Blob([partes.join("\n\n")], { type: "text/plain;charset=utf-8" });
+    return new Blob([paginas.join("\n\f\n")], { type: "text/plain;charset=utf-8" });
   }
 
   /**
