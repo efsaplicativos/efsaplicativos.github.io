@@ -296,31 +296,68 @@
     return new Blob([await pdf.save()], { type: "application/pdf" });
   }
 
-  /** PDF → texto com as linhas reconstruídas: agrupa por altura (y) e ordena por largura (x). */
-  async function pdfParaTexto(arquivo) {
+  /**
+   * Fábrica de canvas que o pdf.js exige para renderizar (sem ela ele quebra com "createCanvas").
+   * É o ponto de extensão documentado: o build ESM não traz uma pronta.
+   */
+  const fabricaCanvas = {
+    create(largura, altura) {
+      const canvas = document.createElement("canvas");
+      canvas.width = largura;
+      canvas.height = altura;
+      return { canvas, context: canvas.getContext("2d") };
+    },
+    reset(par, largura, altura) {
+      par.canvas.width = largura;
+      par.canvas.height = altura;
+    },
+    destroy(par) {
+      par.canvas.width = 0;
+      par.canvas.height = 0;
+    },
+  };
+
+  const abrirPdf = async (arquivo) => {
     const pdfjs = await carregarPdfJs();
     const dados = new Uint8Array(await arquivo.arrayBuffer());
-    const documento = await pdfjs.getDocument({ data: dados }).promise;
+    return pdfjs.getDocument({ data: dados, canvasFactory: fabricaCanvas }).promise;
+  };
+
+  /**
+   * PDF → texto com as linhas reconstruídas por posição. Muitos PDFs desenham as palavras sem o
+   * caractere de espaço, então a decisão de separar vem do espaço em branco entre um pedaço e o
+   * seguinte (mais de 20% da altura da fonte = espaço de verdade).
+   */
+  async function pdfParaTexto(arquivo) {
+    const documento = await abrirPdf(arquivo);
     const partes = [];
     for (let numero = 1; numero <= documento.numPages; numero++) {
       const pagina = await documento.getPage(numero);
       const conteudo = await pagina.getTextContent();
       const itens = conteudo.items
         .filter((item) => item.str !== "")
-        .map((item) => ({ texto: item.str, x: item.transform[4], y: Math.round(item.transform[5] * 10) / 10 }))
+        .map((item) => ({
+          texto: item.str,
+          x: item.transform[4],
+          fim: item.transform[4] + (item.width || 0),
+          y: Math.round(item.transform[5] * 10) / 10,
+          altura: Math.abs(item.height || item.transform[3] || 10),
+        }))
         .sort((a, b) => b.y - a.y || a.x - b.x);
       const linhas = [];
       let atual = null;
       for (const item of itens) {
-        // 3 pontos de tolerância: pedaços da mesma linha costumam variar um pouco de altura
         if (!atual || Math.abs(atual.y - item.y) > 3) {
-          atual = { y: item.y, partes: [item.texto] };
+          atual = { y: item.y, altura: item.altura, partes: [item.texto], fim: item.fim };
           linhas.push(atual);
-        } else {
-          atual.partes.push(item.texto);
+          continue;
         }
+        const vao = item.x - atual.fim;
+        const espaco = vao > Math.max(1.2, atual.altura * 0.2) ? " " : "";
+        atual.partes.push(espaco + item.texto);
+        atual.fim = Math.max(atual.fim, item.fim);
       }
-      partes.push(linhas.map((linha) => linha.partes.join(" ").replace(/\s+/g, " ").trim()).join("\n"));
+      partes.push(linhas.map((linha) => linha.partes.join("").replace(/[ \t]+/g, " ").trim()).join("\n"));
     }
     return new Blob([partes.join("\n\n")], { type: "text/plain;charset=utf-8" });
   }
@@ -330,9 +367,7 @@
    * Assim o resultado fica igual ao arquivo original, com imagens, colunas e tudo no lugar.
    */
   async function pdfParaHtmlVisual(arquivo) {
-    const pdfjs = await carregarPdfJs();
-    const dados = new Uint8Array(await arquivo.arrayBuffer());
-    const documento = await pdfjs.getDocument({ data: dados }).promise;
+    const documento = await abrirPdf(arquivo);
     const paginas = [];
     for (let numero = 1; numero <= documento.numPages; numero++) {
       const pagina = await documento.getPage(numero);
@@ -340,7 +375,11 @@
       const tela = document.createElement("canvas");
       tela.width = Math.ceil(visor.width);
       tela.height = Math.ceil(visor.height);
-      await pagina.render({ canvasContext: tela.getContext("2d"), viewport: visor }).promise;
+      const contexto = tela.getContext("2d");
+      // O fundo branco evita a página sair transparente (e preta em alguns visualizadores)
+      contexto.fillStyle = "#ffffff";
+      contexto.fillRect(0, 0, tela.width, tela.height);
+      await pagina.render({ canvas: tela, canvasContext: contexto, viewport: visor, canvasFactory: fabricaCanvas }).promise;
       paginas.push(
         `<img src="${tela.toDataURL("image/png")}" alt="Página ${numero}" width="${tela.width}" height="${tela.height}">`,
       );
