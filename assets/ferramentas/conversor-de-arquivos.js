@@ -417,6 +417,53 @@
     return new Blob([html], { type: "text/html;charset=utf-8" });
   }
 
+  /**
+   * PDF → DOCX visual: cada página entra como imagem dentro do .docx, com a página A4 e margem de
+   * 1 cm. O resultado abre no Word igual ao PDF (imagens, colunas, tudo no lugar). O texto fica
+   * dentro da imagem — não é editável, e é o limite honesto de fazer isso sem serviço de conversão.
+   */
+  async function pdfParaDocxVisual(arquivo) {
+    const documento = await abrirPdf(arquivo);
+    const JSZip = await carregarZip();
+    const pacote = new JSZip();
+    const imagens = [];
+    for (let numero = 1; numero <= documento.numPages; numero++) {
+      const pagina = await documento.getPage(numero);
+      const visor = pagina.getViewport({ scale: 2 });
+      const tela = document.createElement("canvas");
+      tela.width = Math.ceil(visor.width);
+      tela.height = Math.ceil(visor.height);
+      const contexto = tela.getContext("2d");
+      contexto.fillStyle = "#ffffff";
+      contexto.fillRect(0, 0, tela.width, tela.height);
+      await pagina.render({ canvas: tela, canvasContext: contexto, viewport: visor, canvasFactory: fabricaCanvas }).promise;
+      const base64 = tela.toDataURL("image/png").split(",")[1];
+      imagens.push({ png: base64, largura: tela.width, altura: tela.height });
+    }
+
+    // 1 cm = 567 twips; A4 = 11906 x 16838 twips; 1 polegada = 914400 EMU
+    const LARGURA_TEXTO_EMU = 5_943_000; // 6,5 polegadas
+    const paragrafos = imagens.map((imagem, indice) => {
+      const id = indice + 1;
+      const altura = Math.round((LARGURA_TEXTO_EMU * imagem.altura) / imagem.largura);
+      return `<w:p><w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${LARGURA_TEXTO_EMU}" cy="${altura}"/><wp:docPr id="${id}" name="Pagina ${id}"/><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="${id}" name="imagem${id}.png"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="rId${id}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${LARGURA_TEXTO_EMU}" cy="${altura}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r>${id < imagens.length ? '<w:r><w:br w:type="page"/></w:r>' : ""}</w:p>`;
+    });
+
+    pacote.file("[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`);
+    pacote.file("_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`);
+    pacote.file("word/_rels/document.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${imagens.map((_, i) => `<Relationship Id="rId${i + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/imagem${i + 1}.png"/>`).join("")}</Relationships>`);
+    pacote.file(
+      "word/document.xml",
+      `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><w:body>${paragrafos.join("")}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="567" w:right="567" w:bottom="567" w:left="567" w:header="0" w:footer="0" w:gutter="0"/></w:sectPr></w:body></w:document>`,
+    );
+    imagens.forEach((imagem, i) => pacote.file(`word/media/imagem${i + 1}.png`, imagem.png, { base64: true }));
+    const blob = await pacote.generateAsync({
+      type: "blob",
+      mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    });
+    return blob;
+  }
+
   async function converterTudo() {
     if (!itens.length) return;
     blocoGlobal.hidden = false;
@@ -431,7 +478,9 @@
         const nome = C.nomeSaida(item.arquivo.name, item.destino);
         let blob;
         if (item.formato === "pdf") {
-          blob = item.destino === "html" ? await pdfParaHtmlVisual(item.arquivo) : await pdfParaTexto(item.arquivo);
+          if (item.destino === "docx") blob = await pdfParaDocxVisual(item.arquivo);
+          else if (item.destino === "html") blob = await pdfParaHtmlVisual(item.arquivo);
+          else blob = await pdfParaTexto(item.arquivo);
         } else if (item.formato === "docx") {
           blob = await docxParaBlob(item.arquivo, item.destino);
         } else if (C.ehImagem(item.formato)) {

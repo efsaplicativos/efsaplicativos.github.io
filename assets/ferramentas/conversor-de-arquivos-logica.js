@@ -30,7 +30,7 @@ const LogicaConversor = (() => {
     webp: ["png", "jpg", "bmp"],
     bmp: ["png", "jpg", "webp"],
     txt: ["pdf"],
-    pdf: ["html", "txt"],
+    pdf: ["docx", "html", "txt"],
     docx: ["html", "txt"],
   };
 
