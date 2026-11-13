@@ -296,7 +296,7 @@
     return new Blob([await pdf.save()], { type: "application/pdf" });
   }
 
-  /** PDF → texto, página por página, respeitando as quebras de linha que o próprio PDF informa. */
+  /** PDF → texto com as linhas reconstruídas: agrupa por altura (y) e ordena por largura (x). */
   async function pdfParaTexto(arquivo) {
     const pdfjs = await carregarPdfJs();
     const dados = new Uint8Array(await arquivo.arrayBuffer());
@@ -305,36 +305,77 @@
     for (let numero = 1; numero <= documento.numPages; numero++) {
       const pagina = await documento.getPage(numero);
       const conteudo = await pagina.getTextContent();
-      let linha = "";
-      for (const item of conteudo.items) {
-        linha += item.str;
-        linha += item.hasEOL ? "\n" : " ";
+      const itens = conteudo.items
+        .filter((item) => item.str !== "")
+        .map((item) => ({ texto: item.str, x: item.transform[4], y: Math.round(item.transform[5] * 10) / 10 }))
+        .sort((a, b) => b.y - a.y || a.x - b.x);
+      const linhas = [];
+      let atual = null;
+      for (const item of itens) {
+        // 3 pontos de tolerância: pedaços da mesma linha costumam variar um pouco de altura
+        if (!atual || Math.abs(atual.y - item.y) > 3) {
+          atual = { y: item.y, partes: [item.texto] };
+          linhas.push(atual);
+        } else {
+          atual.partes.push(item.texto);
+        }
       }
-      partes.push(linha.replace(/[ \t]+\n/g, "\n").trim());
+      partes.push(linhas.map((linha) => linha.partes.join(" ").replace(/\s+/g, " ").trim()).join("\n"));
     }
     return new Blob([partes.join("\n\n")], { type: "text/plain;charset=utf-8" });
   }
 
-  // DOCX: o mammoth lê o Word e devolve HTML ou texto puro. Só entra quando alguém solta um .docx.
-  let promessaMammoth = null;
-  const carregarMammoth = () => {
-    if (!promessaMammoth) {
-      promessaMammoth = import("https://cdn.jsdelivr.net/npm/mammoth@1.8.0/+esm").then((modulo) => modulo.default || modulo);
-    }
-    return promessaMammoth;
-  };
-
-  /** DOCX → HTML ou DOCX → texto. É só ida: o mammoth não escreve .docx. */
-  async function docxParaBlob(arquivo, destino) {
-    const mammoth = await carregarMammoth();
+  /**
+   * PDF → HTML visual: cada página é renderizada em um canvas e entra no HTML como imagem.
+   * Assim o resultado fica igual ao arquivo original, com imagens, colunas e tudo no lugar.
+   */
+  async function pdfParaHtmlVisual(arquivo) {
+    const pdfjs = await carregarPdfJs();
     const dados = new Uint8Array(await arquivo.arrayBuffer());
-    if (destino === "txt") {
-      const { value } = await mammoth.extractRawText({ arrayBuffer: dados.buffer.slice(dados.byteOffset, dados.byteOffset + dados.byteLength) });
-      return new Blob([value], { type: "text/plain;charset=utf-8" });
+    const documento = await pdfjs.getDocument({ data: dados }).promise;
+    const paginas = [];
+    for (let numero = 1; numero <= documento.numPages; numero++) {
+      const pagina = await documento.getPage(numero);
+      const visor = pagina.getViewport({ scale: 2 });
+      const tela = document.createElement("canvas");
+      tela.width = Math.ceil(visor.width);
+      tela.height = Math.ceil(visor.height);
+      await pagina.render({ canvasContext: tela.getContext("2d"), viewport: visor }).promise;
+      paginas.push(
+        `<img src="${tela.toDataURL("image/png")}" alt="Página ${numero}" width="${tela.width}" height="${tela.height}">`,
+      );
     }
-    const { value } = await mammoth.convertToHtml({ arrayBuffer: dados.buffer.slice(dados.byteOffset, dados.byteOffset + dados.byteLength) });
-    const documento = `<!doctype html>\n<html lang="pt-BR">\n<head>\n<meta charset="utf-8">\n<title>Documento</title>\n</head>\n<body>\n${value}\n</body>\n</html>\n`;
-    return new Blob([documento], { type: "text/html;charset=utf-8" });
+    const html = `<!doctype html>\n<html lang="pt-BR">\n<head>\n<meta charset="utf-8">\n<title>Documento</title>\n<style>body{margin:0;padding:12px;background:#f1f5f9}img{display:block;max-width:100%;height:auto;margin:0 auto 12px;box-shadow:0 1px 4px rgba(0,0,0,.25)}</style>\n</head>\n<body>\n${paginas.join("\n")}\n</body>\n</html>\n`;
+    return new Blob([html], { type: "text/html;charset=utf-8" });
+  }
+
+  /**
+   * DOCX → HTML ou texto, sem biblioteca: um .docx é um ZIP e o conteúdo está em word/document.xml.
+   * Cada <w:p> é um parágrafo e o texto dele são os <w:t> em ordem. Assim não dependemos de uma
+   * biblioteca opaca (o mammoth dava erro em alguns arquivos) e a leitura fica sob nosso controle.
+   */
+  async function docxParaBlob(arquivo, destino) {
+    const JSZip = await carregarZip();
+    const pacote = await JSZip.loadAsync(arquivo);
+    const entrada = pacote.file("word/document.xml");
+    if (!entrada) throw new Error("Este .docx não tem word/document.xml (pode estar protegido).");
+    const xml = await entrada.async("string");
+    const documento = new DOMParser().parseFromString(xml, "application/xml");
+    const erro = documento.getElementsByTagName("parsererror");
+    if (erro.length) throw new Error("Não foi possível ler o XML do documento.");
+    const paragrafos = [...documento.getElementsByTagName("w:p")].map((paragrafo) =>
+      [...paragrafo.getElementsByTagName("w:t")].map((pedaco) => pedaco.textContent).join(""),
+    );
+    if (destino === "txt") {
+      return new Blob([paragrafos.join("\n\n")], { type: "text/plain;charset=utf-8" });
+    }
+    const escapar = (texto) => texto.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const corpo = paragrafos
+      .map((texto) => (texto.trim() ? `  <p>${escapar(texto)}</p>` : ""))
+      .filter(Boolean)
+      .join("\n");
+    const html = `<!doctype html>\n<html lang="pt-BR">\n<head>\n<meta charset="utf-8">\n<title>Documento</title>\n</head>\n<body>\n${corpo}\n</body>\n</html>\n`;
+    return new Blob([html], { type: "text/html;charset=utf-8" });
   }
 
   async function converterTudo() {
@@ -351,7 +392,7 @@
         const nome = C.nomeSaida(item.arquivo.name, item.destino);
         let blob;
         if (item.formato === "pdf") {
-          blob = await pdfParaTexto(item.arquivo);
+          blob = item.destino === "html" ? await pdfParaHtmlVisual(item.arquivo) : await pdfParaTexto(item.arquivo);
         } else if (item.formato === "docx") {
           blob = await docxParaBlob(item.arquivo, item.destino);
         } else if (C.ehImagem(item.formato)) {

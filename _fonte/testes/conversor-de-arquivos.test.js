@@ -43,7 +43,7 @@ const testes = {
   },
   "o PDF entra como texto de ida e de volta"() {
     assert.deepEqual(C.saidasDe("txt"), ["pdf"]);
-    assert.deepEqual(C.saidasDe("pdf"), ["txt"]);
+    assert.deepEqual(C.saidasDe("pdf"), ["html", "txt"]);
     assert.equal(C.formatoDe({ name: "contrato.PDF" }), "pdf");
     assert.equal(C.formatoDe({ name: "notas.txt" }), "txt");
     assert.equal(C.nomeSaida("notas.txt", "pdf"), "notas.pdf");
