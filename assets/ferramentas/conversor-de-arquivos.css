@@ -1,0 +1,184 @@
+/* Conversor de arquivos. Usa as classes base do site (.tool, .button, .hint). */
+.conversor {
+  display: grid;
+  gap: 18px;
+}
+
+.conv-solta {
+  position: relative;
+  padding: 26px 18px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  text-align: center;
+  background: #f8fafc;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.conv-solta:focus-visible {
+  outline: 3px solid #12647a;
+  outline-offset: 3px;
+}
+
+.conv-solta.arrastando {
+  border-color: #12647a;
+  background: #ecfeff;
+}
+
+.conv-entrada {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.conv-chamada {
+  margin: 0 0 6px;
+  font-size: 17px;
+}
+
+.conv-escolher {
+  font: inherit;
+  font-weight: 700;
+  color: #12647a;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.conv-fila-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.conv-fila-topo h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.conv-itens {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.conv-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  gap: 8px 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.conv-nome {
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+
+.conv-seta {
+  opacity: 0.5;
+}
+
+.conv-destino {
+  font: inherit;
+  padding: 6px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: inherit;
+  color-scheme: light;
+}
+
+.conv-estado {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+.conv-ok {
+  color: #15803d;
+  opacity: 1;
+}
+
+.conv-erro {
+  color: #b91c1c;
+  opacity: 1;
+}
+
+.conv-erro,
+.conv-baixar {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 14px;
+}
+
+.conv-erro {
+  color: #b91c1c;
+}
+
+.conv-baixar {
+  font-weight: 700;
+  color: #12647a;
+}
+
+.conv-global {
+  margin: 4px 0 12px;
+}
+
+.conv-barra {
+  height: 10px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.conv-barra span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: #12647a;
+  transition: width 0.2s ease;
+}
+
+.conv-progresso {
+  margin: 6px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.conv-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.conv-aviso {
+  margin: 0;
+  min-height: 1.3em;
+  font-weight: 600;
+}
+
+@media (max-width: 560px) {
+  .conv-item {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .conv-seta {
+    display: none;
+  }
+
+  .conv-estado {
+    grid-column: 1 / -1;
+  }
+}

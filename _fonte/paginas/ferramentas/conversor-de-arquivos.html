@@ -1,0 +1,106 @@
+<!--
+titulo: Conversor de Arquivos Online: JSON, CSV e Markdown Grátis — EFS Aplicativos
+descricao: Converta arquivos no navegador, sem enviar nada para servidor: JSON para CSV, CSV para JSON e Markdown para HTML, com conversão em lote, barra de progresso e download direto.
+estilos: /assets/ferramentas/conversor-de-arquivos.css
+scripts: /assets/ferramentas/conversor-de-arquivos-logica.js /assets/ferramentas/conversor-de-arquivos.js
+app: Conversor de arquivos | UtilitiesApplication
+-->
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Conversor de arquivos</li>
+  </ol>
+  <h1>Conversor de arquivos</h1>
+  <p>
+    Arraste os arquivos, escolha o formato e baixe o resultado. Tudo acontece no seu navegador: nenhum
+    arquivo é enviado para servidor nenhum.
+  </p>
+</header>
+
+<section class="tool conversor" aria-label="Conversor de arquivos">
+  <div class="conv-solta" id="conv-solta">
+    <input class="conv-entrada" id="conv-arquivos" type="file" multiple
+      accept=".json,.csv,.md,.markdown,.txt,.pdf,.docx,.png,.jpg,.jpeg,.webp,.bmp,.zip,application/json,text/csv,text/markdown,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg,image/webp,image/bmp,application/zip" />
+    <p class="conv-chamada">
+      <strong>Arraste os arquivos aqui</strong> ou
+      <button type="button" class="conv-escolher" id="conv-escolher">escolha no computador</button>
+    </p>
+    <p class="hint">Aceita JSON, CSV, Markdown, texto, PDF, DOCX, PNG, JPG, WebP, BMP e ZIP. Vários arquivos de uma vez.</p>
+  </div>
+
+  <div class="conv-fila" id="conv-fila" hidden>
+    <div class="conv-fila-topo">
+      <h2 id="conv-fila-titulo">Arquivos</h2>
+      <button type="button" class="button secondary" id="conv-limpar">Limpar lista</button>
+    </div>
+    <ul class="conv-itens" id="conv-itens"></ul>
+    <div class="conv-global" id="conv-global" hidden>
+      <div class="conv-barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="conv-barra-global">
+        <span id="conv-barra-preenchida"></span>
+      </div>
+      <p class="conv-progresso" id="conv-progresso" role="status"></p>
+    </div>
+    <div class="conv-acoes">
+      <button type="button" class="button" id="conv-converter">Converter</button>
+      <button type="button" class="button secondary" id="conv-baixar" hidden>Baixar convertidos</button>
+      <button type="button" class="button secondary" id="conv-zip" hidden>Baixar em .zip</button>
+    </div>
+  </div>
+
+  <p class="conv-aviso" id="conv-aviso" role="status"></p>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<aside class="indicacao" data-indicacao="conversor-de-arquivos" hidden></aside>
+
+<article class="texto">
+  <h2>O que já converte</h2>
+  <ul>
+    <li><strong>JSON → CSV</strong>: pega uma lista de objetos e monta a planilha com todas as colunas; valores com vírgula ou aspas vão entre aspas, e o arquivo sai com BOM para o Excel abrir os acentos certo.</li>
+    <li><strong>CSV → JSON</strong>: lê a primeira linha como cabeçalho, transforma cada linha em um objeto e converte número em número de verdade.</li>
+    <li><strong>Markdown → HTML</strong>: títulos, listas, <code>negrito</code>, <em>itálico</em>, código e links, com o HTML escapado (nada de script entrar por acidente).</li>
+    <li><strong>Imagens</strong>: PNG ⇄ JPG ⇄ WebP ⇄ BMP. A conversão usa o próprio navegador (canvas) e, no BMP, um codificador escrito aqui, sem biblioteca. Imagem com transparência vai para JPG ou BMP com fundo branco, porque esses formatos não guardam transparência.</li>
+    <li><strong>PDF ⇄ texto</strong>: <strong>TXT → PDF</strong> monta um A4 com margem, quebra de linha pela largura real da fonte e quantas páginas precisar; <strong>PDF → TXT</strong> extrai o texto página por página, respeitando as quebras. As duas bibliotecas (pdf-lib e pdf.js, ~1,3 MB) só são baixadas quando você usa PDF.</li>
+    <li><strong>ZIP</strong>: solte um <code>.zip</code> para o conteúdo entrar na fila e ser convertido, e use <strong>Baixar em .zip</strong> para levar todos os resultados num pacote só. Nomes repetidos viram "arquivo (2)" dentro do pacote, em vez de um sobrescrever o outro.</li>
+    <li><strong>Word (DOCX) → HTML ou texto</strong>: lê o .docx com o mammoth e devolve a página HTML (títulos, listas, negrito, tabelas simples) ou o texto puro. É <strong>só ida</strong>: o navegador não escreve .docx fiel, e é por isso que PDF ⇄ DOCX não aparece nesta ferramenta.</li>
+  </ul>
+  <p>
+    <strong>Resumo do que já vai e volta</strong>: texto (JSON, CSV, Markdown, TXT e PDF), imagens
+    (PNG, JPG, WebP e BMP), DOCX só como origem e ZIP para agrupar. Nada de servidor: tudo roda no
+    seu navegador, e as bibliotecas de PDF, DOCX e ZIP só são baixadas quando você usa aquele formato.
+  </p>
+  <p>
+    Imagens (PNG, JPG, WebP e BMP) e arquivos de texto já vão e voltam. ZIP, PDF e DOCX entram nas
+    próximas etapas — a matriz da ferramenta só mostra o que já funciona, para você nunca ver uma
+    conversão que promete e não entrega.
+  </p>
+
+  <h2>Por que tudo fica no navegador</h2>
+  <p class="formula">arquivo → leitura local → conversão em JavaScript → link de download</p>
+  <p>
+    Como o processamento é local, o arquivo não sai do seu computador, não há limite de tamanho imposto
+    por servidor e a ferramenta funciona mesmo sem conexão depois de carregada. O preço é que formatos
+    muito complexos (como PDF ⇄ DOCX) exigem bibliotecas grandes ou serviço especializado.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Meus arquivos são enviados para algum lugar?</h3>
+  <p>
+    Não. A conversão roda em JavaScript na sua máquina, com a API de arquivos do navegador. Fechar a
+    aba descarta tudo.
+  </p>
+  <h3>Dá para converter vários arquivos de uma vez?</h3>
+  <p>
+    Sim: arraste quantos quiser, escolha o formato de cada um e use <strong>Converter</strong>. A barra
+    mostra o progresso do arquivo e o total, e um arquivo com erro não trava os outros.
+  </p>
+  <h3>O CSV abre no Excel com acento errado?</h3>
+  <p>
+    Não: o arquivo sai com BOM (UTF-8 com marca), que é o que o Excel precisa para reconhecer os
+    acentos. Se o seu programa reclamar, importe como UTF-8.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>

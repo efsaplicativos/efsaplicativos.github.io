@@ -1,0 +1,292 @@
+<!doctype html>
+<!-- Gerado por _fonte/gerar.py a partir de _fonte/paginas/ferramentas/conversor-de-arquivos.html. Edite lá. -->
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fff7f0" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        var theme = null;
+        try {
+          theme = localStorage.getItem("efs-theme");
+        } catch (error) {
+          theme = null;
+        }
+        // O laranja (claro) é o padrão; o escuro vale para quem ligou o modo noturno
+        if (theme === "dark") {
+          root.setAttribute("data-theme", "dark");
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", "#0f1115");
+        }
+      })();
+    </script>
+    <title>Conversor de Arquivos Online: JSON, CSV e Markdown Grátis — EFS Aplicativos</title>
+    <meta name="description" content="Converta arquivos no navegador, sem enviar nada para servidor: JSON para CSV, CSV para JSON e Markdown para HTML, com conversão em lote, barra de progresso e download direto." />
+    <link rel="canonical" href="https://efsaplicativos.com.br/ferramentas/conversor-de-arquivos/" />
+    <meta property="og:title" content="Conversor de Arquivos Online: JSON, CSV e Markdown Grátis — EFS Aplicativos" />
+    <meta property="og:description" content="Converta arquivos no navegador, sem enviar nada para servidor: JSON para CSV, CSV para JSON e Markdown para HTML, com conversão em lote, barra de progresso e download direto." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://efsaplicativos.com.br/ferramentas/conversor-de-arquivos/" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="google-adsense-account" content="ca-pub-4599982617961569" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600..800&amp;family=Nunito:wght@400..800&amp;display=swap"
+    />
+    <link rel="stylesheet" href="/site.css?v=ac36ff2eeb30" />
+    <link rel="stylesheet" href="/assets/web.css?v=f4683d85c12d" />
+    <link rel="stylesheet" href="/assets/ferramentas/conversor-de-arquivos.css?v=7de504bf1c5d" />
+    <script src="/assets/estatisticas.js?v=da0036a12f2f" async></script>
+    <script src="/site.js?v=926b8efae759" defer></script>
+    <script src="/assets/anuncios.js?v=e781784cb3d8" defer></script>
+    <script src="/assets/indicacoes.js?v=7f30da75c802" defer></script>
+    <script src="/assets/ferramentas/conversor-de-arquivos-logica.js?v=952b2c59ef8e" defer></script>
+    <script src="/assets/ferramentas/conversor-de-arquivos.js?v=4d43f1592c1e" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/images/EfsAplicativos_4.png"
+    />
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Conversor de arquivos", "url": "https://efsaplicativos.com.br/ferramentas/conversor-de-arquivos/", "description": "Converta arquivos no navegador, sem enviar nada para servidor: JSON para CSV, CSV para JSON e Markdown para HTML, com conversão em lote, barra de progresso e download direto.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Qualquer navegador", "inLanguage": "pt-BR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "EFS Aplicativos", "url": "https://efsaplicativos.com.br/"}}</script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a
+          class="brand"
+          href="/"
+          aria-label="EFS Aplicativos — página inicial"
+          ><img
+            src="/images/EfsAplicativos_4.png"
+            alt=""
+            width="64"
+            height="64"
+          /><span class="brand-name">EFS Aplicativos</span></a
+        >
+        <div class="header-actions">
+          <nav class="nav" aria-label="Principal">
+            <a href="/ferramentas/" data-secao="ferramentas" aria-current="page">Ferramentas</a
+            ><a href="/jogos/" data-secao="jogos">Jogos</a
+            ><a href="/#aplicativos">Aplicativos</a
+            ><a class="contact-link" href="/contato/" data-secao="contato">Fale conosco</a>
+          </nav>
+          <button
+            class="theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Modo noturno"
+            title="Modo noturno"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+              />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="conteudo">
+      <div class="container">
+<header class="page-head">
+  <ol class="breadcrumb" aria-label="Você está em">
+    <li><a href="/">Início</a></li>
+    <li><a href="/ferramentas/">Ferramentas</a></li>
+    <li aria-current="page">Conversor de arquivos</li>
+  </ol>
+  <h1>Conversor de arquivos</h1>
+  <p>
+    Arraste os arquivos, escolha o formato e baixe o resultado. Tudo acontece no seu navegador: nenhum
+    arquivo é enviado para servidor nenhum.
+  </p>
+</header>
+
+<section class="tool conversor" aria-label="Conversor de arquivos">
+  <div class="conv-solta" id="conv-solta">
+    <input class="conv-entrada" id="conv-arquivos" type="file" multiple
+      accept=".json,.csv,.md,.markdown,.txt,.pdf,.docx,.png,.jpg,.jpeg,.webp,.bmp,.zip,application/json,text/csv,text/markdown,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg,image/webp,image/bmp,application/zip" />
+    <p class="conv-chamada">
+      <strong>Arraste os arquivos aqui</strong> ou
+      <button type="button" class="conv-escolher" id="conv-escolher">escolha no computador</button>
+    </p>
+    <p class="hint">Aceita JSON, CSV, Markdown, texto, PDF, DOCX, PNG, JPG, WebP, BMP e ZIP. Vários arquivos de uma vez.</p>
+  </div>
+
+  <div class="conv-fila" id="conv-fila" hidden>
+    <div class="conv-fila-topo">
+      <h2 id="conv-fila-titulo">Arquivos</h2>
+      <button type="button" class="button secondary" id="conv-limpar">Limpar lista</button>
+    </div>
+    <ul class="conv-itens" id="conv-itens"></ul>
+    <div class="conv-global" id="conv-global" hidden>
+      <div class="conv-barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="conv-barra-global">
+        <span id="conv-barra-preenchida"></span>
+      </div>
+      <p class="conv-progresso" id="conv-progresso" role="status"></p>
+    </div>
+    <div class="conv-acoes">
+      <button type="button" class="button" id="conv-converter">Converter</button>
+      <button type="button" class="button secondary" id="conv-baixar" hidden>Baixar convertidos</button>
+      <button type="button" class="button secondary" id="conv-zip" hidden>Baixar em .zip</button>
+    </div>
+  </div>
+
+  <p class="conv-aviso" id="conv-aviso" role="status"></p>
+</section>
+
+<div class="anuncio" data-bloco="meio" hidden></div>
+
+<aside class="indicacao" data-indicacao="conversor-de-arquivos" hidden></aside>
+
+<article class="texto">
+  <h2>O que já converte</h2>
+  <ul>
+    <li><strong>JSON → CSV</strong>: pega uma lista de objetos e monta a planilha com todas as colunas; valores com vírgula ou aspas vão entre aspas, e o arquivo sai com BOM para o Excel abrir os acentos certo.</li>
+    <li><strong>CSV → JSON</strong>: lê a primeira linha como cabeçalho, transforma cada linha em um objeto e converte número em número de verdade.</li>
+    <li><strong>Markdown → HTML</strong>: títulos, listas, <code>negrito</code>, <em>itálico</em>, código e links, com o HTML escapado (nada de script entrar por acidente).</li>
+    <li><strong>Imagens</strong>: PNG ⇄ JPG ⇄ WebP ⇄ BMP. A conversão usa o próprio navegador (canvas) e, no BMP, um codificador escrito aqui, sem biblioteca. Imagem com transparência vai para JPG ou BMP com fundo branco, porque esses formatos não guardam transparência.</li>
+    <li><strong>PDF ⇄ texto</strong>: <strong>TXT → PDF</strong> monta um A4 com margem, quebra de linha pela largura real da fonte e quantas páginas precisar; <strong>PDF → TXT</strong> extrai o texto página por página, respeitando as quebras. As duas bibliotecas (pdf-lib e pdf.js, ~1,3 MB) só são baixadas quando você usa PDF.</li>
+    <li><strong>ZIP</strong>: solte um <code>.zip</code> para o conteúdo entrar na fila e ser convertido, e use <strong>Baixar em .zip</strong> para levar todos os resultados num pacote só. Nomes repetidos viram "arquivo (2)" dentro do pacote, em vez de um sobrescrever o outro.</li>
+    <li><strong>Word (DOCX) → HTML ou texto</strong>: lê o .docx com o mammoth e devolve a página HTML (títulos, listas, negrito, tabelas simples) ou o texto puro. É <strong>só ida</strong>: o navegador não escreve .docx fiel, e é por isso que PDF ⇄ DOCX não aparece nesta ferramenta.</li>
+  </ul>
+  <p>
+    <strong>Resumo do que já vai e volta</strong>: texto (JSON, CSV, Markdown, TXT e PDF), imagens
+    (PNG, JPG, WebP e BMP), DOCX só como origem e ZIP para agrupar. Nada de servidor: tudo roda no
+    seu navegador, e as bibliotecas de PDF, DOCX e ZIP só são baixadas quando você usa aquele formato.
+  </p>
+  <p>
+    Imagens (PNG, JPG, WebP e BMP) e arquivos de texto já vão e voltam. ZIP, PDF e DOCX entram nas
+    próximas etapas — a matriz da ferramenta só mostra o que já funciona, para você nunca ver uma
+    conversão que promete e não entrega.
+  </p>
+
+  <h2>Por que tudo fica no navegador</h2>
+  <p class="formula">arquivo → leitura local → conversão em JavaScript → link de download</p>
+  <p>
+    Como o processamento é local, o arquivo não sai do seu computador, não há limite de tamanho imposto
+    por servidor e a ferramenta funciona mesmo sem conexão depois de carregada. O preço é que formatos
+    muito complexos (como PDF ⇄ DOCX) exigem bibliotecas grandes ou serviço especializado.
+  </p>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Meus arquivos são enviados para algum lugar?</h3>
+  <p>
+    Não. A conversão roda em JavaScript na sua máquina, com a API de arquivos do navegador. Fechar a
+    aba descarta tudo.
+  </p>
+  <h3>Dá para converter vários arquivos de uma vez?</h3>
+  <p>
+    Sim: arraste quantos quiser, escolha o formato de cada um e use <strong>Converter</strong>. A barra
+    mostra o progresso do arquivo e o total, e um arquivo com erro não trava os outros.
+  </p>
+  <h3>O CSV abre no Excel com acento errado?</h3>
+  <p>
+    Não: o arquivo sai com BOM (UTF-8 com marca), que é o que o Excel precisa para reconhecer os
+    acentos. Se o seu programa reclamar, importe como UTF-8.
+  </p>
+</article>
+
+<div class="anuncio" data-bloco="fim" hidden></div>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">EFS Aplicativos</div>
+          <p class="footer-note">
+            Jogos e ferramentas para acompanhar o seu dia.
+          </p>
+          <p class="footer-note">© 2026 EFS Aplicativos.</p>
+        </div>
+        <nav class="footer-links" aria-label="Informações e privacidade">
+          <a href="/sobre/">Sobre a EFS Aplicativos</a
+          ><a href="/contato/">Contato</a
+          ><a href="/privacidade/">Privacidade e cookies do site</a
+          ><a href="/politica-privacidade.html">Política de privacidade dos aplicativos</a>
+        </nav>
+      </div>
+      <div class="container footer-apoio">
+        <p class="footer-note">
+          Este site é grátis, sem cadastro e feito por uma pessoa só. Se ele te ajudou e você quiser apoiar, pode mandar
+          um PIX de qualquer valor:
+        </p>
+        <p class="pix-chave">
+          <span class="pix-rotulo">Chave PIX</span>
+          <code id="pix-chave">efsaplicativos@gmail.com</code>
+          <button type="button" class="pix-copiar" id="pix-copiar">Copiar chave</button>
+        </p>
+        <p class="pix-aviso" id="pix-aviso" role="status"></p>
+      </div>
+    </footer>
+    <script>
+      // Copiar a chave do PIX, com plano B para navegador antigo ou sem permissão de clipboard
+      (() => {
+        const chave = "efsaplicativos@gmail.com";
+        const botao = document.getElementById("pix-copiar");
+        const aviso = document.getElementById("pix-aviso");
+        if (!botao) return;
+        botao.addEventListener("click", async () => {
+          let copiou = false;
+          try {
+            await navigator.clipboard.writeText(chave);
+            copiou = true;
+          } catch (erro) {
+            copiou = false;
+          }
+          if (!copiou) {
+            const area = document.createElement("textarea");
+            area.value = chave;
+            area.style.position = "fixed";
+            area.style.opacity = "0";
+            document.body.append(area);
+            area.select();
+            try {
+              copiou = document.execCommand("copy");
+            } catch (erro) {
+              copiou = false;
+            }
+            area.remove();
+          }
+          if (aviso) {
+            aviso.textContent = copiou
+              ? "Chave copiada. Obrigado pelo apoio!"
+              : "Não deu para copiar: a chave é " + chave;
+          }
+          botao.textContent = copiou ? "Copiado!" : "Copiar chave";
+          setTimeout(() => {
+            botao.textContent = "Copiar chave";
+          }, 2500);
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -65,6 +65,8 @@ IMAGENS = {
     "tile in the center, like a spelling game board.",
     "jogos/forca": "A simple wooden gallows with a rope and a blue stick figure drawn on it, with "
     "four blank cream tiles arranged in a row below it.",
+    "ferramentas/conversor-de-arquivos": "Two rounded document sheets with a thick teal arrow "
+    "curving between them, one sheet warm orange and one cream, suggesting a file changing format.",
     "ferramentas/energia-eletrica": "A white wall power outlet with a blue plug connected and a warm "
     "orange lightning bolt floating above it, with a small violet energy meter beside.",
     "ferramentas/churrasco": "A small round charcoal grill with glowing orange coals, three skewers "
