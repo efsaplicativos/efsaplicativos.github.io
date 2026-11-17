@@ -59,6 +59,8 @@
   }
   if (!carregar) return;
 
+  // O script do AdSense já vem no <head> de todas as páginas; aqui só garantimos que exista
+  if (document.querySelector('script[src*="adsbygoogle.js"]')) return;
   const script = document.createElement("script");
   script.async = true;
   script.crossOrigin = "anonymous";
