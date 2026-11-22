@@ -58,6 +58,7 @@
   let avisouSemSolucao = false;
   let pressao = null;
   let dicaTimer = null;
+  let timersVitoria = [];
   let foco = 0;
   let g = null;
   let posicoes = [];
@@ -734,15 +735,15 @@
     dados.push(["Vitórias seguidas", G.formatarNumero(novas.sequencia)]);
     const { semente, modo } = estado;
     const sobra = estado.monte.length;
-    setTimeout(() => {
+    timersVitoria.push(setTimeout(() => {
       // As cartas que ficaram à vista pulam, uma depois da outra
       let k = 0;
       posicoes.forEach((p, id) => !p.coberta && cartasEl[id].style.setProperty("--k", String(k++ % 8)));
       mesa.classList.add("gf-festa");
       setTimeout(() => mesa.classList.remove("gf-festa"), 2200);
       som.tocar("vitoria");
-    }, espera);
-    setTimeout(() => {
+    }, espera));
+    timersVitoria.push(setTimeout(() => {
       abrirDialogo({
         titulo: "Parabéns!",
         texto: `Você limpou as 7 colunas no modo ${G.textoModo(modo)}${
@@ -755,7 +756,7 @@
           { rotulo: "Fechar", acao: () => {}, secundario: true },
         ],
       });
-    }, espera + 900);
+    }, espera + 900));
   }
 
   // ---------- Estatísticas ----------
@@ -833,6 +834,9 @@
   }
 
   function novaPartida({ modo = estado ? estado.modo : G.MODO_PADRAO, semente = G.novaSemente() } = {}) {
+    // A festa e o "Parabéns!" da partida anterior não podem cair sobre a nova
+    timersVitoria.forEach(clearTimeout);
+    timersVitoria = [];
     fecharDialogo();
     pararBusca();
     registrarSaida();

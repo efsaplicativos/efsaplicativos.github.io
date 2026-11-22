@@ -249,7 +249,8 @@
   /** Copia o resultado para A ou B, como "Usar como A/B" do app. */
   function carregarEm(nome) {
     if (!resultado || resultado.tipo !== "matriz") return;
-    const m = resultado.matriz;
+    // Sem resíduos de arredondamento, como na tabela (4,4 × 10⁻¹⁶ vira 0)
+    const m = X.limpar(resultado.matriz);
     const celulas = Array(CELULAS).fill("");
     m.forEach((linha, r) =>
       linha.forEach((v, c) => {

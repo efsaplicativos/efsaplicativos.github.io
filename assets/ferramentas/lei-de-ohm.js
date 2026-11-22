@@ -106,7 +106,8 @@
   const ERROS_LEI = {
     excesso: "Preencha apenas 2 grandezas. Apague as demais para recalcular.",
     "divisao-por-zero": "Divisão por zero: revise os valores informados.",
-    invalido: "Combinação inválida: resistência e potência não podem ser negativas.",
+    invalido:
+      "Combinação inválida: resistência e potência não podem ser negativas (tensão e corrente precisam ter o mesmo sinal).",
   };
 
   function destacarRoda(usadas) {

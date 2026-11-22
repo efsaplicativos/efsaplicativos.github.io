@@ -148,7 +148,8 @@ const LogicaFinanciamento = (() => {
   function simular({ valor, entrada, taxaPercentual, periodo = "mes", prazo, unidade = "meses", custos }) {
     const erros = {};
     const e = entrada ?? 0;
-    if (valor !== null && valor !== undefined && e > 0 && e >= valor) erros.entrada = true;
+    if (e < 0 || (valor !== null && valor !== undefined && e > 0 && e >= valor)) erros.entrada = true;
+    if (custos !== null && custos !== undefined && custos < 0) erros.custos = true;
     if (taxaPercentual !== null && taxaPercentual !== undefined && (taxaPercentual > 100 || taxaPercentual < 0)) {
       erros.taxa = true;
     }

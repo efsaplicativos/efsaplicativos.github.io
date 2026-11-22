@@ -662,7 +662,10 @@
     if (recordes.movimentos) dados.push(["Menos movimentos!", P.formatarNumero(estado.movimentos), true]);
     dados.push(["Vitórias seguidas", P.formatarNumero(novas.sequencia)]);
     const { semente } = estado;
+    // Se outra partida começou antes da festa (botão Nova partida no meio da subida), ela não vale mais
+    const aindaGanha = () => P.venceu(estado) && estado.semente === semente;
     setTimeout(() => {
+      if (!aindaGanha()) return;
       terminarRecolhimento();
       estado.fundacoes.forEach((f, k) => cartasEl[f[f.length - 1]].style.setProperty("--k", String(k)));
       mesa.classList.add("fc-festa");
@@ -670,6 +673,7 @@
       som.tocar("vitoria");
     }, espera);
     setTimeout(() => {
+      if (!aindaGanha()) return;
       abrirDialogo({
         titulo: "Parabéns!",
         texto: `Você venceu a partida nº ${P.formatarNumero(semente)} do FreeCell.`,

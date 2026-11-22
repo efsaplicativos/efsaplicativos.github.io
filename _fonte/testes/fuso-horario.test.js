@@ -57,6 +57,12 @@ assert.equal(F.hora(lacuna.origem), "03:30");
 const repetido = F.converter({ ano: 2026, mes: 11, dia: 1 }, { hora: 1, minuto: 30 }, NY, LONDRES);
 assert.equal(repetido.ambiguo, true);
 assert.equal(repetido.ms, instante("2026-11-01T05:30:00Z"));
+// hora média local (São Paulo usava −03:06:28 até 1914): a hora digitada não muda na origem
+const antigo = F.converter({ ano: 1900, mes: 1, dia: 1 }, { hora: 12, minuto: 0 }, SP, TOQUIO);
+assert.equal(F.hora(antigo.origem, true), "12:00:00");
+assert.equal(antigo.ms, instante("1900-01-01T15:06:28Z"));
+assert.equal(antigo.ajustadoPorLacuna, false);
+assert.equal(F.deslocamentoMin(SP, instante("1900-01-01T12:00:00Z")), -186);
 const normal = F.converter({ ano: 2026, mes: 6, dia: 1 }, { hora: 12, minuto: 0 }, NY, LONDRES);
 assert.equal(normal.ambiguo, false);
 assert.equal(normal.ajustadoPorLacuna, false);

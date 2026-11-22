@@ -15,6 +15,14 @@
   const resultado = document.querySelector("#resultado");
   const dinheiro = (valor) => Numeros.dinheiro(valor);
   const numero = (valor, casas = 2) => Numeros.numero(valor, casas, 0);
+  const dinheiro4 = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+  });
+  /** Custo por kg, L ou unidade: abaixo de R$ 1, com até 4 casas, para não virar "R$ 0,00". */
+  const custo = (valor) => (Math.abs(valor) < 1 ? dinheiro4.format(valor) : dinheiro(valor));
 
   function ler(campo, milhar = false) {
     const valor = Numeros.ler(campo.value, { milhar });
@@ -35,7 +43,7 @@
     rotulo.textContent = `Mais barato: ${conta.melhor.nome}`;
     const valor = document.createElement("div");
     valor.className = "result-value";
-    valor.textContent = `${dinheiro(conta.melhor.custo)} / ${conta.unidadeDaBase}`;
+    valor.textContent = `${custo(conta.melhor.custoExato)} / ${conta.unidadeDaBase}`;
 
     const lista = document.createElement("dl");
     lista.className = "result-list";
@@ -44,7 +52,7 @@
       const dt = document.createElement("dt");
       const dd = document.createElement("dd");
       dt.textContent = `${item.nome} (${numero(item.quantidade)} ${item.unidade})`;
-      dd.textContent = `${dinheiro(item.preco)} → ${dinheiro(item.custo)} / ${conta.unidadeDaBase}`;
+      dd.textContent = `${dinheiro(item.preco)} → ${custo(item.custoExato)} / ${conta.unidadeDaBase}`;
       linha.append(dt, dd);
       lista.append(linha);
     }
@@ -53,7 +61,7 @@
     nota.className = "note";
     nota.textContent =
       conta.economia > 0
-        ? `A diferença é de ${dinheiro(conta.diferenca)} por ${conta.unidadeDaBase}, ou ${numero(conta.economia)}% a menos que a opção mais cara.`
+        ? `A diferença é de ${custo(conta.diferencaExata)} por ${conta.unidadeDaBase}, ou ${numero(conta.economia)}% a menos que a opção mais cara.`
         : "As duas opções custam o mesmo por unidade de medida.";
     resultado.replaceChildren(rotulo, valor, lista, nota);
   }

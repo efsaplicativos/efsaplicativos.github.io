@@ -635,6 +635,8 @@
   function mostrarSolucao() {
     if (!sessao || !podeVerSolucao() || sessao.terminou) return;
     limparPendente();
+    // A escolha da promoção que estava aberta não vale mais: a solução joga sozinha
+    fecharPromocao();
     const estavaErrado = lanceErrado;
     lanceErrado = null;
     posicaoErrada = null;

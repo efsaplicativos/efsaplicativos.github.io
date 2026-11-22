@@ -58,6 +58,7 @@
   let pressao = null;
   let selecionada = null;
   let dicaTimer = null;
+  let timerVitoria = null;
   let foco = { pilha: 6, profundidade: 0 };
   let g = null;
   let posicoes = [];
@@ -469,6 +470,7 @@
     if (automatico !== null) return;
     const novo = P.comprar(estado);
     if (!novo) {
+      if (!P.venceu(estado)) som.tocar("erro");
       anunciar("O monte e o descarte estão vazios.");
       return;
     }
@@ -493,7 +495,7 @@
   /** Um toque (ou Enter) na carta: vai para o melhor lugar, se houver. */
   function tocarCarta(id) {
     const local = P.localizar(estado, id);
-    if (!local || automatico !== null) return;
+    if (!local || automatico !== null || P.venceu(estado)) return;
     if (local.tipo === "monte") {
       acaoMonte();
       return;
@@ -641,7 +643,8 @@
     if (recordes.tempo) dados.push(["Novo melhor tempo!", P.formatarTempo(estado.segundos), true]);
     dados.push(["Vitórias seguidas", P.formatarNumero(novas.sequencia)]);
     const semente = estado.semente;
-    setTimeout(() => {
+    timerVitoria = setTimeout(() => {
+      timerVitoria = null;
       abrirDialogo({
         titulo: "Parabéns!",
         texto: `Você terminou a paciência virando ${estado.modo === 1 ? "1 carta" : "3 cartas"}.`,
@@ -711,6 +714,9 @@
   }
 
   function novaPartida({ modo = estado ? estado.modo : 1, semente = P.novaSemente() } = {}) {
+    // O "Parabéns!" da partida anterior não pode abrir por cima da nova
+    clearTimeout(timerVitoria);
+    timerVitoria = null;
     fecharDialogo();
     pararAutomatico();
     registrarAbandono();

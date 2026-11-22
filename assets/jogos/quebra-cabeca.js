@@ -99,7 +99,8 @@
 
   function salvar() {
     if (vitoria) return;
-    gravar(CHAVE_PARTIDA, { ...partida, tempoMs: decorridoMs() });
+    // O jogo do dia guarda a data: terminado depois de recarregar a página, ainda conta como feito
+    gravar(CHAVE_PARTIDA, { ...partida, tempoMs: decorridoMs(), diario: modoDiario && D ? D.chave() : null });
   }
 
   function carregar() {
@@ -118,6 +119,8 @@
     if (valida) {
       partida = { imagem: salva.imagem, tamanho: salva.tamanho, pecas: salva.pecas, movimentos: salva.movimentos, tempoMs: salva.tempoMs };
       acumuladoMs = salva.tempoMs;
+      // Só vale como jogo do dia se for o de hoje
+      modoDiario = Boolean(D) && typeof salva.diario === "string" && salva.diario === D.chave();
     } else {
       partida = nova("quebraCabeca1", 3);
     }
@@ -372,8 +375,13 @@
     });
   }
 
-  function aplicarMovimento(pecas) {
-    if (!pecas || vitoria || pausado) return;
+  function aplicarMovimento(pecas, avisarErro = true) {
+    if (vitoria || pausado) return;
+    if (!pecas) {
+      // Peça que não encosta no espaço vazio, ou nenhuma peça daquele lado
+      if (avisarErro) som.tocar("erro");
+      return;
+    }
     partida = { ...partida, pecas, movimentos: partida.movimentos + 1 };
     aguardandoMovimento = false;
     // A última peça toca a vitória (em concluir) no lugar do deslize
@@ -461,7 +469,8 @@
     // Fora do tabuleiro, as setas só valem se o foco não estiver em outro controle
     if (evento.target !== tabuleiro && evento.target.closest?.("button, a, summary")) return;
     evento.preventDefault();
-    aplicarMovimento(Q.deslizar(partida.pecas, direcao));
+    // Tecla segurada contra a borda não repete o som de erro
+    aplicarMovimento(Q.deslizar(partida.pecas, direcao), !evento.repeat);
   });
 
   let inicio = null;

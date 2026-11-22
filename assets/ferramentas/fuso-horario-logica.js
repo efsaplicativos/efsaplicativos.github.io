@@ -223,12 +223,18 @@ const LogicaFuso = (() => {
     };
   }
 
-  /** Minutos em relação ao UTC no instante [ms] (−180 = UTC−03:00). */
-  function deslocamentoMin(zona, ms) {
+  /**
+   * Segundos em relação ao UTC no instante [ms]. Antes dos fusos padronizados (hora média
+   * local, como −03:06:28 em São Paulo até 1914) o deslocamento não é um número exato de minutos.
+   */
+  function deslocamentoSeg(zona, ms) {
     const segundoCheio = Math.floor(ms / 1000) * 1000;
     const p = partesLocais(zona, segundoCheio);
-    return Math.round((msUTC(p.ano, p.mes, p.dia, p.hora, p.minuto, p.segundo) - segundoCheio) / 60000);
+    return Math.round((msUTC(p.ano, p.mes, p.dia, p.hora, p.minuto, p.segundo) - segundoCheio) / 1000);
   }
+
+  /** Minutos em relação ao UTC no instante [ms] (−180 = UTC−03:00). */
+  const deslocamentoMin = (zona, ms) => Math.round(deslocamentoSeg(zona, ms) / 60);
 
   /** "UTC−03:00", "UTC+05:30", "UTC+00:00". */
   function textoDeslocamento(minutos) {
@@ -257,11 +263,12 @@ const LogicaFuso = (() => {
   function instanteLocal(zona, ano, mes, dia, hora, minuto) {
     const local = msUTC(ano, mes, dia, hora, minuto, 0);
     // Um deslocamento nunca passa de 14 h: antes e depois desta janela estão os dois candidatos.
-    const antes = deslocamentoMin(zona, local - 16 * 3600000);
-    const depois = deslocamentoMin(zona, local + 16 * 3600000);
-    const validos = [...new Set([antes, depois])].filter((d) => deslocamentoMin(zona, local - d * 60000) === d);
-    if (!validos.length) return { ms: local - antes * 60000, lacuna: true, ambiguo: false };
-    return { ms: local - validos[0] * 60000, lacuna: false, ambiguo: validos.length > 1 };
+    // Em segundos, para a hora digitada não virar 11:59:32 em datas de hora média local.
+    const antes = deslocamentoSeg(zona, local - 16 * 3600000);
+    const depois = deslocamentoSeg(zona, local + 16 * 3600000);
+    const validos = [...new Set([antes, depois])].filter((d) => deslocamentoSeg(zona, local - d * 1000) === d);
+    if (!validos.length) return { ms: local - antes * 1000, lacuna: true, ambiguo: false };
+    return { ms: local - validos[0] * 1000, lacuna: false, ambiguo: validos.length > 1 };
   }
 
   /**

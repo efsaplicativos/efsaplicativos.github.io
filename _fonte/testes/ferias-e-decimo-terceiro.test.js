@@ -40,8 +40,8 @@ const testes = {
     assert.equal(F.ferias({ salario: 3000, dias: 20.4 }).dias, 20);
   },
   "o abono de 10 dias entra no bruto e não sofre desconto"() {
-    const semAbono = F.ferias({ salario: 3000 });
-    const comAbono = F.ferias({ salario: 3000, abonar: true });
+    const semAbono = F.ferias({ salario: 3000, dias: 20 });
+    const comAbono = F.ferias({ salario: 3000, dias: 20, abonar: true });
     perto(comAbono.abono, 1000);
     perto(comAbono.tercoAbono, 333.33);
     perto(comAbono.bruto, semAbono.bruto + 1333.33);
@@ -50,6 +50,15 @@ const testes = {
     assert.equal(comAbono.inss, semAbono.inss);
     assert.equal(comAbono.irrf, semAbono.irrf);
     perto(comAbono.liquido, semAbono.liquido + 1333.33);
+  },
+  "quem vende 10 dias goza no máximo 20"() {
+    // Antes, 30 dias + abono pagavam 40 dias de férias
+    const conta = F.ferias({ salario: 3000, dias: 30, abonar: true });
+    assert.equal(conta.dias, 20);
+    perto(conta.ferias, 2000);
+    perto(conta.bruto, 4000); // 20 dias + 1/3 + 10 dias de abono + 1/3
+    assert.equal(F.ferias({ salario: 3000, abonar: true }).dias, 20);
+    assert.equal(F.ferias({ salario: 3000, dias: 15, abonar: true }).dias, 15);
   },
   "férias de salário alto pagam imposto"() {
     const conta = F.ferias({ salario: 12000 });

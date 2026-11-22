@@ -475,7 +475,7 @@ const LogicaCacaPalavras = (() => {
       }
       if (typeof w.dica !== "boolean") return null;
     }
-    return {
+    const partida = {
       v: 1,
       nivel: p.nivel,
       tema: p.tema,
@@ -486,6 +486,9 @@ const LogicaCacaPalavras = (() => {
       dicas: p.dicas,
       tempoMs: p.tempoMs,
     };
+    // Jogo do dia: a data ("AAAA-MM-DD") volta junto, para a marca do dia sair mesmo depois de recarregar
+    if (typeof p.diario === "string" && /^\d{4}-\d{2}-\d{2}$/.test(p.diario)) partida.diario = p.diario;
+    return partida;
   }
 
   // ---------- Recordes ----------

@@ -88,7 +88,9 @@ const Estatistica = (() => {
     const largura = (max - min) / k;
     const quantidades = new Array(k).fill(0);
     for (const v of ordenados) {
-      const i = Math.min(k - 1, Math.max(0, Math.floor((v - min) / largura)));
+      // A folga de 1e-9 classe põe o valor que cai no limite na classe de cima, como diz a regra
+      // (0,6 / 0,2 dá 2,9999999999999996 e o 0,6 ia para a classe [0,4; 0,6[)
+      const i = Math.min(k - 1, Math.max(0, Math.floor((v - min) / largura + 1e-9)));
       quantidades[i]++;
     }
     return quantidades.map((quantidade, i) => ({
@@ -103,10 +105,12 @@ const Estatistica = (() => {
     const ordenados = [...valores].sort((a, b) => a - b);
     const n = ordenados.length;
     const soma = ordenados.reduce((acc, v) => acc + v, 0);
-    const media = soma / n;
-    const mediana = percentil(ordenados, 50);
     const min = ordenados[0];
     const max = ordenados[n - 1];
+    // Valores todos iguais: a média é o próprio valor (0,1 + 0,1 + 0,1 dividido por 3 não dá
+    // 0,1 exato, e o resíduo aparecia como desvio padrão e assimetria)
+    const media = min === max ? min : soma / n;
+    const mediana = percentil(ordenados, 50);
 
     let m2 = 0;
     let m3 = 0;

@@ -60,7 +60,9 @@ const LogicaOhm = (() => {
       return { valores: { tensao, corrente, resistencia, potencia }, usadas };
     };
     if (v !== null && i !== null) {
-      return i === 0 ? falha("divisao-por-zero") : sucesso(v, i, v / i, v * i, "R_VI", "P_VI");
+      if (i === 0) return falha("divisao-por-zero");
+      // Sinais opostos dariam resistência e potência negativas, que um resistor não tem.
+      return v * i < 0 ? falha("invalido") : sucesso(v, i, v / i, v * i, "R_VI", "P_VI");
     }
     if (v !== null && r !== null) {
       return r === 0 ? falha("divisao-por-zero") : sucesso(v, v / r, r, (v * v) / r, "I_VR", "P_V2R");

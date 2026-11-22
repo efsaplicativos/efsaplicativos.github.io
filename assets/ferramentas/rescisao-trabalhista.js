@@ -21,7 +21,8 @@
 
   const reais = (valor) => Numeros.dinheiro(valor);
   const desconto = (valor) => `− ${Numeros.dinheiro(valor)}`;
-  const avos = (n) => `${n}/12`;
+  // Quando a projeção do aviso passa da virada do ano, o 13º soma os dois anos: 12/12 + 1/12
+  const avos = (n) => (n > 12 ? `12/12 + ${n - 12}/12` : `${n}/12`);
 
   function ler(nome, dinheiro) {
     const campo = campos[nome];

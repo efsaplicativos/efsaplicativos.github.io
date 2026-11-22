@@ -432,7 +432,7 @@ PARTE 2 — AS 40 FERRAMENTAS
 
 24) Conversor de medidas
     Endereço: /ferramentas/conversor-de-medidas/
-    O que faz: 16 grandezas e mais de 150 unidades (comprimento, área, volume,
+    O que faz: 16 grandezas e mais de 140 unidades (comprimento, área, volume,
     massa, velocidade, pressão, energia e outras), dos sistemas métrico,
     americano e britânico, mais medidas brasileiras como alqueire e arroba.
     App: Calculadora Multifunção

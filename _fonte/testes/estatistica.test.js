@@ -90,6 +90,9 @@ teste("histograma de Sturges e frequências", () => {
   const freq = S.frequencias([1, 1, 2, 3]);
   perto(freq[0].porcentagem, 50);
   perto(freq[freq.length - 1].acumulada, 100);
+  // Valor no limite vai para a classe de cima: 0,6 fica em [0,6; 0,8[, e não em [0,4; 0,6[
+  const decimos = Array.from({ length: 11 }, (_, i) => i / 10);
+  assert.deepEqual(S.histograma(decimos).map((c) => c.quantidade), [2, 2, 2, 2, 3]);
 });
 
 // ---------- Textos da tela ----------
@@ -132,6 +135,15 @@ teste("sem dispersão: CV, assimetria e curtose", () => {
   assert.equal(forma2["Média geométrica"], "Requer valores positivos");
   const cv = S.secoes(S.calcular([-1, 1]))[0].linhas.find((l) => l.rotulo === "Coeficiente de variação");
   assert.equal(cv.valor, "—");
+});
+
+teste("valores iguais sem resíduo de ponto flutuante", () => {
+  // 0,1 + 0,1 + 0,1 = 0,30000000000000004: antes o desvio saía 1,7 × 10⁻¹⁷ e a assimetria −2,45
+  const r = S.calcular([0.1, 0.1, 0.1]);
+  assert.equal(r.media, 0.1);
+  assert.equal(r.desvioAmostral, 0);
+  assert.equal(r.assimetria, null);
+  assert.equal(S.escoreZ(1, r), null);
 });
 
 if (falhas) {

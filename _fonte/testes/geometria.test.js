@@ -119,6 +119,18 @@ teste("campos vazios e mensagens de erro", () => {
   assert.equal(erro.estado, "erro");
   assert.equal(erro.mensagem, "O ângulo central deve estar entre 0° e 360°.");
   assert.equal(G.resultadoDaTela("quadrado", { lado: "-1" }, "cm").mensagem, G.ERROS.valores);
+  // Volume que passa do limite do double não aparece como "∞ cm³"
+  const enorme = G.resultadoDaTela("cubo", { lado: "1e103" }, "cm");
+  assert.equal(enorme.estado, "erro");
+  assert.equal(enorme.mensagem, G.ERROS.grande);
+});
+
+teste("Herão estável em triângulo fino", () => {
+  // Antes: 5,0000002
+  const r = G.trianguloPorLados(100000, 100000, 0.0001);
+  assert.ok(Math.abs(r.medidas[0][1] - 5) < 1e-12, `área ${r.medidas[0][1]}`);
+  assert.equal(G.trianguloPorLados(3, 4, 5).medidas[0][1], 6);
+  assert.equal(G.trianguloPorLados(5, 3, 4).medidas[0][1], 6);
 });
 
 if (falhas) {

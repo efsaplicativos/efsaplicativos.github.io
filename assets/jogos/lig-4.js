@@ -47,6 +47,7 @@
   let foco = 3;
   let ultimaMensagem = "";
   let animada = -1;
+  let devolverFoco = false;
 
   const contraComputador = () => estado.modo === "computador";
   const vezDoComputador = () => contraComputador() && !estado.partida.terminada && estado.partida.vez === L.COMPUTADOR;
@@ -117,7 +118,11 @@
       const passo = evento.key === "ArrowRight" ? 1 : evento.key === "ArrowLeft" ? -1 : 0;
       if (!passo) return;
       evento.preventDefault();
-      moverFoco((coluna + passo + L.COLUNAS) % L.COLUNAS);
+      // Pula as colunas cheias: botão desativado não recebe o foco
+      let destino = coluna;
+      do destino = (destino + passo + L.COLUNAS) % L.COLUNAS;
+      while (destino !== coluna && colunasBotao[destino].disabled);
+      moverFoco(destino);
     });
     colunasBotao.push(botao);
     colunasEl.append(botao);
@@ -171,8 +176,20 @@
     mensagem.replaceChildren(icone, rotulo);
   }
 
+  /** A coluna livre mais perto da escolhida (ela mesma, se não estiver cheia). */
+  function colunaLivrePerto(casas, coluna) {
+    for (let distancia = 0; distancia < L.COLUNAS; distancia++) {
+      for (const c of [coluna + distancia, coluna - distancia]) {
+        if (c >= 0 && c < L.COLUNAS && !L.colunaCheia(casas, c)) return c;
+      }
+    }
+    return coluna;
+  }
+
   function desenhar() {
     const { partida } = estado;
+    // Com o foco numa coluna cheia (desativada), o Tab pularia o tabuleiro inteiro
+    foco = colunaLivrePerto(partida.casas, foco);
     const vencedoras = new Set(partida.vitoria ? partida.vitoria.casas : []);
     partida.casas.forEach((jogador, casa) => {
       const celula = casasEl[casa];
@@ -275,9 +292,22 @@
     if (depois.terminada) registrarResultado(depois);
     salvar();
     desenhar();
+    recuperarFoco();
     som.tocar(somDaJogada(depois));
     agendarJogadaComputador();
     return true;
+  }
+
+  /**
+   * Botão desativado perde o foco (coluna que encheu, ou todas enquanto o computador pensa). Quem
+   * joga pelo teclado volta para uma coluna livre assim que for a sua vez de novo.
+   */
+  function recuperarFoco() {
+    if (!devolverFoco || vezDoComputador()) return;
+    devolverFoco = false;
+    const ativo = document.activeElement;
+    const perdido = !ativo || ativo === document.body || (colunasBotao.includes(ativo) && ativo.disabled);
+    if (perdido && !colunasBotao[foco].disabled) colunasBotao[foco].focus();
   }
 
   function registrarResultado(partida) {
@@ -293,6 +323,7 @@
   function jogarColuna(coluna) {
     if (vezDoComputador() || !L.podeJogar(estado.partida, coluna)) return;
     foco = coluna;
+    devolverFoco = document.activeElement === colunasBotao[coluna];
     aplicarJogada(coluna);
   }
 

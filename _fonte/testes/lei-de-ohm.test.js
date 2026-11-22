@@ -38,6 +38,13 @@ assert.deepEqual(O.resolver(12, 2, 6, 24), { erro: "excesso" });
 assert.deepEqual(O.resolver(12, 0, null, null), { erro: "divisao-por-zero" });
 assert.deepEqual(O.resolver(5, null, 0, null), { erro: "divisao-por-zero" });
 assert.deepEqual(O.resolver(null, null, -6, 24), { erro: "invalido" });
+// tensão e corrente com sinais opostos dariam R e P negativas
+assert.deepEqual(O.resolver(12, -2, null, null), { erro: "invalido" });
+assert.deepEqual(O.resolver(-12, 2, null, null), { erro: "invalido" });
+const negativos = resolvido(-12, -2, null, null);
+perto(6, negativos.valores.resistencia);
+perto(24, negativos.valores.potencia);
+perto(0, resolvido(0, 2, null, null).valores.resistencia);
 
 // série, paralelo e divisor
 perto(30, O.serie([10, 20]));

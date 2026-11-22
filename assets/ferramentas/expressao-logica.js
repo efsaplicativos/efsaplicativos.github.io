@@ -528,6 +528,8 @@ const Expressao = (() => {
 
     function aplicar(nome, x) {
       const limitar = (v) => Math.min(1, Math.max(-1, v));
+      // Em graus e grados, tira as voltas inteiras antes (o resto é exato): sin(10¹⁵) em graus dava 0
+      if ((nome === "sin" || nome === "cos" || nome === "tan") && modoAngulo !== "RAD") x %= 2 * meiaVolta;
       let r;
       switch (nome) {
         case "sin":
@@ -970,7 +972,10 @@ const Expressao = (() => {
     if (s.avaliado) s = { ...s, pecas: [], avaliado: false, resultado: null, erro: null };
     const fim = ultimo(s.pecas);
     const prefixo = fim !== undefined && (ehDigito(fim[fim.length - 1]) || fim === "." || fim === "E") ? ["×"] : [];
-    return { ...s, pecas: [...s.pecas, ...prefixo, ...pecasDoValor(valor)] };
+    // Negativo entre parênteses: −5 inserido e depois x² dava −5² = −25
+    const pecas = pecasDoValor(valor);
+    const numero = pecas[0] === "−" ? ["(", ...pecas, ")"] : pecas;
+    return { ...s, pecas: [...s.pecas, ...prefixo, ...numero] };
   }
 
   /** Carrega uma expressão do histórico para edição. */

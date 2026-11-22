@@ -258,6 +258,33 @@ const testes = {
     repetir(terceira, 5);
     assert.ok(C.torreNa(terceira, 1).vida < C.TORRES.canhao.vida || terceira.projeteisInimigos.length > 0);
   },
+  "a cadência de tiro é a mesma em 30, 60, 120 e 144 quadros por segundo"() {
+    // Antes, a sobra da recarga era descartada: a metralhadora dava 225 tiros por minuto a 60 fps e 240 a 144 fps.
+    const tiros = (fps, velocidade = 1) => {
+      const e = C.iniciar();
+      C.construir(e, 1, "metralhadora");
+      e.fase = "batalha";
+      e.onda = 3;
+      e.fila = [];
+      e.inimigos.push({
+        id: 999, tipo: "leve", x: 74, y: 152, segmento: 0, vida: 1e12, vidaMaxima: 1e12, velocidade: 0,
+        recompensa: 0, danoBase: 1, danoTorre: 0, recarga: 0, angulo: 0, anguloTorre: 0, progresso: 0,
+      });
+      const contagem = { tiro: 0, tiroInimigo: 0 };
+      for (let k = 0; k < 60 * fps; k++) {
+        C.avancar(e, velocidade / fps);
+        for (const ev of e.eventos) if (ev.tipo in contagem) contagem[ev.tipo]++;
+        e.eventos.length = 0;
+      }
+      return contagem;
+    };
+    for (const fps of [30, 60, 120, 144]) {
+      const { tiro, tiroInimigo } = tiros(fps);
+      assert.ok(Math.abs(tiro - 60 / C.TORRES.metralhadora.intervalo) <= 1, `${fps} fps: ${tiro} tiros da torre`);
+      assert.ok(Math.abs(tiroInimigo - 60 / C.INIMIGOS.leve.intervaloTorre) <= 1, `${fps} fps: ${tiroInimigo} tiros do inimigo`);
+      assert.ok(Math.abs(tiros(fps, 2).tiro - 120 / C.TORRES.metralhadora.intervalo) <= 1, `${fps} fps em 2×`);
+    }
+  },
   "a campanha pode ser vencida construindo e melhorando entre as ondas"() {
     const e = C.iniciar();
     const plano = [

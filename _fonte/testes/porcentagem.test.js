@@ -45,8 +45,10 @@ const testes = {
   "valores inválidos e limites"() {
     assert.deepEqual(P.parte({}), { incompleto: true });
     assert.deepEqual(P.parte({ percentual: 10, valor: -5 }), { erro: "negativo" });
-    assert.deepEqual(P.ajuste({ valor: 100, percentual: 120 }), { erro: "descontoGrande" });
-    assert.deepEqual(P.ajuste({ valor: 100, percentual: 120, desconto: true }).erro, undefined);
+    // Desconto acima de 100% daria preço negativo (antes: −20); aumento de 120% é válido (antes: erro)
+    assert.deepEqual(P.ajuste({ valor: 100, percentual: 120, desconto: true }), { erro: "descontoGrande" });
+    assert.deepEqual(P.ajuste({ valor: 100, percentual: 120 }).erro, undefined);
+    perto(P.ajuste({ valor: 200, percentual: 150 }).resultado, 500);
     assert.deepEqual(P.variacao({ de: 0, para: 10 }), { erro: "zero" });
     assert.deepEqual(P.proporcao({ parte: 1, total: 0 }), { erro: "zero" });
     assert.deepEqual(P.cadeia({ valor: 100, percentuais: [] }), { incompleto: true });

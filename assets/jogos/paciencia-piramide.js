@@ -60,6 +60,7 @@
   let pressao = null;
   let selecionada = null;
   let dicaTimer = null;
+  let timersVitoria = [];
   let foco = 21;
   let g = null;
   let posicoes = [];
@@ -493,6 +494,7 @@
   }
 
   function acaoMonte() {
+    if (P.venceu(estado)) return;
     const novo = P.usarMonte(estado);
     if (!novo) {
       som.tocar("erro");
@@ -541,7 +543,7 @@
   /** Um toque (ou Enter) numa carta: escolhe, forma o par com a escolhida ou tira o Rei. */
   function tocarCarta(id) {
     const local = P.localizar(estado, id);
-    if (!local) return;
+    if (!local || P.venceu(estado)) return;
     if (local.tipo === "monte") {
       acaoMonte();
       return;
@@ -759,15 +761,15 @@
     if (recordes.tempo) dados.push(["Novo melhor tempo!", P.formatarTempo(estado.segundos), true]);
     dados.push(["Vitórias seguidas", P.formatarNumero(novas.sequencia)]);
     const { semente, modo } = estado;
-    setTimeout(() => {
+    timersVitoria.push(setTimeout(() => {
       // As cartas que ficaram à vista pulam, uma depois da outra
       let k = 0;
       posicoes.forEach((p, id) => !p.coberta && cartasEl[id].style.setProperty("--k", String(k++ % 8)));
       mesa.classList.add("pr-festa");
       setTimeout(() => mesa.classList.remove("pr-festa"), 2200);
       som.tocar("vitoria");
-    }, espera);
-    setTimeout(() => {
+    }, espera));
+    timersVitoria.push(setTimeout(() => {
       abrirDialogo({
         titulo: "Parabéns!",
         texto: `Você limpou a pirâmide com ${P.textoModo(modo)}.`,
@@ -778,7 +780,7 @@
           { rotulo: "Fechar", acao: () => {}, secundario: true },
         ],
       });
-    }, espera + 900);
+    }, espera + 900));
   }
 
   // ---------- Estatísticas ----------
@@ -842,6 +844,9 @@
   }
 
   function novaPartida({ modo = estado ? estado.modo : P.MODO_PADRAO, semente = P.novaSemente() } = {}) {
+    // A festa e o "Parabéns!" da partida anterior não podem cair sobre a nova
+    timersVitoria.forEach(clearTimeout);
+    timersVitoria = [];
     fecharDialogo();
     pararBusca();
     registrarAbandono();

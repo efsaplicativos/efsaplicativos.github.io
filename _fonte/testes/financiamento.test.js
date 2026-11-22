@@ -79,6 +79,9 @@ const testes = {
     assert.deepEqual(F.simular({ valor: 1000, taxaPercentual: 1, prazo: 601 }), { erros: { prazo: true } });
     assert.deepEqual(F.simular({ valor: 1000, taxaPercentual: 1, prazo: 0 }), { erros: { prazo: true } });
     assert.deepEqual(F.simular({ valor: null, taxaPercentual: 1, prazo: 12 }), { incompleto: true });
+    // Entrada ou custos negativos não podem aumentar o financiado nem baixar a parcela
+    assert.deepEqual(F.simular({ valor: 100000, entrada: -1000, taxaPercentual: 1, prazo: 12 }), { erros: { entrada: true } });
+    assert.deepEqual(F.simular({ valor: 100000, taxaPercentual: 1, prazo: 12, custos: -50 }), { erros: { custos: true } });
     const r = F.simular({ valor: 150000, entrada: 30000, taxaPercentual: 1, prazo: 10, unidade: "anos" });
     assert.equal(r.financiado, 120000);
     assert.equal(r.meses, 120);

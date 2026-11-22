@@ -210,6 +210,22 @@ const testes = {
     }
     assert.ok(lances > 0);
   },
+  "o computador prefere vencer já a vencer alguns lances depois"() {
+    const casas = tabuleiro([
+      [2, 1, P, true],
+      [3, 0, B],
+      [4, 5, B, true],
+      [5, 6, P, true],
+      [6, 1, P, true],
+    ]);
+    // Toda captura da dama branca ganha, mas só cair em (1,2) deixa o peão de (3,0) sem lance na hora
+    const melhores = L.melhoresJogadas(casas, P, L.PROFUNDIDADE.dificil);
+    assert.ok(melhores.length > 0);
+    for (const lance of melhores) {
+      assert.equal(L.lancesLegais(L.aplicarLance(casas, lance), B).length, 0, `não vence na hora: ${JSON.stringify(lance)}`);
+    }
+    assert.ok(melhores.some((lance) => lance.passos.at(-1).para === casa(1, 2)));
+  },
   "o computador reclama de partida terminada"() {
     const terminada = L.criar([LANCE_NEUTRO], tabuleiro([[5, 0, B]]));
     assert.throws(() => L.escolherJogada(terminada.casas, P, L.NIVEIS.dificil), /terminou/);

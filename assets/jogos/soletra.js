@@ -28,6 +28,19 @@
   let rodada = null;
   let digitada = "";
   let modoDiario = false;
+  /** Data ("AAAA-MM-DD") da rodada do dia em jogo; null numa rodada comum. */
+  let diaDoJogo = null;
+  const CHAVE_PARTIDA = "efs-soletra-partida";
+
+  // A rodada em jogo fica gravada: recarregar a página não perde as palavras achadas nem o dia
+  function salvar() {
+    if (!S.paraSalvar) return;
+    try {
+      localStorage.setItem(CHAVE_PARTIDA, S.paraSalvar(rodada, modoDiario ? diaDoJogo : null));
+    } catch (erro) {
+      /* Sem armazenamento: vale só enquanto a página estiver aberta. */
+    }
+  }
 
   function desenhar() {
     const { letras, meio } = rodada;
@@ -82,7 +95,8 @@
     if (S.completa(rodada)) {
       let texto = `Rodada completa! ${rodada.pontos} pontos, ${rodada.pangramas} pangrama(s).`;
       raiz.dataset.jogo = "fim";
-      if (modoDiario && D) {
+      // Só marca o dia da própria rodada: a de ontem completada depois da meia-noite não vale por hoje
+      if (modoDiario && D && diaDoJogo === D.chave()) {
         D.marcarConcluido("soletra");
         texto += " O soletra de hoje está feito.";
       }
@@ -124,19 +138,42 @@
       mensagem.textContent = ultima.pangrama
         ? `Pangrama! Você usou as sete letras: +${ultima.pontos} pontos.`
         : `${ultima.palavra.toLowerCase()}: +${ultima.pontos} ponto(s).`;
-      som.tocar(ultima.pangrama ? "vitoria" : "acerto");
+      // A última palavra da rodada também toca a música de vitória
+      som.tocar(ultima.pangrama || S.completa(rodada) ? "vitoria" : "acerto");
     }
     digitada = "";
+    if (rodada !== antes) salvar();
     desenhar();
   }
 
   function nova(diario = false) {
     modoDiario = Boolean(diario) && Boolean(D);
-    rodada = S.iniciar({ aleatorio: modoDiario ? D.doDia("soletra").gerador : Math.random });
+    const doDia = modoDiario ? D.doDia("soletra") : null;
+    diaDoJogo = doDia ? doDia.data : null;
+    rodada = S.iniciar({ aleatorio: doDia ? doDia.gerador : Math.random });
     digitada = "";
-    const cabeca = modoDiario ? `Rodada do dia ${D.doDia("soletra").data}` : "Rodada nova";
+    const cabeca = doDia ? `Rodada do dia ${doDia.data}` : "Rodada nova";
     mensagem.textContent = `${cabeca}: palavras de ${S.MIN_LETRAS_PALAVRA} letras ou mais, sempre com a letra ${rodada.meio}.`;
+    salvar();
     desenhar();
+  }
+
+  /** Volta à rodada gravada; o jogo do dia só continua valendo se ainda for o mesmo dia. */
+  function retomar() {
+    let salva = null;
+    try {
+      salva = S.retomar ? S.retomar(localStorage.getItem(CHAVE_PARTIDA)) : null;
+    } catch (erro) {
+      salva = null;
+    }
+    if (!salva) return false;
+    rodada = salva.rodada;
+    digitada = "";
+    modoDiario = Boolean(D) && typeof salva.diario === "string" && salva.diario === D.chave();
+    diaDoJogo = modoDiario ? salva.diario : null;
+    mensagem.textContent = `${modoDiario ? "Rodada do dia" : "Rodada"} retomada de onde você parou, sempre com a letra ${rodada.meio}.`;
+    desenhar();
+    return true;
   }
 
   letrasEl.addEventListener("click", (evento) => {
@@ -160,6 +197,9 @@
       return;
     }
     if (evento.key === "Enter") {
+      // Enter num link ou num botão fora do jogo (menu, rodapé...) faz o que deve fazer
+      const alvo = evento.target;
+      if (alvo.closest?.("a[href], summary") || (alvo.closest?.("button") && !raiz.contains(alvo))) return;
       evento.preventDefault();
       enviar();
       return;
@@ -168,5 +208,5 @@
     if (letra.length === 1 && /^[A-Z]$/.test(letra) && rodada.letras.includes(letra)) digitar(letra);
   });
 
-  nova(false);
+  if (!retomar()) nova(false);
 })();

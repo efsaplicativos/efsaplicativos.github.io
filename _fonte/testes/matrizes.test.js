@@ -248,6 +248,14 @@ teste("operações da tela e títulos", () => {
   );
   assert.equal(X.textoCopia(inversa.matriz), "0,6\t-0,7\n-0,2\t0,4");
   assert.equal(X.textoParaCelula(inversa.matriz[0][1]), "-0,7");
+  // Usar como A/B não perde algarismos de valores pequenos nem gera textos enormes
+  const M = require("../../assets/ferramentas/matematica-comum.js");
+  for (const v of [1 / 3e6, 1e50, -1234.5, 1 / 3, 0, 2.5e-20]) {
+    const texto = X.textoParaCelula(v);
+    assert.ok(texto.length <= 40, texto);
+    assert.ok(Math.abs(M.ler(texto) - v) <= Math.abs(v) * 1e-14, `${v} → ${texto}`);
+  }
+  assert.equal(X.textoParaCelula(0.1 + 0.2), "0,3");
 });
 
 teste("mensagens de erro da tela", () => {
@@ -275,6 +283,20 @@ teste("mensagens de erro da tela", () => {
     X.calcular(base({ operacao: "inversa", celulasA: celulas([[1, 2], [2, 4]]) })).mensagem,
     "A matriz é singular (determinante igual a 0) e não possui inversa.",
   );
+  // Resultado além do limite do double: mensagem em vez de "∞"
+  const grande = "O resultado tem valores grandes demais para calcular.";
+  const dez = celulas([[10, 0], [0, 10]]);
+  assert.equal(X.calcular(base({ operacao: "potencia", celulasA: dez, n: "400" })).mensagem, grande);
+  assert.equal(X.calcular(base({ operacao: "escalar", k: "1e308" })).mensagem, grande);
+});
+
+teste("determinante pequeno não vira zero", () => {
+  // 0,001·I₅: det = 10⁻¹⁵ e a inversa existe (antes dava 0, "singular")
+  const m = X.identidade(5).map((l) => l.map((v) => v * 0.001));
+  assert.ok(Math.abs(X.determinante(m) - 1e-15) < 1e-27);
+  assert.equal(X.determinante([[1, 2, 3], [4, 5, 6], [7, 8, 9]]), 0);
+  assert.equal(X.determinante([[1e-5, 2e-5, 3e-5], [4e-5, 5e-5, 6e-5], [7e-5, 8e-5, 9e-5]]), 0);
+  assert.equal(X.determinante([[0, 0], [0, 0]]), 0);
 });
 
 if (falhas) {

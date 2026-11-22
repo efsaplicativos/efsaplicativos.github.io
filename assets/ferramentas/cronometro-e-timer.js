@@ -133,6 +133,14 @@
     },
   };
 
+  // Depois de recarregar a página com o temporizador contando, o áudio só é liberado num gesto:
+  // sem isto, os bipes e o alarme do fim tocariam mudos. Qualquer toque ou tecla na página serve.
+  for (const tipo of ["click", "keydown"]) {
+    document.addEventListener(tipo, () => {
+      if (timer.rodando && opcoes.som) contextoAudio();
+    });
+  }
+
   function tocar(som) {
     if (!opcoes.som) return;
     try {
@@ -429,6 +437,7 @@
       salvarTimer();
       atualizarBotoesTimer();
       desenharTimer(agora());
+      atualizarTitulo(); // tira o "Tempo esgotado!" do título ao digitar um tempo novo
     });
   }
 

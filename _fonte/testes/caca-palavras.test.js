@@ -235,6 +235,18 @@ teste("salvar e restaurar devolve a mesma partida", () => {
   assert.deepEqual(L.restaurar(L.paraSalvar(p)), p);
 });
 
+teste("o jogo do dia continua sendo do dia depois de salvar e restaurar", () => {
+  // Antes a data se perdia: recarregar a página no meio do jogo do dia e terminar não marcava o dia
+  const p = { ...partidaCom("facil", "frutas", 3), diario: "2026-11-22" };
+  const volta = L.restaurar(L.paraSalvar(p));
+  assert.equal(volta.diario, "2026-11-22");
+  const achada = L.selecionar(volta, volta.palavras[0].celulas[0], volta.palavras[0].celulas.at(-1)).partida;
+  assert.equal(L.restaurar(L.paraSalvar(achada)).diario, "2026-11-22");
+  // Sem data (jogo comum) ou com data estranha, não há campo diario
+  assert.equal("diario" in L.restaurar(L.paraSalvar(partidaCom("facil", "frutas", 3))), false);
+  assert.equal("diario" in L.restaurar(L.paraSalvar({ ...p, diario: "ontem" })), false);
+});
+
 teste("partida salva estragada ou adulterada volta null", () => {
   const p = partidaCom("medio", "casa", 6);
   const estragos = [

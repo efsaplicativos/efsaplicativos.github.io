@@ -127,6 +127,8 @@ const LogicaPaciencia = (() => {
 
   /** Cartas que saem juntas ao pegar [id]: a sequência da carta até o topo da coluna, ou só a de cima. */
   function cartasParaMover(e, id) {
+    // Partida ganha: nada mais sai do lugar (um Rei voltando da fundação daria uma segunda vitória)
+    if (venceu(e)) return null;
     const local = localizar(e, id);
     if (!local) return null;
     if (local.tipo === "coluna") {
@@ -317,7 +319,8 @@ const LogicaPaciencia = (() => {
     });
 
     if (deCimaDescarte !== null) {
-      if (podeMover(e, deCimaDescarte, { tipo: "fundacao" })) considerar(85, { id: deCimaDescarte, destino: { tipo: "fundacao" } });
+      // Acima de qualquer jogada que só revela uma carta (até 86, com 6 fechadas): fundação primeiro
+      if (podeMover(e, deCimaDescarte, { tipo: "fundacao" })) considerar(89, { id: deCimaDescarte, destino: { tipo: "fundacao" } });
       for (let d = 0; d < COLUNAS; d++) {
         if (podeMover(e, deCimaDescarte, { tipo: "coluna", indice: d })) {
           considerar(60, { id: deCimaDescarte, destino: { tipo: "coluna", indice: d } });

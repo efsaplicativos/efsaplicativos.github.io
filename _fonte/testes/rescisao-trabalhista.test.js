@@ -156,6 +156,39 @@ const testes = {
     assert.ok(conta.verbas.total > 0);
     assert.ok(conta.descontos.inss > 0);
   },
+  "admitido no mesmo mês: o saldo conta a partir da admissão"() {
+    const conta = R.calcular({ salario: 3000, admissao: data(2026, 3, 10), afastamento: data(2026, 3, 20), tipo: "pedido" });
+    assert.equal(conta.diasTrabalhados, 11);
+    perto(conta.verbas.saldo, 1100);
+  },
+  "período aquisitivo completado na projeção do aviso entra como vencido"() {
+    // 01/03/2025 a 15/02/2026, aviso de 30 dias: projeção até 17/03/2026 fecha o período de 12 meses
+    const conta = R.calcular({ salario: 3000, admissao: data(2025, 3, 1), afastamento: data(2026, 2, 15) });
+    assert.equal(conta.avos.feriasVencidas, 1);
+    perto(conta.verbas.feriasVencidas, 3000);
+    perto(conta.verbas.tercoFeriasVencidas, 1000);
+    assert.equal(conta.avos.ferias, 1);
+    const pedido = R.calcular({ salario: 3000, admissao: data(2025, 3, 1), afastamento: data(2026, 2, 15), tipo: "pedido" });
+    assert.ok(conta.verbas.total > pedido.verbas.total, "a dispensa não pode pagar menos que o pedido");
+  },
+  "projeção que vira o ano soma o 13º dos dois anos"() {
+    // 10/12/2025 + 45 dias de aviso = 24/01/2026: 12/12 de 2025 e 1/12 de 2026
+    const conta = R.calcular({ salario: 3000, admissao: data(2020, 1, 1), afastamento: data(2025, 12, 10) });
+    assert.deepEqual(conta.dataProjetada, data(2026, 1, 24));
+    assert.equal(conta.avos.decimo, 13);
+    perto(conta.verbas.decimo, 3250);
+  },
+  "férias indenizadas e aviso indenizado não têm INSS nem IRRF"() {
+    const conta = R.calcular({ salario: 3000, admissao: data(2024, 3, 5), afastamento: data(2026, 11, 20), saldoFgts: 10000 });
+    // INSS só do saldo (2.000,00) e do 13º (3.000,00); IRRF zerado pela redução de 2026
+    perto(conta.descontos.inss, 155.69 + 248.6);
+    assert.equal(conta.descontos.irrf, 0);
+    perto(conta.liquido, 15933.33 - 404.29);
+    // Salário alto: IRRF do saldo pela tabela mensal e do 13º à parte, sem somar férias e aviso
+    const alta = R.calcular({ salario: 12000, admissao: data(2020, 1, 1), afastamento: data(2026, 6, 20) });
+    assert.equal(alta.descontos.tributavel, alta.verbas.saldo + alta.verbas.decimo);
+    perto(alta.descontos.irrf, 1792.6);
+  },
   "datas ou valores inválidos são recusados"() {
     assert.deepEqual(R.calcular({}), { incompleto: true });
     assert.deepEqual(R.calcular({ salario: 3000 }), { incompleto: true });

@@ -267,7 +267,8 @@
     desenharRecordes();
     desenharInicio();
     grade.classList.toggle("terminada", L.terminou(partida));
-    if (modoDiario && partida && L.terminou(partida) && D) D.marcarConcluido("caca-palavras");
+    // Só marca o dia da própria grade: a de ontem terminada depois da meia-noite não vale por hoje
+    if (modoDiario && partida && L.terminou(partida) && D && partida.diario === D.chave()) D.marcarConcluido("caca-palavras");
   }
 
   // ---------- Seleção na grade ----------
@@ -344,6 +345,7 @@
         return;
       case "repetida":
         mostrarErro(a, b);
+        som.tocar("erro");
         mostrarMensagem(`Você já achou ${maiuscula(partida.palavras[r.indice].texto)}.`, { duracao: 1800 });
         return;
       case "nada":
@@ -640,6 +642,8 @@
     arrasto = null;
     partida = L.novaPartida(nivel, tema, aleatorio);
     modoDiario = Boolean(aleatorio) && Boolean(D);
+    // A data vai junto na partida salva: quem recarregar a página continua no jogo do dia
+    if (modoDiario) partida = { ...partida, diario: D.chave() };
     gravar(CHAVE_NIVEL, partida.nivel);
     salvarPartida();
     montarGrade();
@@ -651,12 +655,13 @@
 
   botaoDiario?.addEventListener("click", () => {
     if (!D) return;
-    iniciarJogo(partida ? partida.nivel : "facil", seletorTema.value, D.doDia("caca-palavras").gerador);
+    // Como no Novo jogo: um jogo com progresso só é trocado depois de confirmar
+    pedirNovoJogo(partida ? partida.nivel : "facil", seletorTema.value, D.doDia("caca-palavras").gerador);
   });
 
-  function pedirNovoJogo(nivel, tema) {
+  function pedirNovoJogo(nivel, tema, aleatorio) {
     if (!temProgresso()) {
-      iniciarJogo(nivel, tema);
+      iniciarJogo(nivel, tema, aleatorio);
       return;
     }
     dialogoTitulo.textContent = "Começar outro caça-palavras?";
@@ -665,7 +670,7 @@
     dialogoBotoes.replaceChildren(
       botao("Sim, novo jogo", () => {
         dialogo.close();
-        iniciarJogo(nivel, tema);
+        iniciarJogo(nivel, tema, aleatorio);
       }),
       botao("Continuar este", () => dialogo.close(), true),
     );
@@ -721,6 +726,7 @@
   if (salva && !L.terminou(salva)) {
     // A partida volta parada: o tempo só corre de novo no próximo toque na grade
     partida = salva;
+    modoDiario = Boolean(D) && salva.diario === D.chave();
     montarGrade();
     desenhar();
     atualizarCronometro();

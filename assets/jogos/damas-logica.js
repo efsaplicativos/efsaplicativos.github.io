@@ -329,7 +329,8 @@ const LogicaDamas = (() => {
     for (const lance of lances) {
       const proximo = aplicarLance(casas, lance);
       let nota;
-      if (lancesLegais(proximo, adversario(jogador)).length === 0) nota = PONTOS_VITORIA;
+      // A vitória neste lance vale mais que qualquer vitória achada mais fundo (PONTOS_VITORIA + o que restava)
+      if (lancesLegais(proximo, adversario(jogador)).length === 0) nota = PONTOS_VITORIA + profundidade;
       else if (profundidade <= 1) nota = avaliar(proximo, jogador);
       else nota = minimax(proximo, adversario(jogador), jogador, profundidade - 1, -Infinity, Infinity);
       if (nota > melhorNota) {

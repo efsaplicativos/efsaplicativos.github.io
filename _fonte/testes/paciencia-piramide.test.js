@@ -193,6 +193,14 @@ function jogadasPossiveis(e) {
   assert.ok(P.podeProgredir(estado({ piramide: base, descarte: "2e 8e", volta: 3 })), "a carta de cima ainda serve");
   assert.ok(!P.podeProgredir(estado({ piramide: "" })), "partida ganha não tem mais nada a fazer");
 }
+{
+  // Pirâmide limpa com cartas sobrando: o monte para e o Rei do descarte não sai (seria outra vitória)
+  const ganha = estado({ piramide: "", monte: "2e Ke", descarte: "Kc" });
+  assert.ok(P.venceu(ganha));
+  assert.equal(P.usarMonte(ganha), null, "depois da vitória, o monte não vira mais");
+  assert.equal(P.tirar(ganha, [carta("Kc")]), null, "depois da vitória, nenhuma carta sai");
+  assert.equal(P.dica(ganha), null);
+}
 
 // ---------- Dica simples ----------
 {

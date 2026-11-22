@@ -91,6 +91,17 @@ const testes = {
     assert.equal(C.girar(subiu, "esquerda"), subiu);
     assert.equal(C.girar(subiu, "baixo").pendente.id, "baixo");
   },
+  "apertar a direção atual antes do passo desfaz a curva guardada"() {
+    // Indo para a direita na linha de cima: ↑ sem querer e logo → não pode levar a cobra à parede
+    const partida = montar(N.facil, [casa(N.facil, 0, 6), casa(N.facil, 0, 5), casa(N.facil, 0, 4)], "direita", casa(N.facil, 9, 9));
+    const corrigida = C.girar(C.girar(partida, "cima"), "direita");
+    assert.equal(corrigida.pendente.id, "direita");
+    const depois = C.avancar(corrigida, semente(14));
+    assert.equal(depois.terminada, false);
+    assert.equal(depois.cabeca, casa(N.facil, 0, 7));
+    // Sem curva guardada, apertar a direção atual não muda nada
+    assert.equal(C.girar(partida, "direita"), partida);
+  },
   "girar ignora direção desconhecida e partida terminada"() {
     const partida = C.iniciar(N.facil, semente(6));
     assert.equal(C.girar(partida, "lado"), partida);

@@ -11,9 +11,10 @@
  *  - multa do FGTS: 40% sem justa causa, 20% no acordo, nada nos outros casos;
  *  - com justa causa só cabem saldo de salário e férias vencidas.
  *
- * Os descontos (INSS e IRRF) são uma ESTIMATIVA: usam as tabelas de 2026 do salário líquido e a
- * tributação exclusiva na fonte. O TRCT oficial é calculado pelo empregador e pode trazer
- * particularidades (férias gozadas no mês, adiantamentos, plano de saúde e afins).
+ * Os descontos (INSS e IRRF) são uma ESTIMATIVA: usam as tabelas de 2026 do salário líquido, só
+ * sobre o saldo de salário e o 13º (férias indenizadas e aviso indenizado são isentos). O TRCT
+ * oficial é calculado pelo empregador e pode trazer particularidades (férias gozadas no mês,
+ * adiantamentos, plano de saúde e afins).
  */
 const LogicaRescisao = (() => {
   /** Tabelas de INSS/IRRF compartilhadas com a calculadora de salário líquido. */
@@ -122,24 +123,33 @@ const LogicaRescisao = (() => {
     const indenizado = contrato.aviso && avisoIndenizado;
     const dataProjetada = indenizado ? somarDias(afastamento, diasAvisoPagos) : afastamento;
 
-    // Saldo de salário: dias trabalhados no mês do afastamento (mês comercial de 30 dias)
-    const diasTrabalhados = Math.min(DIAS_NO_MES, afastamento.dia);
+    // Saldo de salário: dias trabalhados no mês do afastamento (mês comercial de 30 dias), contados
+    // a partir da admissão quando ela caiu no mesmo mês
+    const mesmoMes = admissao.ano === afastamento.ano && admissao.mes === afastamento.mes;
+    const diasTrabalhados = Math.min(DIAS_NO_MES, afastamento.dia - (mesmoMes ? admissao.dia - 1 : 0));
     const saldo = (salario / DIAS_NO_MES) * diasTrabalhados;
 
     // Aviso indenizado entra como verba e projeta férias e 13º
     const aviso = indenizado ? (salario / DIAS_NO_MES) * diasAvisoPagos : 0;
 
-    // Férias: períodos completos não gozados + os avos do período aquisitivo em curso
-    const periodosVencidos = Number.isInteger(feriasVencidas) && feriasVencidas > 0 ? Math.min(5, feriasVencidas) : 0;
+    // Férias: períodos completos não gozados + os avos do período aquisitivo em curso. O período
+    // que se completa durante a projeção do aviso também entra como vencido.
+    const completadosNaProjecao = anosCompletos(admissao, dataProjetada) - anosCompletos(admissao, afastamento);
+    const periodosVencidos = (Number.isInteger(feriasVencidas) && feriasVencidas > 0 ? Math.min(5, feriasVencidas) : 0) + completadosNaProjecao;
     const inicioAquisitivo = inicioDoPeriodoAquisitivo(admissao, dataProjetada);
     const avosFerias = avos(inicioAquisitivo, dataProjetada);
     const feriasVencidasValor = periodosVencidos * salario;
     const feriasProporcionais = (salario / 12) * avosFerias;
 
-    // 13º: meses do ano do afastamento (ou desde a admissão, se entrou neste ano)
-    const primeiroDiaDoAno = { ano: dataProjetada.ano, mes: 1, dia: 1 };
-    const inicioDecimo = ordem(admissao, primeiroDiaDoAno) > 0 ? admissao : primeiroDiaDoAno;
-    const avosDecimo = avos(inicioDecimo, dataProjetada);
+    // 13º: meses do ano do afastamento (ou desde a admissão, se entrou neste ano). Se a projeção
+    // do aviso passa para o ano seguinte, os avos dos dois anos se somam.
+    let avosDecimo = 0;
+    for (let ano = afastamento.ano; ano <= dataProjetada.ano; ano++) {
+      const primeiroDiaDoAno = { ano, mes: 1, dia: 1 };
+      const inicioDecimo = ordem(admissao, primeiroDiaDoAno) > 0 ? admissao : primeiroDiaDoAno;
+      const fimDecimo = ano < dataProjetada.ano ? { ano, mes: 12, dia: 31 } : dataProjetada;
+      avosDecimo += avos(inicioDecimo, fimDecimo);
+    }
     const decimo = (salario / 12) * avosDecimo;
 
     const justaCausa = tipo === "justaCausa";
@@ -185,18 +195,22 @@ const LogicaRescisao = (() => {
   }
 
   /**
-   * Estimativa de INSS e IRRF. O INSS incide no saldo, nas férias (com o terço) e no 13º; o IRRF é
-   * calculado sobre o total tributável, na fonte e de forma exclusiva (sem as deduções do ajuste).
+   * Estimativa de INSS e IRRF. Férias indenizadas (com o terço), aviso prévio indenizado e multa do
+   * FGTS não têm INSS nem IRRF. O saldo de salário segue a conta do mês (INSS, IRRF com o melhor
+   * desconto e a redução de 2026); o 13º tem INSS à parte e IRRF exclusivo na fonte, também com a
+   * redução.
    */
   function descontosDe(verbas) {
     if (!Salario) return { inss: null, irrf: null, total: null, estimativa: false };
-    const baseFerias = verbas.feriasVencidas + verbas.tercoFeriasVencidas + verbas.feriasProporcionais + verbas.tercoFeriasProporcionais;
-    const inssSaldo = Salario.inss(verbas.saldo).total;
-    const inssFerias = Salario.inss(baseFerias).total;
+    const mes = verbas.saldo > 0 ? Salario.calcular({ bruto: verbas.saldo }) : null;
+    const inssSaldo = mes ? mes.inss.total : 0;
+    const irrfSaldo = mes ? mes.irrf.valor : 0;
     const inssDecimo = Salario.inss(verbas.decimo).total;
-    const inss = centavos(inssSaldo + inssFerias + inssDecimo);
-    const tributavel = centavos(Math.max(0, verbas.saldo + verbas.aviso + baseFerias + verbas.decimo));
-    const irrf = Salario.irrf(tributavel).valor;
+    const baseDecimo = centavos(Math.max(0, verbas.decimo - inssDecimo));
+    const irrfDecimo = centavos(Math.max(0, Salario.irrf(baseDecimo).valor - Salario.reducaoMensal(verbas.decimo)));
+    const inss = centavos(inssSaldo + inssDecimo);
+    const irrf = centavos(irrfSaldo + irrfDecimo);
+    const tributavel = centavos(verbas.saldo + verbas.decimo);
     return { inss, irrf, total: centavos(inss + irrf), tributavel, estimativa: true };
   }
 

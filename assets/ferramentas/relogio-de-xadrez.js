@@ -378,6 +378,9 @@
     // Enter ou espaço com a metade em foco (o clique do ponteiro já foi tratado no pointerdown)
     botao.addEventListener("click", (evento) => {
       if (evento.detail === 0) tocarMetade(metade);
+      // No toque, o pointerdown ainda não conta como gesto para liberar o áudio (iPhone e o
+      // primeiro toque no Android); o clique que vem depois conta, e o alerta do fim não fica mudo
+      else prepararAudio();
     });
     botao.addEventListener("contextmenu", (evento) => evento.preventDefault());
   }

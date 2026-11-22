@@ -64,7 +64,7 @@
   const ERROS = {
     negativo: "Use apenas números positivos.",
     zero: "O valor de referência não pode ser zero.",
-    descontoGrande: "Um aumento acima de 100% não é permitido aqui — use o modo de variação.",
+    descontoGrande: "Um desconto acima de 100% deixaria o valor negativo.",
   };
 
   function calcularParte() {

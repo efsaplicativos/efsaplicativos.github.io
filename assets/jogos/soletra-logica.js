@@ -293,6 +293,49 @@ const LogicaSoletra = (() => {
   const pontosTotais = (rodada) =>
     rodada.possiveis.reduce((soma, p) => soma + pontosDe(p) + (pangrama(p, rodada.letras) ? BONUS_PANGRAMA : 0), 0);
 
+  /**
+   * O que gravar da rodada em jogo: letras, a do meio, as palavras achadas e, no jogo do dia, a
+   * data ("AAAA-MM-DD"). Os pontos são refeitos ao retomar.
+   */
+  function paraSalvar(rodada, diario = null) {
+    return JSON.stringify({
+      letras: rodada.letras.join(""),
+      meio: rodada.meio,
+      achadas: rodada.achadas.map((a) => a.palavra),
+      diario,
+    });
+  }
+
+  /** Rodada gravada por paraSalvar: { rodada, diario }; null se ausente, estragada ou impossível. */
+  function retomar(texto) {
+    let o;
+    try {
+      o = JSON.parse(texto);
+    } catch (erro) {
+      return null;
+    }
+    if (!o || typeof o !== "object" || typeof o.letras !== "string" || typeof o.meio !== "string") return null;
+    const letras = [...o.letras];
+    if (letras.length !== TOTAL_LETRAS || new Set(letras).size !== TOTAL_LETRAS || !letras.every((l) => /^[A-Z]$/.test(l))) return null;
+    if (!letras.includes(o.meio)) return null;
+    let rodada = congelar({
+      letras: letras.sort((a, b) => a.localeCompare(b, "pt-BR")),
+      meio: o.meio,
+      possiveis: solucoes(letras, o.meio),
+      achadas: [],
+      pontos: 0,
+      pangramas: 0,
+      tentativas: 0,
+    });
+    if (!rodada.possiveis.length) return null;
+    // Cada palavra passa de novo pela regra: o que não vale é ignorado e os pontos saem certos
+    for (const palavra of Array.isArray(o.achadas) ? o.achadas : []) {
+      if (typeof palavra === "string") rodada = tentar(rodada, palavra);
+    }
+    const diario = typeof o.diario === "string" && /^\d{4}-\d{2}-\d{2}$/.test(o.diario) ? o.diario : null;
+    return { rodada, diario };
+  }
+
   return {
     TOTAL_LETRAS,
     MIN_LETRAS_PALAVRA,
@@ -314,6 +357,8 @@ const LogicaSoletra = (() => {
     completa,
     pontosTotais,
     letrasDe,
+    paraSalvar,
+    retomar,
   };
 })();
 

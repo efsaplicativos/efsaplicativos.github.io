@@ -206,6 +206,26 @@ assert.equal(P.vermelha(c("5p")), false);
   assert.equal(e.pontos, 520);
   assert.equal(P.passoAutomatico(e), null);
   conferirInvariantes(e);
+
+  // Partida ganha: o Rei não volta da fundação para uma coluna vazia (ganharia de novo ao subir)
+  const rei = c("Ke");
+  assert.equal(P.cartasParaMover(e, rei), null);
+  assert.equal(P.podeMover(e, rei, { tipo: "coluna", indice: 0 }), false);
+  assert.equal(P.mover(e, rei, { tipo: "coluna", indice: 0 }), null);
+  assert.equal(P.melhorDestino(e, rei), null);
+}
+
+{
+  // Dica: a carta do descarte que vai para a fundação vem antes de revelar uma carta, mesmo na
+  // coluna com 6 fechadas
+  const sete = cs("2e 3e 4e 5e 6e 7e 5p");
+  const usadas = new Set([...sete, c("6c"), c("Ae")]);
+  const e = estado({ colunas: ["", "6c"], descarte: "Ae" });
+  e.colunas[6] = sete;
+  e.fechadas[6] = 6;
+  e.monte = [...Array(52).keys()].filter((id) => !usadas.has(id));
+  conferirInvariantes(e);
+  assert.deepEqual(P.dica(e), { id: c("Ae"), destino: { tipo: "fundacao" } });
 }
 
 assert.equal(P.bonusTempo(29), 0);

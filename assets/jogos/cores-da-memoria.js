@@ -645,19 +645,22 @@
       aplicar();
       return;
     }
+    const estavaPausado = jogo.fase === F.PAUSADO;
     pausar(false);
     if (!C.emAndamento(jogo.fase)) {
       // Pausar logo depois de um erro na última vida já encerrou a partida
       return;
     }
+    // Como em reiniciar(): quem já tinha pausado continua pausado ao desistir da troca
+    const voltar = estavaPausado ? () => botaoContinuar.focus() : continuar;
     abrirDialogo({
       titulo: "Trocar de nível?",
       texto: `A partida em andamento será perdida e um jogo no nível ${C.NIVEIS[id].nome} poderá começar.`,
       botoes: [
         { rotulo: "Trocar", acao: aplicar },
-        { rotulo: "Continuar jogando", acao: continuar, secundario: true },
+        { rotulo: estavaPausado ? "Voltar" : "Continuar jogando", acao: voltar, secundario: true },
       ],
-      aoCancelar: continuar,
+      aoCancelar: voltar,
     });
   }
 

@@ -329,7 +329,10 @@ const LogicaXadrez = (() => {
     r.usadoAntesDaPausaMs = naoNegativo(instantaneo.usadoNoTurnoMs);
     if (instantaneo.estado === "ativo") {
       r.estado = "pausado";
-    } else if (instantaneo.estado !== "pronto" && r.vez === null) {
+    } else if (
+      (instantaneo.estado !== "pronto" && r.vez === null) ||
+      (instantaneo.estado === "encerrado" && r.perdedor === null)
+    ) {
       // Estado incoerente (dados corrompidos): volta ao início
       r.reiniciar();
     } else {

@@ -30,13 +30,14 @@
 
   const ERROS = {
     potencia: "A potência precisa ser maior que zero (veja na etiqueta do aparelho).",
-    horas: "Informe as horas por dia, entre 0 e 24.",
+    horas: "Informe as horas por dia: mais de 0 e no máximo 24.",
     tarifa: "Informe o valor do kWh, que aparece na conta de luz.",
   };
 
   function atualizar() {
     const conta = E.consumo({
-      potencia: ler(campos.potencia),
+      // "5.500" W é cinco mil e quinhentos, como no exemplo da página
+      potencia: ler(campos.potencia, true),
       horasDia: ler(campos.horas),
       dias: ler(campos.dias) ?? 30,
       tarifa: ler(campos.tarifa),
@@ -53,7 +54,7 @@
     const lista = document.createElement("dl");
     lista.className = "result-list";
     for (const [nome, texto] of [
-      ["Consumo", `${numero(conta.kwh)} kWh em ${conta.dias} dias`],
+      ["Consumo", `${numero(conta.kwh)} kWh em ${numero(conta.dias)} dias`],
       ["Por dia", `${numero(conta.porDia)} kWh · ${dinheiro(conta.custoPorDia)}`],
       ["No ano (projeção)", dinheiro(conta.custoAno)],
       ["Tarifa usada", `${dinheiro(conta.tarifa)} por kWh`],
@@ -68,7 +69,7 @@
     }
     const nota = document.createElement("p");
     nota.className = "note";
-    nota.textContent = `A conta é ${numero(conta.potencia)} W ÷ 1000 × ${numero(conta.horasDia)} h × ${conta.dias} dias = ${numero(conta.kwh)} kWh.`;
+    nota.textContent = `A conta é ${numero(conta.potencia)} W ÷ 1000 × ${numero(conta.horasDia)} h × ${numero(conta.dias)} dias = ${numero(conta.kwh)} kWh.`;
     resultado.replaceChildren(rotulo, valor, lista, nota);
   }
 

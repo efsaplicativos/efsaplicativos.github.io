@@ -179,7 +179,8 @@ const LogicaPiramide = (() => {
   // ---------- Jogadas ----------
 
   function tirar(e, ids) {
-    if (!podeTirar(e, ids)) return null;
+    // Pirâmide limpa: a partida acabou (um Rei no descarte daria uma segunda vitória)
+    if (venceu(e) || !podeTirar(e, ids)) return null;
     const n = clonar(e);
     for (const id of ids) {
       const p = n.piramide.indexOf(id);
@@ -198,6 +199,7 @@ const LogicaPiramide = (() => {
 
   /** Um toque no monte: vira a carta de cima ou, com ele vazio, devolve o descarte para começar outra volta. */
   function usarMonte(e) {
+    if (venceu(e)) return null;
     if (podeVirar(e)) {
       const n = clonar(e);
       n.descarte.push(n.monte.pop());

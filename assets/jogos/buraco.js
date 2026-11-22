@@ -1139,6 +1139,11 @@
 
   function abrirFimDeRodada() {
     if (!P.terminouRodada(estado) || !estado.resumo) return;
+    // Outro diálogo aberto (Nova partida, Zerar): o resumo espera ele fechar, sem tomar o lugar dele
+    if (dialogo.open) {
+      timerDialogo = setTimeout(abrirFimDeRodada, 400);
+      return;
+    }
     const r = estado.resumo;
     const quem = r.bateu === 0 ? "Você bateu." : r.bateu === 1 ? `O ${NOME} bateu.` : "O monte acabou e ninguém bateu.";
     if (estado.fase === "acabou") {
@@ -1156,15 +1161,21 @@
       });
       return;
     }
+    // Na rodada normal, ninguém chegou ao alvo; se alguém chegou, os dois passaram empatados
+    const falta = estado.alvo - Math.max(...estado.totais);
     abrirDialogo({
       titulo: `Fim da rodada ${r.rodada}`,
-      texto: `${quem} Faltam ${P.formatarNumero(Math.max(0, estado.alvo - Math.max(...estado.totais)))} pontos para alguém chegar a ${P.formatarNumero(estado.alvo)}.`,
+      texto:
+        falta > 0
+          ? `${quem} Faltam ${P.formatarNumero(falta)} pontos para alguém chegar a ${P.formatarNumero(estado.alvo)}.`
+          : `${quem} Os dois passaram de ${P.formatarNumero(estado.alvo)} empatados: vale mais uma rodada.`,
       tabela: tabelaDoResumo(r),
       botoes: [
         { rotulo: "Próxima rodada", acao: proximaRodada },
         { rotulo: "Ver a mesa", acao: () => {}, secundario: true },
       ],
     });
+    som.tocar("completo");
   }
 
   function proximaRodada() {

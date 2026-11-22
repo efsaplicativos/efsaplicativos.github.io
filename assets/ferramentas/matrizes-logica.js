@@ -88,7 +88,10 @@ const Matrizes = (() => {
         for (let c = col; c < n; c++) m[r][c] -= fator * m[col][c];
       }
     }
-    return Math.abs(det) < 1e-12 * maiorAbs(a) ** n ? 0 : det;
+    // Tolerância relativa à escala real dos valores: com o piso 1 de maiorAbs, det(0,001·I₅) = 10⁻¹⁵
+    // virava 0 ("singular") embora a inversa exista
+    const escala = Math.max(...a.map((l) => Math.max(...l.map(Math.abs))));
+    return Math.abs(det) < 1e-12 * escala ** n ? 0 : det;
   }
 
   /** Inversa por Gauss-Jordan; lança "singular" se não existir. */
@@ -205,7 +208,10 @@ const Matrizes = (() => {
     if (a === null && (precisaB || alvo === "A")) return erro("Há células com valores inválidos na Matriz A.");
     if (b === null && (precisaB || alvo === "B")) return erro("Há células com valores inválidos na Matriz B.");
     const x = alvo === "A" ? a : b;
-    const matriz = (titulo, m) => ({ tipo: "matriz", titulo, matriz: m });
+    // Valores além do limite do double apareciam como "∞" (ex.: potência 400 de 10·I)
+    const GRANDE = "O resultado tem valores grandes demais para calcular.";
+    const matriz = (titulo, m) =>
+      m.every((l) => l.every(Number.isFinite)) ? { tipo: "matriz", titulo, matriz: m } : erro(GRANDE);
 
     try {
       switch (operacao) {
@@ -226,6 +232,7 @@ const Matrizes = (() => {
           return matriz(`${alvo}ᵀ`, transposta(x));
         case "determinante": {
           const det = determinante(x);
+          if (!Number.isFinite(det)) return erro(GRANDE);
           return { tipo: "escalar", titulo: `det(${alvo})`, valor: det, nota: det === 0 ? NOTA_SINGULAR : null };
         }
         case "inversa":
@@ -262,8 +269,12 @@ const Matrizes = (() => {
   const textoCelula = (v) => M.inteligente(v, 8);
   const textoEscalar = (v) => M.inteligente(v, 10);
   const textoCopia = (m) => limpar(m).map((l) => l.map((v) => M.inteligente(v, 10, false)).join("\t")).join("\n");
-  /** Valor gravado nas células ao usar o resultado como A ou B. */
-  const textoParaCelula = (v) => M.numero(v, 10, 0, false);
+  /**
+   * Valor gravado nas células ao usar o resultado como A ou B: 15 algarismos significativos, com
+   * "e" para valores extremos (M.ler aceita "3,3e-7"). Com 10 casas fixas, 3,3·10⁻⁷ virava
+   * 0,0000003333 e 10⁵⁰ virava um texto de 51 dígitos que o armazenamento recusava.
+   */
+  const textoParaCelula = (v) => String(Number(v.toPrecision(15))).replace(".", ",");
   const titulo = (r) => `${r.titulo} — Matriz ${r.matriz.length} × ${r.matriz[0].length}`;
 
   return {

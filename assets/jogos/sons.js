@@ -264,7 +264,14 @@ const Sons = (() => {
   // O navegador só deixa tocar depois de um gesto da pessoa (toque, clique ou tecla)
   function preparar() {
     if (contexto) {
-      if (contexto.state === "suspended") contexto.resume().catch(() => {});
+      // "interrupted" é do Safari no iPhone (ligação, app em segundo plano): também precisa voltar
+      if (contexto.state === "suspended" || contexto.state === "interrupted") {
+        try {
+          Promise.resolve(contexto.resume()).catch(() => {});
+        } catch (e) {
+          /* segue mudo até o próximo gesto */
+        }
+      }
       return contexto;
     }
     const Contexto = window.AudioContext || window.webkitAudioContext;
@@ -300,7 +307,11 @@ const Sons = (() => {
     const ultimos = new Map();
     const botoes = [];
     if (raiz) {
-      for (const tipo of ["pointerdown", "keydown"]) raiz.addEventListener(tipo, () => ligado && preparar(), { capture: true });
+      // No celular, tocar a tela (pointerdown) ainda não conta como gesto para liberar o áudio: o
+      // navegador só libera no fim do toque (pointerup/touchend) ou no clique
+      for (const tipo of ["pointerdown", "pointerup", "touchend", "click", "keydown"]) {
+        raiz.addEventListener(tipo, () => ligado && preparar(), { capture: true });
+      }
     }
 
     function tocar(nome, opcao) {

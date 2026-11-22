@@ -100,13 +100,23 @@ const Equacoes = (() => {
     } else {
       const r = Math.sqrt(-p / 3);
       const arg = Math.min(1, Math.max(-1, ((3 * q) / (2 * p)) * Math.sqrt(-3 / p)));
-      t = 2 * r * Math.cos(Math.acos(arg) / 3);
+      const angulo = Math.acos(arg) / 3;
+      // Das três raízes reais, fica a de maior módulo, que sai com mais exatidão
+      t = [0, 1, 2]
+        .map((k) => 2 * r * Math.cos(angulo - (2 * Math.PI * k) / 3))
+        .reduce((m, v) => (Math.abs(v + deslocamento) > Math.abs(m + deslocamento) ? v : m));
     }
     const raiz = polirRaizCubica(bn, cn, dn, t + deslocamento);
 
     // Divide por (x − r): x² + (bn + r)x + (cn + (bn + r)r)
-    const qb = bn + raiz;
-    const qc = cn + qb * raiz;
+    let qb = bn + raiz;
+    let qc = cn + qb * raiz;
+    // Se r é a maior raiz, dividir a partir do termo independente evita o cancelamento
+    // (x³ + 1000000x² + x + 1 dava três raízes reais em vez de uma real e duas complexas)
+    if (raiz !== 0 && Math.abs(raiz) ** 3 >= Math.abs(dn)) {
+      qc = -dn / raiz;
+      qb = (qc - cn) / raiz;
+    }
     const restantes = resolverQuadratica(1, qb, qc).raizes;
     const raizes = [complexo(snap(raiz)), ...restantes]
       .map((z) => (ehReal(z) ? complexo(snap(polirRaizCubica(bn, cn, dn, z.re))) : z))

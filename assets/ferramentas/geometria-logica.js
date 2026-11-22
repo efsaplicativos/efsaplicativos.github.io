@@ -89,6 +89,7 @@ const Geometria = (() => {
     poligono: "O polígono regular precisa de um número inteiro de lados, no mínimo 3.",
     setor: "O ângulo central deve estar entre 0° e 360°.",
     alturaLado: "A altura não pode ser maior que o lado inclinado.",
+    grande: "As medidas são grandes demais para calcular.",
   };
 
   const UNIDADES = ["mm", "cm", "m", "km", "in", "ft"];
@@ -117,8 +118,10 @@ const Geometria = (() => {
 
   function trianguloPorLados(a, b, c) {
     if (a + b <= c || a + c <= b || b + c <= a) return falha("triangulo");
-    const s = (a + b + c) / 2;
-    const area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+    // Herão na ordem de Kahan (lados em ordem decrescente), que não perde precisão em triângulos
+    // finos: 100000, 100000 e 0,0001 davam 5,0000002 em vez de 5
+    const [p, q, r] = [a, b, c].sort((x, y) => y - x);
+    const area = Math.sqrt((p + (q + r)) * (r - (p - q)) * (r + (p - q)) * (p + (q - r))) / 4;
     const anguloA = graus(Math.acos(limitar((b * b + c * c - a * a) / (2 * b * c), -1, 1)));
     const anguloB = graus(Math.acos(limitar((a * a + c * c - b * b) / (2 * a * c), -1, 1)));
     const anguloC = 180 - anguloA - anguloB;
@@ -406,6 +409,8 @@ const Geometria = (() => {
     if (f.entradas.some((k) => valores[k] === null)) return { estado: "vazio", valores, mensagem: "Preencha as medidas para ver os resultados." };
     const r = calcular(idForma, valores);
     if (!r.ok) return { estado: "erro", valores, mensagem: ERROS[r.erro] };
+    // Lado 1e103 num cubo dava volume "∞ cm³"
+    if (r.medidas.some(([, valor]) => !Number.isFinite(valor))) return { estado: "erro", valores, mensagem: ERROS.grande };
     const linhas = r.medidas.map(([medida, valor], i) => ({
       rotulo: rotuloMedida(medida, idForma),
       valor: formatarMedida(valor, medida, unidade),

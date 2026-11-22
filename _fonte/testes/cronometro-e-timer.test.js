@@ -63,6 +63,17 @@ assert.deepEqual(L.somarTempo(t, 0), L.definirDuracao(null, 60000)); // depois d
 assert.equal(L.iniciarTimer(L.definirDuracao(null, 0), 0).rodando, false); // duração zero não inicia
 assert.equal(L.reiniciarTimer(L.pausarTimer(L.iniciarTimer(padrao, 0), 1000)).restantePausadoMs, 300000);
 
+// +1 min nunca passa de 99:59:59 (antes virava 100:00:59 e o estado salvo era recusado ao recarregar)
+const quaseNoMaximo = L.definirDuracao(null, L.DURACAO_MAXIMA_MS - 30000);
+const somadoParado = L.somarTempo(quaseNoMaximo, 0);
+assert.equal(somadoParado.restantePausadoMs, L.DURACAO_MAXIMA_MS);
+assert.equal(somadoParado.totalMs, L.DURACAO_MAXIMA_MS);
+assert.deepEqual(L.validarTimer(JSON.parse(JSON.stringify(somadoParado))), somadoParado);
+const somadoRodando = L.somarTempo(L.iniciarTimer(quaseNoMaximo, 0), 1000);
+assert.equal(L.restante(somadoRodando, 1000), L.DURACAO_MAXIMA_MS);
+assert.equal(L.formatarTimer(L.restante(somadoRodando, 1000)), "99:59:59");
+assert.equal(somadoRodando.totalMs, L.DURACAO_MAXIMA_MS);
+
 // formatação
 assert.equal(L.formatarCronometro(0), "00:00.00");
 assert.equal(L.formatarCronometro(62345), "01:02.34");

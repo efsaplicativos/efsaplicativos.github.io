@@ -44,7 +44,9 @@ const LogicaFerias13 = (() => {
    */
   function ferias({ salario = null, dias = DIAS_DE_FERIAS, abonar = false } = {}) {
     if (!Number.isFinite(salario) || salario <= 0) return { incompleto: true };
-    const quantosDias = Number.isFinite(dias) ? limitar(Math.round(dias), 1, DIAS_DE_FERIAS) : DIAS_DE_FERIAS;
+    // Quem vende 10 dias goza no máximo os outros 20 (art. 143 da CLT)
+    const maximoDias = abonar ? DIAS_DE_FERIAS - DIAS_DE_ABONO : DIAS_DE_FERIAS;
+    const quantosDias = Number.isFinite(dias) ? limitar(Math.round(dias), 1, maximoDias) : maximoDias;
 
     const valorDias = (salario / DIAS_DO_MES) * quantosDias;
     const terco = valorDias / 3;

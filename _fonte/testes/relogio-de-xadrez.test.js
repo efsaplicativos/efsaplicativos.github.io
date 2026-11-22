@@ -240,6 +240,11 @@ teste("instantâneo incoerente volta ao início", () => {
   const salvo = { ...relogio(tempo).instantaneo(), estado: "pausado", vez: null };
   const restaurado = X.restaurar(salvo, () => tempo.agoraMs);
   assert.equal(restaurado.estado, "pronto");
+  // Encerrado sem perdedor: a tela quebraria ao anunciar o vencedor
+  const semPerdedor = { ...relogio(tempo).instantaneo(), estado: "encerrado", vez: BRANCAS, perdedor: null };
+  const lido = X.lerInstantaneo(semPerdedor);
+  assert.ok(lido);
+  assert.equal(X.restaurar(lido, () => tempo.agoraMs).estado, "pronto");
 });
 
 teste("instantâneo com formato errado é recusado", () => {

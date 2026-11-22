@@ -22,7 +22,8 @@ const LogicaPorcentagem = (() => {
   function ajuste({ valor = null, percentual = null, desconto: ehDesconto = false } = {}) {
     if (vazio(valor) || vazio(percentual)) return { incompleto: true };
     if (valor < 0 || percentual < 0) return { erro: "negativo" };
-    if (!ehDesconto && percentual > 100) return { erro: "descontoGrande" };
+    // Desconto acima de 100% deixaria o valor negativo; aumento acima de 100% é normal (200 + 150% = 500)
+    if (ehDesconto && percentual > 100) return { erro: "descontoGrande" };
     const diferenca = centavos((valor * percentual) / 100);
     const resultado = ehDesconto ? centavos(valor - diferenca) : centavos(valor + diferenca);
     return { resultado, diferenca, valor, percentual, desconto: ehDesconto };

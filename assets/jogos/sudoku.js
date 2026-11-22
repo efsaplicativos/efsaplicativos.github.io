@@ -48,7 +48,8 @@
   let jogo = null;
   let selecionada = null;
   let modoNotas = false;
-  let modoDiario = false;
+  /** Data ("AAAA-MM-DD") do jogo do dia em andamento, ou null num jogo comum. */
+  let modoDiario = null;
   let pausado = false;
   let venceu = false;
   let historico = [];
@@ -80,7 +81,8 @@
   function salvar() {
     if (!jogo || venceu) return;
     jogo = { ...jogo, tempoMs: decorridoMs() };
-    gravar(CHAVE_PARTIDA, jogo);
+    // O jogo do dia guarda a data: ao voltar à página, ele continua valendo como jogo do dia
+    gravar(CHAVE_PARTIDA, modoDiario ? { ...jogo, diario: modoDiario } : jogo);
   }
 
   // ---------- Cronômetro ----------
@@ -275,7 +277,7 @@
     const nivel = S.NIVEIS[nivelId];
     const doDia = diario && D ? D.doDia("sudoku") : null;
     jogo = S.novoJogo(nivel, S.gerar(nivel, doDia ? doDia.gerador : Math.random));
-    modoDiario = Boolean(doDia);
+    modoDiario = doDia ? doDia.data : null;
     selecionada = null;
     modoNotas = false;
     pausado = false;
@@ -288,7 +290,9 @@
     desenhar();
     if (avisoDiario) {
       avisoDiario.hidden = !doDia;
-      avisoDiario.textContent = doDia ? `Jogo do dia ${doDia.data}` : "";
+      // O aviso de jogo já completado também aparece na tela, não só para o leitor de tela
+      const feito = doDia && D.concluido("sudoku") ? " · você já completou o jogo de hoje" : "";
+      avisoDiario.textContent = doDia ? `Jogo do dia ${doDia.data}${feito}` : "";
     }
     status.textContent = doDia
       ? `Jogo do dia ${doDia.data}, nível ${nivel.nome}: o mesmo tabuleiro para todos os visitantes de hoje.`
@@ -348,7 +352,8 @@
     historico = [];
     const segundos = Math.max(1, Math.floor(acumuladoMs / 1000));
     // O jogo do dia fica marcado: ao voltar, o site avisa que o de hoje já foi feito
-    if (modoDiario && D) D.marcarConcluido("sudoku");
+    // (só se o tabuleiro for mesmo o de hoje: o jogo de ontem terminado depois da meia-noite não conta)
+    if (modoDiario && D && modoDiario === D.chave()) D.marcarConcluido("sudoku");
     const { lista, posicao } = S.inserirRecorde(recordes[jogo.nivel], { segundos, data: Date.now() });
     recordes = { ...recordes, [jogo.nivel]: lista };
     gravar(CHAVE_RECORDES, recordes);
@@ -362,7 +367,7 @@
     abrirDialogo({
       titulo: "Parabéns!",
       texto: modoDiario
-        ? `Você completou o Sudoku do dia (${D.doDia("sudoku").data}), nível ${nivel.nome}.`
+        ? `Você completou o Sudoku do dia (${modoDiario}), nível ${nivel.nome}.`
         : `Você completou o Sudoku ${nivel.nome}.`,
       dados,
       botoes: [
@@ -532,6 +537,11 @@
     jogo = salvo;
     acumuladoMs = salvo.tempoMs;
     pausado = true;
+    modoDiario = D && typeof salvo.diario === "string" ? salvo.diario : null;
+    if (avisoDiario && modoDiario) {
+      avisoDiario.hidden = false;
+      avisoDiario.textContent = `Jogo do dia ${modoDiario}`;
+    }
     desenhar();
   } else {
     novoJogo("medio", { silencioso: true });

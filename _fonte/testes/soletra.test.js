@@ -147,6 +147,28 @@ const testes = {
     assert.equal(S.completa(rodada), false);
     assert.equal(cheia.pontos, S.pontosTotais(rodada));
   },
+  "a rodada salva volta com as palavras, os pontos e a data do jogo do dia"() {
+    // Antes nada era gravado: recarregar no meio do jogo do dia perdia as palavras e a marca do dia
+    let jogada = rodada;
+    for (const palavra of rodada.possiveis.slice(0, 3)) jogada = S.tentar(jogada, palavra);
+    const volta = S.retomar(S.paraSalvar(jogada, "2026-11-22"));
+    assert.equal(volta.diario, "2026-11-22");
+    assert.deepEqual([...volta.rodada.letras], [...jogada.letras]);
+    assert.equal(volta.rodada.meio, jogada.meio);
+    assert.deepEqual([...volta.rodada.possiveis], [...jogada.possiveis]);
+    assert.deepEqual(volta.rodada.achadas.map((a) => a.palavra), jogada.achadas.map((a) => a.palavra));
+    assert.equal(volta.rodada.pontos, jogada.pontos);
+    assert.equal(S.retomar(S.paraSalvar(jogada)).diario, null);
+  },
+  "rodada salva estragada volta null e palavra inventada é ignorada"() {
+    for (const texto of [null, "", "{", "null", '{"letras":"ABC","meio":"A"}', '{"letras":"AABCDEF","meio":"A"}', '{"letras":"ABCDEFG","meio":"Z"}']) {
+      assert.equal(S.retomar(texto), null, String(texto));
+    }
+    const dados = JSON.parse(S.paraSalvar(rodada));
+    const volta = S.retomar(JSON.stringify({ ...dados, achadas: ["XXXXXX", 7, rodada.possiveis[0]], diario: "ontem" }));
+    assert.deepEqual(volta.rodada.achadas.map((a) => a.palavra), [rodada.possiveis[0]]);
+    assert.equal(volta.diario, null);
+  },
   "a rodada é imutável: tentar não altera a anterior"() {
     const antes = JSON.stringify(rodada);
     S.tentar(rodada, rodada.possiveis[0]);

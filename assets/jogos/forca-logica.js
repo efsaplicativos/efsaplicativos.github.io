@@ -7,7 +7,7 @@ const LogicaForca = (() => {
   const MAX_ERROS = 6;
   const TEMAS = {
     animais: ["animais", "Animais", [
-      ["JACARE", "réptil de rio com couro duro"],
+      ["JACARÉ", "réptil de rio com couro duro"],
       ["TARTARUGA", "anda devagar e carrega a casa"],
       ["GIRAFA", "o pescoço mais comprido da savana"],
       ["MORCEGO", "mamífero que voa"],
@@ -20,7 +20,7 @@ const LogicaForca = (() => {
       ["ABACAXI", "tem coroa e espinhos"],
       ["GOIABA", "por dentro é rosa ou branca"],
       ["MANGA", "doce e amarela por dentro"],
-      ["MARACUJA", "azedinha por natureza"],
+      ["MARACUJÁ", "azedinha por natureza"],
       ["JABUTICABA", "fruta preta do pé"],
       ["CAJU", "a castanha vem junto"],
       ["PITANGA", "vermelhinha e pequena"],
@@ -29,10 +29,10 @@ const LogicaForca = (() => {
       ["BRASIL", "o país do futebol"],
       ["ARGENTINA", "vizinho do sul"],
       ["PORTUGAL", "do outro lado do Atlântico"],
-      ["JAPAO", "terra do sol nascente"],
-      ["CANADA", "a folha está na bandeira"],
+      ["JAPÃO", "terra do sol nascente"],
+      ["CANADÁ", "a folha está na bandeira"],
       ["EGITO", "tem pirâmides"],
-      ["AUSTRALIA", "país continente"],
+      ["AUSTRÁLIA", "país continente"],
     ]],
     profissoes: ["profissoes", "Profissões", [
       ["PROFESSOR", "trabalha com alunos"],
@@ -80,7 +80,8 @@ const LogicaForca = (() => {
     const escolhido = TEMAS[tema] || TEMAS.animais;
     const lista = escolhido[2];
     const [palavra, dica] = lista[Math.floor(aleatorio() * lista.length)];
-    return congelar({ tema: escolhido[0], palavra: semAcento(palavra), dica, letras: [], erros: 0 });
+    // palavra: sem acento, para comparar as letras; grafia: como se escreve, para revelar no fim
+    return congelar({ tema: escolhido[0], palavra: semAcento(palavra), grafia: palavra, dica, letras: [], erros: 0 });
   }
 
   /** Tenta uma letra. Letra repetida, inválida ou partida encerrada devolvem a mesma partida. */

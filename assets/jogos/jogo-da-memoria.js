@@ -300,7 +300,9 @@
     if (posicao === 1) dados.push(["Novo recorde neste nível!", "1º lugar", true]);
     else if (posicao) dados.push(["Posição nos seus recordes", `${posicao}º lugar`, true]);
     if (posicao !== 1 && anterior) dados.push(["Seu recorde", M.resumoRecorde(anterior)]);
-    setTimeout(() => {
+    // Em espera: uma partida nova começada antes do aviso o cancela
+    espera = setTimeout(() => {
+      espera = null;
       abrirDialogo({
         titulo: "Parabéns!",
         texto: `Você completou o nível ${nivel().nome}!`,

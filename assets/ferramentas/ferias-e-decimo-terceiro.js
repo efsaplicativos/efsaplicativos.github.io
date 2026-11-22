@@ -14,6 +14,8 @@
 
   const reais = (valor) => Numeros.dinheiro(valor);
   const desconto = (valor) => `− ${Numeros.dinheiro(valor)}`;
+  // A redução nunca passa do imposto apurado: mostra só o que de fato saiu do IRRF
+  const reducaoAplicada = (conta) => Math.round((conta.irrfTabela - conta.irrf) * 100) / 100;
 
   function lerNumero(campo, dinheiro = false) {
     const valor = Numeros.ler(campo.value, { milhar: dinheiro });
@@ -54,7 +56,7 @@
     linhas.push(["Total bruto", reais(conta.bruto)]);
     linhas.push(["INSS", desconto(conta.inss)]);
     linhas.push(["IRRF pela tabela", desconto(conta.irrfTabela)]);
-    if (conta.reducao > 0) linhas.push([`Redução do imposto (${conta.referencia})`, `+ ${reais(conta.reducao)}`]);
+    if (reducaoAplicada(conta) > 0) linhas.push([`Redução do imposto (${conta.referencia})`, `+ ${reais(reducaoAplicada(conta))}`]);
     linhas.push(["Total de descontos", desconto(conta.descontos)]);
     return bloco(`Férias · líquido`, reais(conta.liquido), linhas);
   }
@@ -67,7 +69,7 @@
       ["INSS", desconto(conta.inss)],
       ["IRRF pela tabela", desconto(conta.irrfTabela)],
     ];
-    if (conta.reducao > 0) linhas.push([`Redução do imposto (${conta.referencia})`, `+ ${reais(conta.reducao)}`]);
+    if (reducaoAplicada(conta) > 0) linhas.push([`Redução do imposto (${conta.referencia})`, `+ ${reais(reducaoAplicada(conta))}`]);
     linhas.push(["Total de descontos", desconto(conta.descontos)]);
     return bloco(rotulos[conta.parcela] ?? rotulos.total, reais(conta.valor), linhas);
   }

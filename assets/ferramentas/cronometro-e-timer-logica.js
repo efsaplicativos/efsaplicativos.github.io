@@ -69,15 +69,15 @@ const LogicaCronometro = (() => {
 
   const reiniciarTimer = (t) => ({ ...t, rodando: false, restantePausadoMs: t.totalMs, terminado: false });
 
-  /** Acrescenta 1 minuto (ou [ms]) à contagem atual. */
+  /** Acrescenta 1 minuto (ou [ms]) à contagem atual, sem passar de 99:59:59. */
   function somarTempo(t, agora, ms = 60000) {
-    if (t.rodando) return { ...t, terminaEm: t.terminaEm + ms, totalMs: Math.min(t.totalMs + ms, DURACAO_MAXIMA_MS) };
+    if (t.rodando) {
+      const terminaEm = Math.min(t.terminaEm + ms, agora + DURACAO_MAXIMA_MS);
+      return { ...t, terminaEm, totalMs: Math.min(t.totalMs + ms, DURACAO_MAXIMA_MS) };
+    }
     if (t.terminado) return definirDuracao(null, ms);
-    return {
-      ...t,
-      restantePausadoMs: t.restantePausadoMs + ms,
-      totalMs: Math.max(t.totalMs, t.restantePausadoMs + ms),
-    };
+    const restantePausadoMs = Math.min(t.restantePausadoMs + ms, DURACAO_MAXIMA_MS);
+    return { ...t, restantePausadoMs, totalMs: Math.max(t.totalMs, restantePausadoMs) };
   }
 
   /** Marca como concluído se o tempo acabou; devolve o mesmo objeto se ainda não terminou. */

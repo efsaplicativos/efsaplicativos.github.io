@@ -63,6 +63,7 @@
   // ---------- Som, vibração e tela acesa ----------
 
   let audio = null;
+  let avisoTocado = false;
 
   /** O navegador só libera o áudio depois de um gesto do usuário. */
   function prepararAudio() {
@@ -95,6 +96,29 @@
           oscilador.start(t);
           oscilador.stop(t + 0.2);
         });
+      });
+    } catch {
+      // Sem som disponível: fica o aviso na tela
+    }
+  }
+
+  /** Dois bipes curtos: falta um minuto para a troca de nível. */
+  function tocarAviso() {
+    if (!audio || !preferencias.alerta) return;
+    try {
+      const inicio = audio.currentTime + 0.02;
+      [0, 0.22].forEach((atraso) => {
+        const t = inicio + atraso;
+        const oscilador = audio.createOscillator();
+        const volume = audio.createGain();
+        oscilador.type = "triangle";
+        oscilador.frequency.value = 880;
+        volume.gain.setValueAtTime(0.0001, t);
+        volume.gain.exponentialRampToValueAtTime(0.22, t + 0.015);
+        volume.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+        oscilador.connect(volume).connect(audio.destination);
+        oscilador.start(t);
+        oscilador.stop(t + 0.16);
       });
     } catch {
       // Sem som disponível: fica o aviso na tela
@@ -177,6 +201,12 @@
     const intervalo = P.ehIntervalo(nivel);
     const restante = R.restanteMs(r, t);
     const aviso = !encerrado && !intervalo && restante > 0 && restante <= AVISO_MS;
+    // Bipa uma vez ao entrar no último minuto (não ao abrir a página no meio dele)
+    if (!aviso) avisoTocado = false;
+    else if (!avisoTocado && r.status === P.RODANDO && restante > AVISO_MS - 2000) {
+      avisoTocado = true;
+      tocarAviso();
+    }
 
     el.cartao.dataset.tipo = intervalo ? "intervalo" : "blind";
     el.cartao.dataset.aviso = String(aviso);
@@ -432,6 +462,10 @@
   // ---------- Teclado, visibilidade e tela cheia ----------
 
   raiz.addEventListener("pointerdown", prepararAudio);
+  // No toque, o pointerdown ainda não conta como gesto para liberar o áudio (iPhone e o primeiro
+  // toque no Android): o clique ou a tecla seguinte em qualquer ponto da página libera o alerta
+  document.addEventListener("click", () => prepararAudio());
+  document.addEventListener("keydown", () => prepararAudio());
 
   function relogioVisivel() {
     const caixa = el.cartao.getBoundingClientRect();

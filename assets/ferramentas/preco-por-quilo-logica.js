@@ -26,13 +26,15 @@ const LogicaPrecoPorQuilo = (() => {
     if (!u || preco < 0 || quantidade <= 0) return null;
     const total = quantidade * u.fator;
     return {
-      nome: String(nome || "").trim() || `${quantidade} ${u.nome}`,
+      nome: String(nome || "").trim() || `${String(quantidade).replace(".", ",")} ${u.nome}`,
       preco,
       quantidade,
       unidade: u.id,
       base: u.base,
       total,
       custo: centavos(preco / total),
+      // Sem arredondar: é o que decide a comparação (R$ 0,0045 e R$ 0,0050 por unidade não empatam).
+      custoExato: preco / total,
     };
   }
 
@@ -46,17 +48,19 @@ const LogicaPrecoPorQuilo = (() => {
     const base = validos[0].base;
     if (validos.some((i) => i.base !== base)) return { erro: "grandezas" };
 
-    const ordenados = [...validos].sort((a, b) => a.custo - b.custo);
+    const ordenados = [...validos].sort((a, b) => a.custoExato - b.custoExato);
     const melhor = ordenados[0];
     const pior = ordenados[ordenados.length - 1];
-    const economia = pior.custo > 0 ? centavos(((pior.custo - melhor.custo) / pior.custo) * 100) : 0;
+    const economia =
+      pior.custoExato > 0 ? centavos(((pior.custoExato - melhor.custoExato) / pior.custoExato) * 100) : 0;
     return {
       itens: ordenados,
       base,
       unidadeDaBase: MELHOR[base],
       melhor,
       economia,
-      diferenca: centavos(pior.custo - melhor.custo),
+      diferenca: centavos(pior.custoExato - melhor.custoExato),
+      diferencaExata: pior.custoExato - melhor.custoExato,
     };
   }
 

@@ -524,6 +524,22 @@ a.indicacao-link:hover {
   .cta-app .button {
     margin-left: 0;
   }
+  /* Celular: cabeçalho da página mais baixo, para o jogo ou a ferramenta aparecer na primeira tela */
+  .page-head {
+    padding: 16px 0 14px;
+  }
+  .page-head h1 {
+    font-size: 30px;
+    margin: 8px 0;
+  }
+  /* Nos jogos, a explicação completa já está no texto abaixo do tabuleiro */
+  .page-head:has(.breadcrumb a[href="/jogos/"]) > p {
+    display: none;
+  }
+  /* Nos jogos, o topo do site não acompanha a rolagem: a tela inteira fica para o tabuleiro */
+  body:has(.page-head .breadcrumb a[href="/jogos/"]) .site-header {
+    position: relative;
+  }
 }
 
 /* Botão de som dos jogos (assets/jogos/sons.js) */

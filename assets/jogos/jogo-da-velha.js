@@ -362,6 +362,11 @@
   function tocarCasa(casa) {
     // Enquanto o computador "pensa", os toques não valem
     if (vezDoComputador()) return;
+    // Casa já marcada, com a partida em andamento: a jogada não vale
+    if (!estado.partida.terminada && !V.podeJogar(estado.partida, casa)) {
+      som.tocar("erro");
+      return;
+    }
     aplicarJogada(casa);
   }
 

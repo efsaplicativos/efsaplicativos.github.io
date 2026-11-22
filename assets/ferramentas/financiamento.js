@@ -40,9 +40,10 @@
     sam: "SAM: sistema misto, média entre Price e SAC.",
   };
   const ERROS = {
-    entrada: "A entrada deve ser menor que o valor do bem.",
+    entrada: "A entrada não pode ser negativa e deve ser menor que o valor do bem.",
     taxa: "Informe uma taxa entre 0 e 100%.",
     prazo: "Informe um prazo entre 1 e 600 meses.",
+    custos: "Os custos mensais não podem ser negativos.",
   };
 
   let sistema = "price";

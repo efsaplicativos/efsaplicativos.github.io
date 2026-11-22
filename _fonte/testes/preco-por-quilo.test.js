@@ -72,6 +72,18 @@ const testes = {
   },
   "o nome padrão usa a quantidade e a unidade"() {
     assert.equal(P.item({ preco: 10, quantidade: 500, unidade: "g" }).nome, "500 grama");
+    // vírgula decimal, como o resto da página
+    assert.equal(P.item({ preco: 10, quantidade: 0.5, unidade: "kg" }).nome, "0,5 quilo");
+  },
+  "itens baratos por unidade não empatam pelo arredondamento em centavos"() {
+    // 500 un por R$ 2,49 = R$ 0,00498/un; 1000 un por R$ 4,50 = R$ 0,0045/un
+    const conta = P.comparar([
+      { nome: "A", preco: 2.49, quantidade: 500, unidade: "un" },
+      { nome: "B", preco: 4.5, quantidade: 1000, unidade: "un" },
+    ]);
+    assert.equal(conta.melhor.nome, "B");
+    assert.ok(conta.economia > 9 && conta.economia < 10, `economia ${conta.economia}`);
+    perto(conta.diferencaExata, 0.00048, 1e-9);
   },
 };
 

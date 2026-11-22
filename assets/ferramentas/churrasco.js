@@ -40,7 +40,10 @@
     const lista = document.createElement("dl");
     lista.className = "result-list";
     for (const [nome, texto] of [
-      ["Pessoas", `${conta.pessoas} (${conta.adultos} adultos e ${conta.criancas} crianças)`],
+      [
+        "Pessoas",
+        `${conta.pessoas} (${conta.adultos} ${conta.adultos === 1 ? "adulto" : "adultos"} e ${conta.criancas} ${conta.criancas === 1 ? "criança" : "crianças"})`,
+      ],
       ["Por pessoa", gramas(conta.porPessoa)],
       ["Acompanhamentos", gramas(conta.acompanhamento)],
       ["Bebida", `${numero(conta.bebidaLitros)} L`],

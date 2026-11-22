@@ -312,6 +312,14 @@
 }
 
 @media (max-width: 640px) {
+  /* No celular, a calculadora ocupa a largura toda: sem a moldura do cartão, as teclas ficam ~20% mais largas */
+  .tool:has(> .rpn) {
+    margin-inline: -8px;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+  }
   .rpn .rpn-topo {
     flex-direction: column;
   }

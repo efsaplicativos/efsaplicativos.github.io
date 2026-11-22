@@ -239,7 +239,11 @@
       return;
     }
     if (km <= 0 || kmL <= 0 || preco < 0) {
-      mensagem(resultadoViagem, "A distância e o consumo precisam ser maiores que zero.", true);
+      mensagem(
+        resultadoViagem,
+        preco < 0 ? "O preço do litro não pode ser negativo." : "A distância e o consumo precisam ser maiores que zero.",
+        true,
+      );
       return;
     }
     const r = C.viagem(km, kmL, preco, { idaEVolta: idaEVolta.checked, pedagios: pedagio ?? 0, pessoas: quantas });

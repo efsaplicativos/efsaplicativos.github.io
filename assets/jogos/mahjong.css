@@ -477,6 +477,29 @@
 }
 
 @media (max-width: 420px) {
+  /* Os três botões numa linha só, sem quebrar o texto: Som fica só com o ícone */
+  .mj-barra-botoes {
+    width: 100%;
+  }
+  .mj-barra-botoes .button {
+    flex: 1 1 auto;
+    min-height: 46px;
+    padding: 8px 12px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .mj-barra-botoes .som-botao {
+    min-height: 46px;
+    padding: 8px 12px;
+  }
+  .mj-barra-botoes .som-botao span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
   .mj-mesa {
     margin-inline: -8px;
     border-radius: var(--r);

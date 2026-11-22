@@ -65,7 +65,8 @@
   let selecionada = null;
   let dica = null;
   let vitoria = null;
-  let modoDiario = false;
+  /** Data ("AAAA-MM-DD") do jogo do dia em andamento, ou null numa partida comum. */
+  let modoDiario = null;
   /** O jogador fechou o aviso de "sem jogadas" para olhar a mesa. */
   let avisoOculto = false;
   /** O relógio só corre depois do primeiro toque na partida, com a aba visível. */
@@ -115,7 +116,9 @@
 
   function salvar() {
     // Partida vencida não fica guardada: ao voltar, começa outra no mesmo tabuleiro
-    gravar(CHAVE_PARTIDA, vitoria || M.venceu(partida) ? null : M.codificar(partida));
+    if (vitoria || M.venceu(partida)) gravar(CHAVE_PARTIDA, null);
+    // O jogo do dia guarda a data: ao voltar à página, ele continua valendo como jogo do dia
+    else gravar(CHAVE_PARTIDA, modoDiario ? { ...M.codificar(partida), diario: modoDiario } : M.codificar(partida));
   }
 
   // ---------- Mesa ----------
@@ -498,14 +501,17 @@
   const botaoDiario = document.querySelector("#mj-diario");
   if (!D && botaoDiario) botaoDiario.hidden = true;
   botaoDiario?.addEventListener("click", () => {
-    if (D && partida) novaPartida(partida.tabuleiro, D.doDia("mahjong").gerador);
+    // Como em Nova distribuição: uma partida com jogadas feitas pede confirmação antes de sumir
+    if (D && partida) confirmarSeTiverJogadas(() => novaPartida(partida.tabuleiro, D.doDia("mahjong")));
   });
 
-  function novaPartida(tabuleiro, aleatorio) {
+  /** [doDia]: a partida do dia (Diario.doDia), com a distribuição tirada da data; sem ela, ao acaso. */
+  function novaPartida(tabuleiro, doDia = null) {
     const remontar = !partida || tabuleiro !== partida.tabuleiro;
-    modoDiario = Boolean(aleatorio) && Boolean(D);
-    iniciar(M.novaPartida(tabuleiro, aleatorio), { remontar });
+    modoDiario = doDia && D ? doDia.data : null;
+    iniciar(M.novaPartida(tabuleiro, modoDiario ? doDia.gerador : undefined), { remontar });
     anunciar(`Nova distribuição no tabuleiro ${tabuleiro.nome}: ${tabuleiro.totalPecas} peças.`);
+    som.tocar("inicio");
   }
 
   function trocarTabuleiro(tabuleiro, semPerguntar = false) {
@@ -587,8 +593,9 @@
   }
 
   function vencer(final) {
-    // Modo diário: fica registrado que o mahjong de hoje já foi terminado
-    if (modoDiario && D) D.marcarConcluido("mahjong");
+    // Modo diário: fica registrado que o mahjong de hoje já foi terminado (o de ontem, terminado
+    // depois da meia-noite, não conta como o de hoje)
+    if (modoDiario && D && modoDiario === D.chave()) D.marcarConcluido("mahjong");
     partida = final;
     const id = final.tabuleiro.id;
     const anterior = recordes[id] || null;
@@ -847,8 +854,10 @@
 
   carregarPreferencias();
   recordes = M.validarRecordes(lerJson(CHAVE_RECORDES));
-  const salva = M.decodificar(lerJson(CHAVE_PARTIDA));
+  const lida = lerJson(CHAVE_PARTIDA);
+  const salva = M.decodificar(lida);
   partida = salva && !M.venceu(salva) ? salva : M.novaPartida(M.tabuleiroPorId(preferencias.tabuleiro));
+  if (partida === salva && D && typeof lida.diario === "string") modoDiario = lida.diario;
   preferencias.tabuleiro = partida.tabuleiro.id;
   aplicarPreferencias();
   montarMesa();

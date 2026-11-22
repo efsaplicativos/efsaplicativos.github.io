@@ -59,6 +59,7 @@
   let pressao = null;
   let selecionada = null;
   let dicaTimer = null;
+  let timersVitoria = [];
   let foco = { pilha: 2, profundidade: 0 };
   let g = null;
   let posicoes = [];
@@ -529,6 +530,7 @@
 
   function acaoMonte() {
     if (!estado.monte.length) {
+      if (!P.venceu(estado)) som.tocar("erro");
       anunciar("O monte acabou: todas as cartas já foram distribuídas.");
       return;
     }
@@ -669,14 +671,14 @@
     if (recordes.tempo) dados.push(["Novo melhor tempo!", P.formatarTempo(estado.segundos), true]);
     dados.push(["Vitórias seguidas", P.formatarNumero(novas.sequencia)]);
     const { semente, modo } = estado;
-    setTimeout(() => {
+    timersVitoria.push(setTimeout(() => {
       terminarRecolhimento();
       estado.completos.forEach((sequencia, k) => cartasEl[sequencia[0]].style.setProperty("--k", String(k)));
       mesa.classList.add("sp-festa");
       setTimeout(() => mesa.classList.remove("sp-festa"), 2200);
       som.tocar("vitoria");
-    }, espera);
-    setTimeout(() => {
+    }, espera));
+    timersVitoria.push(setTimeout(() => {
       abrirDialogo({
         titulo: "Parabéns!",
         texto: `Você completou os 8 naipes da Paciência Spider com ${P.textoModo(modo)}.`,
@@ -687,7 +689,7 @@
           { rotulo: "Fechar", acao: () => {}, secundario: true },
         ],
       });
-    }, espera + 900);
+    }, espera + 900));
   }
 
   // ---------- Estatísticas ----------
@@ -745,6 +747,9 @@
   }
 
   function novaPartida({ modo = estado ? estado.modo : 1, semente = P.novaSemente() } = {}) {
+    // A festa e o "Parabéns!" da partida anterior não podem cair sobre a nova
+    timersVitoria.forEach(clearTimeout);
+    timersVitoria = [];
     fecharDialogo();
     registrarAbandono();
     zerarCronometro();

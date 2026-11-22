@@ -67,10 +67,22 @@ const testes = {
       assert.equal(dados[1].length > 0, true);
       assert.ok(dados[2].length >= 5, `${tema} tem poucas palavras`);
       for (const [palavra, dica] of dados[2]) {
-        assert.ok(/^[A-Z]+$/.test(palavra), `${palavra} tem caractere estranho`);
+        assert.ok(/^[A-Z]+$/.test(F.semAcento(palavra)), `${palavra} tem caractere estranho`);
         assert.ok(dica.length > 5, `${palavra} sem dica boa`);
       }
     }
+  },
+  "a palavra revelada no fim mantém o acento"() {
+    // Antes as listas não tinham acento e o fim mostrava "japao" e "jacare"
+    const paises = F.TEMAS.paises[2];
+    const japao = F.iniciar({ tema: "paises", aleatorio: () => paises.findIndex(([p]) => F.semAcento(p) === "JAPAO") / paises.length });
+    assert.equal(japao.palavra, "JAPAO");
+    assert.equal(japao.grafia, "JAPÃO");
+    let partida = japao;
+    for (const letra of "japo") partida = F.tentar(partida, letra);
+    assert.equal(partida.vitoria, true);
+    assert.equal(partida.grafia, "JAPÃO");
+    assert.equal(sorteada("animais", 0).grafia, "JACARÉ");
   },
   "tema desconhecido cai em animais"() {
     assert.equal(F.iniciar({ tema: "inexistente", aleatorio: () => 0 }).tema, "animais");

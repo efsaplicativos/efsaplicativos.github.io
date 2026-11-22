@@ -35,7 +35,8 @@ const testes = {
   "cada interface entrega o gerador do dia ao jogo"() {
     for (const jogo of Object.keys(JOGOS)) {
       const codigo = fs.readFileSync(`assets/jogos/${jogo}.js`, "utf8");
-      assert.ok(codigo.includes(`D.doDia("${jogo}").gerador`), `${jogo} não usa o gerador do dia`);
+      // Vale entregar só o gerador (D.doDia(...).gerador) ou o objeto do dia inteiro, que o leva junto
+      assert.ok(codigo.includes(`D.doDia("${jogo}")`), `${jogo} não usa o gerador do dia`);
       assert.ok(codigo.includes('typeof Diario === "object"'), `${jogo} não protege contra o diario.js ausente`);
       assert.ok(codigo.includes(`botaoDiario.hidden = true`), `${jogo} não esconde o botão sem o script`);
     }

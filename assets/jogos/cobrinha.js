@@ -325,6 +325,29 @@
     botao.addEventListener("click", () => virar(botao.dataset.direcao));
   }
 
+  // Deslizar o dedo no tabuleiro também vira a cobra. Cada 24px de arraste conta como um
+  // comando, então dá para fazer duas curvas sem tirar o dedo da tela.
+  const DESLIZE_MINIMO = 24;
+  let inicioDeslize = null;
+  tabuleiroEl.addEventListener("pointerdown", (evento) => {
+    if (evento.pointerType === "mouse") return;
+    inicioDeslize = { x: evento.clientX, y: evento.clientY, id: evento.pointerId };
+  });
+  tabuleiroEl.addEventListener("pointermove", (evento) => {
+    if (!inicioDeslize || evento.pointerId !== inicioDeslize.id) return;
+    const dx = evento.clientX - inicioDeslize.x;
+    const dy = evento.clientY - inicioDeslize.y;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < DESLIZE_MINIMO) return;
+    if (Math.abs(dx) > Math.abs(dy)) virar(dx > 0 ? "direita" : "esquerda");
+    else virar(dy > 0 ? "baixo" : "cima");
+    inicioDeslize = { x: evento.clientX, y: evento.clientY, id: evento.pointerId };
+  });
+  for (const fim of ["pointerup", "pointercancel"]) {
+    tabuleiroEl.addEventListener(fim, () => {
+      inicioDeslize = null;
+    });
+  }
+
   for (const botao of botoesNivel) {
     botao.addEventListener("click", () => {
       if (botao.dataset.nivel === nivel.id) return;
@@ -341,7 +364,18 @@
     som.tocar("toque");
   });
 
+  // Com o jogo parado, as teclas só valem com metade do tabuleiro na tela, para não atrapalhar a
+  // rolagem do texto nem começar uma partida fora da vista
+  function tabuleiroVisivel() {
+    const area = tabuleiroEl.getBoundingClientRect();
+    const visivel = Math.min(area.bottom, window.innerHeight) - Math.max(area.top, 0);
+    return visivel >= area.height / 2;
+  }
+
   document.addEventListener("keydown", (evento) => {
+    // Atalhos do navegador (Alt+← para voltar, Ctrl+D, Ctrl+S...) não mexem na cobra
+    if (evento.altKey || evento.ctrlKey || evento.metaKey) return;
+    if (!rodando && !tabuleiroVisivel()) return;
     const tecla = evento.key;
     const mapa = {
       ArrowUp: "cima",

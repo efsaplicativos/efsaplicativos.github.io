@@ -458,7 +458,9 @@
       som.tocar("derrota");
       mostrarMensagem(`A palavra era ${maiuscula(partida.resposta)}.`);
     }
-    setTimeout(() => abrirResultado(), movimentoReduzido() ? 200 : 1300);
+    // Quem trocou de modo nesse meio-tempo não recebe o resultado da outra partida
+    const terminada = partida;
+    setTimeout(() => partida === terminada && abrirResultado(), movimentoReduzido() ? 200 : 1300);
   }
 
   // ---------- Dica ----------
@@ -533,7 +535,9 @@
     const mm = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
     const ss = String(s % 60).padStart(2, "0");
     proxima.textContent = `Próxima palavra do dia em ${hh}:${mm}:${ss}`;
-    if (s <= 0 && partida.modo === "dia" && L.numeroDoDia() !== partida.numero) {
+    // Passou da meia-noite com o resultado aberto: a contagem já vale para o dia seguinte, então
+    // quem decide é o número do dia (a conta acima nunca chega a zero)
+    if (dialogo.open && partida.modo === "dia" && L.numeroDoDia() !== partida.numero) {
       dialogo.close();
       carregarModo("dia");
     }
@@ -578,6 +582,8 @@
   // ---------- Modos e treino ----------
 
   function trocarModo(novo) {
+    // Durante a virada das letras, trocar de modo deixaria o fim da animação agindo na outra partida
+    if (ocupado) return;
     if (dialogo.open) dialogo.close();
     if (novo === modo) return;
     gravar(CHAVE_MODO, novo);

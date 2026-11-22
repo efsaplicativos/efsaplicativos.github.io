@@ -262,7 +262,8 @@ const LogicaTowerDefense = (() => {
   function atualizarTorres(estado, dt) {
     for (const torre of estado.torres) {
       const stats = statsTorre(torre);
-      torre.recarga = Math.max(0, torre.recarga - dt);
+      const recarga = torre.recarga - dt;
+      torre.recarga = Math.max(0, recarga);
       let alvo = null;
       for (const inimigo of estado.inimigos) {
         if (inimigo.vida <= 0 || !podeAtacar(torre.tipo, inimigo.tipo) || distancia(torre, inimigo) > stats.alcance) continue;
@@ -273,7 +274,8 @@ const LogicaTowerDefense = (() => {
       if (!alvo) continue;
       torre.angulo = Math.atan2(alvo.y - torre.y, alvo.x - torre.x);
       if (torre.recarga > 0) continue;
-      torre.recarga = stats.intervalo;
+      // O tempo que passou da recarga neste passo vale para o próximo tiro: a cadência não depende da taxa de quadros.
+      torre.recarga = stats.intervalo + recarga;
       const origem = pontaCanhao(torre);
       torre.disparos++;
       estado.projeteis.push({
@@ -345,7 +347,8 @@ const LogicaTowerDefense = (() => {
   function atualizarAtaquesInimigos(estado, dt) {
     for (const inimigo of estado.inimigos) {
       const definicao = INIMIGOS[inimigo.tipo];
-      inimigo.recarga = Math.max(0, inimigo.recarga - dt);
+      const recarga = inimigo.recarga - dt;
+      inimigo.recarga = Math.max(0, recarga);
       if (estado.onda < 3) {
         inimigo.anguloTorre = inimigo.angulo;
         continue;
@@ -358,7 +361,7 @@ const LogicaTowerDefense = (() => {
       const angulo = Math.atan2(alvo.y - inimigo.y, alvo.x - inimigo.x);
       inimigo.anguloTorre = angulo;
       if (inimigo.recarga > 0) continue;
-      inimigo.recarga = definicao.intervaloTorre;
+      inimigo.recarga = definicao.intervaloTorre + recarga;
       const escalaTorre = inimigo.tipo === "rapido" ? 1.53 : 1;
       const frente = definicao.tamanho * 0.68 * escalaTorre;
       estado.projeteisInimigos.push({

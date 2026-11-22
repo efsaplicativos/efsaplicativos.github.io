@@ -87,6 +87,21 @@ teste("terceiro grau com raiz múltipla", () => {
   assert.ok(tripla.raizes.every((z) => z.im === 0 && Math.abs(z.re + 2) < 1e-5));
 });
 
+teste("terceiro grau com raízes de escalas muito diferentes", () => {
+  // x³ + 1000000x² + x + 1: uma raiz perto de −10⁶ e duas complexas perto de ±0,001i
+  const r = E.resolverCubica(1, 1e6, 1, 1);
+  assert.equal(r.natureza, "umaReal");
+  perto(r.raizes[0].re, -1e6, 1e-3);
+  perto(r.raizes[1].im, 1e-3, 1e-9);
+  perto(r.raizes[2].im, -1e-3, 1e-9);
+  // Raízes −21262,457; −1,5·10⁻⁷ e 7,39·10⁻⁵: antes as duas menores saíam erradas
+  const raizes = [-21262.457085198315, -1.5159890501443707e-7, 0.00007391332642794917];
+  const [u, v, w] = raizes;
+  const t = E.resolverCubica(1, -(u + v + w), u * v + u * w + v * w, -(u * v * w));
+  assert.equal(t.natureza, "tresDistintas");
+  t.raizes.forEach((z, i) => perto(z.re, raizes[i], Math.abs(raizes[i]) * 1e-9));
+});
+
 teste("sistemas 2×2 e 3×3", () => {
   const s2 = E.resolverSistema(
     [

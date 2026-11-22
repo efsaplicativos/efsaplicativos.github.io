@@ -332,8 +332,9 @@
       }
     }
     definirCep(digitos, Math.min(antes, digitos.length));
-    // Com os 8 algarismos a busca já começa (o app espera o botão ou a tecla de busca)
-    if (Cep.valido(digitos) && digitos !== ultimoCepBuscado) buscarCep();
+    // Com os 8 algarismos a busca já começa (o app espera o botão ou a tecla de busca).
+    // O mesmo CEP só é pulado se o endereço dele ainda está na tela; depois de um erro, busca de novo.
+    if (Cep.valido(digitos) && (digitos !== ultimoCepBuscado || estado.buscaCep.tipo === "ocioso")) buscarCep();
   });
 
   el.limpar.addEventListener("click", () => {

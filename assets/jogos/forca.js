@@ -48,8 +48,9 @@
       botao.classList.toggle("is-errada", usada && !partida.palavra.includes(letra));
     }
 
-    if (partida.vitoria) mensagem.textContent = `Você acertou! A palavra era ${partida.palavra.toLowerCase()}.`;
-    else if (partida.derrota) mensagem.textContent = `Seus erros acabaram. A palavra era ${partida.palavra.toLowerCase()}.`;
+    const revelada = (partida.grafia || partida.palavra).toLocaleLowerCase("pt-BR");
+    if (partida.vitoria) mensagem.textContent = `Você acertou! A palavra era ${revelada}.`;
+    else if (partida.derrota) mensagem.textContent = `Seus erros acabaram. A palavra era ${revelada}.`;
     else if (partida.letras.length === 0) mensagem.textContent = "Escolha uma letra para começar.";
     else mensagem.textContent = "Continue: as letras certas aparecem na palavra.";
 

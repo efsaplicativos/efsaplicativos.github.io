@@ -91,13 +91,14 @@ const LogicaCobrinha = (() => {
 
   /**
    * Guarda a próxima direção. A comparação é com a direção do último passo, então duas curvas no
-   * mesmo passo não conseguem virar a cobra de ponta-cabeça dentro dela mesma.
+   * mesmo passo não conseguem virar a cobra de ponta-cabeça dentro dela mesma. Apertar a direção
+   * atual antes do passo desfaz a curva guardada.
    */
   function girar(estado, nova) {
     if (estado.terminada) return estado;
     const alvo = direcao(nova);
     if (!alvo) return estado;
-    if (alvo.id === estado.direcao.id) return estado;
+    if (alvo.id === estado.pendente.id) return estado;
     if (alvo.id === OPOSTAS[estado.direcao.id]) return estado;
     return Object.freeze({ ...estado, pendente: alvo });
   }

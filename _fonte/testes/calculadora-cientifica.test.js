@@ -44,6 +44,12 @@ teste("modo DEG", () => {
   assert.equal(avaliar("cos(90)"), 0);
   assert.equal(avaliar("sin⁻¹(0.5)"), 30);
   assert.equal(erro("tan(90)"), "dominio");
+  // Ângulos enormes: 10¹⁵° = 2777777777777 voltas + 280° (antes dava 0)
+  assert.equal(avaliar("sin(1E15)"), avaliar("sin(280)"));
+  assert.equal(avaliar("cos(1E15)"), avaliar("cos(280)"));
+  assert.equal(avaliar("sin(500)", "GRAD"), 1);
+  assert.equal(avaliar("sin(390)"), 0.5);
+  assert.equal(erro("tan(450)"), "dominio");
 });
 
 teste("modos RAD e GRAD", () => {
@@ -163,6 +169,11 @@ teste("insere valores do histórico", () => {
   s = C.inserirValor(s, 3);
   assert.equal(C.expressao(s), "2×3");
   assert.equal(C.previa(s), 6);
+  // Negativo inserido vale como um número só: (−5)² = 25, e não −5² = −25
+  s = C.inserirValor(C.estado(), -5);
+  s = C.pressionar(s, { tipo: "posfixo", valor: "²" });
+  assert.equal(C.expressao(s), "(−5)²");
+  assert.equal(C.igual(s).resultado, 25);
 });
 
 teste("10ˣ depois de um número multiplica (correção)", () => {

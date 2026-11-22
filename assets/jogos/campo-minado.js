@@ -80,7 +80,7 @@
   function salvarPartida() {
     if (!iniciada || tabuleiro.status !== L.JOGANDO) return;
     ultimoSalvo = performance.now();
-    gravar(CHAVE_PARTIDA, { nivel: nivel.id, tabuleiro, tempoMs: decorridoMs(), modoBandeira });
+    gravar(CHAVE_PARTIDA, { nivel: nivel.id, tabuleiro, tempoMs: decorridoMs(), modoBandeira, diario: modoDiario && D ? D.chave() : null });
   }
 
   function carregar() {
@@ -96,6 +96,9 @@
       modoBandeira = salva.modoBandeira === true;
       iniciada = true;
       retomada = true;
+      // Jogo do dia retomado: a vitória ainda marca o dia, e as minas ainda não sorteadas saem da semente
+      modoDiario = Boolean(D) && typeof salva.diario === "string" && salva.diario === D.chave();
+      if (modoDiario && !tabuleiro.minasDistribuidas) sorteioDiario = D.doDia("campo-minado").gerador;
     } else {
       tabuleiro = L.doNivel(nivel);
     }
@@ -281,7 +284,7 @@
 
   const partidaEmAndamento = () => iniciada && tabuleiro.status === L.JOGANDO;
 
-  botaoDiario?.addEventListener("click", () => novaPartida(nivel, true));
+  botaoDiario?.addEventListener("click", () => confirmarNovaPartida(nivel, true));
 
   function novaPartida(novoNivel = nivel, diario = false) {
     fecharDialogo();
@@ -308,16 +311,16 @@
     som.tocar("inicio");
   }
 
-  function confirmarNovaPartida(novoNivel = nivel) {
+  function confirmarNovaPartida(novoNivel = nivel, diario = false) {
     if (!partidaEmAndamento()) {
-      novaPartida(novoNivel);
+      novaPartida(novoNivel, diario);
       return;
     }
     abrirDialogo({
       titulo: "Reiniciar partida?",
       texto: "O progresso da partida atual será perdido.",
       botoes: [
-        { rotulo: "Reiniciar", acao: () => novaPartida(novoNivel) },
+        { rotulo: "Reiniciar", acao: () => novaPartida(novoNivel, diario) },
         { rotulo: "Cancelar", acao: () => {}, secundario: true },
       ],
     });

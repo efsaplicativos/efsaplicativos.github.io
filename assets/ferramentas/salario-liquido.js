@@ -58,8 +58,10 @@
     lista.append(linha(`INSS (${porcento(conta.inss.total / conta.bruto)})`, desconto(conta.inss.total)));
     lista.append(linha("Base do imposto de renda", reais(conta.irrf.base)));
     lista.append(linha(`IRRF pela tabela (${porcento(conta.irrf.aliquota)})`, desconto(conta.irrf.antesDaReducao)));
-    if (conta.irrf.reducao > 0) {
-      lista.append(linha(`Redução do imposto (${conta.referencia})`, `+ ${Numeros.dinheiro(conta.irrf.reducao)}`));
+    // A redução nunca passa do imposto apurado: mostra só o que de fato saiu do IRRF
+    const reducaoAplicada = Math.round((conta.irrf.antesDaReducao - conta.irrf.valor) * 100) / 100;
+    if (reducaoAplicada > 0) {
+      lista.append(linha(`Redução do imposto (${conta.referencia})`, `+ ${Numeros.dinheiro(reducaoAplicada)}`));
       lista.append(linha("IRRF descontado", desconto(conta.irrf.valor)));
     }
     if (conta.dependentes > 0) {
@@ -78,8 +80,8 @@
         (conta.pensao > 0 ? " e pensão" : "") +
         ")";
     const reducao =
-      conta.irrf.reducao > 0
-        ? ` Com a redução do imposto de ${conta.referencia}, o IRRF caiu ${reais(conta.irrf.reducao)}.`
+      reducaoAplicada > 0
+        ? ` Com a redução do imposto de ${conta.referencia}, o IRRF caiu ${reais(reducaoAplicada)}.`
         : "";
     nota.textContent = `Tributação pelo ${regime}. Tabelas de ${conta.referencia}.${reducao}`;
 

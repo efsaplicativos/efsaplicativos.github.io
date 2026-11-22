@@ -289,6 +289,7 @@
     selecionada = -1;
     destinos = [];
     if (depois.terminada) registrarResultado(depois);
+    selecionarUnica();
     salvar();
     desenhar();
     som.tocar(somDoLance(depois, lance));
@@ -373,6 +374,7 @@
     estado = { ...estado, partida };
     selecionada = -1;
     destinos = [];
+    selecionarUnica();
     ultimaMensagem = "";
     salvar();
     desenhar();
