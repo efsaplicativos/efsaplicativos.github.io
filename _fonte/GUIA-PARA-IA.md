@@ -37,7 +37,7 @@ Os commits são feitos com o autor `efsaplicativos <efsaplicativos@gmail.com>`.
 |---|---|---|
 | `index.html` | Página inicial | À mão, direto no arquivo |
 | `politica-privacidade.html` | Política de privacidade dos apps Android | À mão |
-| `batalha-naval/`, `lance-certo/` | Privacidade e exclusão de conta de apps específicos | À mão |
+| `batalha-naval/`, `lance-certo/`, `space-battle-x/` | Privacidade e exclusão de conta de apps específicos | À mão |
 | `_fonte/paginas/` | Conteúdo das páginas de jogos, ferramentas, sobre, contato e privacidade do site | Edite aqui e rode o gerador |
 | `_fonte/modelo.html` | Cabeçalho, menu, rodapé e `<head>` comuns às páginas geradas | Edite aqui e rode o gerador |
 | `ferramentas/`, `jogos/`, `sobre/`, `contato/`, `privacidade/`, `sitemap.xml` | Páginas **geradas** | **Nunca edite à mão**: o gerador apaga a mudança |
@@ -72,6 +72,7 @@ precisar, `scripts`, `estilos` e `app`). O início do `_fonte/gerar.py` explica 
   - `batalha-naval/privacidade.html`
   - `batalha-naval/excluir-conta.html`
   - `lance-certo/privacidade.html`, `lance-certo/privacy.html` e `lance-certo/privacidad.html`
+  - `space-battle-x/privacidade.html` e `space-battle-x/privacy.html`
 
   Se um link desses quebrar, o Google Play pode reprovar ou remover o app.
 - **Não crie `.nojekyll` nem `_config.yml`.** O GitHub Pages usa o Jekyll, que deixa de fora do site as pastas
